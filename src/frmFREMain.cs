@@ -3511,7 +3511,7 @@ where
 				FROM 
 					usersettings.clientsdata cd
                     inner join farm.regions r on r.RegionCode = cd.RegionCode
-				WHERE cd.firmtype = 0 ORDER BY cd.FirmCode";
+				WHERE cd.firmtype = 0 ORDER BY cd.ShortName";
 
 			MyDA.Fill(dtClients);
 		}
