@@ -77,13 +77,13 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="INDataGrid">
-      <Name>INDataGrid</Name>
-      <HintPath>LIB\INDataGrid.dll</HintPath>
+    <Reference Include="INDataGrid, Version=1.0.21.33, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\INDataGrid.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data">
-      <Name>MySql.Data</Name>
-      <HintPath>LIB\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=1.0.7.30072, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\MySql.Data.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System">
@@ -107,17 +107,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
-    <Content Include="Dataset1.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>Dataset1.Designer.cs</LastGenOutput>
-    </Content>
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Dataset1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Dataset1.xsd</DependentUpon>
     </Compile>
     <Compile Include="frmFREMain.cs">
       <SubType>Form</SubType>
@@ -128,23 +119,16 @@
     <Compile Include="frmWait.cs">
       <SubType>Form</SubType>
     </Compile>
-    <None Include="Dataset1.xsc">
-      <DependentUpon>Dataset1.xsd</DependentUpon>
-    </None>
-    <None Include="Dataset1.xss">
-      <DependentUpon>Dataset1.xsd</DependentUpon>
-    </None>
-    <None Include="Dataset1.xsx">
-      <DependentUpon>Dataset1.xsd</DependentUpon>
-    </None>
     <EmbeddedResource Include="frmFREMain.resx">
       <DependentUpon>frmFREMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmNameMask.resx">
       <DependentUpon>frmNameMask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmWait.resx">
       <DependentUpon>frmWait.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
