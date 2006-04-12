@@ -113,6 +113,9 @@
     <Compile Include="frmFREMain.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="frmFREMain.Designer.cs">
+      <DependentUpon>frmFREMain.cs</DependentUpon>
+    </Compile>    
     <Compile Include="frmNameMask.cs">
       <SubType>Form</SubType>
     </Compile>
