@@ -58,8 +58,8 @@ namespace FREditor
 
 		private OleDbConnection dbcMain	= new OleDbConnection();
 
-		string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-		//string StartPath = "C:" + "\\" + "Price" + "\\";
+		//string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+		string StartPath = "C:\\TEMP\\Base\\";
 		string EndPath = Path.GetTempPath();
 		//string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
 		string TxtFilePath = String.Empty;
@@ -361,6 +361,7 @@ namespace FREditor
         private MySqlDataAdapter daCostRules;
         private MySqlCommand mcmdUFormRules;
         private MySqlDataAdapter daFormRules;
+        private ToolTip ttMain;
         private IContainer components;
 
 		public frmFREMain()
@@ -370,7 +371,7 @@ namespace FREditor
 			//
 			InitializeComponent();
 
-            this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FirmCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFR_if", System.Data.DataRowVersion.Current, null));
+            //this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FirmCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFR_if", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRCost_Code", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FieldName", MySql.Data.MySqlClient.MySqlDbType.String, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFieldName", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("TxtBegin", MySql.Data.MySqlClient.MySqlDbType.String, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRTextBegin", System.Data.DataRowVersion.Current, null));
@@ -879,6 +880,7 @@ where
             this.daCostRules = new MySql.Data.MySqlClient.MySqlDataAdapter();
             this.mcmdUFormRules = new MySql.Data.MySqlClient.MySqlCommand();
             this.daFormRules = new MySql.Data.MySqlClient.MySqlDataAdapter();
+            this.ttMain = new System.Windows.Forms.ToolTip(this.components);
             this.tbControl.SuspendLayout();
             this.tpFirms.SuspendLayout();
             this.pnlGrid.SuspendLayout();
@@ -985,12 +987,12 @@ where
             new System.Data.DataRelation("Поставщики-Прайсы", "Поставщики", "Прайсы", new string[] {
                         "CCode"}, new string[] {
                         "PFirmCode"}, false),
-            new System.Data.DataRelation("Цены-Правила формализации цен", "Цены", "Правила формализации цен", new string[] {
-                        "PCCostCode"}, new string[] {
-                        "CFRCost_Code"}, false),
             new System.Data.DataRelation("Прайсы-правила", "Прайсы", "Правила формализации", new string[] {
                         "PPriceCode"}, new string[] {
-                        "FRPriceCode"}, false)});
+                        "FRPriceCode"}, false),
+            new System.Data.DataRelation("Прайсы-Правила формализации цен", "Прайсы", "Правила формализации цен", new string[] {
+                        "PPriceCode"}, new string[] {
+                        "CFRfr_if"}, false)});
             this.dtSet.Tables.AddRange(new System.Data.DataTable[] {
             this.dtClients,
             this.dtPrices,
@@ -1595,9 +1597,9 @@ where
             this.CFRfr_if,
             this.CFRCostName});
             this.dtCostsFormRules.Constraints.AddRange(new System.Data.Constraint[] {
-            new System.Data.ForeignKeyConstraint("Цены-Правила формализации цен", "Цены", new string[] {
-                        "PCCostCode"}, new string[] {
-                        "CFRCost_Code"}, System.Data.AcceptRejectRule.None, System.Data.Rule.Cascade, System.Data.Rule.Cascade)});
+            new System.Data.ForeignKeyConstraint("Прайсы-Правила формализации цен", "Прайсы", new string[] {
+                        "PPriceCode"}, new string[] {
+                        "CFRfr_if"}, System.Data.AcceptRejectRule.None, System.Data.Rule.Cascade, System.Data.Rule.Cascade)});
             this.dtCostsFormRules.TableName = "Правила формализации цен";
             // 
             // CFRCost_Code
@@ -1620,6 +1622,7 @@ where
             // CFRfr_if
             // 
             this.CFRfr_if.ColumnName = "CFRfr_if";
+            this.CFRfr_if.DataType = typeof(long);
             // 
             // CFRCostName
             // 
@@ -1795,23 +1798,23 @@ where
             this.groupBox1.Controls.Add(this.lblArticle);
             this.groupBox1.Controls.Add(this.lLblMaster);
             this.groupBox1.Controls.Add(this.lblMaster);
-            this.groupBox1.Location = new System.Drawing.Point(16, 360);
+            this.groupBox1.Location = new System.Drawing.Point(20, 344);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(200, 184);
+            this.groupBox1.Size = new System.Drawing.Size(200, 163);
             this.groupBox1.TabIndex = 32;
             this.groupBox1.TabStop = false;
             // 
             // rtbArticle
             // 
-            this.rtbArticle.Location = new System.Drawing.Point(4, 104);
+            this.rtbArticle.Location = new System.Drawing.Point(2, 74);
             this.rtbArticle.Name = "rtbArticle";
-            this.rtbArticle.Size = new System.Drawing.Size(192, 72);
+            this.rtbArticle.Size = new System.Drawing.Size(192, 83);
             this.rtbArticle.TabIndex = 29;
             this.rtbArticle.Text = "";
             // 
             // lblArticle
             // 
-            this.lblArticle.Location = new System.Drawing.Point(8, 80);
+            this.lblArticle.Location = new System.Drawing.Point(6, 55);
             this.lblArticle.Name = "lblArticle";
             this.lblArticle.Size = new System.Drawing.Size(64, 16);
             this.lblArticle.TabIndex = 28;
@@ -1820,14 +1823,14 @@ where
             // lLblMaster
             // 
             this.lLblMaster.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dtSet, "Поставщики.Поставщики-Прайсы.Прайсы-правила.FRManager", true));
-            this.lLblMaster.Location = new System.Drawing.Point(16, 48);
+            this.lLblMaster.Location = new System.Drawing.Point(6, 39);
             this.lLblMaster.Name = "lLblMaster";
             this.lLblMaster.Size = new System.Drawing.Size(168, 16);
             this.lLblMaster.TabIndex = 27;
             // 
             // lblMaster
             // 
-            this.lblMaster.Location = new System.Drawing.Point(8, 21);
+            this.lblMaster.Location = new System.Drawing.Point(6, 16);
             this.lblMaster.Name = "lblMaster";
             this.lblMaster.Size = new System.Drawing.Size(168, 23);
             this.lblMaster.TabIndex = 16;
@@ -1839,7 +1842,7 @@ where
             this.grpbParent.Controls.Add(this.lblRules);
             this.grpbParent.Controls.Add(this.tbSynonyms);
             this.grpbParent.Controls.Add(this.tbRules);
-            this.grpbParent.Location = new System.Drawing.Point(16, 232);
+            this.grpbParent.Location = new System.Drawing.Point(20, 220);
             this.grpbParent.Name = "grpbParent";
             this.grpbParent.Size = new System.Drawing.Size(200, 112);
             this.grpbParent.TabIndex = 31;
@@ -1890,7 +1893,7 @@ where
             this.groupBox2.Controls.Add(this.cmbFormat);
             this.groupBox2.Controls.Add(this.lblMoney);
             this.groupBox2.Controls.Add(this.cmbMoney);
-            this.groupBox2.Location = new System.Drawing.Point(16, 80);
+            this.groupBox2.Location = new System.Drawing.Point(20, 70);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(200, 144);
             this.groupBox2.TabIndex = 30;
@@ -1976,14 +1979,14 @@ where
             // 
             this.lblPriceName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dtSet, "Поставщики.Поставщики-Прайсы.Прайсы-правила.FRName", true));
             this.lblPriceName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.lblPriceName.Location = new System.Drawing.Point(16, 48);
+            this.lblPriceName.Location = new System.Drawing.Point(17, 32);
             this.lblPriceName.Name = "lblPriceName";
             this.lblPriceName.Size = new System.Drawing.Size(184, 23);
             this.lblPriceName.TabIndex = 29;
             // 
             // lblNameFirm
             // 
-            this.lblNameFirm.Location = new System.Drawing.Point(16, 24);
+            this.lblNameFirm.Location = new System.Drawing.Point(17, 16);
             this.lblNameFirm.Name = "lblNameFirm";
             this.lblNameFirm.Size = new System.Drawing.Size(64, 16);
             this.lblNameFirm.TabIndex = 28;
@@ -2118,7 +2121,7 @@ where
             // 
             this.CostsDataGrid.AllowDrop = true;
             this.CostsDataGrid.CaptionText = "Цены";
-            this.CostsDataGrid.DataMember = "Поставщики.Поставщики-Прайсы.Прайсы-Цены.Цены-Правила формализации цен";
+            this.CostsDataGrid.DataMember = "Поставщики.Поставщики-Прайсы.Прайсы-Правила формализации цен";
             this.CostsDataGrid.DataSource = this.dtSet;
             this.CostsDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CostsDataGrid.HeaderForeColor = System.Drawing.SystemColors.ControlText;
@@ -3137,6 +3140,7 @@ where
             this.btnEditMask.Name = "btnEditMask";
             this.btnEditMask.Size = new System.Drawing.Size(24, 20);
             this.btnEditMask.TabIndex = 23;
+            this.ttMain.SetToolTip(this.btnEditMask, "Настройка маски разбора");
             this.btnEditMask.Click += new System.EventHandler(this.btnEditMask_Click);
             // 
             // btnCheckAll
@@ -3147,6 +3151,7 @@ where
             this.btnCheckAll.Name = "btnCheckAll";
             this.btnCheckAll.Size = new System.Drawing.Size(24, 20);
             this.btnCheckAll.TabIndex = 22;
+            this.ttMain.SetToolTip(this.btnCheckAll, "Проверка маски разбора");
             this.btnCheckAll.Click += new System.EventHandler(this.btnCheckAll_Click);
             // 
             // btnJunkCheck
@@ -3157,6 +3162,7 @@ where
             this.btnJunkCheck.Name = "btnJunkCheck";
             this.btnJunkCheck.Size = new System.Drawing.Size(24, 20);
             this.btnJunkCheck.TabIndex = 21;
+            this.ttMain.SetToolTip(this.btnJunkCheck, "Проверка маски сроковых");
             this.btnJunkCheck.Click += new System.EventHandler(this.btnJunkCheck_Click);
             // 
             // btnAwaitCheck
@@ -3167,6 +3173,7 @@ where
             this.btnAwaitCheck.Name = "btnAwaitCheck";
             this.btnAwaitCheck.Size = new System.Drawing.Size(24, 20);
             this.btnAwaitCheck.TabIndex = 20;
+            this.ttMain.SetToolTip(this.btnAwaitCheck, "Проверка маски ожидаемых");
             this.btnAwaitCheck.Click += new System.EventHandler(this.btnAwaitCheck_Click);
             // 
             // label23
@@ -3331,7 +3338,7 @@ where
             // mcmdUCostRules
             // 
             this.mcmdUCostRules.CommandText = "UPDATE farm.costformrules c SET\r\nFieldName = ?FieldName,\r\nTxtBegin = ?TxtBegin,\r\n" +
-                "TxtEnd = ?TxtEnd\r\nWHERE c.FR_Id = ?FirmCode\r\n AND c.PC_CostCode = ?CostCode";
+                "TxtEnd = ?TxtEnd\r\nWHERE c.PC_CostCode = ?CostCode";
             this.mcmdUCostRules.CommandTimeout = 0;
             this.mcmdUCostRules.CommandType = System.Data.CommandType.Text;
             this.mcmdUCostRules.Connection = null;
@@ -3560,9 +3567,10 @@ order by pc.costName";
 		{
 			dtCostsFormRules.Clear();
 
-			MyCmd.CommandText = 
-				@"SELECT distinct
-					cfr.FR_id AS CFRfr_if,
+			MyCmd.CommandText =
+                @"SELECT distinct
+					-- cfr.FR_id AS CFRfr_if,
+					pc.showpricecode AS CFRfr_if,
 					pc.CostName as CFRCostName,
 					cfr.PC_CostCode AS CFRCost_Code,
 					cfr.FieldName AS CFRFieldName,
