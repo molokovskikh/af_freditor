@@ -1233,6 +1233,7 @@ namespace FREditor
             // 
             // rtbArticle
             // 
+            this.rtbArticle.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dtSet, "Поставщики.Поставщики-Прайсы.Прайсы-правила.FRMemo", true));
             this.rtbArticle.Location = new System.Drawing.Point(2, 74);
             this.rtbArticle.Name = "rtbArticle";
             this.rtbArticle.Size = new System.Drawing.Size(192, 83);

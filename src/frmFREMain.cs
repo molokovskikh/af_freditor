@@ -188,7 +188,9 @@ namespace FREditor
   FPeriod = ?FRFPeriod,
   FDoc = ?FRFDoc,
   FJunk = ?FRFJunk,
-  FAwait = ?FRFAwait
+  FAwait = ?FRFAwait,
+  
+  Memo = ?FRMemo
 where
   FirmCode = ?FRPriceCode;";
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
@@ -276,6 +278,7 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFDoc", MySql.Data.MySqlClient.MySqlDbType.String, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFJunk", MySql.Data.MySqlClient.MySqlDbType.String, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFAwait", MySql.Data.MySqlClient.MySqlDbType.String, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRMemo", MySql.Data.MySqlClient.MySqlDbType.String, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
             foreach (MySqlParameter ms in this.mcmdUFormRules.Parameters)
             {
