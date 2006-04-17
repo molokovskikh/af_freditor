@@ -778,8 +778,8 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                     tcInnerTable.ItemSize = new Size(58, 18);
                     tcInnerTable.Appearance = TabAppearance.Normal;
 
-                    label22.Visible = false;
-                    txtBoxStartLine.Visible = false;
+                    lStartLine.Visible = true;
+                    txtBoxStartLine.Visible = true;
                     label23.Visible = false;
                     txtBoxSheetName.Visible = false;
                     pnlGeneralFields.Visible = false;
@@ -805,8 +805,8 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                     tcInnerTable.ItemSize = new Size(0, 1);
                     tcInnerTable.Appearance = TabAppearance.Buttons;
 
-                    label22.Visible = false;
-                    txtBoxStartLine.Visible = false;
+                    lStartLine.Visible = true;
+                    txtBoxStartLine.Visible = true;
                     label23.Visible = false;
                     txtBoxSheetName.Visible = false;
                     pnlGeneralFields.Visible = true;
@@ -835,7 +835,7 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                     tcInnerSheets.ItemSize = new Size(58, 18);
                     tcInnerSheets.Appearance = TabAppearance.Normal;
 
-                    label22.Visible = true;
+                    lStartLine.Visible = true;
                     txtBoxStartLine.Visible = true;
                     label23.Visible = true;
                     txtBoxSheetName.Visible = true;
@@ -853,7 +853,7 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                         tcInnerSheets.ItemSize = new Size(0, 1);
                         tcInnerSheets.Appearance = TabAppearance.Buttons;
 
-                        label22.Visible = false;
+                        lStartLine.Visible = false;
                         txtBoxStartLine.Visible = false;
                         label23.Visible = false;
                         txtBoxSheetName.Visible = false;
@@ -1496,7 +1496,7 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
 
             DelCostsColumns();
 
-            label22.Visible = false;
+            lStartLine.Visible = false;
             txtBoxStartLine.Visible = false;
             label23.Visible = false;
             txtBoxSheetName.Visible = false;

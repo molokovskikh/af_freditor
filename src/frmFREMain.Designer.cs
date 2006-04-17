@@ -287,7 +287,7 @@ namespace FREditor
             this.btnJunkCheck = new System.Windows.Forms.Button();
             this.btnAwaitCheck = new System.Windows.Forms.Button();
             this.label23 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
+            this.lStartLine = new System.Windows.Forms.Label();
             this.txtBoxSheetName = new System.Windows.Forms.TextBox();
             this.txtBoxStartLine = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
@@ -2543,7 +2543,7 @@ namespace FREditor
             this.pnlSettings.Controls.Add(this.btnJunkCheck);
             this.pnlSettings.Controls.Add(this.btnAwaitCheck);
             this.pnlSettings.Controls.Add(this.label23);
-            this.pnlSettings.Controls.Add(this.label22);
+            this.pnlSettings.Controls.Add(this.lStartLine);
             this.pnlSettings.Controls.Add(this.txtBoxSheetName);
             this.pnlSettings.Controls.Add(this.txtBoxStartLine);
             this.pnlSettings.Controls.Add(this.label21);
@@ -2612,13 +2612,13 @@ namespace FREditor
             this.label23.TabIndex = 19;
             this.label23.Text = "Название листа :";
             // 
-            // label22
+            // lStartLine
             // 
-            this.label22.Location = new System.Drawing.Point(64, 104);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(80, 23);
-            this.label22.TabIndex = 18;
-            this.label22.Text = "Старт-срока :";
+            this.lStartLine.Location = new System.Drawing.Point(64, 104);
+            this.lStartLine.Name = "lStartLine";
+            this.lStartLine.Size = new System.Drawing.Size(80, 23);
+            this.lStartLine.TabIndex = 18;
+            this.lStartLine.Text = "Старт-срока :";
             // 
             // txtBoxSheetName
             // 
@@ -2918,7 +2918,7 @@ namespace FREditor
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label lStartLine;
         private System.Windows.Forms.Label label23;
         private System.Windows.Forms.GroupBox grpbSettings;
         private System.Windows.Forms.Panel pnlSettings;
