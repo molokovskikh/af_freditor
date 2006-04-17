@@ -49,9 +49,9 @@ namespace FREditor
         //INDataGrid.INDataGridTableStyle PriceDataTableStyle = new INDataGrid.INDataGridTableStyle();
 
 #if DEBUG
-        private MySqlConnection MyCn = new MySqlConnection("server=TestSQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
+        private MySqlConnection MyCn = new MySqlConnection("server=TestSQL.analit.net; user id={0}; password=pw123; database=farm; Allow Zero Datetime=True;");
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id={0}; password=123; database=farm; Allow Zero Datetime=True;");
 #endif
         private MySqlCommand MyCmd = new MySqlCommand();
         private MySqlDataAdapter MyDA = new MySqlDataAdapter();
@@ -282,6 +282,7 @@ where
                 ms.SourceColumn = ms.ParameterName;
             }
 
+            MyCn.ConnectionString = String.Format(MyCn.ConnectionString, Environment.UserName);
 
             MyCn.Open();
             MyCmd.Connection = MyCn;
