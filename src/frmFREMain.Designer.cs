@@ -43,9 +43,9 @@ namespace FREditor
             this.CRegion = new System.Data.DataColumn();
             this.CFullName = new System.Data.DataColumn();
             this.dtPrices = new System.Data.DataTable();
+            this.PPriceCode = new System.Data.DataColumn();
             this.PFirmCode = new System.Data.DataColumn();
             this.PFirmName = new System.Data.DataColumn();
-            this.PPriceCode = new System.Data.DataColumn();
             this.dtPricesCost = new System.Data.DataTable();
             this.PCPriceCode = new System.Data.DataColumn();
             this.PCBaseCost = new System.Data.DataColumn();
@@ -479,6 +479,12 @@ namespace FREditor
         this.PPriceCode};
             this.dtPrices.TableName = "Прайсы";
             // 
+            // PPriceCode
+            // 
+            this.PPriceCode.AllowDBNull = false;
+            this.PPriceCode.ColumnName = "PPriceCode";
+            this.PPriceCode.DataType = typeof(long);
+            // 
             // PFirmCode
             // 
             this.PFirmCode.ColumnName = "PFirmCode";
@@ -487,12 +493,6 @@ namespace FREditor
             // PFirmName
             // 
             this.PFirmName.ColumnName = "PFirmName";
-            // 
-            // PPriceCode
-            // 
-            this.PPriceCode.AllowDBNull = false;
-            this.PPriceCode.ColumnName = "PPriceCode";
-            this.PPriceCode.DataType = typeof(long);
             // 
             // dtPricesCost
             // 
@@ -1066,6 +1066,7 @@ namespace FREditor
             this.ClientsTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
             this.ClientsTableStyle.MappingName = "Поставщики";
             this.ClientsTableStyle.ReadOnly = true;
+            this.ClientsTableStyle.RowHeadersVisible = false;
             this.ClientsTableStyle.RowSelected = true;
             // 
             // CClientCodeTextBoxColumn
@@ -1078,7 +1079,7 @@ namespace FREditor
             this.CClientCodeTextBoxColumn.NullText = "";
             this.CClientCodeTextBoxColumn.ReadOnly = true;
             this.CClientCodeTextBoxColumn.SearchColumn = true;
-            this.CClientCodeTextBoxColumn.Width = 272;
+            this.CClientCodeTextBoxColumn.Width = 284;
             // 
             // CClientNameTextBoxColumn
             // 
@@ -1090,7 +1091,7 @@ namespace FREditor
             this.CClientNameTextBoxColumn.NullText = "";
             this.CClientNameTextBoxColumn.ReadOnly = true;
             this.CClientNameTextBoxColumn.SearchColumn = true;
-            this.CClientNameTextBoxColumn.Width = 272;
+            this.CClientNameTextBoxColumn.Width = 284;
             // 
             // CRegionNameTextBoxColumn
             // 
@@ -1102,7 +1103,7 @@ namespace FREditor
             this.CRegionNameTextBoxColumn.NullText = "";
             this.CRegionNameTextBoxColumn.ReadOnly = true;
             this.CRegionNameTextBoxColumn.SearchColumn = false;
-            this.CRegionNameTextBoxColumn.Width = 273;
+            this.CRegionNameTextBoxColumn.Width = 284;
             // 
             // PricesTableStyle
             // 
