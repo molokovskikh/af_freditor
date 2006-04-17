@@ -1555,7 +1555,6 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                 CurrencyManager cm = (CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName];
                 //Код выбранного клиента
                 long ClientCode = (long)((DataRowView)cm.Current)[CCode.ColumnName];
-                int CurrentPosition = PriceGrid.CurrentCell.RowNumber;
 
                 //То, что сейчас отображается в таблице
                 string dataMember = PriceGrid.DataMember;
@@ -1789,47 +1788,16 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
             {
                 if (costsHitTestInfo.Row > -1)
                 {
-                    bool ed;
                     CurrencyManager cm = (CurrencyManager)BindingContext[CostsDataGrid.DataSource, CostsDataGrid.DataMember];
                     DataRowView drv = (DataRowView)cm.Current;
                     if (pnlGeneralFields.Visible)
                     {
-                        /*
-private void EditValue()
-{ 
-   int rowtoedit = 1;
-   CurrencyManager myCurrencyManager = 
-   (CurrencyManager)this.BindingContext[ds.Tables["Suppliers"]];
-   myCurrencyManager.Position=rowtoedit;
-   DataGridColumnStyle dgc = dataGrid1.TableStyles[0].GridColumnStyles[0];
-   dataGrid1.BeginEdit(dgc, rowtoedit);
-   // Insert code to edit the value.
-   dataGrid1.EndEdit(dgc, rowtoedit, false);
-}                         * 
-                         */
-
-
-                        //ed = CostsDataGrid.BeginEdit(CostsDataGrid.CurrentTableStyle.GridColumnStyles[2], costsHitTestInfo.Row);
                         CostsDataGrid[costsHitTestInfo.Row, 2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
-                        //ed = CostsDataGrid.EndEdit(CostsDataGrid.CurrentTableStyle.GridColumnStyles[2], costsHitTestInfo.Row, false);
-                        //drv.BeginEdit();
-                        //drv.Row[2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
-                        //drv.EndEdit();
                     }
                     else
                     {
-                        //ed = CostsDataGrid.BeginEdit(CostsDataGrid.CurrentTableStyle.GridColumnStyles[2], costsHitTestInfo.Row);
                         CostsDataGrid[costsHitTestInfo.Row, 2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
-                        //ed = CostsDataGrid.EndEdit(CostsDataGrid.CurrentTableStyle.GridColumnStyles[2], costsHitTestInfo.Row, false);
-
-                        //CostsDataGrid.BeginEdit(CostsDataGrid.CurrentTableStyle.GridColumnStyles[3], costsHitTestInfo.Row);
                         CostsDataGrid[costsHitTestInfo.Row, 3] = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
-                        //CostsDataGrid.EndEdit(CostsDataGrid.CurrentTableStyle.GridColumnStyles[3], costsHitTestInfo.Row, false);
-
-                        //drv.BeginEdit();
-                        //drv.Row[2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
-                        //drv.Row[3] = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
-                        //drv.EndEdit();
                     }
                 }
             }
@@ -2130,7 +2098,7 @@ private void EditValue()
                         }
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                     erP.SetIconAlignment(txtMask, ErrorIconAlignment.MiddleLeft);
 
