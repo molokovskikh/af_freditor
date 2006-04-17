@@ -466,9 +466,9 @@ namespace FREditor
             // dtPrices
             // 
             this.dtPrices.Columns.AddRange(new System.Data.DataColumn[] {
+            this.PPriceCode,
             this.PFirmCode,
-            this.PFirmName,
-            this.PPriceCode});
+            this.PFirmName});
             this.dtPrices.Constraints.AddRange(new System.Data.Constraint[] {
             new System.Data.UniqueConstraint("Constraint1", new string[] {
                         "PPriceCode"}, true),
@@ -1066,7 +1066,6 @@ namespace FREditor
             this.ClientsTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
             this.ClientsTableStyle.MappingName = "Поставщики";
             this.ClientsTableStyle.ReadOnly = true;
-            this.ClientsTableStyle.RowHeadersVisible = false;
             this.ClientsTableStyle.RowSelected = true;
             // 
             // CClientCodeTextBoxColumn
@@ -1079,7 +1078,7 @@ namespace FREditor
             this.CClientCodeTextBoxColumn.NullText = "";
             this.CClientCodeTextBoxColumn.ReadOnly = true;
             this.CClientCodeTextBoxColumn.SearchColumn = true;
-            this.CClientCodeTextBoxColumn.Width = 284;
+            this.CClientCodeTextBoxColumn.Width = 272;
             // 
             // CClientNameTextBoxColumn
             // 
@@ -1091,7 +1090,7 @@ namespace FREditor
             this.CClientNameTextBoxColumn.NullText = "";
             this.CClientNameTextBoxColumn.ReadOnly = true;
             this.CClientNameTextBoxColumn.SearchColumn = true;
-            this.CClientNameTextBoxColumn.Width = 284;
+            this.CClientNameTextBoxColumn.Width = 272;
             // 
             // CRegionNameTextBoxColumn
             // 
@@ -1103,7 +1102,7 @@ namespace FREditor
             this.CRegionNameTextBoxColumn.NullText = "";
             this.CRegionNameTextBoxColumn.ReadOnly = true;
             this.CRegionNameTextBoxColumn.SearchColumn = false;
-            this.CRegionNameTextBoxColumn.Width = 284;
+            this.CRegionNameTextBoxColumn.Width = 273;
             // 
             // PricesTableStyle
             // 
@@ -1482,7 +1481,7 @@ namespace FREditor
             // 
             // PriceDataTableStyle
             // 
-            this.PriceDataTableStyle.ColumnSizeAutoFit = true;
+            this.PriceDataTableStyle.ColumnSizeAutoFit = false;
             this.PriceDataTableStyle.DataGrid = this.PriceDataGrid;
             this.PriceDataTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
             this.PriceDataTableStyle.RowHeadersVisible = false;
@@ -2802,10 +2801,12 @@ namespace FREditor
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(864, 753);
             this.Controls.Add(this.tscMain);
+            this.KeyPreview = true;
             this.Name = "frmFREMain";
             this.Text = "Редактор Правил Формализации";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Closed += new System.EventHandler(this.Form1_Closed);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.frmFREMain_KeyDown);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tbControl.ResumeLayout(false);
             this.tpFirms.ResumeLayout(false);

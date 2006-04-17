@@ -59,7 +59,8 @@ namespace FREditor
         private OleDbConnection dbcMain = new OleDbConnection();
 
         //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        string StartPath = "C:\\TEMP\\Base\\";
+        //string StartPath = "C:\\TEMP\\Base\\";
+        string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
         string TxtFilePath = String.Empty;
@@ -77,6 +78,9 @@ namespace FREditor
 
         string nameR = String.Empty;
 
+        /// <summary>
+        /// Указывает на то, что у фирмы имеется только один прайс-лист
+        /// </summary>
         bool firstFind = false;
 
         StringFormat sf = new StringFormat();
@@ -294,13 +298,9 @@ where
             dtPrice.TableName = "Прайс";
             PriceDataTableStyle.MappingName = dtPrice.TableName;
             PriceDataTableStyle.RowHeadersVisible = false;
-            PriceDataTableStyle.ColumnSizeAutoFit = true;
+            //PriceDataTableStyle.ColumnSizeAutoFit = true;
 
             MyCn.Close();
-
-            //
-            // TODO: Add any constructor code after InitializeComponent call
-            //
         }
 
         /// <summary>
@@ -314,6 +314,8 @@ where
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
+            if (PriceGrid.CurrentRowIndex > -1)
+                PriceGrid.CurrentCell = new DataGridCell(0, 1);
             PriceGrid.Focus();
             PriceGrid.Select();
 
@@ -748,7 +750,6 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                                 OpenTXTDFile(filePath, fmt);
                             }
                         }
-                CreateColumns(PriceDataTableStyle, dtPrice);
                 Application.DoEvents();
                 ShowTab(fmt);
                 Application.DoEvents();
@@ -763,6 +764,8 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
             INDataGrid.INDataGridColorTextBoxColumn c;
 
             PriceDataGrid.DataSource = dtPrice;
+            CreateColumns(PriceDataTableStyle, dtPrice);
+
             if ((fmt == "win") || (fmt == "dos"))
             {
                 if (delimiter == String.Empty)
@@ -893,7 +896,7 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                 Application.DoEvents();
                 OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from [{0}]", System.IO.Path.GetFileNameWithoutExtension(filePath)), dbcMain);
                 CreateThread(da, dtPrice, PriceDataGrid);
-                PriceDataGrid.DataSource = dtPrice;
+                //PriceDataGrid.DataSource = dtPrice;
             }
             finally
             {
@@ -948,7 +951,7 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                             tblstyle = new INDataGrid.INDataGridTableStyle();
                             tblstyle.MappingName = dt.TableName;
                             //								tblstyle.DataGrid = indg;
-                            tblstyle.ColumnSizeAutoFit = true;
+                            //tblstyle.ColumnSizeAutoFit = true;
                             tblstyle.ReadOnly = true;
                             tblstyle.RowHeadersVisible = false;
                             tblstyles.Add(tblstyle);
@@ -973,7 +976,7 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                             if (j == 0)
                             {
                                 CreateThread(da, dtPrice, PriceDataGrid);
-                                PriceDataGrid.DataSource = dtPrice;
+                                //PriceDataGrid.DataSource = dtPrice;
                             }
                             else
                             {
@@ -1056,7 +1059,7 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
             OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from {0}", System.IO.Path.GetFileName(filePath).Replace(".", "#")), dbcMain);
 
             CreateThread(da, dtPrice, PriceDataGrid);
-            PriceDataGrid.DataSource = dtPrice;
+            //PriceDataGrid.DataSource = dtPrice;
             dbcMain.Close();
             dbcMain.Dispose();
             Application.DoEvents();
@@ -1217,6 +1220,9 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                 cs.MappingName = dt.Columns[i].ColumnName.ToString();
                 cs.HeaderText = dt.Columns[i].ColumnName;
                 cs.NullText = String.Empty;
+                cs.ReadOnly = true;
+                cs.EditDisable = true;
+                cs.SearchColumn = true;
                 //ts.DataGrid.BeginInvoke(new ttAa(aa), new object[] { ts, cs });
                 ts.GridColumnStyles.Add(cs);
             }
@@ -1452,6 +1458,8 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
 
         private void ClearPrice()
         {
+            PriceDataGrid.DataSource = null;
+
             tcInnerSheets.SizeMode = TabSizeMode.Normal;
             tcInnerSheets.ItemSize = new Size(0, 1);
             tcInnerSheets.Appearance = TabAppearance.Normal;//
@@ -1477,8 +1485,6 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
             dtables.Clear();
             tblstyles.Clear();
             dtMarking.Clear();
-
-            PriceDataGrid.DataSource = null;
 
             dtPrice.Rows.Clear();
             dtPrice.Columns.Clear();
@@ -1519,14 +1525,54 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
             dtCostsFormRulesFill();
         }
 
+        private void CurrencyManagerPosition(CurrencyManager cm, string ColName, object value)
+        {
+            DataView dataView = (DataView)cm.List;
+            string query;
+            if (value is string)            
+                query = string.Format("{0} = '{1}'", ColName, value);
+            else
+                query = string.Format("{0} = {1}", ColName, value);
+
+            DataTable dataTable = dataView.ToTable();
+            DataRow[] rows = dataTable.Select(query);
+            if (rows.Length > 0)
+            {
+                DataRow[] tempRows;
+                tempRows = new DataRow[dataTable.Rows.Count];
+                dataTable.Rows.CopyTo(tempRows, 0);
+                int rowIndex = Array.IndexOf(tempRows, rows[0]);
+                cm.Position = rowIndex;
+            }
+        }
+
         private void tbControl_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (tbControl.SelectedTab == tpFirms)
             {
                 //TODO: восстанавливать позицию в таблице клиентов и прайс-листов.
                 int CRI = PriceGrid.CurrentRowIndex;
+                CurrencyManager cm = (CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName];
+                //Код выбранного клиента
+                long ClientCode = (long)((DataRowView)cm.Current)[CCode.ColumnName];
+                int CurrentPosition = PriceGrid.CurrentCell.RowNumber;
+
+                //То, что сейчас отображается в таблице
+                string dataMember = PriceGrid.DataMember;
+                //Выбранная запись в текущем контексте
+                DataRow childRow = ((DataRowView)((CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember]).Current).Row;
+                //значение первого столбца выбранной записи
+                object SelectedValue = childRow[0];
+                //название первого столбца выбранной записи
+                string ChildRowColumnName = childRow.Table.Columns[0].ColumnName;
                 RefreshDataSet();
-                PriceGrid.CurrentRowIndex = CRI;
+                PriceGrid.DataMember = dtClients.TableName;
+                CurrencyManagerPosition((CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName], CCode.ColumnName, ClientCode);
+                if (dataMember != dtClients.TableName)
+                {
+                    PriceGrid.NavigateTo(((CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName]).Position, dtClients.TableName + "-" + dtPrices.TableName);
+                    CurrencyManagerPosition((CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember], ChildRowColumnName, SelectedValue);
+                }
                 PriceGrid.Focus();
                 PriceGrid.Select();
                 this.Text = "Редактор Правил Формализации";
@@ -2355,6 +2401,12 @@ private void EditValue()
             }
 
 
+        }
+
+        private void frmFREMain_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyCode == Keys.Escape) && (tbControl.SelectedTab == tpPrice))
+                tbControl.SelectedTab = tpFirms;
         }
     }
 
