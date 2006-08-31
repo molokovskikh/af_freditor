@@ -49,7 +49,8 @@ namespace FREditor
         //INDataGrid.INDataGridTableStyle PriceDataTableStyle = new INDataGrid.INDataGridTableStyle();
 
 #if DEBUG
-        private MySqlConnection MyCn = new MySqlConnection("server=TestSQL.analit.net; user id={0}; password=pw123; database=farm; Allow Zero Datetime=True;");
+        //private MySqlConnection MyCn = new MySqlConnection("server=TestSQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id={0}; password=123; database=farm; Allow Zero Datetime=True;");
 #endif
@@ -58,9 +59,9 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
         //string StartPath = "C:\\TEMP\\Base\\";
-        string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
+        //string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
         string TxtFilePath = String.Empty;
@@ -97,7 +98,7 @@ namespace FREditor
             //
             InitializeComponent();
 
-            //this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FirmCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFR_if", System.Data.DataRowVersion.Current, null));
+			//this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FirmCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFR_if", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRCost_Code", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FieldName", MySql.Data.MySqlClient.MySqlDbType.String, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFieldName", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("TxtBegin", MySql.Data.MySqlClient.MySqlDbType.String, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRTextBegin", System.Data.DataRowVersion.Current, null));
@@ -285,7 +286,6 @@ where
                 ms.SourceColumn = ms.ParameterName;
             }
 
-            MyCn.ConnectionString = String.Format(MyCn.ConnectionString, Environment.UserName);
 
             MyCn.Open();
             MyCmd.Connection = MyCn;
@@ -405,18 +405,33 @@ where
         {
             dtPrices.Clear();
 
-            MyCmd.CommandText =
-                @"SELECT distinct
-          pd.FirmCode AS PFirmCode,
-          pd.PriceName AS PFirmName,
-                    pd.PriceCode as PPriceCode
-        FROM
-          usersettings.pricesdata pd
+			MyCmd.CommandText =
+@"SELECT 
+  distinct
+  pd.FirmCode AS PFirmCode,
+  pd.PriceName AS PFirmName,
+  pd.PriceCode as PPriceCode
+FROM
+  usersettings.pricesdata pd
 inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
 where
   cd.FirmType = 0
-order by pd.pricename";
+and pd.CostType = 0
+union all
+SELECT 
+  distinct
+  pd.FirmCode AS PFirmCode,
+  pc.CostName AS PFirmName,
+  pc.CostCode as PPriceCode
+FROM
+  usersettings.pricesdata pd
+inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
+inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+where
+  cd.FirmType = 0
+and pd.CostType = 1
+order by 2"; 
 
             MyDA.Fill(dtPrices);
         }
@@ -425,42 +440,78 @@ order by pd.pricename";
         {
             dtPricesCost.Clear();
 
-            MyCmd.CommandText =
-                @"SELECT distinct
-					pc.ShowPriceCode AS PCPriceCode,
-					pc.CostCode AS PCCostCode,
-                    pc.BaseCost as PCBaseCost,
-					pc.CostName as PCCostName
-				FROM 
-					usersettings.pricescosts pc
+			MyCmd.CommandText =
+@"SELECT 
+  distinct
+	pc.ShowPriceCode AS PCPriceCode,
+	pc.CostCode AS PCCostCode,
+	pc.BaseCost as PCBaseCost,
+	pc.CostName as PCCostName
+FROM
+	usersettings.pricescosts pc
 inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
 inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
-where cd.firmtype = 0
-order by pc.costName";
+where 
+    cd.firmtype = 0
+and pd.CostType = 0
+union all
+SELECT 
+  distinct
+	pc.PriceCode AS PCPriceCode,
+	pc.CostCode AS PCCostCode,
+	pc.BaseCost as PCBaseCost,
+	pc.CostName as PCCostName
+FROM
+  usersettings.pricescosts pc
+inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
+inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
+where 
+    cd.firmtype = 0
+and pd.CostType = 1 
+order by 4";
 
-            MyDA.Fill(dtPricesCost);
+			MyDA.Fill(dtPricesCost);
         }
 
         private void dtCostsFormRulesFill()
         {
             dtCostsFormRules.Clear();
 
-            MyCmd.CommandText =
-                @"SELECT distinct
-					-- cfr.FR_id AS CFRfr_if,
-					pc.showpricecode AS CFRfr_if,
-					pc.CostName as CFRCostName,
-					cfr.PC_CostCode AS CFRCost_Code,
-					cfr.FieldName AS CFRFieldName,
-                    cfr.TxtBegin as CFRTxtBegin,
-					cfr.TxtEnd as CFRTxtEnd
-				FROM 
-					farm.costformrules cfr
+			MyCmd.CommandText =
+@"SELECT 
+  distinct
+  pc.showpricecode AS CFRfr_if,
+  pc.CostName as CFRCostName,
+  cfr.PC_CostCode AS CFRCost_Code,
+  cfr.FieldName AS CFRFieldName,
+  cfr.TxtBegin as CFRTxtBegin,
+  cfr.TxtEnd as CFRTxtEnd
+FROM 
+  farm.costformrules cfr
 inner join usersettings.pricescosts pc on pc.CostCode = cfr.pc_costcode
 inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
 inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
-where cd.firmtype = 0
-order by pc.costName";
+where 
+     cd.firmtype = 0 
+and pd.CostType = 0
+union all
+SELECT 
+  distinct
+  pc.pricecode AS CFRfr_if,
+  pc.CostName as CFRCostName,
+  cfr.PC_CostCode AS CFRCost_Code,
+  cfr.FieldName AS CFRFieldName,
+  cfr.TxtBegin as CFRTxtBegin,
+  cfr.TxtEnd as CFRTxtEnd
+FROM 
+  farm.costformrules cfr
+inner join usersettings.pricescosts pc on pc.CostCode = cfr.pc_costcode
+inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
+inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
+where 
+    cd.firmtype = 0 
+and pd.CostType = 1
+order by 2";
 
             MyDA.Fill(dtCostsFormRules);
         }
@@ -602,7 +653,32 @@ INNER JOIN
 LEFT JOIN
     Farm.FormRules AS PFR
     ON PFR.FirmCode=IF(FR.ParentFormRules,FR.ParentFormRules,FR.FirmCode)
-where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = pd.PriceCode)";
+where 
+  pd.PriceCode in
+(
+SELECT 
+  distinct
+  pd.PriceCode as PPriceCode
+FROM
+  usersettings.pricesdata pd
+inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
+inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+where
+  cd.FirmType = 0
+and pd.CostType = 0
+union all
+SELECT 
+  distinct
+  pc.CostCode as PPriceCode
+FROM
+  usersettings.pricesdata pd
+inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
+inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+where
+  cd.FirmType = 0
+and pd.CostType = 1
+)
+";
             //WHERE FR.DateCurPrice > '2005.01.01'
 
             MyDA.Fill(dtFormRules);
@@ -2326,13 +2402,18 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
         {
             if (e.TabPage == tpPrice)
             {
-                CommitAllEdit();
-                DataSet dsc = dtSet.GetChanges();
-                if (dsc != null)
-                    if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-                        tsbApply_Click(null, null);
+				TrySaveData();
             }
         }
+
+		private void TrySaveData()
+		{
+			CommitAllEdit();
+			DataSet dsc = dtSet.GetChanges();
+			if (dsc != null)
+				if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+					tsbApply_Click(null, null);
+		}
 
         private void tsbApply_Click(object sender, EventArgs e)
         {
@@ -2347,6 +2428,11 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                     MySqlTransaction tr = MyCn.BeginTransaction();
                     try
                     {
+						MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
+						SetCMD.Parameters.Add("INHost", Environment.MachineName);
+						SetCMD.Parameters.Add("INUser", Environment.UserName);
+						SetCMD.ExecuteNonQuery();
+
                         mcmdUCostRules.Connection = MyCn;
                         daCostRules.TableMappings.Clear();
                         daCostRules.TableMappings.Add("Table", dtCostsFormRules.TableName);
@@ -2371,8 +2457,6 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
                     MyCn.Close();
                 }
             }
-
-
         }
 
         private void frmFREMain_KeyDown(object sender, KeyEventArgs e)
@@ -2380,6 +2464,17 @@ where exists(select * from usersettings.pricescosts pc where pc.ShowPriceCode = 
             if ((e.KeyCode == Keys.Escape) && (tbControl.SelectedTab == tpPrice))
                 tbControl.SelectedTab = tpFirms;
         }
+
+		private void tmrUpdateApply_Tick(object sender, EventArgs e)
+		{
+			tsbApply.Enabled = dtSet.HasChanges();
+			tsbCancel.Enabled = tsbApply.Enabled;
+		}
+
+		private void frmFREMain_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			TrySaveData();
+		}
     }
 
     public class WaitWindowThread
