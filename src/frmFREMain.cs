@@ -67,6 +67,7 @@ namespace FREditor
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
         string TxtFilePath = String.Empty;
         string frmCaption = String.Empty;
+        bool Opened = false;
 
         DataRow openedPriceDR;
         string listName = String.Empty;
@@ -842,7 +843,6 @@ and pd.CostType = 1
         private void ShowTab(string fmt)
         {
             tcInnerTable.Visible = true;
-            INDataGridViewTextBoxColumn c;
 
             //indgvPriceData.DataSource = dtSet;
             //indgvPriceData.DataSource = dtPrice;
@@ -868,21 +868,8 @@ and pd.CostType = 1
                     pnlGeneralFields.Visible = false;
                     pnlTxtFields.Visible = true;
 
-                    c = new INDataGridViewTextBoxColumn();
-                    c.Name = "CFRTxtBegin";
-                    //c.NullText = String.Empty;
-                    c.HeaderText = "Начало";
-                    //c.ReadOnly = true;
-                    //c.EditDisable = true;
-                    indgvCosts.Columns.Add(c);
-                    //CostsFormRulesTableStyle.GridColumnStyles.Add(c);
-
-                    c = new INDataGridViewTextBoxColumn();
-                    c.Name = "CFRTxtEnd";
-                    //c.NullText = String.Empty;
-                    c.HeaderText = "Конец";
-                    //c.ReadOnly = true;
-                    indgvCosts.Columns.Add(c);
+                    indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
+                    indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
                 }
                 else
                 {
@@ -897,12 +884,7 @@ and pd.CostType = 1
                     pnlGeneralFields.Visible = true;
                     pnlTxtFields.Visible = false;
 
-                    c = new INDataGridViewTextBoxColumn();
-                    c.Name = "CFRFieldName";
-                    //c.NullText = String.Empty;
-                    c.HeaderText = "Поле";
-                    //c.ReadOnly = true;
-                    indgvCosts.Columns.Add(c);
+                    indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
                 }
                 tcInnerSheets.SizeMode = TabSizeMode.Fixed;
                 tcInnerSheets.ItemSize = new Size(0, 1);
@@ -946,12 +928,7 @@ and pd.CostType = 1
                         pnlTxtFields.Visible = false;
                     }
 
-                c = new INDataGridViewTextBoxColumn();
-                c.Name = "CFRFieldName";
-                //c.NullText = String.Empty;
-                c.HeaderText = "Поле";
-                //c.ReadOnly = true;
-                indgvCosts.Columns.Add(c); 
+                indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
             }
 
             if (existParentRules == String.Empty)
@@ -1332,16 +1309,20 @@ and pd.CostType = 1
 
         private void DelCostsColumns()
         {
-            for (int i = indgvCosts.Columns.Count - 1; i > 0; i--)
-            {
-                if ((indgvCosts.Columns[i].Name == CFRCost_Code.ColumnName) || (indgvCosts.Columns[i].Name == CFRCostName.ColumnName))
-                {
-                }
-                else
-                {
-                    indgvCosts.Columns.Remove(indgvCosts.Columns[i]);
-                }
-            }
+            indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = false;
+            indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = false;
+            indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = false;
+
+            //for (int i = indgvCosts.Columns.Count - 1; i > 0; i--)
+            //{
+            //    if ((indgvCosts.Columns[i].Name == CFRCost_Code.ColumnName) || (indgvCosts.Columns[i].Name == CFRCostName.ColumnName))
+            //    {
+            //    }
+            //    else
+            //    {
+            //        indgvCosts.Columns.Remove(indgvCosts.Columns[i]);
+            //    }
+            //  }
         }
 
         public string strToANSI(string Dest)
@@ -1652,6 +1633,7 @@ and pd.CostType = 1
         {
             if (tbControl.SelectedTab == tpFirms)
             {
+                Opened = false;
                 //TODO: восстанавливать позицию в таблице клиентов и прайс-листов.
                 int CRI = PriceGrid.CurrentRowIndex;
                 CurrencyManager cm = (CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName];
@@ -1687,6 +1669,7 @@ and pd.CostType = 1
                 {
                     //	fmt0 = String.Empty;
                     //	ClearPrice();
+                    Opened = true;
                     CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
                     DataRowView drv = (DataRowView)currencyManager.Current;
                     DataView dv = (DataView)currencyManager.List;
@@ -2422,8 +2405,7 @@ and pd.CostType = 1
 
         private void CommitAllEdit()
         {
-//            CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
-            CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-Правила формализации цен"];
+            CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
             cm.EndCurrentEdit();
             DataTable dt = dtSet.Tables[dtCostsFormRules.TableName].GetChanges();
             //TODO: Здесь надо правильно биндить
