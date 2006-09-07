@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Inforoom.WinForms;
 
 namespace FREditor
 {
@@ -50,7 +51,7 @@ namespace FREditor
 
 #if DEBUG
         //private MySqlConnection MyCn = new MySqlConnection("server=TestSQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id={0}; password=123; database=farm; Allow Zero Datetime=True;");
 #endif
@@ -59,8 +60,8 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        //string StartPath = "C:\\TEMP\\Base\\";
+        //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+        string StartPath = "C:\\TEMP\\Base\\";
         //string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
@@ -841,10 +842,16 @@ and pd.CostType = 1
         private void ShowTab(string fmt)
         {
             tcInnerTable.Visible = true;
-            INDataGrid.INDataGridColorTextBoxColumn c;
+            INDataGridViewTextBoxColumn c;
 
+            //indgvPriceData.DataSource = dtSet;
+            //indgvPriceData.DataSource = dtPrice;
+            //dtPrice.ChildRelations.Clear();
+            //indgvPriceData.DataMember = dtPrice.TableName;
             PriceDataGrid.DataSource = dtPrice;
+
             CreateColumns(PriceDataTableStyle, dtPrice);
+            //CreateIndgvColumns(indgvPriceData, dtPrice);
 
             if ((fmt == "win") || (fmt == "dos"))
             {
@@ -861,19 +868,21 @@ and pd.CostType = 1
                     pnlGeneralFields.Visible = false;
                     pnlTxtFields.Visible = true;
 
-                    c = new INDataGrid.INDataGridColorTextBoxColumn();
-                    c.MappingName = "CFRTxtBegin";
-                    c.NullText = String.Empty;
+                    c = new INDataGridViewTextBoxColumn();
+                    c.Name = "CFRTxtBegin";
+                    //c.NullText = String.Empty;
                     c.HeaderText = "Начало";
-                    c.EditDisable = true;
-                    CostsFormRulesTableStyle.GridColumnStyles.Add(c);
+                    //c.ReadOnly = true;
+                    //c.EditDisable = true;
+                    indgvCosts.Columns.Add(c);
+                    //CostsFormRulesTableStyle.GridColumnStyles.Add(c);
 
-                    c = new INDataGrid.INDataGridColorTextBoxColumn();
-                    c.MappingName = "CFRTxtEnd";
-                    c.NullText = String.Empty;
+                    c = new INDataGridViewTextBoxColumn();
+                    c.Name = "CFRTxtEnd";
+                    //c.NullText = String.Empty;
                     c.HeaderText = "Конец";
-                    c.EditDisable = true;
-                    CostsFormRulesTableStyle.GridColumnStyles.Add(c);
+                    //c.ReadOnly = true;
+                    indgvCosts.Columns.Add(c);
                 }
                 else
                 {
@@ -888,12 +897,12 @@ and pd.CostType = 1
                     pnlGeneralFields.Visible = true;
                     pnlTxtFields.Visible = false;
 
-                    c = new INDataGrid.INDataGridColorTextBoxColumn();
-                    c.MappingName = "CFRFieldName";
-                    c.NullText = String.Empty;
+                    c = new INDataGridViewTextBoxColumn();
+                    c.Name = "CFRFieldName";
+                    //c.NullText = String.Empty;
                     c.HeaderText = "Поле";
-                    c.EditDisable = true;
-                    CostsFormRulesTableStyle.GridColumnStyles.Add(c);
+                    //c.ReadOnly = true;
+                    indgvCosts.Columns.Add(c);
                 }
                 tcInnerSheets.SizeMode = TabSizeMode.Fixed;
                 tcInnerSheets.ItemSize = new Size(0, 1);
@@ -937,13 +946,12 @@ and pd.CostType = 1
                         pnlTxtFields.Visible = false;
                     }
 
-                pnlFloat.Visible = false;
-                c = new INDataGrid.INDataGridColorTextBoxColumn();
-                c.MappingName = "CFRFieldName";
-                c.NullText = String.Empty;
+                c = new INDataGridViewTextBoxColumn();
+                c.Name = "CFRFieldName";
+                //c.NullText = String.Empty;
                 c.HeaderText = "Поле";
-                c.EditDisable = true;
-                CostsFormRulesTableStyle.GridColumnStyles.Add(c);
+                //c.ReadOnly = true;
+                indgvCosts.Columns.Add(c); 
             }
 
             if (existParentRules == String.Empty)
@@ -1308,16 +1316,30 @@ and pd.CostType = 1
             }
         }
 
+        private void CreateIndgvColumns(INDataGridView indgv, DataTable dt)
+        {
+            indgv.Columns.Clear();
+            for (int i = 0; i < dt.Columns.Count; i++)
+            {
+                INDataGridViewTextBoxColumn cs = new INDataGridViewTextBoxColumn();
+                cs.Name = dt.Columns[i].ColumnName.ToString();
+                cs.HeaderText = dt.Columns[i].ColumnName;
+                cs.ReadOnly = true;
+                indgv.SearchColumnName = cs.Name;
+                indgv.Columns.Add(cs);
+            }
+        }
+
         private void DelCostsColumns()
         {
-            for (int i = CostsFormRulesTableStyle.GridColumnStyles.Count - 1; i > 0; i--)
+            for (int i = indgvCosts.Columns.Count - 1; i > 0; i--)
             {
-                if ((CostsFormRulesTableStyle.GridColumnStyles[i].MappingName == CFRCost_Code.ColumnName) || (CostsFormRulesTableStyle.GridColumnStyles[i].MappingName == CFRCostName.ColumnName))
+                if ((indgvCosts.Columns[i].Name == CFRCost_Code.ColumnName) || (indgvCosts.Columns[i].Name == CFRCostName.ColumnName))
                 {
                 }
                 else
                 {
-                    CostsFormRulesTableStyle.GridColumnStyles.Remove(CostsFormRulesTableStyle.GridColumnStyles[i]);
+                    indgvCosts.Columns.Remove(indgvCosts.Columns[i]);
                 }
             }
         }
@@ -1655,6 +1677,10 @@ and pd.CostType = 1
                 PriceGrid.Focus();
                 PriceGrid.Select();
                 this.Text = "Редактор Правил Формализации";
+                tsbApply.Enabled = false;
+                tsbCancel.Enabled = false;
+                pnlFloat.Visible = false;
+                tmrUpdateApply.Stop();
             }
             else
                 if (tbControl.SelectedTab == tpPrice)
@@ -1670,6 +1696,7 @@ and pd.CostType = 1
                         DataRow drP = drv.Row;
                         openedPriceDR = drP;
                         DoOpenPrice(drP);
+                        tmrUpdateApply.Start();
                     }
                     else
                         if (drv.Row.Table.TableName == dtClients.TableName)
@@ -1704,12 +1731,17 @@ and pd.CostType = 1
                                     //								{
                                     openedPriceDR = drs[0];
                                     DoOpenPrice(drs[0]);
+                                    tmrUpdateApply.Start();
                                     //									break;
                                     //								}
                                     //							}
                                 }
                                 else
+                                {
                                     tbControl.SelectedTab = tpFirms;
+                                    tsbApply.Enabled = false;
+                                    tsbCancel.Enabled = false;
+                                }
                                 firstFind = false;
                             }
                             else
@@ -1720,9 +1752,14 @@ and pd.CostType = 1
                                     DataRow drP = drs[0];
                                     openedPriceDR = drP;
                                     DoOpenPrice(drP);
+                                    tmrUpdateApply.Start();
                                 }
                                 else
+                                {
                                     tbControl.SelectedTab = tpFirms;
+                                    tsbApply.Enabled = false;
+                                    tsbCancel.Enabled = false;
+                                }
                             }
                         }
                 }
@@ -1862,25 +1899,25 @@ and pd.CostType = 1
 
         private void CostsDataGrid_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            Point p = CostsDataGrid.PointToClient(new Point(e.X, e.Y));
-            DataGrid.HitTestInfo costsHitTestInfo = CostsDataGrid.HitTest(p.X, p.Y);
-            if (costsHitTestInfo.Type == DataGrid.HitTestType.Cell)
-            {
-                if (costsHitTestInfo.Row > -1)
-                {
-                    CurrencyManager cm = (CurrencyManager)BindingContext[CostsDataGrid.DataSource, CostsDataGrid.DataMember];
-                    DataRowView drv = (DataRowView)cm.Current;
-                    if (pnlGeneralFields.Visible)
-                    {
-                        CostsDataGrid[costsHitTestInfo.Row, 2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
-                    }
-                    else
-                    {
-                        CostsDataGrid[costsHitTestInfo.Row, 2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
-                        CostsDataGrid[costsHitTestInfo.Row, 3] = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
-                    }
-                }
-            }
+            //Point p = CostsDataGrid.PointToClient(new Point(e.X, e.Y));
+            //DataGrid.HitTestInfo costsHitTestInfo = CostsDataGrid.HitTest(p.X, p.Y);
+            //if (costsHitTestInfo.Type == DataGrid.HitTestType.Cell)
+            //{
+            //    if (costsHitTestInfo.Row > -1)
+            //    {
+            //        CurrencyManager cm = (CurrencyManager)BindingContext[CostsDataGrid.DataSource, CostsDataGrid.DataMember];
+            //        DataRowView drv = (DataRowView)cm.Current;
+            //        if (pnlGeneralFields.Visible)
+            //        {
+            //            CostsDataGrid[costsHitTestInfo.Row, 2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
+            //        }
+            //        else
+            //        {
+            //            CostsDataGrid[costsHitTestInfo.Row, 2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
+            //            CostsDataGrid[costsHitTestInfo.Row, 3] = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
+            //        }
+            //    }
+            //}
         }
 
         private void CostsDataGrid_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
@@ -1939,12 +1976,12 @@ and pd.CostType = 1
 
         private void CostsDataGrid_DragOver(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            Point p = CostsDataGrid.PointToClient(new Point(e.X, e.Y));
-            System.Windows.Forms.DataGrid.HitTestInfo costsHitTestInfo = CostsDataGrid.HitTest(p.X, p.Y);
-            if ((costsHitTestInfo.Type == System.Windows.Forms.DataGrid.HitTestType.Cell) && (e.Data.GetDataPresent(typeof(DropField))))
-                e.Effect = DragDropEffects.Copy;
-            else
-                e.Effect = DragDropEffects.None;
+            //Point p = CostsDataGrid.PointToClient(new Point(e.X, e.Y));
+            //System.Windows.Forms.DataGrid.HitTestInfo costsHitTestInfo = CostsDataGrid.HitTest(p.X, p.Y);
+            //if ((costsHitTestInfo.Type == System.Windows.Forms.DataGrid.HitTestType.Cell) && (e.Data.GetDataPresent(typeof(DropField))))
+            //    e.Effect = DragDropEffects.Copy;
+            //else
+            //    e.Effect = DragDropEffects.None;
         }
 
         private void PriceGrid_Click(object sender, System.EventArgs e)
@@ -2072,7 +2109,7 @@ and pd.CostType = 1
 
                 System.IAsyncResult ar = ta.BeginInvoke(da, dt, dg, null, state);
                 while (!ar.IsCompleted)
-                    Application.DoEvents();
+                Application.DoEvents();
 
                 //				dt.BeginLoadData();
                 //				try
@@ -2385,10 +2422,12 @@ and pd.CostType = 1
 
         private void CommitAllEdit()
         {
-            CurrencyManager cm = (CurrencyManager)BindingContext[CostsDataGrid.DataSource, CostsDataGrid.DataMember];
+//            CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
+            CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-Правила формализации цен"];
             cm.EndCurrentEdit();
+            DataTable dt = dtSet.Tables[dtCostsFormRules.TableName].GetChanges();
             //TODO: Здесь надо правильно биндить
-            cm = (CurrencyManager)BindingContext[CostsDataGrid.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-правила"];
+            cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-правила"];
             cm.EndCurrentEdit();
         }
 
@@ -2396,6 +2435,8 @@ and pd.CostType = 1
         {
             CommitAllEdit();
             dtSet.RejectChanges();
+            tsbApply.Enabled = false;
+            tsbCancel.Enabled = false;
         }
 
         private void tbControl_Deselecting(object sender, TabControlCancelEventArgs e)
@@ -2410,9 +2451,18 @@ and pd.CostType = 1
 		{
 			CommitAllEdit();
 			DataSet dsc = dtSet.GetChanges();
-			if (dsc != null)
-				if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-					tsbApply_Click(null, null);
+            if (dsc != null)
+            {
+                if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                {
+                    tsbApply_Click(null, null);
+                }
+                else
+                {
+                    tsbApply.Enabled = false;
+                    tsbCancel.Enabled = false;
+                }
+            }
 		}
 
         private void tsbApply_Click(object sender, EventArgs e)
@@ -2421,6 +2471,8 @@ and pd.CostType = 1
             DataSet chg = dtSet.GetChanges();
             if (chg != null)
             {
+                ((CurrencyManager)BindingContext[PriceDataGrid.DataSource, PriceDataGrid.DataMember]).EndCurrentEdit();
+
                 if (MyCn.State == ConnectionState.Closed)
                     MyCn.Open();
                 try
@@ -2457,6 +2509,8 @@ and pd.CostType = 1
                     MyCn.Close();
                 }
             }
+            tsbApply.Enabled = false;
+            tsbCancel.Enabled = false;
         }
 
         private void frmFREMain_KeyDown(object sender, KeyEventArgs e)
@@ -2467,14 +2521,87 @@ and pd.CostType = 1
 
 		private void tmrUpdateApply_Tick(object sender, EventArgs e)
 		{
-			tsbApply.Enabled = dtSet.HasChanges();
-			tsbCancel.Enabled = tsbApply.Enabled;
+            tmrUpdateApply.Stop();
+            int ss = rtbArticle.SelectionStart;
+
+            CommitAllEdit();
+
+            if (dtSet.HasChanges())
+            {
+                tsbApply.Enabled = true;
+                tsbCancel.Enabled = true;
+                if (rtbArticle.Focused)
+                {
+                    rtbArticle.SelectionStart = ss;
+                }
+            }
+            tmrUpdateApply.Start();
+           
 		}
 
 		private void frmFREMain_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			TrySaveData();
 		}
+
+        private void indgvCosts_DragDrop(object sender, DragEventArgs e)
+        {
+            Point p = indgvCosts.PointToClient(new Point(e.X, e.Y));
+            DataGridView.HitTestInfo costsHitTestInfo = indgvCosts.HitTest(p.X, p.Y);
+            if (costsHitTestInfo.Type == DataGridViewHitTestType.Cell)
+            {
+                if (costsHitTestInfo.RowIndex > -1)
+                {
+                    CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
+                    DataRowView drv = (DataRowView)cm.Current;
+                    if (pnlGeneralFields.Visible)
+                    {
+                        indgvCosts[1, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
+                    }
+                    else
+                    {
+                        indgvCosts[1, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
+                        indgvCosts[2, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
+                    }
+                }
+            }
+        }
+
+        private void indgvCosts_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(typeof(DropField)))
+            {
+                if (dtCostsFormRules.Rows.Count > 0)
+                    e.Effect = DragDropEffects.Copy;
+                else
+                    e.Effect = DragDropEffects.None;
+            }
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void indgvCosts_DragOver(object sender, DragEventArgs e)
+        {
+            Point p = indgvCosts.PointToClient(new Point(e.X, e.Y));
+            DataGridView.HitTestInfo costsHitTestInfo = indgvCosts.HitTest(p.X, p.Y);
+            if ((costsHitTestInfo.Type == DataGridViewHitTestType.Cell) && (e.Data.GetDataPresent(typeof(DropField))))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void txtBoxNameMask_TextChanged(object sender, EventArgs e)
+        {
+            tmrUpdateApply.Stop();
+            tmrUpdateApply.Start();
+        }
+
+        private void rtbArticle_TextChanged(object sender, EventArgs e)
+        {
+            tmrUpdateApply.Stop();
+            tmrUpdateApply.Start();
+
+        }
     }
 
     public class WaitWindowThread
