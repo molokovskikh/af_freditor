@@ -57,6 +57,8 @@ namespace FREditor
 #endif
         private MySqlCommand MyCmd = new MySqlCommand();
         private MySqlDataAdapter MyDA = new MySqlDataAdapter();
+        private string BaseRegKey = "Software\\Inforoom\\FREditor";
+        private string CregKey;
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
@@ -67,7 +69,7 @@ namespace FREditor
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
         string TxtFilePath = String.Empty;
         string frmCaption = String.Empty;
-        bool Opened = false;
+        //bool Opened = false;
 
         DataRow openedPriceDR;
         string listName = String.Empty;
@@ -851,6 +853,7 @@ and pd.CostType = 1
             PriceDataGrid.DataSource = dtPrice;
 
             CreateColumns(PriceDataTableStyle, dtPrice);
+            indgvCosts.Columns[cFRCostCodeDataGridViewTextBoxColumn.Name].Visible = false;
             //CreateIndgvColumns(indgvPriceData, dtPrice);
 
             if ((fmt == "win") || (fmt == "dos"))
@@ -946,6 +949,7 @@ and pd.CostType = 1
                 txtBoxForbWords.ReadOnly = true;
             }
 
+            LoadCostsSettings();
             PriceDataTableStyle.RowHeadersVisible = false;
             PriceDataGrid.Focus();
             PriceDataGrid.Select();
@@ -1166,10 +1170,12 @@ and pd.CostType = 1
 
             fds = new ArrayList();
             int TxtBegin, TxtEnd;
+            //foreach (string pf in FFieldNames)
             foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields)))
             {
+//                TmpName = pf;
                 TmpName = GetFieldName(pf);
-                if (PriceFields.OriginalName != pf && PriceFields.BaseCost != pf && null != TmpName)
+                if (PriceFields.OriginalName != pf && PriceFields.BaseCost != pf && String.Empty != TmpName)
                 {
                     try
                     {
@@ -1202,7 +1208,8 @@ and pd.CostType = 1
                     mdr = dtMarking.NewRow();
                     mdr["MNameField"] = String.Format("x{0}", countx);
                     mdr["MBeginField"] = "1";
-                    mdr["MEndField"] = currTFD.posEnd;
+                    mdr["MEndField"] = currTFD.posBegin-1;
+//                    mdr["MEndField"] = currTFD.posEnd;
                     dtMarking.Rows.Add(mdr);
 
                     countx++;
@@ -1545,7 +1552,7 @@ and pd.CostType = 1
 
             tcInnerSheets.SizeMode = TabSizeMode.Normal;
             tcInnerSheets.ItemSize = new Size(0, 1);
-            tcInnerSheets.Appearance = TabAppearance.Normal;//
+            tcInnerSheets.Appearance = TabAppearance.Normal;
 
             tcInnerTable.SizeMode = TabSizeMode.Normal;
             tcInnerTable.ItemSize = new Size(0, 1);
@@ -1633,7 +1640,8 @@ and pd.CostType = 1
         {
             if (tbControl.SelectedTab == tpFirms)
             {
-                Opened = false;
+                SaveCostsSettings();
+                //Opened = false;
                 //TODO: восстанавливать позицию в таблице клиентов и прайс-листов.
                 int CRI = PriceGrid.CurrentRowIndex;
                 CurrencyManager cm = (CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName];
@@ -1669,7 +1677,6 @@ and pd.CostType = 1
                 {
                     //	fmt0 = String.Empty;
                     //	ClearPrice();
-                    Opened = true;
                     CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
                     DataRowView drv = (DataRowView)currencyManager.Current;
                     DataView dv = (DataView)currencyManager.List;
@@ -1880,29 +1887,6 @@ and pd.CostType = 1
             tcInnerSheets.DoDragDrop(new DropSheet(NameText), DragDropEffects.Copy | DragDropEffects.Move);
         }
 
-        private void CostsDataGrid_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
-        {
-            //Point p = CostsDataGrid.PointToClient(new Point(e.X, e.Y));
-            //DataGrid.HitTestInfo costsHitTestInfo = CostsDataGrid.HitTest(p.X, p.Y);
-            //if (costsHitTestInfo.Type == DataGrid.HitTestType.Cell)
-            //{
-            //    if (costsHitTestInfo.Row > -1)
-            //    {
-            //        CurrencyManager cm = (CurrencyManager)BindingContext[CostsDataGrid.DataSource, CostsDataGrid.DataMember];
-            //        DataRowView drv = (DataRowView)cm.Current;
-            //        if (pnlGeneralFields.Visible)
-            //        {
-            //            CostsDataGrid[costsHitTestInfo.Row, 2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
-            //        }
-            //        else
-            //        {
-            //            CostsDataGrid[costsHitTestInfo.Row, 2] = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
-            //            CostsDataGrid[costsHitTestInfo.Row, 3] = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
-            //        }
-            //    }
-            //}
-        }
-
         private void CostsDataGrid_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(DropField)))
@@ -1945,26 +1929,12 @@ and pd.CostType = 1
             else
             {
                 PriceGrid.CaptionText = N;
-                if (PriceGrid.CaptionText == dtClients.TableName)
-                    grpbGeneral.Visible = false;
-                else
-                    grpbGeneral.Visible = true;
             }
         }
 
         private void lLblMaster_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(String.Format("mailto:{0}", lLblMaster.Text));
-        }
-
-        private void CostsDataGrid_DragOver(object sender, System.Windows.Forms.DragEventArgs e)
-        {
-            //Point p = CostsDataGrid.PointToClient(new Point(e.X, e.Y));
-            //System.Windows.Forms.DataGrid.HitTestInfo costsHitTestInfo = CostsDataGrid.HitTest(p.X, p.Y);
-            //if ((costsHitTestInfo.Type == System.Windows.Forms.DataGrid.HitTestType.Cell) && (e.Data.GetDataPresent(typeof(DropField))))
-            //    e.Effect = DragDropEffects.Copy;
-            //else
-            //    e.Effect = DragDropEffects.None;
         }
 
         private void PriceGrid_Click(object sender, System.EventArgs e)
@@ -2524,6 +2494,7 @@ and pd.CostType = 1
 		private void frmFREMain_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			TrySaveData();
+            SaveCostsSettings();
 		}
 
         private void indgvCosts_DragDrop(object sender, DragEventArgs e)
@@ -2583,6 +2554,32 @@ and pd.CostType = 1
             tmrUpdateApply.Stop();
             tmrUpdateApply.Start();
 
+        }
+
+        private void SaveCostsSettings()
+        {
+            if (((fmt == "win") || (fmt == "dos"))&&(delimiter == String.Empty))
+            {
+                CregKey = BaseRegKey + "\\Two";
+            }
+            else
+            {
+                CregKey = BaseRegKey + "\\One";
+            }
+            indgvCosts.SaveSettings(CregKey);
+        }
+
+        private void LoadCostsSettings()
+        {
+            if (((fmt == "win") || (fmt == "dos")) && (delimiter == String.Empty))
+            {
+                CregKey = BaseRegKey + "\\Two";
+            }
+            else
+            {
+                CregKey = BaseRegKey + "\\One";
+            }
+            indgvCosts.LoadSettings(CregKey);
         }
     }
 
