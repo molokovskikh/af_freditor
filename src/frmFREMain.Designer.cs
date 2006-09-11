@@ -198,15 +198,18 @@ namespace FREditor
             this.tbpMarking = new System.Windows.Forms.TabPage();
             this.MarkingDataGrid = new INDataGrid.INDataGrid();
             this.MarkingTableStyle = new INDataGrid.INDataGridTableStyle();
+            this.inDataGridColorTextBoxColumnName = new INDataGrid.INDataGridColorTextBoxColumn();
+            this.inDataGridColorTextBoxColumnBegin = new INDataGrid.INDataGridColorTextBoxColumn();
+            this.inDataGridColorTextBoxColumnEnd = new INDataGrid.INDataGridColorTextBoxColumn();
             this.btnFloatPanel = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.indgvCosts = new Inforoom.WinForms.INDataGridView();
-            this.cFRCostCodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFRCostNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFRFieldNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFRTextBeginDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFRTextEndDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cFRfrifDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cFRCostCodeDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.cFRCostNameDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.cFRFieldNameDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.cFRfrifDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.cFRTextBeginDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.cFRTextEndDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
             this.grpbFields = new System.Windows.Forms.GroupBox();
             this.pnlTxtFields = new System.Windows.Forms.Panel();
             this.txtBoxAwaitEnd = new System.Windows.Forms.TextBox();
@@ -313,9 +316,6 @@ namespace FREditor
             this.daFormRules = new MySql.Data.MySqlClient.MySqlDataAdapter();
             this.ttMain = new System.Windows.Forms.ToolTip(this.components);
             this.tmrUpdateApply = new System.Windows.Forms.Timer(this.components);
-            this.inDataGridColorTextBoxColumnName = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.inDataGridColorTextBoxColumnBegin = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.inDataGridColorTextBoxColumnEnd = new INDataGrid.INDataGridColorTextBoxColumn();
             this.tbControl.SuspendLayout();
             this.tpFirms.SuspendLayout();
             this.pnlGrid.SuspendLayout();
@@ -1542,6 +1542,39 @@ namespace FREditor
             this.MarkingTableStyle.RowHeadersVisible = false;
             this.MarkingTableStyle.RowSelected = false;
             // 
+            // inDataGridColorTextBoxColumnName
+            // 
+            this.inDataGridColorTextBoxColumnName.EditDisable = false;
+            this.inDataGridColorTextBoxColumnName.Format = "";
+            this.inDataGridColorTextBoxColumnName.FormatInfo = null;
+            this.inDataGridColorTextBoxColumnName.HeaderText = "Наименование колонки";
+            this.inDataGridColorTextBoxColumnName.MappingName = "MNameField";
+            this.inDataGridColorTextBoxColumnName.NullText = "";
+            this.inDataGridColorTextBoxColumnName.SearchColumn = false;
+            this.inDataGridColorTextBoxColumnName.Width = 273;
+            // 
+            // inDataGridColorTextBoxColumnBegin
+            // 
+            this.inDataGridColorTextBoxColumnBegin.EditDisable = false;
+            this.inDataGridColorTextBoxColumnBegin.Format = "";
+            this.inDataGridColorTextBoxColumnBegin.FormatInfo = null;
+            this.inDataGridColorTextBoxColumnBegin.HeaderText = "Начало";
+            this.inDataGridColorTextBoxColumnBegin.MappingName = "MBeginField";
+            this.inDataGridColorTextBoxColumnBegin.NullText = "";
+            this.inDataGridColorTextBoxColumnBegin.SearchColumn = false;
+            this.inDataGridColorTextBoxColumnBegin.Width = 273;
+            // 
+            // inDataGridColorTextBoxColumnEnd
+            // 
+            this.inDataGridColorTextBoxColumnEnd.EditDisable = false;
+            this.inDataGridColorTextBoxColumnEnd.Format = "";
+            this.inDataGridColorTextBoxColumnEnd.FormatInfo = null;
+            this.inDataGridColorTextBoxColumnEnd.HeaderText = "Конец";
+            this.inDataGridColorTextBoxColumnEnd.MappingName = "MEndField";
+            this.inDataGridColorTextBoxColumnEnd.NullText = "";
+            this.inDataGridColorTextBoxColumnEnd.SearchColumn = false;
+            this.inDataGridColorTextBoxColumnEnd.Width = 274;
+            // 
             // btnFloatPanel
             // 
             this.btnFloatPanel.Dock = System.Windows.Forms.DockStyle.Right;
@@ -1576,9 +1609,9 @@ namespace FREditor
             this.cFRCostCodeDataGridViewTextBoxColumn,
             this.cFRCostNameDataGridViewTextBoxColumn,
             this.cFRFieldNameDataGridViewTextBoxColumn,
+            this.cFRfrifDataGridViewTextBoxColumn,
             this.cFRTextBeginDataGridViewTextBoxColumn,
-            this.cFRTextEndDataGridViewTextBoxColumn,
-            this.cFRfrifDataGridViewTextBoxColumn});
+            this.cFRTextEndDataGridViewTextBoxColumn});
             this.indgvCosts.DataMember = "Поставщики.Поставщики-Прайсы.Прайсы-Правила формализации цен";
             this.indgvCosts.DataSource = this.dtSet;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1608,6 +1641,7 @@ namespace FREditor
             this.cFRCostCodeDataGridViewTextBoxColumn.HeaderText = "Код цены";
             this.cFRCostCodeDataGridViewTextBoxColumn.Name = "cFRCostCodeDataGridViewTextBoxColumn";
             this.cFRCostCodeDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRCostCodeDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.cFRCostCodeDataGridViewTextBoxColumn.Visible = false;
             // 
             // cFRCostNameDataGridViewTextBoxColumn
@@ -1616,6 +1650,7 @@ namespace FREditor
             this.cFRCostNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
             this.cFRCostNameDataGridViewTextBoxColumn.Name = "cFRCostNameDataGridViewTextBoxColumn";
             this.cFRCostNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRCostNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // cFRFieldNameDataGridViewTextBoxColumn
             // 
@@ -1623,23 +1658,8 @@ namespace FREditor
             this.cFRFieldNameDataGridViewTextBoxColumn.HeaderText = "Поле";
             this.cFRFieldNameDataGridViewTextBoxColumn.Name = "cFRFieldNameDataGridViewTextBoxColumn";
             this.cFRFieldNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRFieldNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.cFRFieldNameDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // cFRTextBeginDataGridViewTextBoxColumn
-            // 
-            this.cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName = "CFRTextBegin";
-            this.cFRTextBeginDataGridViewTextBoxColumn.HeaderText = "Начало";
-            this.cFRTextBeginDataGridViewTextBoxColumn.Name = "cFRTextBeginDataGridViewTextBoxColumn";
-            this.cFRTextBeginDataGridViewTextBoxColumn.ReadOnly = true;
-            this.cFRTextBeginDataGridViewTextBoxColumn.Visible = false;
-            // 
-            // cFRTextEndDataGridViewTextBoxColumn
-            // 
-            this.cFRTextEndDataGridViewTextBoxColumn.DataPropertyName = "CFRTextEnd";
-            this.cFRTextEndDataGridViewTextBoxColumn.HeaderText = "Конец";
-            this.cFRTextEndDataGridViewTextBoxColumn.Name = "cFRTextEndDataGridViewTextBoxColumn";
-            this.cFRTextEndDataGridViewTextBoxColumn.ReadOnly = true;
-            this.cFRTextEndDataGridViewTextBoxColumn.Visible = false;
             // 
             // cFRfrifDataGridViewTextBoxColumn
             // 
@@ -1647,7 +1667,24 @@ namespace FREditor
             this.cFRfrifDataGridViewTextBoxColumn.HeaderText = "CFRfr_if";
             this.cFRfrifDataGridViewTextBoxColumn.Name = "cFRfrifDataGridViewTextBoxColumn";
             this.cFRfrifDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRfrifDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.cFRfrifDataGridViewTextBoxColumn.Visible = false;
+            // 
+            // cFRTextBeginDataGridViewTextBoxColumn
+            // 
+            this.cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName = "CFRTextBegin";
+            this.cFRTextBeginDataGridViewTextBoxColumn.HeaderText = "Начало";
+            this.cFRTextBeginDataGridViewTextBoxColumn.Name = "cFRTextBeginDataGridViewTextBoxColumn";
+            this.cFRTextBeginDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRTextBeginDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // cFRTextEndDataGridViewTextBoxColumn
+            // 
+            this.cFRTextEndDataGridViewTextBoxColumn.DataPropertyName = "CFRTextEnd";
+            this.cFRTextEndDataGridViewTextBoxColumn.HeaderText = "Конец";
+            this.cFRTextEndDataGridViewTextBoxColumn.Name = "cFRTextEndDataGridViewTextBoxColumn";
+            this.cFRTextEndDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRTextEndDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // grpbFields
             // 
@@ -2860,39 +2897,6 @@ namespace FREditor
             this.tmrUpdateApply.Interval = 1000;
             this.tmrUpdateApply.Tick += new System.EventHandler(this.tmrUpdateApply_Tick);
             // 
-            // inDataGridColorTextBoxColumnName
-            // 
-            this.inDataGridColorTextBoxColumnName.EditDisable = false;
-            this.inDataGridColorTextBoxColumnName.Format = "";
-            this.inDataGridColorTextBoxColumnName.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnName.HeaderText = "Наименование колонки";
-            this.inDataGridColorTextBoxColumnName.MappingName = "MNameField";
-            this.inDataGridColorTextBoxColumnName.NullText = "";
-            this.inDataGridColorTextBoxColumnName.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnName.Width = 273;
-            // 
-            // inDataGridColorTextBoxColumnBegin
-            // 
-            this.inDataGridColorTextBoxColumnBegin.EditDisable = false;
-            this.inDataGridColorTextBoxColumnBegin.Format = "";
-            this.inDataGridColorTextBoxColumnBegin.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnBegin.HeaderText = "Начало";
-            this.inDataGridColorTextBoxColumnBegin.MappingName = "MBeginField";
-            this.inDataGridColorTextBoxColumnBegin.NullText = "";
-            this.inDataGridColorTextBoxColumnBegin.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnBegin.Width = 273;
-            // 
-            // inDataGridColorTextBoxColumnEnd
-            // 
-            this.inDataGridColorTextBoxColumnEnd.EditDisable = false;
-            this.inDataGridColorTextBoxColumnEnd.Format = "";
-            this.inDataGridColorTextBoxColumnEnd.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnEnd.HeaderText = "Конец";
-            this.inDataGridColorTextBoxColumnEnd.MappingName = "MEndField";
-            this.inDataGridColorTextBoxColumnEnd.NullText = "";
-            this.inDataGridColorTextBoxColumnEnd.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnEnd.Width = 274;
-            // 
             // frmFREMain
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -3232,14 +3236,14 @@ namespace FREditor
         private System.Windows.Forms.ToolTip ttMain;
 		private System.Windows.Forms.Timer tmrUpdateApply;
         private Inforoom.WinForms.INDataGridView indgvCosts;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFRCostCodeDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cFRfrifDataGridViewTextBoxColumn;
         private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnName;
         private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnBegin;
         private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnEnd;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostCodeDataGridViewTextBoxColumn;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRfrifDataGridViewTextBoxColumn;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
     }
 }

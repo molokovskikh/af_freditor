@@ -488,8 +488,8 @@ order by 4";
   pc.CostName as CFRCostName,
   cfr.PC_CostCode AS CFRCost_Code,
   cfr.FieldName AS CFRFieldName,
-  cfr.TxtBegin as CFRTxtBegin,
-  cfr.TxtEnd as CFRTxtEnd
+  cfr.TxtBegin as CFRTextBegin,
+  cfr.TxtEnd as CFRTextEnd
 FROM 
   farm.costformrules cfr
 inner join usersettings.pricescosts pc on pc.CostCode = cfr.pc_costcode
@@ -505,8 +505,8 @@ SELECT
   pc.CostName as CFRCostName,
   cfr.PC_CostCode AS CFRCost_Code,
   cfr.FieldName AS CFRFieldName,
-  cfr.TxtBegin as CFRTxtBegin,
-  cfr.TxtEnd as CFRTxtEnd
+  cfr.TxtBegin as CFRTextBegin,
+  cfr.TxtEnd as CFRTextEnd
 FROM 
   farm.costformrules cfr
 inner join usersettings.pricescosts pc on pc.CostCode = cfr.pc_costcode
@@ -1268,6 +1268,7 @@ and pd.CostType = 1
                 mdr["MEndField"] = "255";
                 dtMarking.Rows.Add(mdr);
             }
+            dtSet.AcceptChanges();
         }
 
         private void OpenTXTFFile(string filePath, DataRow dr)
@@ -1528,6 +1529,7 @@ and pd.CostType = 1
                     }
                 }
             }
+            dtSet.AcceptChanges();
         }
 
         private void DoOpenTable(DataRow drFict)
@@ -2402,17 +2404,20 @@ and pd.CostType = 1
 		private void TrySaveData()
 		{
 			CommitAllEdit();
-			DataSet dsc = dtSet.GetChanges();
-            if (dsc != null)
+            if (dtSet.HasChanges())
             {
-                if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                DataSet dsc = dtSet.GetChanges();
+                if (dsc != null)
                 {
-                    tsbApply_Click(null, null);
-                }
-                else
-                {
-                    tsbApply.Enabled = false;
-                    tsbCancel.Enabled = false;
+                    if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                    {
+                        tsbApply_Click(null, null);
+                    }
+                    else
+                    {
+                        tsbApply.Enabled = false;
+                        tsbCancel.Enabled = false;
+                    }
                 }
             }
 		}
@@ -2560,11 +2565,11 @@ and pd.CostType = 1
         {
             if (((fmt == "win") || (fmt == "dos"))&&(delimiter == String.Empty))
             {
-                CregKey = BaseRegKey + "\\Two";
+                CregKey = BaseRegKey + "\\CostsDataGridFixed";
             }
             else
             {
-                CregKey = BaseRegKey + "\\One";
+                CregKey = BaseRegKey + "\\CostsDataGrid";
             }
             indgvCosts.SaveSettings(CregKey);
         }
@@ -2573,11 +2578,11 @@ and pd.CostType = 1
         {
             if (((fmt == "win") || (fmt == "dos")) && (delimiter == String.Empty))
             {
-                CregKey = BaseRegKey + "\\Two";
+                CregKey = BaseRegKey + "\\CostsDataGridFixed";
             }
             else
             {
-                CregKey = BaseRegKey + "\\One";
+                CregKey = BaseRegKey + "\\CostsDataGrid";
             }
             indgvCosts.LoadSettings(CregKey);
         }
