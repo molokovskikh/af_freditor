@@ -102,6 +102,9 @@ namespace FREditor
             //
             InitializeComponent();
 
+            indgvMarking.DataSource = dtSet;
+            indgvMarking.DataMember = dtMarking.TableName;
+
 			//this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FirmCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFR_if", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRCost_Code", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFieldName", System.Data.DataRowVersion.Current, null));
@@ -304,8 +307,6 @@ where
             dtCostsFormRulesFill();
 
             dtPrice.TableName = "Прайс";
-            PriceDataTableStyle.MappingName = dtPrice.TableName;
-            PriceDataTableStyle.RowHeadersVisible = false;
             //PriceDataTableStyle.ColumnSizeAutoFit = true;
 
             MyCn.Close();
@@ -846,13 +847,10 @@ and pd.CostType = 1
         {
             tcInnerTable.Visible = true;
 
-            //indgvPriceData.DataSource = dtSet;
-            //indgvPriceData.DataSource = dtPrice;
-            //dtPrice.ChildRelations.Clear();
-            //indgvPriceData.DataMember = dtPrice.TableName;
-            PriceDataGrid.DataSource = dtPrice;
+            
+            indgvPriceData.DataSource = dtPrice;
 
-            CreateColumns(PriceDataTableStyle, dtPrice);
+            //CreateColumns(PriceDataTableStyle, dtPrice);
             indgvCosts.Columns[cFRCostCodeDataGridViewTextBoxColumn.Name].Visible = false;
             //CreateIndgvColumns(indgvPriceData, dtPrice);
 
@@ -950,9 +948,8 @@ and pd.CostType = 1
             }
 
             LoadCostsSettings();
-            PriceDataTableStyle.RowHeadersVisible = false;
-            PriceDataGrid.Focus();
-            PriceDataGrid.Select();
+            indgvPriceData.Focus();
+            indgvPriceData.Select();
         }
 
         private void OpenDBFFile(string filePath)
@@ -964,7 +961,7 @@ and pd.CostType = 1
             {
                 Application.DoEvents();
                 OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from [{0}]", System.IO.Path.GetFileNameWithoutExtension(filePath)), dbcMain);
-                CreateThread(da, dtPrice, PriceDataGrid);
+                CreateThread(da, dtPrice, indgvPriceData);
                 //PriceDataGrid.DataSource = dtPrice;
             }
             finally
@@ -994,8 +991,7 @@ and pd.CostType = 1
                     Sheet[0] = (string)TableNames.Rows[0]["TABLE_NAME"];
                     tbpSheet1.Text = Sheet[0];
 
-                    INDataGrid.INDataGrid indg;
-                    INDataGrid.INDataGridTableStyle tblstyle;
+                    INDataGridView indgv;
                     for (int i = 1; i < TableNames.Rows.Count; i++)
                     {
                         DataRow dr = TableNames.Rows[i];
@@ -1006,25 +1002,22 @@ and pd.CostType = 1
                             tp.Name = "tbpSheet" + (i + 1);
                             tp.Text = Sheet[i];
                             tcInnerSheets.TabPages.Add(tp);
-                            indg = new INDataGrid.INDataGrid();
-                            indg.Name = "PriceDataGrid" + (i + 1);
-                            indg.Parent = tp;
-                            indg.ButtonPress += new INDataGrid.INDataGridKeyPressEventHandler(PriceDataGrid_ButtonPress);
-                            indg.Dock = DockStyle.Fill;
-                            indg.CaptionVisible = false;
-                            indg.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PriceDataGrid_MouseDown);
-                            gds.Add(indg);
+
+                            indgv = new INDataGridView();
+                            indgv.Name = "indgvPriceData" + (i + 1);
+                            indgv.Parent = tp;
+                            //indg.KeyDown += new INDataGridView.(indgvPriceData_KeyDown);
+                            indgv.KeyDown += new System.Windows.Forms.KeyEventHandler(indgvPriceData_KeyDown);
+                            indgv.Dock = DockStyle.Fill;
+                            //indgv.CaptionVisible = false;
+                            indgv.ReadOnly = true;
+                            indgv.RowHeadersVisible = false;
+                            indgv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.indgvPriceData_MouseDown);
+                            gds.Add(indgv);
+
                             DataTable dt = new DataTable();
                             dt.TableName = "Прайс" + (i + 1);
                             dtables.Add(dt);
-                            tblstyle = new INDataGrid.INDataGridTableStyle();
-                            tblstyle.MappingName = dt.TableName;
-                            //								tblstyle.DataGrid = indg;
-                            //tblstyle.ColumnSizeAutoFit = true;
-                            tblstyle.ReadOnly = true;
-                            tblstyle.RowHeadersVisible = false;
-                            tblstyles.Add(tblstyle);
-                            indg.TableStyles.Add(tblstyle);
                             //indg.DataSource = dt;
                         }
                         Application.DoEvents();
@@ -1044,14 +1037,15 @@ and pd.CostType = 1
                             OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select {0} from [{1}]", FieldNames, Sheet[j]), dbcMain);
                             if (j == 0)
                             {
-                                CreateThread(da, dtPrice, PriceDataGrid);
+                                CreateThread(da, dtPrice, indgvPriceData);
                                 //PriceDataGrid.DataSource = dtPrice;
                             }
                             else
                             {
-                                ((INDataGrid.INDataGridTableStyle)tblstyles[j - 1]).GridColumnStyles.Clear();
-                                CreateThread(da, ((DataTable)(dtables[j - 1])), ((INDataGrid.INDataGrid)gds[j - 1]));
-                                ((INDataGrid.INDataGrid)gds[j - 1]).DataSource = ((DataTable)(dtables[j - 1]));
+                                ((INDataGridView)gds[j - 1]).Columns.Clear();
+//                                CreateThread(da, ((DataTable)(dtables[j - 1])), ((INDataGrid.INDataGrid)gds[j - 1]), indgvPriceData);
+                                CreateThread(da, ((DataTable)(dtables[j - 1])), ((INDataGridView)gds[j - 1]));
+                                ((INDataGridView)gds[j - 1]).DataSource = ((DataTable)(dtables[j - 1]));
                                 //CreateColumns((INDataGrid.INDataGridTableStyle)tblstyles[j-1], (DataTable)(dtables[j-1]));
                             }
                         }
@@ -1127,7 +1121,7 @@ and pd.CostType = 1
             dbcMain.Open();
             OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from {0}", System.IO.Path.GetFileName(filePath).Replace(".", "#")), dbcMain);
 
-            CreateThread(da, dtPrice, PriceDataGrid);
+            CreateThread(da, dtPrice, indgvPriceData);
             //PriceDataGrid.DataSource = dtPrice;
             dbcMain.Close();
             dbcMain.Dispose();
@@ -1351,11 +1345,11 @@ and pd.CostType = 1
         {
             if (tcInnerSheets.SelectedTab == tbpSheet1)
             {
-                PriceDataGrid.DataSource = dtPrice;
+                indgvPriceData.DataSource = dtPrice;
             }
             else
             {
-                ((INDataGrid.INDataGrid)gds[tcInnerSheets.SelectedIndex - 1]).DataSource = ((DataTable)dtables[tcInnerSheets.SelectedIndex - 1]);
+                ((INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]).DataSource = ((DataTable)dtables[tcInnerSheets.SelectedIndex - 1]);
             }
         }
 
@@ -1478,9 +1472,10 @@ and pd.CostType = 1
                 try
                 {
                     OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from {0}", System.IO.Path.GetFileName(TxtFilePath).Replace(".", "#")), dbcMain);
-                    PriceDataTableStyle.GridColumnStyles.Clear();
+                    //PriceDataTableStyle.GridColumnStyles.Clear();
+                    indgvPriceData.Columns.Clear();
 
-                    CreateThread(da, dtPrice, PriceDataGrid);
+                    CreateThread(da, dtPrice, indgvPriceData);
                 }
                 finally
                 {
@@ -1494,6 +1489,7 @@ and pd.CostType = 1
         {
             if (tcInnerTable.SelectedTab == tbpTable)
             {
+                SaveMarkingSettings();
                 DataTable dtTemp = dtMarking.GetChanges();
                 if (!(dtTemp == null))
                 {
@@ -1528,29 +1524,32 @@ and pd.CostType = 1
                         fW = null;
                     }
                 }
+                dtSet.AcceptChanges();
             }
-            dtSet.AcceptChanges();
+            else if (tcInnerTable.SelectedTab == tbpMarking)
+            {
+                LoadMarkingSettings();
+            }
         }
 
         private void DoOpenTable(DataRow drFict)
         {
             dtMarking.AcceptChanges();
             Application.DoEvents();
-            PriceDataGrid.DataSource = null;
+            indgvPriceData.DataSource = null;
             Application.DoEvents();
 
             OpenTable(fmt);
             Application.DoEvents();
 
-            PriceDataGrid.DataSource = dtPrice;
+            indgvPriceData.DataSource = dtPrice;
             Application.DoEvents();
-            CreateColumns(PriceDataTableStyle, dtPrice);
             Application.DoEvents();
         }
 
         private void ClearPrice()
         {
-            PriceDataGrid.DataSource = null;
+            indgvPriceData.DataSource = null;
 
             tcInnerSheets.SizeMode = TabSizeMode.Normal;
             tcInnerSheets.ItemSize = new Size(0, 1);
@@ -1571,7 +1570,8 @@ and pd.CostType = 1
                 }
             }
 
-            PriceDataTableStyle.GridColumnStyles.Clear();
+            indgvPriceData.Columns.Clear();
+            //PriceDataTableStyle.GridColumnStyles.Clear();
 
             gds.Clear();
             dtables.Clear();
@@ -2051,10 +2051,11 @@ and pd.CostType = 1
         //			}
         //		}
 
-        private void CreateThread(OleDbDataAdapter da, DataTable dt, INDataGrid.INDataGrid dg)
+        private void CreateThread(OleDbDataAdapter da, DataTable dt, INDataGridView dgv)
         {
             TestAsync ta = new TestAsync(TestD);
             Object state = new Object();
+            INDataGrid.INDataGrid dg = new INDataGrid.INDataGrid();
 
             try
             {
@@ -2153,7 +2154,7 @@ and pd.CostType = 1
                             foreach (DataRow dr in dtMarking.Rows)
                             {
                                 if ((dr["MBeginField"].ToString() == txtExistBegin.Text) && (dr["MEndField"].ToString() == txtExistEnd.Text))
-                                    CheckErrors(r, dr["MNameField"].ToString(), dtPrice, PriceDataTableStyle);
+                                    CheckErrors(r, dr["MNameField"].ToString(), dtPrice, indgvPriceData);
                             }
                         }
                     }
@@ -2163,10 +2164,10 @@ and pd.CostType = 1
                         {
                             if (tcInnerSheets.SelectedIndex > 0)
                             {
-                                CheckErrors(r, txtExist.Text, (DataTable)dtables[tcInnerSheets.SelectedIndex - 1], (INDataGrid.INDataGridTableStyle)tblstyles[tcInnerSheets.SelectedIndex - 1]);
+                                CheckErrors(r, txtExist.Text, (DataTable)dtables[tcInnerSheets.SelectedIndex - 1], (INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]);
                             }
                             else
-                                CheckErrors(r, txtExist.Text, dtPrice, PriceDataTableStyle);
+                                CheckErrors(r, txtExist.Text, dtPrice, indgvPriceData);
                         }
                     }
                 }
@@ -2180,7 +2181,7 @@ and pd.CostType = 1
             }
         }
 
-        private void CheckErrors(Regex r, string FieldNameToSearch, DataTable dt, INDataGrid.INDataGridTableStyle ts)
+        private void CheckErrors(Regex r, string FieldNameToSearch, DataTable dt, INDataGridView indgv)
         {
             //			DataGrid g = ts.DataGrid;
 
@@ -2205,7 +2206,7 @@ and pd.CostType = 1
                     Match m = r.Match(dr[FieldNameToSearch].ToString());
                     if (!(m.Success))
                     {
-                        ts.RowHeadersVisible = true;
+                        indgv.RowHeadersVisible = true;
                         dr.RowError = "Несоответствие маски";
                     }
                 }
@@ -2256,7 +2257,8 @@ and pd.CostType = 1
 
             if (col != String.Empty)
             {
-                DataRow dr = dtPrice.Rows[PriceDataGrid.CurrentRowIndex];
+//                DataRow dr = dtPrice.Rows[PriceDataGrid.CurrentRowIndex];
+                DataRow dr = dtPrice.Rows[indgvPriceData.CurrentRow.Index];
                 if (dr[col].ToString() != String.Empty)
                 {
                     nameR = dr[col].ToString();
@@ -2321,17 +2323,17 @@ and pd.CostType = 1
 
                 if (tcInnerSheets.SelectedIndex > 0)
                 {
-                    CheckErrorsInAllNames(r, groups, FindNameColumn(), (DataTable)dtables[tcInnerSheets.SelectedIndex - 1], (INDataGrid.INDataGridTableStyle)tblstyles[tcInnerSheets.SelectedIndex - 1]);
+                    CheckErrorsInAllNames(r, groups, FindNameColumn(), (DataTable)dtables[tcInnerSheets.SelectedIndex - 1], (INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]);
                 }
                 else
-                    CheckErrorsInAllNames(r, groups, FindNameColumn(), dtPrice, PriceDataTableStyle);
+                    CheckErrorsInAllNames(r, groups, FindNameColumn(), dtPrice, indgvPriceData);
             }
             else
                 MessageBox.Show(String.Format("Не указана маска разбора товара!"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
         }
 
-        private void CheckErrorsInAllNames(Regex r, string[] GroupsToFind, string ColumnNameToSearchIn, DataTable dt, INDataGrid.INDataGridTableStyle ts)
+        private void CheckErrorsInAllNames(Regex r, string[] GroupsToFind, string ColumnNameToSearchIn, DataTable dt, INDataGridView indgv)
         {
             dt.BeginLoadData();
             bool colExist = false;
@@ -2359,7 +2361,7 @@ and pd.CostType = 1
                             {
                                 if (m.Groups[GroupsToFind[i]].Success == false)
                                 {
-                                    ts.RowHeadersVisible = true;
+                                    indgv.RowHeadersVisible = true;
                                     dr.RowError = "Несоответствие маски";
                                 }
                             }
@@ -2367,7 +2369,7 @@ and pd.CostType = 1
                     }
                     else
                     {
-                        ts.RowHeadersVisible = true;
+                        indgv.RowHeadersVisible = true;
                         dr.RowError = "Несоответствие поля";
                     }
                 }
@@ -2428,7 +2430,7 @@ and pd.CostType = 1
             DataSet chg = dtSet.GetChanges();
             if (chg != null)
             {
-                ((CurrencyManager)BindingContext[PriceDataGrid.DataSource, PriceDataGrid.DataMember]).EndCurrentEdit();
+                ((CurrencyManager)BindingContext[indgvPriceData.DataSource, indgvPriceData.DataMember]).EndCurrentEdit();
 
                 if (MyCn.State == ConnectionState.Closed)
                     MyCn.Open();
@@ -2500,6 +2502,7 @@ and pd.CostType = 1
 		{
 			TrySaveData();
             SaveCostsSettings();
+            SaveMarkingSettings();
 		}
 
         private void indgvCosts_DragDrop(object sender, DragEventArgs e)
@@ -2585,6 +2588,60 @@ and pd.CostType = 1
                 CregKey = BaseRegKey + "\\CostsDataGrid";
             }
             indgvCosts.LoadSettings(CregKey);
+        }
+
+        private void LoadMarkingSettings()
+        {
+            indgvMarking.LoadSettings(BaseRegKey + "\\MarkingDataGrid");
+        }
+
+        private void SaveMarkingSettings()
+        {
+            indgvMarking.SaveSettings(BaseRegKey + "\\MarkingDataGrid");
+        }
+
+         private void indgvPriceData_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+                tbControl.SelectedTab = tpFirms;
+        }
+
+        private void indgvPriceData_MouseDown(object sender, MouseEventArgs e)
+        {
+            INDataGridView dgv = (INDataGridView)sender;
+            Point p = PriceGrid.PointToClient(Control.MousePosition);
+            DataGridView.HitTestInfo hitTestInfo = dgv.HitTest(p.X, p.Y);
+            if (hitTestInfo.Type == DataGridViewHitTestType.Cell)
+            {
+                string FieldText = String.Empty;
+
+                FieldText = dgv.Columns[hitTestInfo.ColumnIndex].HeaderText;
+                int RowText = hitTestInfo.RowIndex;
+                if (pnlGeneralFields.Visible)
+                {
+                    dgv.DoDragDrop(new DropField(FieldText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
+                }
+                else
+                {
+                    string beginText = String.Empty;
+                    string endText = String.Empty;
+                    int i = 0;
+                    bool findField = false;
+                    DataRow dr;
+                    while ((i < dtMarking.Rows.Count) && (!findField))
+                    {
+                        dr = dtMarking.Rows[i];
+                        if (dr["MNameField"].ToString() == FieldText)
+                        {
+                            findField = true;
+                            beginText = dr["MBeginField"].ToString();
+                            endText = dr["MEndField"].ToString();
+                        }
+                        else i++;
+                    }
+                    dgv.DoDragDrop(new DropField(beginText, endText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
+                }
+            }
         }
     }
 

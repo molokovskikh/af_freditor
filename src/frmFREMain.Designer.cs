@@ -32,6 +32,8 @@ namespace FREditor
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmFREMain));
             this.tbControl = new System.Windows.Forms.TabControl();
             this.tpFirms = new System.Windows.Forms.TabPage();
@@ -193,14 +195,12 @@ namespace FREditor
             this.tbpTable = new System.Windows.Forms.TabPage();
             this.tcInnerSheets = new System.Windows.Forms.TabControl();
             this.tbpSheet1 = new System.Windows.Forms.TabPage();
-            this.PriceDataGrid = new INDataGrid.INDataGrid();
-            this.PriceDataTableStyle = new INDataGrid.INDataGridTableStyle();
+            this.indgvPriceData = new Inforoom.WinForms.INDataGridView();
             this.tbpMarking = new System.Windows.Forms.TabPage();
-            this.MarkingDataGrid = new INDataGrid.INDataGrid();
-            this.MarkingTableStyle = new INDataGrid.INDataGridTableStyle();
-            this.inDataGridColorTextBoxColumnName = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.inDataGridColorTextBoxColumnBegin = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.inDataGridColorTextBoxColumnEnd = new INDataGrid.INDataGridColorTextBoxColumn();
+            this.indgvMarking = new Inforoom.WinForms.INDataGridView();
+            this.MNameFieldINDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.MBeginFieldINDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.MEndFieldINDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
             this.btnFloatPanel = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.indgvCosts = new Inforoom.WinForms.INDataGridView();
@@ -316,6 +316,9 @@ namespace FREditor
             this.daFormRules = new MySql.Data.MySqlClient.MySqlDataAdapter();
             this.ttMain = new System.Windows.Forms.ToolTip(this.components);
             this.tmrUpdateApply = new System.Windows.Forms.Timer(this.components);
+            this.inDataGridColorTextBoxColumnEnd = new INDataGrid.INDataGridColorTextBoxColumn();
+            this.inDataGridColorTextBoxColumnBegin = new INDataGrid.INDataGridColorTextBoxColumn();
+            this.inDataGridColorTextBoxColumnName = new INDataGrid.INDataGridColorTextBoxColumn();
             this.tbControl.SuspendLayout();
             this.tpFirms.SuspendLayout();
             this.pnlGrid.SuspendLayout();
@@ -339,9 +342,9 @@ namespace FREditor
             this.tbpTable.SuspendLayout();
             this.tcInnerSheets.SuspendLayout();
             this.tbpSheet1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PriceDataGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.indgvPriceData)).BeginInit();
             this.tbpMarking.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.MarkingDataGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.indgvMarking)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.indgvCosts)).BeginInit();
             this.grpbFields.SuspendLayout();
@@ -1475,39 +1478,36 @@ namespace FREditor
             // 
             // tbpSheet1
             // 
-            this.tbpSheet1.Controls.Add(this.PriceDataGrid);
+            this.tbpSheet1.Controls.Add(this.indgvPriceData);
             this.tbpSheet1.Location = new System.Drawing.Point(4, 5);
             this.tbpSheet1.Name = "tbpSheet1";
             this.tbpSheet1.Size = new System.Drawing.Size(816, 500);
             this.tbpSheet1.TabIndex = 0;
             this.tbpSheet1.Text = "sheet1";
             // 
-            // PriceDataGrid
+            // indgvPriceData
             // 
-            this.PriceDataGrid.CaptionVisible = false;
-            this.PriceDataGrid.DataMember = "";
-            this.PriceDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PriceDataGrid.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.PriceDataGrid.Location = new System.Drawing.Point(0, 0);
-            this.PriceDataGrid.Name = "PriceDataGrid";
-            this.PriceDataGrid.Size = new System.Drawing.Size(816, 500);
-            this.PriceDataGrid.TabIndex = 1;
-            this.PriceDataGrid.TableStyles.AddRange(new System.Windows.Forms.DataGridTableStyle[] {
-            this.PriceDataTableStyle});
-            this.PriceDataGrid.ButtonPress += new INDataGrid.INDataGridKeyPressEventHandler(this.PriceDataGrid_ButtonPress);
-            this.PriceDataGrid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PriceDataGrid_MouseDown);
-            // 
-            // PriceDataTableStyle
-            // 
-            this.PriceDataTableStyle.ColumnSizeAutoFit = false;
-            this.PriceDataTableStyle.DataGrid = this.PriceDataGrid;
-            this.PriceDataTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.PriceDataTableStyle.RowHeadersVisible = false;
-            this.PriceDataTableStyle.RowSelected = false;
+            this.indgvPriceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle1;
+            this.indgvPriceData.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indgvPriceData.Location = new System.Drawing.Point(0, 0);
+            this.indgvPriceData.Name = "indgvPriceData";
+            this.indgvPriceData.RowHeadersVisible = false;
+            this.indgvPriceData.Size = new System.Drawing.Size(816, 500);
+            this.indgvPriceData.TabIndex = 2;
+            this.indgvPriceData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.indgvPriceData_MouseDown);
+            this.indgvPriceData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvPriceData_KeyDown);
             // 
             // tbpMarking
             // 
-            this.tbpMarking.Controls.Add(this.MarkingDataGrid);
+            this.tbpMarking.Controls.Add(this.indgvMarking);
             this.tbpMarking.Location = new System.Drawing.Point(4, 5);
             this.tbpMarking.Name = "tbpMarking";
             this.tbpMarking.Size = new System.Drawing.Size(824, 509);
@@ -1515,65 +1515,54 @@ namespace FREditor
             this.tbpMarking.Text = "Разметка";
             this.tbpMarking.Visible = false;
             // 
-            // MarkingDataGrid
+            // indgvMarking
             // 
-            this.MarkingDataGrid.CaptionVisible = false;
-            this.MarkingDataGrid.DataMember = "Разметка";
-            this.MarkingDataGrid.DataSource = this.dtSet;
-            this.MarkingDataGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MarkingDataGrid.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.MarkingDataGrid.Location = new System.Drawing.Point(0, 0);
-            this.MarkingDataGrid.Name = "MarkingDataGrid";
-            this.MarkingDataGrid.Size = new System.Drawing.Size(824, 509);
-            this.MarkingDataGrid.TabIndex = 0;
-            this.MarkingDataGrid.TableStyles.AddRange(new System.Windows.Forms.DataGridTableStyle[] {
-            this.MarkingTableStyle});
+            this.indgvMarking.AllowDrop = true;
+            this.indgvMarking.AllowUserToAddRows = false;
+            this.indgvMarking.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.indgvMarking.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.indgvMarking.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.MNameFieldINDataGridViewTextBoxColumn,
+            this.MBeginFieldINDataGridViewTextBoxColumn,
+            this.MEndFieldINDataGridViewTextBoxColumn});
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle2;
+            this.indgvMarking.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indgvMarking.HideEmptyColumns = false;
+            this.indgvMarking.Location = new System.Drawing.Point(0, 0);
+            this.indgvMarking.Name = "indgvMarking";
+            this.indgvMarking.ReadOnly = true;
+            this.indgvMarking.RowHeadersVisible = false;
+            this.indgvMarking.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.indgvMarking.Size = new System.Drawing.Size(824, 509);
+            this.indgvMarking.TabIndex = 7;
             // 
-            // MarkingTableStyle
+            // MNameFieldINDataGridViewTextBoxColumn
             // 
-            this.MarkingTableStyle.ColumnSizeAutoFit = true;
-            this.MarkingTableStyle.DataGrid = this.MarkingDataGrid;
-            this.MarkingTableStyle.GridColumnStyles.AddRange(new System.Windows.Forms.DataGridColumnStyle[] {
-            this.inDataGridColorTextBoxColumnName,
-            this.inDataGridColorTextBoxColumnBegin,
-            this.inDataGridColorTextBoxColumnEnd});
-            this.MarkingTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.MarkingTableStyle.MappingName = "Разметка";
-            this.MarkingTableStyle.RowHeadersVisible = false;
-            this.MarkingTableStyle.RowSelected = false;
+            this.MNameFieldINDataGridViewTextBoxColumn.DataPropertyName = "MNameField";
+            this.MNameFieldINDataGridViewTextBoxColumn.HeaderText = "Наименование колонки";
+            this.MNameFieldINDataGridViewTextBoxColumn.Name = "MNameFieldINDataGridViewTextBoxColumn";
+            this.MNameFieldINDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // inDataGridColorTextBoxColumnName
+            // MBeginFieldINDataGridViewTextBoxColumn
             // 
-            this.inDataGridColorTextBoxColumnName.EditDisable = false;
-            this.inDataGridColorTextBoxColumnName.Format = "";
-            this.inDataGridColorTextBoxColumnName.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnName.HeaderText = "Наименование колонки";
-            this.inDataGridColorTextBoxColumnName.MappingName = "MNameField";
-            this.inDataGridColorTextBoxColumnName.NullText = "";
-            this.inDataGridColorTextBoxColumnName.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnName.Width = 273;
+            this.MBeginFieldINDataGridViewTextBoxColumn.DataPropertyName = "MBeginField";
+            this.MBeginFieldINDataGridViewTextBoxColumn.HeaderText = "Начало";
+            this.MBeginFieldINDataGridViewTextBoxColumn.Name = "MBeginFieldINDataGridViewTextBoxColumn";
+            this.MBeginFieldINDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // inDataGridColorTextBoxColumnBegin
+            // MEndFieldINDataGridViewTextBoxColumn
             // 
-            this.inDataGridColorTextBoxColumnBegin.EditDisable = false;
-            this.inDataGridColorTextBoxColumnBegin.Format = "";
-            this.inDataGridColorTextBoxColumnBegin.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnBegin.HeaderText = "Начало";
-            this.inDataGridColorTextBoxColumnBegin.MappingName = "MBeginField";
-            this.inDataGridColorTextBoxColumnBegin.NullText = "";
-            this.inDataGridColorTextBoxColumnBegin.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnBegin.Width = 273;
-            // 
-            // inDataGridColorTextBoxColumnEnd
-            // 
-            this.inDataGridColorTextBoxColumnEnd.EditDisable = false;
-            this.inDataGridColorTextBoxColumnEnd.Format = "";
-            this.inDataGridColorTextBoxColumnEnd.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnEnd.HeaderText = "Конец";
-            this.inDataGridColorTextBoxColumnEnd.MappingName = "MEndField";
-            this.inDataGridColorTextBoxColumnEnd.NullText = "";
-            this.inDataGridColorTextBoxColumnEnd.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnEnd.Width = 274;
+            this.MEndFieldINDataGridViewTextBoxColumn.DataPropertyName = "MEndField";
+            this.MEndFieldINDataGridViewTextBoxColumn.HeaderText = "Конец";
+            this.MEndFieldINDataGridViewTextBoxColumn.Name = "MEndFieldINDataGridViewTextBoxColumn";
+            this.MEndFieldINDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // btnFloatPanel
             // 
@@ -1614,14 +1603,14 @@ namespace FREditor
             this.cFRTextEndDataGridViewTextBoxColumn});
             this.indgvCosts.DataMember = "Поставщики.Поставщики-Прайсы.Прайсы-Правила формализации цен";
             this.indgvCosts.DataSource = this.dtSet;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle3;
             this.indgvCosts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.indgvCosts.HideEmptyColumns = false;
             this.indgvCosts.Location = new System.Drawing.Point(728, 0);
@@ -2897,6 +2886,39 @@ namespace FREditor
             this.tmrUpdateApply.Interval = 1000;
             this.tmrUpdateApply.Tick += new System.EventHandler(this.tmrUpdateApply_Tick);
             // 
+            // inDataGridColorTextBoxColumnEnd
+            // 
+            this.inDataGridColorTextBoxColumnEnd.EditDisable = false;
+            this.inDataGridColorTextBoxColumnEnd.Format = "";
+            this.inDataGridColorTextBoxColumnEnd.FormatInfo = null;
+            this.inDataGridColorTextBoxColumnEnd.HeaderText = "Конец";
+            this.inDataGridColorTextBoxColumnEnd.MappingName = "MEndField";
+            this.inDataGridColorTextBoxColumnEnd.NullText = "";
+            this.inDataGridColorTextBoxColumnEnd.SearchColumn = false;
+            this.inDataGridColorTextBoxColumnEnd.Width = 115;
+            // 
+            // inDataGridColorTextBoxColumnBegin
+            // 
+            this.inDataGridColorTextBoxColumnBegin.EditDisable = false;
+            this.inDataGridColorTextBoxColumnBegin.Format = "";
+            this.inDataGridColorTextBoxColumnBegin.FormatInfo = null;
+            this.inDataGridColorTextBoxColumnBegin.HeaderText = "Начало";
+            this.inDataGridColorTextBoxColumnBegin.MappingName = "MBeginField";
+            this.inDataGridColorTextBoxColumnBegin.NullText = "";
+            this.inDataGridColorTextBoxColumnBegin.SearchColumn = false;
+            this.inDataGridColorTextBoxColumnBegin.Width = 115;
+            // 
+            // inDataGridColorTextBoxColumnName
+            // 
+            this.inDataGridColorTextBoxColumnName.EditDisable = false;
+            this.inDataGridColorTextBoxColumnName.Format = "";
+            this.inDataGridColorTextBoxColumnName.FormatInfo = null;
+            this.inDataGridColorTextBoxColumnName.HeaderText = "Наименование колонки";
+            this.inDataGridColorTextBoxColumnName.MappingName = "MNameField";
+            this.inDataGridColorTextBoxColumnName.NullText = "";
+            this.inDataGridColorTextBoxColumnName.SearchColumn = false;
+            this.inDataGridColorTextBoxColumnName.Width = 115;
+            // 
             // frmFREMain
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -2935,9 +2957,9 @@ namespace FREditor
             this.tbpTable.ResumeLayout(false);
             this.tcInnerSheets.ResumeLayout(false);
             this.tbpSheet1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.PriceDataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.indgvPriceData)).EndInit();
             this.tbpMarking.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.MarkingDataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.indgvMarking)).EndInit();
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.indgvCosts)).EndInit();
             this.grpbFields.ResumeLayout(false);
@@ -3190,9 +3212,7 @@ namespace FREditor
         private System.Windows.Forms.TabPage tbpTable;
         private System.Windows.Forms.TabControl tcInnerSheets;
         private System.Windows.Forms.TabPage tbpSheet1;
-        private INDataGrid.INDataGrid PriceDataGrid;
         private System.Windows.Forms.TabPage tbpMarking;
-        private INDataGrid.INDataGrid MarkingDataGrid;
         private System.Windows.Forms.Panel pnlFloat;
         private System.Windows.Forms.GroupBox grpbGeneral;
         private System.Windows.Forms.GroupBox groupBox1;
@@ -3216,8 +3236,6 @@ namespace FREditor
         private System.Windows.Forms.ComboBox cmbMoney;
         private System.Windows.Forms.Label lblPriceName;
         private System.Windows.Forms.Label lblNameFirm;
-        private INDataGrid.INDataGridTableStyle PriceDataTableStyle;
-        private INDataGrid.INDataGridTableStyle MarkingTableStyle;
         private System.Data.DataColumn FRPriceFile;
         private System.Data.DataColumn FRMemo;
         private System.Windows.Forms.Button btnAwaitCheck;
@@ -3236,14 +3254,19 @@ namespace FREditor
         private System.Windows.Forms.ToolTip ttMain;
 		private System.Windows.Forms.Timer tmrUpdateApply;
         private Inforoom.WinForms.INDataGridView indgvCosts;
-        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnName;
-        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnBegin;
-        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnEnd;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostCodeDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRfrifDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
+        private Inforoom.WinForms.INDataGridView indgvPriceData;
+        private Inforoom.WinForms.INDataGridView indgvMarking;
+        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnEnd;
+        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnBegin;
+        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnName;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn MNameFieldINDataGridViewTextBoxColumn;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn MBeginFieldINDataGridViewTextBoxColumn;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn MEndFieldINDataGridViewTextBoxColumn;
     }
 }
