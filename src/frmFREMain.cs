@@ -62,8 +62,8 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        //string StartPath = "C:\\TEMP\\Base\\";
+        //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+        string StartPath = "C:\\TEMP\\Base\\";
         //string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
@@ -865,8 +865,8 @@ and pd.CostType = 1
                     tcInnerTable.ItemSize = new Size(58, 18);
                     tcInnerTable.Appearance = TabAppearance.Normal;
 
-                    lStartLine.Visible = true;
-                    txtBoxStartLine.Visible = true;
+                    //lStartLine.Visible = true;
+                    //txtBoxStartLine.Visible = true;
                     label23.Visible = false;
                     txtBoxSheetName.Visible = false;
                     pnlGeneralFields.Visible = false;
@@ -881,8 +881,8 @@ and pd.CostType = 1
                     tcInnerTable.ItemSize = new Size(0, 1);
                     tcInnerTable.Appearance = TabAppearance.Buttons;
 
-                    lStartLine.Visible = true;
-                    txtBoxStartLine.Visible = true;
+                    //lStartLine.Visible = true;
+                    //txtBoxStartLine.Visible = true;
                     label23.Visible = false;
                     txtBoxSheetName.Visible = false;
                     pnlGeneralFields.Visible = true;
@@ -906,8 +906,8 @@ and pd.CostType = 1
                     tcInnerSheets.ItemSize = new Size(58, 18);
                     tcInnerSheets.Appearance = TabAppearance.Normal;
 
-                    lStartLine.Visible = true;
-                    txtBoxStartLine.Visible = true;
+                    //lStartLine.Visible = true;
+                    //txtBoxStartLine.Visible = true;
                     label23.Visible = true;
                     txtBoxSheetName.Visible = true;
                     pnlGeneralFields.Visible = true;
@@ -924,8 +924,8 @@ and pd.CostType = 1
                         tcInnerSheets.ItemSize = new Size(0, 1);
                         tcInnerSheets.Appearance = TabAppearance.Buttons;
 
-                        lStartLine.Visible = false;
-                        txtBoxStartLine.Visible = false;
+                        //lStartLine.Visible = false;
+                        //txtBoxStartLine.Visible = false;
                         label23.Visible = false;
                         txtBoxSheetName.Visible = false;
                         pnlGeneralFields.Visible = true;
@@ -1588,8 +1588,8 @@ and pd.CostType = 1
 
             DelCostsColumns();
 
-            lStartLine.Visible = false;
-            txtBoxStartLine.Visible = false;
+            //lStartLine.Visible = false;
+            //txtBoxStartLine.Visible = false;
             label23.Visible = false;
             txtBoxSheetName.Visible = false;
 
