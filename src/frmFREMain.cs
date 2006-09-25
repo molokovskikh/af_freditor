@@ -83,6 +83,8 @@ namespace FREditor
 
         string nameR = String.Empty;
 
+        bool fileExist = false;
+
         /// <summary>
         /// Указывает на то, что у фирмы имеется только один прайс-лист
         /// </summary>
@@ -795,10 +797,12 @@ and pd.CostType = 1
             if (!(File.Exists(StartPath + takeFile)))
             {
                 //tbControl.SelectedTab = tpFirms;
+                fileExist = false;
                 MessageBox.Show(String.Format("Файл {0} выбранного Прайс-листа отсутствует в директории по умолчанию ({1})", takeFile, StartPath), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
+                fileExist = true;
                 Directory.CreateDirectory(EndPath + f);
 
                 File.Copy(StartPath + takeFile, EndPath + f + "\\" + takeFile, true);
@@ -851,7 +855,6 @@ and pd.CostType = 1
             indgvPriceData.DataSource = dtPrice;
 
             //CreateColumns(PriceDataTableStyle, dtPrice);
-            indgvCosts.Columns[cFRCostCodeDataGridViewTextBoxColumn.Name].Visible = false;
             //CreateIndgvColumns(indgvPriceData, dtPrice);
 
             if ((fmt == "win") || (fmt == "dos"))
@@ -950,6 +953,7 @@ and pd.CostType = 1
             LoadCostsSettings();
             indgvPriceData.Focus();
             indgvPriceData.Select();
+            //pnlFloat.Visible = true;
         }
 
         private void OpenDBFFile(string filePath)
@@ -1006,10 +1010,10 @@ and pd.CostType = 1
                             indgv = new INDataGridView();
                             indgv.Name = "indgvPriceData" + (i + 1);
                             indgv.Parent = tp;
-                            //indg.KeyDown += new INDataGridView.(indgvPriceData_KeyDown);
                             indgv.KeyDown += new System.Windows.Forms.KeyEventHandler(indgvPriceData_KeyDown);
                             indgv.Dock = DockStyle.Fill;
                             //indgv.CaptionVisible = false;
+                            indgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                             indgv.ReadOnly = true;
                             indgv.RowHeadersVisible = false;
                             indgv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.indgvPriceData_MouseDown);
@@ -1335,11 +1339,11 @@ and pd.CostType = 1
             return ansi.GetString(ansiBytes);
         }
 
-        private void PriceDataGrid_ButtonPress(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Escape)
-                tbControl.SelectedTab = tpFirms;
-        }
+        //private void PriceDataGrid_ButtonPress(object sender, KeyEventArgs e)
+        //{
+        //    if (e.KeyCode == Keys.Escape)
+        //        tbControl.SelectedTab = tpFirms;
+        //}
 
         private void tcInnerSheets_SelectedIndexChanged(object sender, System.EventArgs e)
         {
@@ -1671,7 +1675,7 @@ and pd.CostType = 1
                 this.Text = "Редактор Правил Формализации";
                 tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
-                pnlFloat.Visible = false;
+                //pnlFloat.Visible = false;
                 tmrUpdateApply.Stop();
             }
             else
@@ -1762,44 +1766,44 @@ and pd.CostType = 1
             da.Fill(dt);
         }
 
-        private void PriceDataGrid_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            INDataGrid.INDataGrid dg = (INDataGrid.INDataGrid)sender;
-            Point p = PriceGrid.PointToClient(Control.MousePosition);
-            DataGrid.HitTestInfo hitTestInfo = dg.HitTest(p.X, p.Y);
-            if (hitTestInfo.Type == DataGrid.HitTestType.Cell)
-            {
+        //private void PriceDataGrid_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        //{
+        //    INDataGrid.INDataGrid dg = (INDataGrid.INDataGrid)sender;
+        //    Point p = PriceGrid.PointToClient(Control.MousePosition);
+        //    DataGrid.HitTestInfo hitTestInfo = dg.HitTest(p.X, p.Y);
+        //    if (hitTestInfo.Type == DataGrid.HitTestType.Cell)
+        //    {
 
-                string FieldText = String.Empty;
+        //        string FieldText = String.Empty;
 
-                FieldText = dg.CurrentTableStyle.GridColumnStyles[hitTestInfo.Column].HeaderText;
-                int RowText = hitTestInfo.Row;
-                if (pnlGeneralFields.Visible)
-                {
-                    dg.DoDragDrop(new DropField(FieldText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
-                }
-                else
-                {
-                    string beginText = String.Empty;
-                    string endText = String.Empty;
-                    int i = 0;
-                    bool findField = false;
-                    DataRow dr;
-                    while ((i < dtMarking.Rows.Count) && (!findField))
-                    {
-                        dr = dtMarking.Rows[i];
-                        if (dr["MNameField"].ToString() == FieldText)
-                        {
-                            findField = true;
-                            beginText = dr["MBeginField"].ToString();
-                            endText = dr["MEndField"].ToString();
-                        }
-                        else i++;
-                    }
-                    dg.DoDragDrop(new DropField(beginText, endText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
-                }
-            }
-        }
+        //        FieldText = dg.CurrentTableStyle.GridColumnStyles[hitTestInfo.Column].HeaderText;
+        //        int RowText = hitTestInfo.Row;
+        //        if (pnlGeneralFields.Visible)
+        //        {
+        //            dg.DoDragDrop(new DropField(FieldText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
+        //        }
+        //        else
+        //        {
+        //            string beginText = String.Empty;
+        //            string endText = String.Empty;
+        //            int i = 0;
+        //            bool findField = false;
+        //            DataRow dr;
+        //            while ((i < dtMarking.Rows.Count) && (!findField))
+        //            {
+        //                dr = dtMarking.Rows[i];
+        //                if (dr["MNameField"].ToString() == FieldText)
+        //                {
+        //                    findField = true;
+        //                    beginText = dr["MBeginField"].ToString();
+        //                    endText = dr["MEndField"].ToString();
+        //                }
+        //                else i++;
+        //            }
+        //            dg.DoDragDrop(new DropField(beginText, endText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
+        //        }
+        //    }
+        //}
 
         private void txtBoxCode_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
@@ -2101,11 +2105,13 @@ and pd.CostType = 1
             if (pnlFloat.Visible)
             {
                 pnlFloat.Visible = false;
-                if (!(fmt0.Equals(cmbFormat.Text.ToLower())) || !(delimiter0.Equals(tbDevider.Text.ToLower())))
-                    DoOpenPrice(openedPriceDR);
-                foreach (INDataGrid.INDataGridTableStyle ts in tblstyles)
+               // if (!(fmt0.Equals(cmbFormat.Text.ToLower())) || !(delimiter0.Equals(tbDevider.Text.ToLower())))
+                if (!(fmt.Equals(cmbFormat.Text.ToLower())) || !(delimiter.Equals(tbDevider.Text.ToLower())))
+                        DoOpenPrice(openedPriceDR);
+                
+                foreach (INDataGridView indg in gds)
                 {
-                    ts.RowHeadersVisible = false;
+                    indg.RowHeadersVisible = false;
                 }
                 //PriceDataTableStyle.RowHeadersVisible = false;
 
@@ -2115,8 +2121,8 @@ and pd.CostType = 1
             {
                 pnlFloat.Visible = true;
                 pnlFloat.BringToFront();
-                fmt0 = fmt;
-                delimiter0 = delimiter;
+                //fmt0 = fmt;
+                //delimiter0 = delimiter;
             }
         }
 
@@ -2517,12 +2523,12 @@ and pd.CostType = 1
                     DataRowView drv = (DataRowView)cm.Current;
                     if (pnlGeneralFields.Visible)
                     {
-                        indgvCosts[1, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
+                        indgvCosts[cFRFieldNameDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
                     }
                     else
                     {
-                        indgvCosts[1, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
-                        indgvCosts[2, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
+                        indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
+                        indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
                     }
                 }
             }
@@ -2566,15 +2572,18 @@ and pd.CostType = 1
 
         private void SaveCostsSettings()
         {
-            if (((fmt == "win") || (fmt == "dos"))&&(delimiter == String.Empty))
+            if (fileExist)
             {
-                CregKey = BaseRegKey + "\\CostsDataGridFixed";
+                if (((fmt == "win") || (fmt == "dos")) && (delimiter == String.Empty))
+                {
+                    CregKey = BaseRegKey + "\\CostsDataGridFixed";
+                }
+                else
+                {
+                    CregKey = BaseRegKey + "\\CostsDataGrid";
+                }
+                indgvCosts.SaveSettings(CregKey);
             }
-            else
-            {
-                CregKey = BaseRegKey + "\\CostsDataGrid";
-            }
-            indgvCosts.SaveSettings(CregKey);
         }
 
         private void LoadCostsSettings()
@@ -2597,7 +2606,10 @@ and pd.CostType = 1
 
         private void SaveMarkingSettings()
         {
-            indgvMarking.SaveSettings(BaseRegKey + "\\MarkingDataGrid");
+            if (fileExist)
+            {
+                indgvMarking.SaveSettings(BaseRegKey + "\\MarkingDataGrid");
+            }
         }
 
          private void indgvPriceData_KeyDown(object sender, KeyEventArgs e)
@@ -2643,6 +2655,65 @@ and pd.CostType = 1
                 }
             }
         }
+
+        private void txtBoxCode_DoubleClick(object sender, EventArgs e)
+        {
+            ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
+
+            //CommitAllEdit();
+            DataTable dt = new DataTable();
+            if(dtSet.HasChanges())
+                dt = dtFormRules.GetChanges();
+        }
+
+        private void txtBoxCodeBegin_DoubleClick(object sender, EventArgs e)
+        {
+            if (((TextBox)sender).AccessibleName.EndsWith("Begin"))
+            {
+                string name = ((TextBox)sender).AccessibleName.Substring(0, ((TextBox)sender).AccessibleName.Length - 5);
+                TextBox pairtb = PairTextBox(name, "End");
+                if (pairtb != null)
+                {
+                    ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
+                    ((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
+                }
+            }
+            else
+                if (((TextBox)sender).AccessibleName.EndsWith("End"))
+                {
+                    string name = ((TextBox)sender).AccessibleName.Substring(0, ((TextBox)sender).AccessibleName.Length - 3);
+                    TextBox pairtb = PairTextBox(name, "Begin");
+                    if (pairtb != null)
+                    {
+                        ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
+                        ((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
+                    }
+                }
+        }
+
+        private void indgvCosts_DoubleClick(object sender, EventArgs e)
+        {
+            Point p = indgvCosts.PointToClient(Control.MousePosition);
+            DataGridView.HitTestInfo costsHitTestInfo = indgvCosts.HitTest(p.X, p.Y);
+            if (costsHitTestInfo.Type == DataGridViewHitTestType.Cell)
+            {
+                if (costsHitTestInfo.RowIndex > -1)
+                {
+                    CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
+                    DataRowView drv = (DataRowView)cm.Current;
+                    if (pnlGeneralFields.Visible)
+                    {
+                        indgvCosts[cFRFieldNameDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = String.Empty;
+                    }
+                    else
+                    {
+                        indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = String.Empty;
+                        indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = String.Empty;
+                    }
+                }
+            }
+        }
+
     }
 
     public class WaitWindowThread
