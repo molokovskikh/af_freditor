@@ -53,7 +53,7 @@ namespace FREditor
         //private MySqlConnection MyCn = new MySqlConnection("server=TestSQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
 		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id={0}; password=123; database=farm; Allow Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
 #endif
         private MySqlCommand MyCmd = new MySqlCommand();
         private MySqlDataAdapter MyDA = new MySqlDataAdapter();
