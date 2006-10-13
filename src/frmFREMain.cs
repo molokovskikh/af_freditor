@@ -18,6 +18,13 @@ namespace FREditor
     /// <summary>
     /// Summary description for Form1.
     /// </summary>
+    /// 
+    // рабочий INDataGridView
+    public enum dgFocus : int
+    {
+        Firm,
+        Price
+    }
     public enum PriceFields : int
     {
         Code,
@@ -62,8 +69,8 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        //string StartPath = "C:\\TEMP\\Base\\";
+        //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+        string StartPath = "C:\\TEMP\\Base\\";
         //string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
@@ -97,12 +104,39 @@ namespace FREditor
         public frmWait fW = null;
         public frmNameMask frmNM = null;
 
+        public DataTable dtCostTypes;
+        public DataTable dtPriceTypes;
+        protected dgFocus fcs;
+
         public frmFREMain()
         {
             //
             // Required for Windows Form Designer support
             //
             InitializeComponent();
+
+            dtCostTypes = new DataTable("CostTypes");
+            dtCostTypes.Columns.Add("ID", typeof(int));
+            dtCostTypes.Columns.Add("Name", typeof(string));
+            dtCostTypes.Rows.Add(new object[] { DBNull.Value, "<не указан>" });
+            dtCostTypes.Rows.Add(new object[] { 0, "мультиколоночный" });
+            dtCostTypes.Rows.Add(new object[] { 1, "многофайловый" });
+
+            pCostTypeDataGridViewComboBoxColumn.DataSource = dtCostTypes;
+            pCostTypeDataGridViewComboBoxColumn.DisplayMember = "Name";
+            pCostTypeDataGridViewComboBoxColumn.ValueMember = "ID";
+
+            dtPriceTypes = new DataTable("PriceTypes");
+            dtPriceTypes.Columns.Add("ID", typeof(int));
+            dtPriceTypes.Columns.Add("Name", typeof(string));
+            dtPriceTypes.Rows.Add(new object[] { DBNull.Value, "<не указан>" });
+            dtPriceTypes.Rows.Add(new object[] { 0, "обычный" });
+            dtPriceTypes.Rows.Add(new object[] { 1, "ассортиментный" });
+            dtPriceTypes.Rows.Add(new object[] { 2, "vip" });
+
+            pPriceTypeDataGridViewComboBoxColumn.DataSource = dtPriceTypes;
+            pPriceTypeDataGridViewComboBoxColumn.DisplayMember = "Name";
+            pPriceTypeDataGridViewComboBoxColumn.ValueMember = "ID";
 
             indgvMarking.DataSource = dtSet;
             indgvMarking.DataMember = dtMarking.TableName;
@@ -309,6 +343,7 @@ where
             dtCatalogCurrencyFill();
             dtPriceFMTsFill();
             dtCostsFormRulesFill();
+            cbRegionsFill();
 
             dtPrice.TableName = "Прайс";
             //PriceDataTableStyle.ColumnSizeAutoFit = true;
@@ -327,14 +362,14 @@ where
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
-            if (PriceGrid.CurrentRowIndex > -1)
-                PriceGrid.CurrentCell = new DataGridCell(0, 1);
-            PriceGrid.Focus();
-            PriceGrid.Select();
+            indgvFirm.Focus();
+            indgvFirm.Select();
 
             sf.Alignment = StringAlignment.Center;
             sf.FormatFlags = StringFormatFlags.DirectionVertical;
             sf.LineAlignment = StringAlignment.Center;
+
+            LoadFirmAndPriceSettings();
         }
 
         private void dtCatalogCurrencyFill()
@@ -401,7 +436,8 @@ where
 					cd.FirmCode AS CCode,
 					cd.ShortName AS CShortName,
 					cd.FullName AS CFullName,
-					r.Region AS CRegion
+					r.Region AS CRegion,
+                    cd.FirmSegment as CSegment
 				FROM 
 					usersettings.clientsdata cd
                     inner join farm.regions r on r.RegionCode = cd.RegionCode
@@ -415,15 +451,23 @@ where
             dtPrices.Clear();
 
 			MyCmd.CommandText =
-@"SELECT 
+@"SELECT
   distinct
   pd.FirmCode AS PFirmCode,
   pd.PriceName AS PFirmName,
-  pd.PriceCode as PPriceCode
+  pd.PriceCode as PPriceCode,
+  fr.DatePrevPrice as PDatePrevPrice,
+  fr.DateCurPrice as PDateCurPrice,
+  fr.DateLastForm as PDateLastForm,
+  fr.MaxOld as PMaxOld,
+  pd.PriceType as PPriceType,
+  pd.CostType as PCostType,
+  1 as PIsParent
 FROM
   usersettings.pricesdata pd
 inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+inner join farm.formrules fr on fr.FirmCode=pd.pricecode
 where
   cd.FirmType = 0
 and pd.CostType = 0
@@ -432,17 +476,71 @@ SELECT
   distinct
   pd.FirmCode AS PFirmCode,
   pc.CostName AS PFirmName,
-  pc.CostCode as PPriceCode
+  pc.CostCode as PPriceCode,
+  fr.DatePrevPrice as PDatePrevPrice,
+  fr.DateCurPrice as PDateCurPrice,
+  fr.DateLastForm as PDateLastForm,
+  fr.MaxOld as PMaxOld,
+  pd.PriceType as PPriceType,
+  pd.CostType as PCostType,
+  (pd.pricecode = pc.CostCode) as PIsParent
 FROM
   usersettings.pricesdata pd
 inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+inner join farm.formrules fr on fr.FirmCode=pc.CostCode
 where
   cd.FirmType = 0
 and pd.CostType = 1
+union all
+SELECT
+  distinct
+  pd.FirmCode AS PFirmCode,
+  pd.PriceName AS PFirmName,
+  pd.PriceCode as PPriceCode,
+  fr.DatePrevPrice as PDatePrevPrice,
+  fr.DateCurPrice as PDateCurPrice,
+  fr.DateLastForm as PDateLastForm,
+  fr.MaxOld as PMaxOld,
+  pd.PriceType as PPriceType,
+  pd.CostType as PCostType,
+  1 as PIsParent
+FROM
+  usersettings.pricesdata pd
+inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
+inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+inner join farm.formrules fr on fr.FirmCode=pd.pricecode
+where
+  cd.FirmType = 0
+and pd.CostType is null
 order by 2"; 
 
             MyDA.Fill(dtPrices);
+        }
+
+        private void cbRegionsFill()
+        {
+            DataTable dtRegions = new DataTable();
+            dtRegions.Clear();
+            MyCmd.CommandText = @"
+SELECT
+    Region
+FROM
+    Regions
+WHERE regionCode > 0
+";
+            MyDA.Fill(dtRegions);
+
+            cbRegions.Items.Clear();
+            cbRegions.Items.Add("Все");
+            if(dtRegions.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dtRegions.Rows)
+                {
+                     cbRegions.Items.Add(dr["Region"].ToString());
+                }
+            }
+
         }
 
         private void dtPricesCostFill()
@@ -698,41 +796,41 @@ and pd.CostType = 1
             MyCn.Close();
         }
 
-        private void PriceGrid_ButtonPress(object sender, KeyEventArgs e)
-        {
-            CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
-            DataRowView drv = (currencyManager.Position > -1) ? (DataRowView)currencyManager.Current : null;
-            DataView dv = (DataView)currencyManager.List;
+        //private void PriceGrid_ButtonPress(object sender, KeyEventArgs e)
+        //{
+        //    CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
+        //    DataRowView drv = (currencyManager.Position > -1) ? (DataRowView)currencyManager.Current : null;
+        //    DataView dv = (DataView)currencyManager.List;
 
-            if (e.KeyCode == Keys.Enter)
-            {
-                if ((currencyManager.Position > -1))
-                {
-                    if (((DataView)currencyManager.List).Table.TableName == dtClients.TableName)
-                    {
-                        CheckOnePrice(currencyManager);
-                    }
-                    else
-                    {
-                        if (((DataView)currencyManager.List).Table.TableName == dtPrices.TableName)
-                        {
-                            tbControl.SelectedTab = tpPrice;
-                        }
-                    }
-                }
-            }
-            else
-                if (e.KeyCode == Keys.Escape)
-                {
-                    if (dv.Table.ParentRelations.Count > 0)
-                    {
-                        PriceGrid.NavigateBack();
-                        PriceGrid.Focus();
-                        PriceGrid.Select();
-                        e.Handled = true;
-                    }
-                }
-        }
+        //    if (e.KeyCode == Keys.Enter)
+        //    {
+        //        if ((currencyManager.Position > -1))
+        //        {
+        //            if (((DataView)currencyManager.List).Table.TableName == dtClients.TableName)
+        //            {
+        //                CheckOnePrice(currencyManager);
+        //            }
+        //            else
+        //            {
+        //                if (((DataView)currencyManager.List).Table.TableName == dtPrices.TableName)
+        //                {
+        //                    tbControl.SelectedTab = tpPrice;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //        if (e.KeyCode == Keys.Escape)
+        //        {
+        //            if (dv.Table.ParentRelations.Count > 0)
+        //            {
+        //                PriceGrid.NavigateBack();
+        //                PriceGrid.Focus();
+        //                PriceGrid.Select();
+        //                e.Handled = true;
+        //            }
+        //        }
+        //}
 
         private void DoOpenPrice(DataRow drP)
         {
@@ -1015,10 +1113,12 @@ and pd.CostType = 1
                             indgv.KeyDown += new System.Windows.Forms.KeyEventHandler(indgvPriceData_KeyDown);
                             indgv.Dock = DockStyle.Fill;
                             //indgv.CaptionVisible = false;
-                            indgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                            indgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                             indgv.ReadOnly = true;
                             indgv.RowHeadersVisible = false;
                             indgv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.indgvPriceData_MouseDown);
+                            foreach (DataGridViewTextBoxColumn dc in indgv.Columns)
+                                dc.Width = 300;
                             gds.Add(indgv);
 
                             DataTable dt = new DataTable();
@@ -1621,6 +1721,7 @@ and pd.CostType = 1
             dtCatalogCurrencyFill();
             dtPriceFMTsFill();
             dtCostsFormRulesFill();
+            dtSet.AcceptChanges();
         }
 
         private void CurrencyManagerPosition(CurrencyManager cm, string ColName, object value)
@@ -1649,46 +1750,47 @@ and pd.CostType = 1
             if (tbControl.SelectedTab == tpFirms)
             {
                 SaveCostsSettings();
-                //Opened = false;
                 //TODO: восстанавливать позицию в таблице клиентов и прайс-листов.
-                int CRI = PriceGrid.CurrentRowIndex;
-                CurrencyManager cm = (CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName];
-                //Код выбранного клиента
-                long ClientCode = (long)((DataRowView)cm.Current)[CCode.ColumnName];
+                //int CRI = PriceGrid.CurrentRowIndex;
+                //CurrencyManager cm = (CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName];
+                ////Код выбранного клиента
+                //long ClientCode = (long)((DataRowView)cm.Current)[CCode.ColumnName];
 
-                //То, что сейчас отображается в таблице
-                string dataMember = PriceGrid.DataMember;
-                //Выбранная запись в текущем контексте
-                DataRow childRow = ((DataRowView)((CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember]).Current).Row;
-                //значение первого столбца выбранной записи
-                object SelectedValue = childRow[0];
-                //название первого столбца выбранной записи
-                string ChildRowColumnName = childRow.Table.Columns[0].ColumnName;
+                ////То, что сейчас отображается в таблице
+                //string dataMember = PriceGrid.DataMember;
+                ////Выбранная запись в текущем контексте
+                //DataRow childRow = ((DataRowView)((CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember]).Current).Row;
+                ////значение первого столбца выбранной записи
+                //object SelectedValue = childRow[0];
+                ////название первого столбца выбранной записи
+                //string ChildRowColumnName = childRow.Table.Columns[0].ColumnName;
                 RefreshDataSet();
-                PriceGrid.DataMember = dtClients.TableName;
-                CurrencyManagerPosition((CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName], CCode.ColumnName, ClientCode);
-                if (dataMember != dtClients.TableName)
-                {
-                    PriceGrid.NavigateTo(((CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName]).Position, dtClients.TableName + "-" + dtPrices.TableName);
-                    CurrencyManagerPosition((CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember], ChildRowColumnName, SelectedValue);
-                }
-                PriceGrid.Focus();
-                PriceGrid.Select();
+                //PriceGrid.DataMember = dtClients.TableName;
+                //CurrencyManagerPosition((CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName], CCode.ColumnName, ClientCode);
+                //if (dataMember != dtClients.TableName)
+                //{
+                //    PriceGrid.NavigateTo(((CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName]).Position, dtClients.TableName + "-" + dtPrices.TableName);
+                //    CurrencyManagerPosition((CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember], ChildRowColumnName, SelectedValue);
+                //}
+                //PriceGrid.Focus();
+                //PriceGrid.Select();
                 this.Text = "Редактор Правил Формализации";
-                tsbApply.Enabled = false;
-                tsbCancel.Enabled = false;
+                if (fcs == dgFocus.Firm)
+                    indgvFirm.Focus();
+                else
+                    if (fcs == dgFocus.Price)
+                        indgvPrice.Select();
                 //pnlFloat.Visible = false;
-                tmrUpdateApply.Stop();
             }
             else
                 if (tbControl.SelectedTab == tpPrice)
                 {
                     //	fmt0 = String.Empty;
                     //	ClearPrice();
-                    CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
+                    CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
                     DataRowView drv = (DataRowView)currencyManager.Current;
                     DataView dv = (DataView)currencyManager.List;
-
+                    
                     if (drv.Row.Table.TableName == dtPrices.TableName)
                     {
                         DataRow drP = drv.Row;
@@ -1704,35 +1806,9 @@ and pd.CostType = 1
                                 DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
                                 if (drs.Length > 0)
                                 {
-                                    //							foreach(DataRow drP in drs)
-                                    //							{
-                                    //								string rl = String.Empty;
-                                    //
-                                    //								DataRow[] drFR = dtFormRules.Select("FRPriceCode = " + drP["PPriceCode"].ToString());
-                                    //
-                                    //								string fl = drFR[0]["FRPriceCode"].ToString();
-                                    //								fmt = drFR[0]["FRFormat"].ToString().ToLower();
-                                    ////								if(fmt0 == String.Empty)
-                                    ////									fmt0 = fmt;
-                                    //
-                                    ////								if((fmt0 == "win")||(fmt0 == "dos"))
-                                    ////									rl = "txt";
-                                    ////								else
-                                    ////									rl = fmt;
-                                    //
-                                    //								if((fmt == "win")||(fmt == "dos"))
-                                    //									rl = "txt";
-                                    //								else
-                                    //									rl = fmt;
-
-                                    //								if(File.Exists(StartPath + fl + "." + rl))
-                                    //								{
                                     openedPriceDR = drs[0];
                                     DoOpenPrice(drs[0]);
                                     tmrUpdateApply.Start();
-                                    //									break;
-                                    //								}
-                                    //							}
                                 }
                                 else
                                 {
@@ -1761,51 +1837,15 @@ and pd.CostType = 1
                             }
                         }
                 }
+            tsbApply.Enabled = false;
+            tsbCancel.Enabled = false;
+            tmrUpdateApply.Stop();
         }
 
         private void MethodForThread(OleDbDataAdapter da, DataTable dt)
         {
             da.Fill(dt);
         }
-
-        //private void PriceDataGrid_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        //{
-        //    INDataGrid.INDataGrid dg = (INDataGrid.INDataGrid)sender;
-        //    Point p = PriceGrid.PointToClient(Control.MousePosition);
-        //    DataGrid.HitTestInfo hitTestInfo = dg.HitTest(p.X, p.Y);
-        //    if (hitTestInfo.Type == DataGrid.HitTestType.Cell)
-        //    {
-
-        //        string FieldText = String.Empty;
-
-        //        FieldText = dg.CurrentTableStyle.GridColumnStyles[hitTestInfo.Column].HeaderText;
-        //        int RowText = hitTestInfo.Row;
-        //        if (pnlGeneralFields.Visible)
-        //        {
-        //            dg.DoDragDrop(new DropField(FieldText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
-        //        }
-        //        else
-        //        {
-        //            string beginText = String.Empty;
-        //            string endText = String.Empty;
-        //            int i = 0;
-        //            bool findField = false;
-        //            DataRow dr;
-        //            while ((i < dtMarking.Rows.Count) && (!findField))
-        //            {
-        //                dr = dtMarking.Rows[i];
-        //                if (dr["MNameField"].ToString() == FieldText)
-        //                {
-        //                    findField = true;
-        //                    beginText = dr["MBeginField"].ToString();
-        //                    endText = dr["MEndField"].ToString();
-        //                }
-        //                else i++;
-        //            }
-        //            dg.DoDragDrop(new DropField(beginText, endText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
-        //        }
-        //    }
-        //}
 
         private void txtBoxCode_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
@@ -1926,42 +1966,9 @@ and pd.CostType = 1
                 e.Effect = DragDropEffects.None;
         }
 
-        private void PriceGrid_Navigate(object sender, System.Windows.Forms.NavigateEventArgs ne)
-        {
-            CurrencyManager cm = (CurrencyManager)BindingContext[((INDataGrid.INDataGrid)sender).DataSource, ((INDataGrid.INDataGrid)sender).DataMember];
-            string N = ((DataView)cm.List).Table.TableName;
-            if (ne.Forward && ((N != dtClients.TableName) && (N != dtPrices.TableName)))
-            {
-                ((INDataGrid.INDataGrid)sender).NavigateBack();
-            }
-            else
-            {
-                PriceGrid.CaptionText = N;
-            }
-        }
-
         private void lLblMaster_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(String.Format("mailto:{0}", lLblMaster.Text));
-        }
-
-        private void PriceGrid_Click(object sender, System.EventArgs e)
-        {
-            //			CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
-            //			DataRowView drv = (DataRowView)currencyManager.Current;
-            //			DataView dv = (DataView)currencyManager.List;
-            //
-            //			if (((DataView)currencyManager.List).Table.TableName == dtClients.TableName)
-            //			{
-            //				DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
-            //				if(drs.Length > 0)
-            //				{
-            //					firstFind = true;
-            //					tbControl.SelectedTab = tpPrice;
-            //				}
-            //				else
-            //					tbControl.SelectedTab = tpFirms;
-            //			}
         }
 
         private void CheckOnePrice(CurrencyManager currencyManager)
@@ -1970,49 +1977,55 @@ and pd.CostType = 1
             DataView dv = (DataView)currencyManager.List;
 
             if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length > 1)
-                PriceGrid.NavigateTo(currencyManager.Position, dtClients.TableName + "-" + dtPrices.TableName);
+            {
+                indgvPrice.Focus();
+                //PriceGrid.NavigateTo(currencyManager.Position, dtClients.TableName + "-" + dtPrices.TableName);
+            }
             else
             {
                 if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length == 1)
-                    tbControl.SelectedTab = tpPrice;
-            }
-        }
-
-        private void PriceGrid_DoubleClick(object sender, System.EventArgs e)
-        {
-            Point p = PriceGrid.PointToClient(Control.MousePosition);
-            Debug.WriteLine(String.Format("PriceGrid_DoubleClick : {0} {1}", Control.MousePosition, p));
-            DataGrid.HitTestInfo costsHitTestInfo = PriceGrid.HitTest(p.X, p.Y);
-            if (costsHitTestInfo.Type == DataGrid.HitTestType.Cell)
-            {
-                //if (costsHitTestInfo.Row > -1)
-                CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
-                DataRowView drv = (currencyManager.Position > -1) ? (DataRowView)currencyManager.Current : null;
-
-                if (((DataView)currencyManager.List).Table.TableName == dtClients.TableName)
                 {
-                    DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
-                    if (drs.Length > 0)
-                    {
-                        firstFind = true;
-                        tbControl.SelectedTab = tpPrice;
-                    }
-                    else
-                        tbControl.SelectedTab = tpFirms;
+                    tbControl.SelectedTab = tpPrice;
+                    fcs = dgFocus.Firm;
                 }
-                else
-                    if ((drv.Row.Table.TableName == dtPrices.TableName) && (drv != null))
-                    {
-                        if ((currencyManager.Position > -1))
-                        {
-                            if (((DataView)currencyManager.List).Table.TableName == dtPrices.TableName)
-                            {
-                                tbControl.SelectedTab = tpPrice;
-                            }
-                        }
-                    }
             }
         }
+
+        //private void PriceGrid_DoubleClick(object sender, System.EventArgs e)
+        //{
+        //    Point p = PriceGrid.PointToClient(Control.MousePosition);
+        //    Debug.WriteLine(String.Format("PriceGrid_DoubleClick : {0} {1}", Control.MousePosition, p));
+        //    DataGrid.HitTestInfo costsHitTestInfo = PriceGrid.HitTest(p.X, p.Y);
+        //    if (costsHitTestInfo.Type == DataGrid.HitTestType.Cell)
+        //    {
+        //        //if (costsHitTestInfo.Row > -1)
+        //        CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
+        //        DataRowView drv = (currencyManager.Position > -1) ? (DataRowView)currencyManager.Current : null;
+
+        //        if (((DataView)currencyManager.List).Table.TableName == dtClients.TableName)
+        //        {
+        //            DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
+        //            if (drs.Length > 0)
+        //            {
+        //                firstFind = true;
+        //                tbControl.SelectedTab = tpPrice;
+        //            }
+        //            else
+        //                tbControl.SelectedTab = tpFirms;
+        //        }
+        //        else
+        //            if ((drv.Row.Table.TableName == dtPrices.TableName) && (drv != null))
+        //            {
+        //                if ((currencyManager.Position > -1))
+        //                {
+        //                    if (((DataView)currencyManager.List).Table.TableName == dtPrices.TableName)
+        //                    {
+        //                        tbControl.SelectedTab = tpPrice;
+        //                    }
+        //                }
+        //            }
+        //    }
+        //}
 
         public delegate void TestAsync(OleDbDataAdapter da, DataTable dt, INDataGrid.INDataGrid dg);
 
@@ -2222,11 +2235,11 @@ and pd.CostType = 1
             dt.EndLoadData();
         }
 
-        private void PriceGrid_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if ((e.Clicks > 1))
-                Debug.WriteLine(String.Format("PriceGrid_MouseDown : {0} {1}", e.X, e.Y));
-        }
+        //private void PriceGrid_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        //{
+        //    if ((e.Clicks > 1))
+        //        Debug.WriteLine(String.Format("PriceGrid_MouseDown : {0} {1}", e.X, e.Y));
+        //}
 
         private string FindNameColumn()
         {
@@ -2387,12 +2400,20 @@ and pd.CostType = 1
 
         private void CommitAllEdit()
         {
-            CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
-            cm.EndCurrentEdit();
-            DataTable dt = dtSet.Tables[dtCostsFormRules.TableName].GetChanges();
-            //TODO: Здесь надо правильно биндить
-            cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-правила"];
-            cm.EndCurrentEdit();
+            CurrencyManager cm;
+            if (tbControl.SelectedTab == tpFirms)
+            {
+                cm = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+                cm.EndCurrentEdit();
+            }
+            else
+            {
+                cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
+                cm.EndCurrentEdit();
+                //TODO: Здесь надо правильно биндить
+                cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-правила"];
+                cm.EndCurrentEdit();
+            }
         }
 
         private void tsbCancel_Click(object sender, EventArgs e)
@@ -2438,42 +2459,109 @@ and pd.CostType = 1
             DataSet chg = dtSet.GetChanges();
             if (chg != null)
             {
-                ((CurrencyManager)BindingContext[indgvPriceData.DataSource, indgvPriceData.DataMember]).EndCurrentEdit();
-
-                if (MyCn.State == ConnectionState.Closed)
-                    MyCn.Open();
-                try
+                if (tbControl.SelectedTab == tpPrice)
                 {
-                    MySqlTransaction tr = MyCn.BeginTransaction();
+                    ((CurrencyManager)BindingContext[indgvPriceData.DataSource, indgvPriceData.DataMember]).EndCurrentEdit();
+
+                    if (MyCn.State == ConnectionState.Closed)
+                        MyCn.Open();
                     try
                     {
-						MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
-						SetCMD.Parameters.Add("INHost", Environment.MachineName);
-						SetCMD.Parameters.Add("INUser", Environment.UserName);
-						SetCMD.ExecuteNonQuery();
+                        MySqlTransaction tr = MyCn.BeginTransaction();
+                        try
+                        {
+                            MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
+                            SetCMD.Parameters.Add("INHost", Environment.MachineName);
+                            SetCMD.Parameters.Add("INUser", Environment.UserName);
+                            SetCMD.ExecuteNonQuery();
 
-                        mcmdUCostRules.Connection = MyCn;
-                        daCostRules.TableMappings.Clear();
-                        daCostRules.TableMappings.Add("Table", dtCostsFormRules.TableName);
-                        daCostRules.Update(chg.Tables[dtCostsFormRules.TableName]);
+                            mcmdUCostRules.Connection = MyCn;
+                            daCostRules.TableMappings.Clear();
+                            daCostRules.TableMappings.Add("Table", dtCostsFormRules.TableName);
+                            daCostRules.Update(chg.Tables[dtCostsFormRules.TableName]);
 
-                        mcmdUFormRules.Connection = MyCn;
-                        daFormRules.TableMappings.Clear();
-                        daFormRules.TableMappings.Add("Table", dtFormRules.TableName);
-                        daFormRules.Update(chg.Tables[dtFormRules.TableName]);
+                            mcmdUFormRules.Connection = MyCn;
+                            daFormRules.TableMappings.Clear();
+                            daFormRules.TableMappings.Add("Table", dtFormRules.TableName);
+                            daFormRules.Update(chg.Tables[dtFormRules.TableName]);
 
-                        tr.Commit();
-                        dtSet.AcceptChanges();
+                            tr.Commit();
+                            dtSet.AcceptChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.ToString());
+                            tr.Rollback();
+                        }
                     }
-                    catch (Exception ex)
+                    finally
                     {
-                        MessageBox.Show(ex.ToString());
-                        tr.Rollback();
+                        MyCn.Close();
                     }
                 }
-                finally
+                else if (tbControl.SelectedTab == tpFirms)
                 {
-                    MyCn.Close();
+                    ((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember]).EndCurrentEdit();
+
+                    if (MyCn.State == ConnectionState.Closed)
+                        MyCn.Open();
+                    try
+                    {
+                        MySqlTransaction tr = MyCn.BeginTransaction();
+                        try
+                        {
+                            MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
+                            SetCMD.Parameters.Add("INHost", Environment.MachineName);
+                            SetCMD.Parameters.Add("INUser", Environment.UserName);
+                            SetCMD.ExecuteNonQuery();
+
+                            MySqlCommand mcmdUPrice = new MySqlCommand();
+                            MySqlDataAdapter daPrice = new MySqlDataAdapter();
+                            mcmdUPrice.CommandText = @"
+UPDATE usersettings.PricesData pd SET
+    PriceType = ?PPriceType,
+    CostType = ?PCostType
+WHERE 
+    pd.PriceCode = ?PPriceCode;
+UPDATE farm.FormRules fr SET
+    MaxOld = ?PMaxOld
+WHERE fr.FirmCode = ?PPriceCode;";
+
+                            mcmdUPrice.Parameters.Clear();
+                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PPriceType", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PCostType", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PMaxOld", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+
+                            foreach (MySqlParameter ms in mcmdUPrice.Parameters)
+                            {
+                                ms.SourceColumn = ms.ParameterName;
+                            }
+
+                            mcmdUPrice.Connection = MyCn;
+                            daPrice.UpdateCommand=mcmdUPrice;
+                            daPrice.TableMappings.Clear();
+                            daPrice.TableMappings.Add("Table", dtPrices.TableName);
+                            daPrice.Update(chg.Tables[dtPrices.TableName]);
+
+                            //mcmdUPriceFormRules.Connection = MyCn;
+                            //daPriceFormRules.TableMappings.Clear();
+                            //daPriceFormRules.TableMappings.Add("Table", dtPrices.TableName);
+                            //daPriceFormRules.Update(chg.Tables[dtPrices.TableName]);
+                            
+                            tr.Commit();
+                            dtSet.AcceptChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.ToString());
+                            tr.Rollback();
+                        }
+                    }
+                    finally
+                    {
+                        MyCn.Close();
+                    }
                 }
             }
             tsbApply.Enabled = false;
@@ -2495,6 +2583,13 @@ and pd.CostType = 1
 
             if (dtSet.HasChanges())
             {
+                bool ch = false;
+                for(int i=0; i<dtSet.Tables[dtFormRules.TableName].Columns.Count; i++)
+                {
+                    if (!dtSet.Tables[dtFormRules.TableName].Rows[0][i, DataRowVersion.Original].Equals(dtSet.Tables[dtFormRules.TableName].Rows[0][i, DataRowVersion.Current]))
+                        ch = true;
+
+                }
                 tsbApply.Enabled = true;
                 tsbCancel.Enabled = true;
                 if (rtbArticle.Focused)
@@ -2511,6 +2606,7 @@ and pd.CostType = 1
 			TrySaveData();
             SaveCostsSettings();
             SaveMarkingSettings();
+            SaveFirmAndPriceSettings();
 		}
 
         private void indgvCosts_DragDrop(object sender, DragEventArgs e)
@@ -2572,6 +2668,22 @@ and pd.CostType = 1
 
         }
 
+        private void SaveFirmAndPriceSettings()
+        {
+            CregKey = BaseRegKey + "\\FirmDataGrid";
+            indgvFirm.SaveSettings(CregKey);
+            CregKey = BaseRegKey + "\\PriceDataGrid";
+            indgvPrice.SaveSettings(CregKey);
+        }
+
+        private void LoadFirmAndPriceSettings()
+        {
+            CregKey = BaseRegKey + "\\FirmDataGrid";
+            indgvFirm.LoadSettings(CregKey);
+            CregKey = BaseRegKey + "\\PriceDataGrid";
+            indgvPrice.LoadSettings(CregKey);
+        }
+
         private void SaveCostsSettings()
         {
             if (fileExist)
@@ -2623,7 +2735,7 @@ and pd.CostType = 1
         private void indgvPriceData_MouseDown(object sender, MouseEventArgs e)
         {
             INDataGridView dgv = (INDataGridView)sender;
-            Point p = PriceGrid.PointToClient(Control.MousePosition);
+            Point p = indgvPriceData.PointToClient(Control.MousePosition);
             DataGridView.HitTestInfo hitTestInfo = dgv.HitTest(p.X, p.Y);
             if (hitTestInfo.Type == DataGridViewHitTestType.Cell)
             {
@@ -2724,6 +2836,103 @@ and pd.CostType = 1
             tmrUpdateApply.Start();
         }
 
+        private void tbFirmName_TextChanged(object sender, EventArgs e)
+        {
+            tmrSearch.Stop();
+            tmrSearch.Start();
+        }
+
+        private void cbRegions_SelectedValueChanged(object sender, EventArgs e)
+        {
+            tmrSearch.Stop();
+            tmrSearch.Start();
+        }
+
+        private void tmrSearch_Tick(object sender, EventArgs e)
+        {
+            tmrSearch.Stop();
+            string FilterString = String.Empty;
+            if ((cbRegions.SelectedItem != null) && (cbRegions.SelectedItem.ToString() != "Все"))
+                FilterString += String.Format("CRegion = '{0}'", cbRegions.SelectedItem);
+            if ((cbSegment.SelectedItem != null) && (cbSegment.SelectedItem.ToString() != "Все"))
+            {
+                if (FilterString != String.Empty)
+                    FilterString += " and ";
+                int segment = -1;
+                if (cbSegment.SelectedItem.ToString() == "Опт")
+                    segment = 0;
+                else if (cbSegment.SelectedItem.ToString() == "Розница")
+                    segment = 1;
+                FilterString += String.Format("CSegment = {0}", segment);
+            }
+            if (tbFirmName.Text != String.Empty)
+            {
+                if (FilterString != String.Empty)
+                    FilterString += " and ";
+                FilterString += String.Format("CShortName like '%{0}%'", tbFirmName.Text);
+            }
+
+            CurrencyManager cm = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
+            ((DataView)cm.List).RowFilter = FilterString;
+        }
+
+        private void indgvPrice_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            tmrUpdateApply.Stop();
+            tmrUpdateApply.Start();
+        }
+
+        private void indgvFirm_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.ColumnIndex == cSegmentDataGridViewTextBoxColumn.Index)
+            {
+                if ((int)e.Value == 0)
+                    e.Value = "Опт";
+                else if ((int)e.Value == 1)
+                    e.Value = "Розница";
+            }
+        }
+
+        private void indgvFirm_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void indgvFirm_DoubleClick(object sender, EventArgs e)
+        {
+            CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
+            CheckOnePrice(currencyManager);
+        }
+
+        private void indgvFirm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
+                CheckOnePrice(currencyManager);
+            }
+        }
+
+        private void indgvPrice_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Escape)
+            {
+                indgvFirm.Focus();
+            }
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                fcs = dgFocus.Price;
+                tbControl.SelectedTab = tpPrice;
+            }
+        }
+
+        private void indgvPrice_DoubleClick(object sender, EventArgs e)
+        {
+            fcs = dgFocus.Price;
+            tbControl.SelectedTab = tpPrice;
+        }
+         
     }
 
     public class WaitWindowThread

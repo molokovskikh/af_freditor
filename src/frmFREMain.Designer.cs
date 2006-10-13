@@ -31,24 +31,40 @@ namespace FREditor
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmFREMain));
             this.tbControl = new System.Windows.Forms.TabControl();
             this.tpFirms = new System.Windows.Forms.TabPage();
-            this.pnlGrid = new System.Windows.Forms.Panel();
-            this.PriceGrid = new INDataGrid.INDataGrid();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.indgvPrice = new Inforoom.WinForms.INDataGridView();
+            this.pFirmNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pDatePrevPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pDateCurPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pDateLastFormDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pMaxOldDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pPriceTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.pCostTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dtSet = new System.Data.DataSet();
             this.dtClients = new System.Data.DataTable();
             this.CCode = new System.Data.DataColumn();
             this.CShortName = new System.Data.DataColumn();
             this.CRegion = new System.Data.DataColumn();
             this.CFullName = new System.Data.DataColumn();
+            this.CSegment = new System.Data.DataColumn();
             this.dtPrices = new System.Data.DataTable();
             this.PPriceCode = new System.Data.DataColumn();
             this.PFirmCode = new System.Data.DataColumn();
             this.PFirmName = new System.Data.DataColumn();
+            this.PDatePrevPrice = new System.Data.DataColumn();
+            this.PDateCurPrice = new System.Data.DataColumn();
+            this.PDateLastForm = new System.Data.DataColumn();
+            this.PMaxOld = new System.Data.DataColumn();
+            this.PPriceType = new System.Data.DataColumn();
+            this.PCostType = new System.Data.DataColumn();
             this.dtPricesCost = new System.Data.DataTable();
             this.PCPriceCode = new System.Data.DataColumn();
             this.PCBaseCost = new System.Data.DataColumn();
@@ -156,17 +172,19 @@ namespace FREditor
             this.CFRTextEnd = new System.Data.DataColumn();
             this.CFRfr_if = new System.Data.DataColumn();
             this.CFRCostName = new System.Data.DataColumn();
-            this.ClientsTableStyle = new INDataGrid.INDataGridTableStyle();
-            this.CClientCodeTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.CClientNameTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.CRegionNameTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.PricesTableStyle = new INDataGrid.INDataGridTableStyle();
-            this.PPriceCodeTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.PFirmNameTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.PricesCostTableStyle = new INDataGrid.INDataGridTableStyle();
-            this.PCCostCodeTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.PCCostNameTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.PCBaseCostBoolColumn = new System.Windows.Forms.DataGridBoolColumn();
+            this.splitter1 = new System.Windows.Forms.Splitter();
+            this.pnlGrid = new System.Windows.Forms.Panel();
+            this.indgvFirm = new Inforoom.WinForms.INDataGridView();
+            this.cShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cSegmentDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.cbSegment = new System.Windows.Forms.ComboBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.cbRegions = new System.Windows.Forms.ComboBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.tbFirmName = new System.Windows.Forms.TextBox();
             this.tpPrice = new System.Windows.Forms.TabPage();
             this.pnlFloat = new System.Windows.Forms.Panel();
             this.grpbGeneral = new System.Windows.Forms.GroupBox();
@@ -318,10 +336,11 @@ namespace FREditor
             this.inDataGridColorTextBoxColumnEnd = new INDataGrid.INDataGridColorTextBoxColumn();
             this.inDataGridColorTextBoxColumnBegin = new INDataGrid.INDataGridColorTextBoxColumn();
             this.inDataGridColorTextBoxColumnName = new INDataGrid.INDataGridColorTextBoxColumn();
+            this.tmrSearch = new System.Windows.Forms.Timer(this.components);
             this.tbControl.SuspendLayout();
             this.tpFirms.SuspendLayout();
-            this.pnlGrid.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PriceGrid)).BeginInit();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.indgvPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtClients)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtPrices)).BeginInit();
@@ -331,6 +350,9 @@ namespace FREditor
             ((System.ComponentModel.ISupportInitialize)(this.dtCatalogCurrency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtMarking)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtCostsFormRules)).BeginInit();
+            this.pnlGrid.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.indgvFirm)).BeginInit();
+            this.panel3.SuspendLayout();
             this.tpPrice.SuspendLayout();
             this.pnlFloat.SuspendLayout();
             this.grpbGeneral.SuspendLayout();
@@ -373,6 +395,8 @@ namespace FREditor
             // 
             // tpFirms
             // 
+            this.tpFirms.Controls.Add(this.panel2);
+            this.tpFirms.Controls.Add(this.splitter1);
             this.tpFirms.Controls.Add(this.pnlGrid);
             this.tpFirms.Location = new System.Drawing.Point(4, 22);
             this.tpFirms.Name = "tpFirms";
@@ -380,38 +404,97 @@ namespace FREditor
             this.tpFirms.TabIndex = 0;
             this.tpFirms.Text = "Фирмы";
             // 
-            // pnlGrid
+            // panel2
             // 
-            this.pnlGrid.Controls.Add(this.PriceGrid);
-            this.pnlGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlGrid.Location = new System.Drawing.Point(0, 0);
-            this.pnlGrid.Name = "pnlGrid";
-            this.pnlGrid.Size = new System.Drawing.Size(856, 702);
-            this.pnlGrid.TabIndex = 5;
+            this.panel2.Controls.Add(this.indgvPrice);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 424);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(856, 278);
+            this.panel2.TabIndex = 6;
             // 
-            // PriceGrid
+            // indgvPrice
             // 
-            this.PriceGrid.AllowDrop = true;
-            this.PriceGrid.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.PriceGrid.CaptionText = "Поставщики";
-            this.PriceGrid.DataMember = "Поставщики";
-            this.PriceGrid.DataSource = this.dtSet;
-            this.PriceGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PriceGrid.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.PriceGrid.Location = new System.Drawing.Point(0, 0);
-            this.PriceGrid.Name = "PriceGrid";
-            this.PriceGrid.ReadOnly = true;
-            this.PriceGrid.Size = new System.Drawing.Size(856, 702);
-            this.PriceGrid.TabIndex = 0;
-            this.PriceGrid.TableStyles.AddRange(new System.Windows.Forms.DataGridTableStyle[] {
-            this.ClientsTableStyle,
-            this.PricesTableStyle,
-            this.PricesCostTableStyle});
-            this.PriceGrid.ButtonPress += new INDataGrid.INDataGridKeyPressEventHandler(this.PriceGrid_ButtonPress);
-            this.PriceGrid.DoubleClick += new System.EventHandler(this.PriceGrid_DoubleClick);
-            this.PriceGrid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PriceGrid_MouseDown);
-            this.PriceGrid.Navigate += new System.Windows.Forms.NavigateEventHandler(this.PriceGrid_Navigate);
-            this.PriceGrid.Click += new System.EventHandler(this.PriceGrid_Click);
+            this.indgvPrice.AllowUserToAddRows = false;
+            this.indgvPrice.AllowUserToDeleteRows = false;
+            this.indgvPrice.AllowUserToResizeRows = false;
+            this.indgvPrice.AutoGenerateColumns = false;
+            this.indgvPrice.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.indgvPrice.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.indgvPrice.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.pFirmNameDataGridViewTextBoxColumn,
+            this.pDatePrevPriceDataGridViewTextBoxColumn,
+            this.pDateCurPriceDataGridViewTextBoxColumn,
+            this.pDateLastFormDataGridViewTextBoxColumn,
+            this.pMaxOldDataGridViewTextBoxColumn,
+            this.pPriceTypeDataGridViewComboBoxColumn,
+            this.pCostTypeDataGridViewComboBoxColumn});
+            this.indgvPrice.DataMember = "Поставщики.Поставщики-Прайсы";
+            this.indgvPrice.DataSource = this.dtSet;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle1;
+            this.indgvPrice.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indgvPrice.Location = new System.Drawing.Point(0, 0);
+            this.indgvPrice.Name = "indgvPrice";
+            this.indgvPrice.RowHeadersVisible = false;
+            this.indgvPrice.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.indgvPrice.Size = new System.Drawing.Size(856, 278);
+            this.indgvPrice.TabIndex = 4;
+            this.indgvPrice.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvPrice_KeyDown);
+            this.indgvPrice.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.indgvPrice_CellValueChanged);
+            this.indgvPrice.DoubleClick += new System.EventHandler(this.indgvPrice_DoubleClick);
+            // 
+            // pFirmNameDataGridViewTextBoxColumn
+            // 
+            this.pFirmNameDataGridViewTextBoxColumn.DataPropertyName = "PFirmName";
+            this.pFirmNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
+            this.pFirmNameDataGridViewTextBoxColumn.Name = "pFirmNameDataGridViewTextBoxColumn";
+            this.pFirmNameDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // pDatePrevPriceDataGridViewTextBoxColumn
+            // 
+            this.pDatePrevPriceDataGridViewTextBoxColumn.DataPropertyName = "PDatePrevPrice";
+            this.pDatePrevPriceDataGridViewTextBoxColumn.HeaderText = "Дата предыдущего прайс-листа";
+            this.pDatePrevPriceDataGridViewTextBoxColumn.Name = "pDatePrevPriceDataGridViewTextBoxColumn";
+            this.pDatePrevPriceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // pDateCurPriceDataGridViewTextBoxColumn
+            // 
+            this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PDateCurPrice";
+            this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата текущего прайс-листа";
+            this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
+            this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // pDateLastFormDataGridViewTextBoxColumn
+            // 
+            this.pDateLastFormDataGridViewTextBoxColumn.DataPropertyName = "PDateLastForm";
+            this.pDateLastFormDataGridViewTextBoxColumn.HeaderText = "Дата последней формализации";
+            this.pDateLastFormDataGridViewTextBoxColumn.Name = "pDateLastFormDataGridViewTextBoxColumn";
+            this.pDateLastFormDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // pMaxOldDataGridViewTextBoxColumn
+            // 
+            this.pMaxOldDataGridViewTextBoxColumn.DataPropertyName = "PMaxOld";
+            this.pMaxOldDataGridViewTextBoxColumn.HeaderText = "Актуальность";
+            this.pMaxOldDataGridViewTextBoxColumn.Name = "pMaxOldDataGridViewTextBoxColumn";
+            // 
+            // pPriceTypeDataGridViewComboBoxColumn
+            // 
+            this.pPriceTypeDataGridViewComboBoxColumn.DataPropertyName = "PPriceType";
+            this.pPriceTypeDataGridViewComboBoxColumn.HeaderText = "Тип прайс-листа";
+            this.pPriceTypeDataGridViewComboBoxColumn.Name = "pPriceTypeDataGridViewComboBoxColumn";
+            // 
+            // pCostTypeDataGridViewComboBoxColumn
+            // 
+            this.pCostTypeDataGridViewComboBoxColumn.DataPropertyName = "PCostType";
+            this.pCostTypeDataGridViewComboBoxColumn.HeaderText = "Тип цены";
+            this.pCostTypeDataGridViewComboBoxColumn.Name = "pCostTypeDataGridViewComboBoxColumn";
             // 
             // dtSet
             // 
@@ -446,7 +529,8 @@ namespace FREditor
             this.CCode,
             this.CShortName,
             this.CRegion,
-            this.CFullName});
+            this.CFullName,
+            this.CSegment});
             this.dtClients.Constraints.AddRange(new System.Data.Constraint[] {
             new System.Data.UniqueConstraint("Constraint1", new string[] {
                         "CCode"}, true)});
@@ -473,12 +557,23 @@ namespace FREditor
             // 
             this.CFullName.ColumnName = "CFullName";
             // 
+            // CSegment
+            // 
+            this.CSegment.ColumnName = "CSegment";
+            this.CSegment.DataType = typeof(int);
+            // 
             // dtPrices
             // 
             this.dtPrices.Columns.AddRange(new System.Data.DataColumn[] {
             this.PPriceCode,
             this.PFirmCode,
-            this.PFirmName});
+            this.PFirmName,
+            this.PDatePrevPrice,
+            this.PDateCurPrice,
+            this.PDateLastForm,
+            this.PMaxOld,
+            this.PPriceType,
+            this.PCostType});
             this.dtPrices.Constraints.AddRange(new System.Data.Constraint[] {
             new System.Data.UniqueConstraint("Constraint1", new string[] {
                         "PPriceCode"}, true),
@@ -503,6 +598,36 @@ namespace FREditor
             // PFirmName
             // 
             this.PFirmName.ColumnName = "PFirmName";
+            // 
+            // PDatePrevPrice
+            // 
+            this.PDatePrevPrice.ColumnName = "PDatePrevPrice";
+            this.PDatePrevPrice.DataType = typeof(System.DateTime);
+            // 
+            // PDateCurPrice
+            // 
+            this.PDateCurPrice.ColumnName = "PDateCurPrice";
+            this.PDateCurPrice.DataType = typeof(System.DateTime);
+            // 
+            // PDateLastForm
+            // 
+            this.PDateLastForm.ColumnName = "PDateLastForm";
+            this.PDateLastForm.DataType = typeof(System.DateTime);
+            // 
+            // PMaxOld
+            // 
+            this.PMaxOld.ColumnName = "PMaxOld";
+            this.PMaxOld.DataType = typeof(int);
+            // 
+            // PPriceType
+            // 
+            this.PPriceType.ColumnName = "PPriceType";
+            this.PPriceType.DataType = typeof(int);
+            // 
+            // PCostType
+            // 
+            this.PCostType.ColumnName = "PCostType";
+            this.PCostType.DataType = typeof(int);
             // 
             // dtPricesCost
             // 
@@ -1067,132 +1192,153 @@ namespace FREditor
             // 
             this.CFRCostName.ColumnName = "CFRCostName";
             // 
-            // ClientsTableStyle
+            // splitter1
             // 
-            this.ClientsTableStyle.ColumnSizeAutoFit = true;
-            this.ClientsTableStyle.DataGrid = this.PriceGrid;
-            this.ClientsTableStyle.GridColumnStyles.AddRange(new System.Windows.Forms.DataGridColumnStyle[] {
-            this.CClientCodeTextBoxColumn,
-            this.CClientNameTextBoxColumn,
-            this.CRegionNameTextBoxColumn});
-            this.ClientsTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.ClientsTableStyle.MappingName = "Поставщики";
-            this.ClientsTableStyle.ReadOnly = true;
-            this.ClientsTableStyle.RowHeadersVisible = false;
-            this.ClientsTableStyle.RowSelected = true;
+            this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.splitter1.Location = new System.Drawing.Point(0, 419);
+            this.splitter1.Name = "splitter1";
+            this.splitter1.Size = new System.Drawing.Size(856, 5);
+            this.splitter1.TabIndex = 7;
+            this.splitter1.TabStop = false;
             // 
-            // CClientCodeTextBoxColumn
+            // pnlGrid
             // 
-            this.CClientCodeTextBoxColumn.EditDisable = true;
-            this.CClientCodeTextBoxColumn.Format = "";
-            this.CClientCodeTextBoxColumn.FormatInfo = null;
-            this.CClientCodeTextBoxColumn.HeaderText = "Код";
-            this.CClientCodeTextBoxColumn.MappingName = "CCode";
-            this.CClientCodeTextBoxColumn.NullText = "";
-            this.CClientCodeTextBoxColumn.ReadOnly = true;
-            this.CClientCodeTextBoxColumn.SearchColumn = true;
-            this.CClientCodeTextBoxColumn.Width = 284;
+            this.pnlGrid.Controls.Add(this.indgvFirm);
+            this.pnlGrid.Controls.Add(this.panel3);
+            this.pnlGrid.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlGrid.Location = new System.Drawing.Point(0, 0);
+            this.pnlGrid.Name = "pnlGrid";
+            this.pnlGrid.Size = new System.Drawing.Size(856, 419);
+            this.pnlGrid.TabIndex = 5;
             // 
-            // CClientNameTextBoxColumn
+            // indgvFirm
             // 
-            this.CClientNameTextBoxColumn.EditDisable = true;
-            this.CClientNameTextBoxColumn.Format = "";
-            this.CClientNameTextBoxColumn.FormatInfo = null;
-            this.CClientNameTextBoxColumn.HeaderText = "Наименование";
-            this.CClientNameTextBoxColumn.MappingName = "CShortName";
-            this.CClientNameTextBoxColumn.NullText = "";
-            this.CClientNameTextBoxColumn.ReadOnly = true;
-            this.CClientNameTextBoxColumn.SearchColumn = true;
-            this.CClientNameTextBoxColumn.Width = 284;
+            this.indgvFirm.AllowUserToAddRows = false;
+            this.indgvFirm.AllowUserToDeleteRows = false;
+            this.indgvFirm.AllowUserToResizeRows = false;
+            this.indgvFirm.AutoGenerateColumns = false;
+            this.indgvFirm.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.indgvFirm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.indgvFirm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cShortNameDataGridViewTextBoxColumn,
+            this.cRegionDataGridViewTextBoxColumn,
+            this.cSegmentDataGridViewTextBoxColumn});
+            this.indgvFirm.DataMember = "Поставщики";
+            this.indgvFirm.DataSource = this.dtSet;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle2;
+            this.indgvFirm.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indgvFirm.Location = new System.Drawing.Point(0, 30);
+            this.indgvFirm.Name = "indgvFirm";
+            this.indgvFirm.ReadOnly = true;
+            this.indgvFirm.RowHeadersVisible = false;
+            this.indgvFirm.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.indgvFirm.Size = new System.Drawing.Size(856, 389);
+            this.indgvFirm.TabIndex = 2;
+            this.indgvFirm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvFirm_KeyDown);
+            this.indgvFirm.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.indgvFirm_CellFormatting);
+            this.indgvFirm.DoubleClick += new System.EventHandler(this.indgvFirm_DoubleClick);
+            this.indgvFirm.Click += new System.EventHandler(this.indgvFirm_Click);
             // 
-            // CRegionNameTextBoxColumn
+            // cShortNameDataGridViewTextBoxColumn
             // 
-            this.CRegionNameTextBoxColumn.EditDisable = true;
-            this.CRegionNameTextBoxColumn.Format = "";
-            this.CRegionNameTextBoxColumn.FormatInfo = null;
-            this.CRegionNameTextBoxColumn.HeaderText = "Регион";
-            this.CRegionNameTextBoxColumn.MappingName = "CRegion";
-            this.CRegionNameTextBoxColumn.NullText = "";
-            this.CRegionNameTextBoxColumn.ReadOnly = true;
-            this.CRegionNameTextBoxColumn.SearchColumn = false;
-            this.CRegionNameTextBoxColumn.Width = 284;
+            this.cShortNameDataGridViewTextBoxColumn.DataPropertyName = "CShortName";
+            this.cShortNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
+            this.cShortNameDataGridViewTextBoxColumn.Name = "cShortNameDataGridViewTextBoxColumn";
+            this.cShortNameDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // PricesTableStyle
+            // cRegionDataGridViewTextBoxColumn
             // 
-            this.PricesTableStyle.ColumnSizeAutoFit = true;
-            this.PricesTableStyle.DataGrid = this.PriceGrid;
-            this.PricesTableStyle.GridColumnStyles.AddRange(new System.Windows.Forms.DataGridColumnStyle[] {
-            this.PPriceCodeTextBoxColumn,
-            this.PFirmNameTextBoxColumn});
-            this.PricesTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.PricesTableStyle.MappingName = "Прайсы";
-            this.PricesTableStyle.ReadOnly = true;
-            this.PricesTableStyle.RowHeadersVisible = false;
-            this.PricesTableStyle.RowSelected = true;
+            this.cRegionDataGridViewTextBoxColumn.DataPropertyName = "CRegion";
+            this.cRegionDataGridViewTextBoxColumn.HeaderText = "Регион";
+            this.cRegionDataGridViewTextBoxColumn.Name = "cRegionDataGridViewTextBoxColumn";
+            this.cRegionDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // PPriceCodeTextBoxColumn
+            // cSegmentDataGridViewTextBoxColumn
             // 
-            this.PPriceCodeTextBoxColumn.EditDisable = true;
-            this.PPriceCodeTextBoxColumn.Format = "";
-            this.PPriceCodeTextBoxColumn.FormatInfo = null;
-            this.PPriceCodeTextBoxColumn.HeaderText = "Код прайс - листа";
-            this.PPriceCodeTextBoxColumn.MappingName = "PPriceCode";
-            this.PPriceCodeTextBoxColumn.NullText = "";
-            this.PPriceCodeTextBoxColumn.SearchColumn = true;
-            this.PPriceCodeTextBoxColumn.Width = 426;
+            this.cSegmentDataGridViewTextBoxColumn.DataPropertyName = "CSegment";
+            this.cSegmentDataGridViewTextBoxColumn.HeaderText = "Сегмент";
+            this.cSegmentDataGridViewTextBoxColumn.Name = "cSegmentDataGridViewTextBoxColumn";
+            this.cSegmentDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // PFirmNameTextBoxColumn
+            // panel3
             // 
-            this.PFirmNameTextBoxColumn.EditDisable = true;
-            this.PFirmNameTextBoxColumn.Format = "";
-            this.PFirmNameTextBoxColumn.FormatInfo = null;
-            this.PFirmNameTextBoxColumn.HeaderText = "Наименование";
-            this.PFirmNameTextBoxColumn.MappingName = "PFirmName";
-            this.PFirmNameTextBoxColumn.NullText = "";
-            this.PFirmNameTextBoxColumn.SearchColumn = false;
-            this.PFirmNameTextBoxColumn.Width = 426;
+            this.panel3.Controls.Add(this.cbSegment);
+            this.panel3.Controls.Add(this.label28);
+            this.panel3.Controls.Add(this.cbRegions);
+            this.panel3.Controls.Add(this.label22);
+            this.panel3.Controls.Add(this.label13);
+            this.panel3.Controls.Add(this.tbFirmName);
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(856, 30);
+            this.panel3.TabIndex = 4;
             // 
-            // PricesCostTableStyle
+            // cbSegment
             // 
-            this.PricesCostTableStyle.ColumnSizeAutoFit = true;
-            this.PricesCostTableStyle.DataGrid = this.PriceGrid;
-            this.PricesCostTableStyle.GridColumnStyles.AddRange(new System.Windows.Forms.DataGridColumnStyle[] {
-            this.PCCostCodeTextBoxColumn,
-            this.PCCostNameTextBoxColumn,
-            this.PCBaseCostBoolColumn});
-            this.PricesCostTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.PricesCostTableStyle.MappingName = "Цены";
-            this.PricesCostTableStyle.ReadOnly = true;
-            this.PricesCostTableStyle.RowHeadersVisible = false;
-            this.PricesCostTableStyle.RowSelected = true;
+            this.cbSegment.FormattingEnabled = true;
+            this.cbSegment.Items.AddRange(new object[] {
+            "Все",
+            "Опт",
+            "Розница"});
+            this.cbSegment.Location = new System.Drawing.Point(470, 5);
+            this.cbSegment.Name = "cbSegment";
+            this.cbSegment.Size = new System.Drawing.Size(121, 21);
+            this.cbSegment.TabIndex = 5;
+            this.cbSegment.Text = "Все";
+            this.cbSegment.SelectedValueChanged += new System.EventHandler(this.cbRegions_SelectedValueChanged);
             // 
-            // PCCostCodeTextBoxColumn
+            // label28
             // 
-            this.PCCostCodeTextBoxColumn.EditDisable = true;
-            this.PCCostCodeTextBoxColumn.Format = "";
-            this.PCCostCodeTextBoxColumn.FormatInfo = null;
-            this.PCCostCodeTextBoxColumn.HeaderText = "Код";
-            this.PCCostCodeTextBoxColumn.MappingName = "PCCostCode";
-            this.PCCostCodeTextBoxColumn.NullText = "";
-            this.PCCostCodeTextBoxColumn.SearchColumn = false;
-            this.PCCostCodeTextBoxColumn.Width = 284;
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(419, 9);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(53, 13);
+            this.label28.TabIndex = 4;
+            this.label28.Text = "Сегмент:";
             // 
-            // PCCostNameTextBoxColumn
+            // cbRegions
             // 
-            this.PCCostNameTextBoxColumn.EditDisable = true;
-            this.PCCostNameTextBoxColumn.Format = "";
-            this.PCCostNameTextBoxColumn.FormatInfo = null;
-            this.PCCostNameTextBoxColumn.MappingName = "PCCostName";
-            this.PCCostNameTextBoxColumn.NullText = "Наименование";
-            this.PCCostNameTextBoxColumn.SearchColumn = false;
-            this.PCCostNameTextBoxColumn.Width = 284;
+            this.cbRegions.FormattingEnabled = true;
+            this.cbRegions.Location = new System.Drawing.Point(275, 5);
+            this.cbRegions.Name = "cbRegions";
+            this.cbRegions.Size = new System.Drawing.Size(121, 21);
+            this.cbRegions.TabIndex = 3;
+            this.cbRegions.Text = "Все";
+            this.cbRegions.SelectedValueChanged += new System.EventHandler(this.cbRegions_SelectedValueChanged);
             // 
-            // PCBaseCostBoolColumn
+            // label22
             // 
-            this.PCBaseCostBoolColumn.HeaderText = "Базовое?";
-            this.PCBaseCostBoolColumn.MappingName = "PCBaseCost";
-            this.PCBaseCostBoolColumn.NullText = "";
-            this.PCBaseCostBoolColumn.Width = 284;
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(231, 9);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(46, 13);
+            this.label22.TabIndex = 2;
+            this.label22.Text = "Регион:";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(4, 8);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(86, 13);
+            this.label13.TabIndex = 1;
+            this.label13.Text = "Наименование:";
+            // 
+            // tbFirmName
+            // 
+            this.tbFirmName.Location = new System.Drawing.Point(90, 5);
+            this.tbFirmName.Name = "tbFirmName";
+            this.tbFirmName.Size = new System.Drawing.Size(122, 20);
+            this.tbFirmName.TabIndex = 0;
+            this.tbFirmName.TextChanged += new System.EventHandler(this.tbFirmName_TextChanged);
             // 
             // tpPrice
             // 
@@ -1489,7 +1635,6 @@ namespace FREditor
             // 
             // indgvPriceData
             // 
-            this.indgvPriceData.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.indgvPriceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
@@ -1528,14 +1673,14 @@ namespace FREditor
             this.MNameFieldINDataGridViewTextBoxColumn,
             this.MBeginFieldINDataGridViewTextBoxColumn,
             this.MEndFieldINDataGridViewTextBoxColumn});
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle4;
             this.indgvMarking.Dock = System.Windows.Forms.DockStyle.Fill;
             this.indgvMarking.HideEmptyColumns = false;
             this.indgvMarking.Location = new System.Drawing.Point(0, 0);
@@ -1605,14 +1750,14 @@ namespace FREditor
             this.cFRTextEndDataGridViewTextBoxColumn});
             this.indgvCosts.DataMember = "Поставщики.Поставщики-Прайсы.Прайсы-Правила формализации цен";
             this.indgvCosts.DataSource = this.dtSet;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle5;
             this.indgvCosts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.indgvCosts.HideEmptyColumns = false;
             this.indgvCosts.Location = new System.Drawing.Point(728, 0);
@@ -2959,6 +3104,11 @@ namespace FREditor
             this.inDataGridColorTextBoxColumnName.SearchColumn = false;
             this.inDataGridColorTextBoxColumnName.Width = 115;
             // 
+            // tmrSearch
+            // 
+            this.tmrSearch.Interval = 1000;
+            this.tmrSearch.Tick += new System.EventHandler(this.tmrSearch_Tick);
+            // 
             // frmFREMain
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -2974,8 +3124,8 @@ namespace FREditor
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tbControl.ResumeLayout(false);
             this.tpFirms.ResumeLayout(false);
-            this.pnlGrid.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.PriceGrid)).EndInit();
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.indgvPrice)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtClients)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtPrices)).EndInit();
@@ -2985,6 +3135,10 @@ namespace FREditor
             ((System.ComponentModel.ISupportInitialize)(this.dtCatalogCurrency)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtMarking)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtCostsFormRules)).EndInit();
+            this.pnlGrid.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.indgvFirm)).EndInit();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.tpPrice.ResumeLayout(false);
             this.pnlFloat.ResumeLayout(false);
             this.grpbGeneral.ResumeLayout(false);
@@ -3028,7 +3182,6 @@ namespace FREditor
         private System.Windows.Forms.TabPage tpFirms;
         private System.Windows.Forms.TabPage tpPrice;
         private System.Windows.Forms.Panel pnlGrid;
-        private INDataGrid.INDataGrid PriceGrid;
         private System.Data.DataSet dtSet;
         private System.Data.DataColumn CCode;
         private System.Data.DataColumn CShortName;
@@ -3059,17 +3212,6 @@ namespace FREditor
         private System.Data.DataColumn FMTFormat;
         private System.Data.DataColumn CCCurrency;
         private System.Windows.Forms.Panel panel1;
-        private INDataGrid.INDataGridTableStyle ClientsTableStyle;
-        private INDataGrid.INDataGridColorTextBoxColumn CClientCodeTextBoxColumn;
-        private INDataGrid.INDataGridColorTextBoxColumn CClientNameTextBoxColumn;
-        private INDataGrid.INDataGridColorTextBoxColumn CRegionNameTextBoxColumn;
-        private INDataGrid.INDataGridTableStyle PricesTableStyle;
-        private INDataGrid.INDataGridColorTextBoxColumn PFirmNameTextBoxColumn;
-        private INDataGrid.INDataGridColorTextBoxColumn PPriceCodeTextBoxColumn;
-        private INDataGrid.INDataGridTableStyle PricesCostTableStyle;
-        private INDataGrid.INDataGridColorTextBoxColumn PCCostNameTextBoxColumn;
-        private System.Windows.Forms.DataGridBoolColumn PCBaseCostBoolColumn;
-        private INDataGrid.INDataGridColorTextBoxColumn PCCostCodeTextBoxColumn;
         private System.Data.DataColumn FRListName;
         private System.Data.DataColumn FRStartLine;
         private System.Data.DataTable dtMarking;
@@ -3307,5 +3449,34 @@ namespace FREditor
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRfrifDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TextBox tbFirmName;
+        private System.Windows.Forms.ComboBox cbRegions;
+        private System.Windows.Forms.ComboBox cbSegment;
+        private System.Windows.Forms.Label label28;
+        private System.Data.DataColumn CSegment;
+        private System.Data.DataColumn PDatePrevPrice;
+        private System.Data.DataColumn PDateCurPrice;
+        private System.Data.DataColumn PDateLastForm;
+        private System.Data.DataColumn PMaxOld;
+        private System.Data.DataColumn PPriceType;
+        private System.Data.DataColumn PCostType;
+        private Inforoom.WinForms.INDataGridView indgvFirm;
+        private System.Windows.Forms.Panel panel2;
+        private Inforoom.WinForms.INDataGridView indgvPrice;
+        private System.Windows.Forms.Timer tmrSearch;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pFirmNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pDatePrevPriceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pDateCurPriceDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pDateLastFormDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pMaxOldDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewComboBoxColumn pPriceTypeDataGridViewComboBoxColumn;
+        private System.Windows.Forms.DataGridViewComboBoxColumn pCostTypeDataGridViewComboBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cShortNameDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cRegionDataGridViewTextBoxColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cSegmentDataGridViewTextBoxColumn;
+        private System.Windows.Forms.Splitter splitter1;
     }
 }
