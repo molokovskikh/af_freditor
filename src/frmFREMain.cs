@@ -69,8 +69,8 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        //string StartPath = "C:\\TEMP\\Base\\";
+        //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+        string StartPath = "C:\\TEMP\\Base\\";
         //string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
@@ -362,6 +362,9 @@ where
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
+            bsCostsFormRules.SuspendBinding();
+            bsFormRules.SuspendBinding();
+
             indgvFirm.Focus();
             indgvFirm.Select();
 
@@ -1750,6 +1753,10 @@ and pd.CostType = 1
             if (tbControl.SelectedTab == tpFirms)
             {
                 SaveCostsSettings();
+                bsCostsFormRules.Filter = String.Empty;
+                bsFormRules.Filter = String.Empty;
+                bsCostsFormRules.SuspendBinding();
+                bsFormRules.SuspendBinding();
                 //TODO: восстанавливать позицию в таблице клиентов и прайс-листов.
                 //int CRI = PriceGrid.CurrentRowIndex;
                 //CurrencyManager cm = (CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName];
@@ -1780,6 +1787,9 @@ and pd.CostType = 1
                 else
                     if (fcs == dgFocus.Price)
                         indgvPrice.Select();
+                tsbApply.Enabled = false;
+                tsbCancel.Enabled = false;
+                tmrUpdateApply.Stop();
                 //pnlFloat.Visible = false;
             }
             else
@@ -1787,6 +1797,7 @@ and pd.CostType = 1
                 {
                     //	fmt0 = String.Empty;
                     //	ClearPrice();
+
                     CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
                     DataRowView drv = (DataRowView)currencyManager.Current;
                     DataView dv = (DataView)currencyManager.List;
@@ -1797,49 +1808,50 @@ and pd.CostType = 1
                         openedPriceDR = drP;
                         DoOpenPrice(drP);
                         tmrUpdateApply.Start();
+                        bsCostsFormRules.Filter = "CFRfr_if = " + drP[PPriceCode.ColumnName].ToString();
+                        bsFormRules.Filter = "FRPriceCode = " + drP[PPriceCode.ColumnName].ToString();
+                        bsCostsFormRules.ResumeBinding();
+                        bsFormRules.ResumeBinding();
                     }
-                    else
-                        if (drv.Row.Table.TableName == dtClients.TableName)
-                        {
-                            if (firstFind)
-                            {
-                                DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
-                                if (drs.Length > 0)
-                                {
-                                    openedPriceDR = drs[0];
-                                    DoOpenPrice(drs[0]);
-                                    tmrUpdateApply.Start();
-                                }
-                                else
-                                {
-                                    tbControl.SelectedTab = tpFirms;
-                                    tsbApply.Enabled = false;
-                                    tsbCancel.Enabled = false;
-                                }
-                                firstFind = false;
-                            }
-                            else
-                            {
-                                DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
-                                if (drs.Length > 0)
-                                {
-                                    DataRow drP = drs[0];
-                                    openedPriceDR = drP;
-                                    DoOpenPrice(drP);
-                                    tmrUpdateApply.Start();
-                                }
-                                else
-                                {
-                                    tbControl.SelectedTab = tpFirms;
-                                    tsbApply.Enabled = false;
-                                    tsbCancel.Enabled = false;
-                                }
-                            }
-                        }
+                    //else
+                    //    if (drv.Row.Table.TableName == dtClients.TableName)
+                    //    {
+                    //        if (firstFind)
+                    //        {
+                    //            DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
+                    //            if (drs.Length > 0)
+                    //            {
+                    //                openedPriceDR = drs[0];
+                    //                DoOpenPrice(drs[0]);
+                    //                tmrUpdateApply.Start();
+                    //            }
+                    //            else
+                    //            {
+                    //                tbControl.SelectedTab = tpFirms;
+                    //                tsbApply.Enabled = false;
+                    //                tsbCancel.Enabled = false;
+                    //            }
+                    //            firstFind = false;
+                    //        }
+                    //        else
+                    //        {
+                    //            DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
+                    //            if (drs.Length > 0)
+                    //            {
+                    //                DataRow drP = drs[0];
+                    //                openedPriceDR = drP;
+                    //                DoOpenPrice(drP);
+                    //                tmrUpdateApply.Start();
+                    //            }
+                    //            else
+                    //            {
+                    //                tbControl.SelectedTab = tpFirms;
+                    //                tsbApply.Enabled = false;
+                    //                tsbCancel.Enabled = false;
+                    //            }
+                    //        }
+                    //    }
                 }
-            tsbApply.Enabled = false;
-            tsbCancel.Enabled = false;
-            tmrUpdateApply.Stop();
         }
 
         private void MethodForThread(OleDbDataAdapter da, DataTable dt)
@@ -2411,8 +2423,14 @@ and pd.CostType = 1
                 cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
                 cm.EndCurrentEdit();
                 //TODO: Здесь надо правильно биндить
-                cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-правила"];
+                //cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-правила"];
+                //cm.EndCurrentEdit();
+                cm = (CurrencyManager)BindingContext[bsCostsFormRules.DataSource, bsCostsFormRules.DataMember];
                 cm.EndCurrentEdit();
+                bsFormRules.EndEdit();
+                //bsFormRules.CurrencyManager.EndCurrentEdit();
+                //cm = (CurrencyManager)BindingContext[bsFormRules.DataSource, bsFormRules.DataMember];
+                //cm.EndCurrentEdit();
             }
         }
 
