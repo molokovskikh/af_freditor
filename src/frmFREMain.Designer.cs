@@ -1248,6 +1248,7 @@ namespace FREditor
             this.indgvFirm.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.indgvFirm_CellFormatting);
             this.indgvFirm.DoubleClick += new System.EventHandler(this.indgvFirm_DoubleClick);
             this.indgvFirm.Click += new System.EventHandler(this.indgvFirm_Click);
+            this.indgvFirm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvFirm_KeyPress);
             // 
             // cShortNameDataGridViewTextBoxColumn
             // 
@@ -1287,10 +1288,6 @@ namespace FREditor
             // cbSegment
             // 
             this.cbSegment.FormattingEnabled = true;
-            this.cbSegment.Items.AddRange(new object[] {
-            "Все",
-            "Опт",
-            "Розница"});
             this.cbSegment.Location = new System.Drawing.Point(470, 5);
             this.cbSegment.Name = "cbSegment";
             this.cbSegment.Size = new System.Drawing.Size(121, 21);

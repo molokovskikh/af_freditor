@@ -69,8 +69,8 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        string StartPath = "C:\\TEMP\\Base\\";
+        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+        //string StartPath = "C:\\TEMP\\Base\\";
         //string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
@@ -89,8 +89,14 @@ namespace FREditor
         string existParentRules = String.Empty;
 
         string nameR = String.Empty;
+        string FilterParams = String.Empty;
+
+        private string shortNameFilter = String.Empty;
+        private int regionCodeFilter = -1;
+        private int segmentFilter = -1;
 
         bool fileExist = false;
+        bool InSearch = false;
 
         /// <summary>
         /// Указывает на то, что у фирмы имеется только один прайс-лист
@@ -106,6 +112,7 @@ namespace FREditor
 
         public DataTable dtCostTypes;
         public DataTable dtPriceTypes;
+        public DataTable dtFirmSegment;
         protected dgFocus fcs;
 
         public frmFREMain()
@@ -137,6 +144,17 @@ namespace FREditor
             pPriceTypeDataGridViewComboBoxColumn.DataSource = dtPriceTypes;
             pPriceTypeDataGridViewComboBoxColumn.DisplayMember = "Name";
             pPriceTypeDataGridViewComboBoxColumn.ValueMember = "ID";
+
+            dtFirmSegment = new DataTable("FirmSegment");
+            dtFirmSegment.Columns.Add("ID", typeof(int));
+            dtFirmSegment.Columns.Add("Segment", typeof(string));
+            dtFirmSegment.Rows.Add(new object[] { -1, "Все" });
+            dtFirmSegment.Rows.Add(new object[] { 0, "Опт" });
+            dtFirmSegment.Rows.Add(new object[] { 1, "Розница" });
+
+            cbSegment.DataSource = dtFirmSegment;
+            cbSegment.DisplayMember = "Segment";
+            cbSegment.ValueMember = "ID";
 
             indgvMarking.DataSource = dtSet;
             indgvMarking.DataMember = dtMarking.TableName;
@@ -331,21 +349,15 @@ where
                 ms.SourceColumn = ms.ParameterName;
             }
 
-
             MyCn.Open();
             MyCmd.Connection = MyCn;
             MyDA = new MySqlDataAdapter(MyCmd);
 
-            dtClientsFill();
-            dtPricesFill();
-            dtPricesCostFill();
-            dtFormRulesFill();
             dtCatalogCurrencyFill();
             dtPriceFMTsFill();
-            dtCostsFormRulesFill();
             cbRegionsFill();
+            //FillTables(String.Empty, 0, -1);
 
-            dtPrice.TableName = "Прайс";
             //PriceDataTableStyle.ColumnSizeAutoFit = true;
 
             MyCn.Close();
@@ -365,8 +377,8 @@ where
             bsCostsFormRules.SuspendBinding();
             bsFormRules.SuspendBinding();
 
-            indgvFirm.Focus();
-            indgvFirm.Select();
+            tbFirmName.Focus();
+            tbFirmName.Select();
 
             sf.Alignment = StringAlignment.Center;
             sf.FormatFlags = StringFormatFlags.DirectionVertical;
@@ -430,9 +442,60 @@ where
             cmbFormat.SelectedIndex = 0;
         }
 
-        private void dtClientsFill()
+        private string AddParams(string shname, int regcode, int seg)
         {
-            dtClients.Clear();
+            string cmnd = String.Empty;
+            if (shname != String.Empty)
+                cmnd += "and cd.ShortName like ?ShortName ";
+            if (regcode != 0)
+                cmnd += "and r.regioncode = ?RegionCode ";
+            if (seg != -1)
+                cmnd += "and cd.firmSegment = ?Segment ";
+            return cmnd;
+        }
+
+        private void FillTables(string shname, int regcode, int seg)
+        {
+            dtSet.EnforceConstraints = false;
+            try
+            {
+                dtClients.Clear();
+                dtPrices.Clear();
+                dtPricesCost.Clear();
+                dtFormRules.Clear();
+                dtCostsFormRules.Clear();
+            }
+            finally
+            {
+                dtSet.EnforceConstraints = true;
+            }
+            dtSet.AcceptChanges();
+
+            if (shname != String.Empty)
+            {
+
+                MyCmd.Parameters.Clear();
+
+                if (shname != String.Empty)
+                    MyCmd.Parameters.Add("ShortName", "%" + shname + "%");
+                if (regcode != 0)
+                    MyCmd.Parameters.Add("RegionCode", regcode);
+                if (seg != -1)
+                    MyCmd.Parameters.Add("Segment", seg);
+
+                FilterParams = AddParams(shname, regcode, seg);
+
+                dtClientsFill(FilterParams);
+                dtPricesFill(FilterParams);
+                dtPricesCostFill(FilterParams);
+                dtFormRulesFill(FilterParams);
+                dtCostsFormRulesFill(FilterParams);
+            }
+        }
+
+        private void dtClientsFill(string param)
+        {
+            //dtClients.Clear();
 
             MyCmd.CommandText =
                 @"SELECT 
@@ -444,16 +507,18 @@ where
 				FROM 
 					usersettings.clientsdata cd
                     inner join farm.regions r on r.RegionCode = cd.RegionCode
-				WHERE cd.firmtype = 0 ORDER BY cd.ShortName";
+				WHERE cd.firmtype = 0 ";
+            MyCmd.CommandText += param;
+            MyCmd.CommandText += " ORDER BY cd.ShortName";
 
             MyDA.Fill(dtClients);
         }
 
-        private void dtPricesFill()
+        private void dtPricesFill(string param)
         {
-            dtPrices.Clear();
+            //dtPrices.Clear();
 
-			MyCmd.CommandText =
+            MyCmd.CommandText =
 @"SELECT
   distinct
   pd.FirmCode AS PFirmCode,
@@ -471,9 +536,12 @@ FROM
 inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
 inner join farm.formrules fr on fr.FirmCode=pd.pricecode
+inner join farm.regions r on r.regioncode=cd.regioncode
 where
   cd.FirmType = 0
-and pd.CostType = 0
+and pd.CostType = 0 ";
+            MyCmd.CommandText += param;
+            MyCmd.CommandText += @" 
 union all
 SELECT 
   distinct
@@ -492,9 +560,12 @@ FROM
 inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
 inner join farm.formrules fr on fr.FirmCode=pc.CostCode
+inner join farm.regions r on r.regioncode=cd.regioncode
 where
   cd.FirmType = 0
-and pd.CostType = 1
+and pd.CostType = 1 ";
+            MyCmd.CommandText += param;
+            MyCmd.CommandText += @" 
 union all
 SELECT
   distinct
@@ -513,44 +584,56 @@ FROM
 inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
 inner join farm.formrules fr on fr.FirmCode=pd.pricecode
+inner join farm.regions r on r.regioncode=cd.regioncode
 where
   cd.FirmType = 0
-and pd.CostType is null
-order by 2"; 
+and pd.CostType is null ";
+            MyCmd.CommandText += param;
+            MyCmd.CommandText += @" 
+order by 2";
 
             MyDA.Fill(dtPrices);
         }
 
         private void cbRegionsFill()
         {
-            DataTable dtRegions = new DataTable();
+            DataTable dtRegions = new DataTable("Region ");
+            dtRegions.Columns.Add("RegionCode", typeof(int));
+            dtRegions.Columns.Add("Region", typeof(string));
             dtRegions.Clear();
+            dtRegions.Rows.Add(new object[] { -1, "Все" });
             MyCmd.CommandText = @"
 SELECT
+    RegionCode,
     Region
 FROM
     Regions
 WHERE regionCode > 0
+Order By Region
 ";
             MyDA.Fill(dtRegions);
 
-            cbRegions.Items.Clear();
-            cbRegions.Items.Add("Все");
-            if(dtRegions.Rows.Count > 0)
-            {
-                foreach (DataRow dr in dtRegions.Rows)
-                {
-                     cbRegions.Items.Add(dr["Region"].ToString());
-                }
-            }
+            //cbRegions.Items.Clear();
+            //cbRegions.Items.Add("Все");
+            //if(dtRegions.Rows.Count > 0)
+            //{
+            //    foreach (DataRow dr in dtRegions.Rows)
+            //    {
+            //         cbRegions.Items.Add(dr["Region"].ToString());
+            //    }
+            //}
+
+            cbRegions.DataSource = dtRegions;
+            cbRegions.DisplayMember = "Region";
+            cbRegions.ValueMember = "RegionCode";
 
         }
 
-        private void dtPricesCostFill()
+        private void dtPricesCostFill(string param)
         {
-            dtPricesCost.Clear();
+            //dtPricesCost.Clear();
 
-			MyCmd.CommandText =
+            MyCmd.CommandText =
 @"SELECT 
   distinct
 	pc.ShowPriceCode AS PCPriceCode,
@@ -561,9 +644,12 @@ FROM
 	usersettings.pricescosts pc
 inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
 inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
+inner join farm.regions r on r.regioncode=cd.regioncode
 where 
     cd.firmtype = 0
-and pd.CostType = 0
+and pd.CostType = 0 ";
+            MyCmd.CommandText += param;
+            MyCmd.CommandText += @"  
 union all
 SELECT 
   distinct
@@ -575,19 +661,22 @@ FROM
   usersettings.pricescosts pc
 inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
 inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
+inner join farm.regions r on r.regioncode=cd.regioncode
 where 
     cd.firmtype = 0
-and pd.CostType = 1 
+and pd.CostType = 1 ";
+            MyCmd.CommandText += param;
+            MyCmd.CommandText += @"  
 order by 4";
 
 			MyDA.Fill(dtPricesCost);
         }
 
-        private void dtCostsFormRulesFill()
+        private void dtCostsFormRulesFill(string param)
         {
-            dtCostsFormRules.Clear();
+            //dtCostsFormRules.Clear();
 
-			MyCmd.CommandText =
+            MyCmd.CommandText =
 @"SELECT 
   distinct
   pc.showpricecode AS CFRfr_if,
@@ -601,9 +690,12 @@ FROM
 inner join usersettings.pricescosts pc on pc.CostCode = cfr.pc_costcode
 inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
 inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
+inner join farm.regions r on r.regioncode=cd.regioncode
 where 
      cd.firmtype = 0 
-and pd.CostType = 0
+and pd.CostType = 0 ";
+            MyCmd.CommandText += param;
+            MyCmd.CommandText += @"   
 union all
 SELECT 
   distinct
@@ -618,17 +710,20 @@ FROM
 inner join usersettings.pricescosts pc on pc.CostCode = cfr.pc_costcode
 inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
 inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
+inner join farm.regions r on r.regioncode=cd.regioncode
 where 
     cd.firmtype = 0 
-and pd.CostType = 1
+and pd.CostType = 1 ";
+            MyCmd.CommandText += param;
+            MyCmd.CommandText += @"   
 order by 2";
 
             MyDA.Fill(dtCostsFormRules);
         }
 
-        private void dtFormRulesFill()
+        private void dtFormRulesFill(string param)
         {
-            dtFormRules.Clear();
+            //dtFormRules.Clear();
 
             MyCmd.CommandText =
                 @"SELECT
@@ -757,14 +852,16 @@ order by 2";
 FROM UserSettings.PricesData AS PD
 INNER JOIN
     UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0
+INNER JOIN 
+    farm.regions r on r.regioncode=cd.regioncode
 INNER JOIN
     Farm.formrules AS FR
     ON FR.FirmCode=PD.PriceCode
 LEFT JOIN
     Farm.FormRules AS PFR
     ON PFR.FirmCode=IF(FR.ParentFormRules,FR.ParentFormRules,FR.FirmCode)
-where 
-  pd.PriceCode in
+where
+pd.PriceCode in
 (
 SELECT 
   distinct
@@ -787,8 +884,9 @@ inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
 where
   cd.FirmType = 0
 and pd.CostType = 1
-)
-";
+)";
+            MyCmd.CommandText += param;
+
             //WHERE FR.DateCurPrice > '2005.01.01'
 
             MyDA.Fill(dtFormRules);
@@ -1581,7 +1679,6 @@ and pd.CostType = 1
                 try
                 {
                     OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from {0}", System.IO.Path.GetFileName(TxtFilePath).Replace(".", "#")), dbcMain);
-                    //PriceDataTableStyle.GridColumnStyles.Clear();
                     indgvPriceData.Columns.Clear();
 
                     CreateThread(da, dtPrice, indgvPriceData);
@@ -1680,7 +1777,6 @@ and pd.CostType = 1
             }
 
             indgvPriceData.Columns.Clear();
-            //PriceDataTableStyle.GridColumnStyles.Clear();
 
             gds.Clear();
             dtables.Clear();
@@ -1693,8 +1789,6 @@ and pd.CostType = 1
 
             DelCostsColumns();
 
-            //lStartLine.Visible = false;
-            //txtBoxStartLine.Visible = false;
             label23.Visible = false;
             txtBoxSheetName.Visible = false;
 
@@ -1717,13 +1811,14 @@ and pd.CostType = 1
             {
                 dtSet.EnforceConstraints = true;
             }
-            dtClientsFill();
-            dtPricesFill();
-            dtPricesCostFill();
-            dtFormRulesFill();
+            dtClientsFill(String.Empty);
+            dtPricesFill(String.Empty);
+            dtPricesCostFill(String.Empty);
+            dtFormRulesFill(String.Empty);
             dtCatalogCurrencyFill();
             dtPriceFMTsFill();
-            dtCostsFormRulesFill();
+            dtCostsFormRulesFill(String.Empty);
+            cbRegionsFill();
             dtSet.AcceptChanges();
         }
 
@@ -1757,36 +1852,24 @@ and pd.CostType = 1
                 bsFormRules.Filter = String.Empty;
                 bsCostsFormRules.SuspendBinding();
                 bsFormRules.SuspendBinding();
-                //TODO: восстанавливать позицию в таблице клиентов и прайс-листов.
-                //int CRI = PriceGrid.CurrentRowIndex;
-                //CurrencyManager cm = (CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName];
-                ////Код выбранного клиента
-                //long ClientCode = (long)((DataRowView)cm.Current)[CCode.ColumnName];
 
-                ////То, что сейчас отображается в таблице
-                //string dataMember = PriceGrid.DataMember;
-                ////Выбранная запись в текущем контексте
-                //DataRow childRow = ((DataRowView)((CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember]).Current).Row;
-                ////значение первого столбца выбранной записи
-                //object SelectedValue = childRow[0];
-                ////название первого столбца выбранной записи
-                //string ChildRowColumnName = childRow.Table.Columns[0].ColumnName;
-                RefreshDataSet();
-                //PriceGrid.DataMember = dtClients.TableName;
-                //CurrencyManagerPosition((CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName], CCode.ColumnName, ClientCode);
-                //if (dataMember != dtClients.TableName)
-                //{
-                //    PriceGrid.NavigateTo(((CurrencyManager)BindingContext[PriceGrid.DataSource, dtClients.TableName]).Position, dtClients.TableName + "-" + dtPrices.TableName);
-                //    CurrencyManagerPosition((CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember], ChildRowColumnName, SelectedValue);
-                //}
-                //PriceGrid.Focus();
-                //PriceGrid.Select();
+                long ClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
+                long PriceCode = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceCode.ColumnName]);
+                FillTables(shortNameFilter, regionCodeFilter, segmentFilter);
+
                 this.Text = "Редактор Правил Формализации";
                 if (fcs == dgFocus.Firm)
+                {
                     indgvFirm.Focus();
+                    CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, ClientCode);
+                }
                 else
                     if (fcs == dgFocus.Price)
+                    {
                         indgvPrice.Select();
+                        CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, ClientCode);
+                        CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceCode.ColumnName, PriceCode);
+                    }
                 tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
                 tmrUpdateApply.Stop();
@@ -1795,62 +1878,18 @@ and pd.CostType = 1
             else
                 if (tbControl.SelectedTab == tpPrice)
                 {
-                    //	fmt0 = String.Empty;
-                    //	ClearPrice();
-
                     CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
                     DataRowView drv = (DataRowView)currencyManager.Current;
                     DataView dv = (DataView)currencyManager.List;
-                    
-                    if (drv.Row.Table.TableName == dtPrices.TableName)
-                    {
-                        DataRow drP = drv.Row;
-                        openedPriceDR = drP;
-                        DoOpenPrice(drP);
-                        tmrUpdateApply.Start();
-                        bsCostsFormRules.Filter = "CFRfr_if = " + drP[PPriceCode.ColumnName].ToString();
-                        bsFormRules.Filter = "FRPriceCode = " + drP[PPriceCode.ColumnName].ToString();
-                        bsCostsFormRules.ResumeBinding();
-                        bsFormRules.ResumeBinding();
-                    }
-                    //else
-                    //    if (drv.Row.Table.TableName == dtClients.TableName)
-                    //    {
-                    //        if (firstFind)
-                    //        {
-                    //            DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
-                    //            if (drs.Length > 0)
-                    //            {
-                    //                openedPriceDR = drs[0];
-                    //                DoOpenPrice(drs[0]);
-                    //                tmrUpdateApply.Start();
-                    //            }
-                    //            else
-                    //            {
-                    //                tbControl.SelectedTab = tpFirms;
-                    //                tsbApply.Enabled = false;
-                    //                tsbCancel.Enabled = false;
-                    //            }
-                    //            firstFind = false;
-                    //        }
-                    //        else
-                    //        {
-                    //            DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
-                    //            if (drs.Length > 0)
-                    //            {
-                    //                DataRow drP = drs[0];
-                    //                openedPriceDR = drP;
-                    //                DoOpenPrice(drP);
-                    //                tmrUpdateApply.Start();
-                    //            }
-                    //            else
-                    //            {
-                    //                tbControl.SelectedTab = tpFirms;
-                    //                tsbApply.Enabled = false;
-                    //                tsbCancel.Enabled = false;
-                    //            }
-                    //        }
-                    //    }
+
+                    DataRow drP = drv.Row;
+                    openedPriceDR = drP;
+                    DoOpenPrice(drP);
+                    tmrUpdateApply.Start();
+                    bsCostsFormRules.Filter = "CFRfr_if = " + drP[PPriceCode.ColumnName].ToString();
+                    bsFormRules.Filter = "FRPriceCode = " + drP[PPriceCode.ColumnName].ToString();
+                    bsCostsFormRules.ResumeBinding();
+                    bsFormRules.ResumeBinding();
                 }
         }
 
@@ -2849,49 +2888,75 @@ WHERE fr.FirmCode = ?PPriceCode;";
         private void tbRules_TextChanged(object sender, EventArgs e)
         {
             tmrUpdateApply.Stop();
-            if(((TextBox)sender).Text == String.Empty)
+            if (((TextBox)sender).Text == String.Empty)
                 ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
             tmrUpdateApply.Start();
         }
 
         private void tbFirmName_TextChanged(object sender, EventArgs e)
         {
-            tmrSearch.Stop();
-            tmrSearch.Start();
+            if (!InSearch)
+            {
+                tmrSearch.Stop();
+                tmrSearch.Start();
+            }
         }
 
         private void cbRegions_SelectedValueChanged(object sender, EventArgs e)
         {
-            tmrSearch.Stop();
-            tmrSearch.Start();
+            if (!InSearch)
+            {
+                tmrSearch.Stop();
+                tmrSearch.Start();
+            }
         }
 
         private void tmrSearch_Tick(object sender, EventArgs e)
         {
-            tmrSearch.Stop();
-            string FilterString = String.Empty;
-            if ((cbRegions.SelectedItem != null) && (cbRegions.SelectedItem.ToString() != "Все"))
-                FilterString += String.Format("CRegion = '{0}'", cbRegions.SelectedItem);
-            if ((cbSegment.SelectedItem != null) && (cbSegment.SelectedItem.ToString() != "Все"))
+            InSearch = true;
+            try
             {
-                if (FilterString != String.Empty)
-                    FilterString += " and ";
-                int segment = -1;
-                if (cbSegment.SelectedItem.ToString() == "Опт")
-                    segment = 0;
-                else if (cbSegment.SelectedItem.ToString() == "Розница")
-                    segment = 1;
-                FilterString += String.Format("CSegment = {0}", segment);
+                tmrSearch.Stop();
+
+                int regcode = 0;
+                if ((cbRegions.SelectedItem != null) && (Convert.ToInt32(cbRegions.SelectedValue) != -1))
+                    regcode = Convert.ToInt32(cbRegions.SelectedValue);
+                int seg = -1;
+                if ((cbSegment.SelectedItem != null) && (Convert.ToInt32(cbSegment.SelectedValue) != -1))
+                    seg = Convert.ToInt32(cbSegment.SelectedValue);
+                string shname = tbFirmName.Text;
+                FillTables(shname, regcode, seg);
+                shortNameFilter = shname;
+                regionCodeFilter = regcode;
+                segmentFilter = seg;
+                indgvFirm.Focus();
+                //tbFirmName.Text = String.Empty;
             }
-            if (tbFirmName.Text != String.Empty)
+            finally
             {
-                if (FilterString != String.Empty)
-                    FilterString += " and ";
-                FilterString += String.Format("CShortName like '%{0}%'", tbFirmName.Text);
+                InSearch = false;
             }
 
-            CurrencyManager cm = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
-            ((DataView)cm.List).RowFilter = FilterString;
+            //{
+            //    if (FilterString != String.Empty)
+            //        FilterString += " and ";
+            //    int segment = -1;
+            //    if (cbSegment.SelectedItem.ToString() == "Опт")
+            //        segment = 0;
+            //    else if (cbSegment.SelectedItem.ToString() == "Розница")
+            //        segment = 1;
+            //    FilterString += String.Format("CSegment = {0}", segment);
+            //}
+            //if (tbFirmName.Text != String.Empty)
+            //{
+            //    if (FilterString != String.Empty)
+            //        FilterString += " and ";
+            //    FilterString += String.Format("CShortName like '%{0}%'", tbFirmName.Text);
+            //}
+
+            //CurrencyManager cm = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
+            //((DataView)cm.List).RowFilter = FilterString;
+            //FillTables(shname, 0, seg);
         }
 
         private void indgvPrice_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -2949,6 +3014,18 @@ WHERE fr.FirmCode = ?PPriceCode;";
         {
             fcs = dgFocus.Price;
             tbControl.SelectedTab = tpPrice;
+        }
+
+        private void indgvFirm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(char.IsLetter(e.KeyChar))
+            {
+                tbFirmName.Focus();
+                tbFirmName.Text = e.KeyChar.ToString();
+                tbFirmName.SelectionStart = 1;
+           
+            }
+
         }
          
     }
