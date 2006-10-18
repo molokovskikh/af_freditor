@@ -223,10 +223,6 @@ namespace FREditor
             this.btnFloatPanel = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.indgvCosts = new Inforoom.WinForms.INDataGridView();
-            this.cFRFieldNameDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
-            this.cFRTextBeginDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
-            this.cFRTextEndDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
-            this.cFRCostNameDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
             this.bsCostsFormRules = new System.Windows.Forms.BindingSource(this.components);
             this.grpbFields = new System.Windows.Forms.GroupBox();
             this.pnlGeneralFields = new System.Windows.Forms.Panel();
@@ -338,6 +334,10 @@ namespace FREditor
             this.inDataGridColorTextBoxColumnBegin = new INDataGrid.INDataGridColorTextBoxColumn();
             this.inDataGridColorTextBoxColumnName = new INDataGrid.INDataGridColorTextBoxColumn();
             this.tmrSearch = new System.Windows.Forms.Timer(this.components);
+            this.cFRCostNameDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.cFRFieldNameDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.cFRTextBeginDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+            this.cFRTextEndDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
             this.tbControl.SuspendLayout();
             this.tpFirms.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -1748,10 +1748,10 @@ namespace FREditor
             this.indgvCosts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.indgvCosts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.indgvCosts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.cFRCostNameDataGridViewTextBoxColumn,
             this.cFRFieldNameDataGridViewTextBoxColumn,
             this.cFRTextBeginDataGridViewTextBoxColumn,
-            this.cFRTextEndDataGridViewTextBoxColumn,
-            this.cFRCostNameDataGridViewTextBoxColumn});
+            this.cFRTextEndDataGridViewTextBoxColumn});
             this.indgvCosts.DataSource = this.bsCostsFormRules;
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
@@ -1774,38 +1774,6 @@ namespace FREditor
             this.indgvCosts.DoubleClick += new System.EventHandler(this.indgvCosts_DoubleClick);
             this.indgvCosts.DragEnter += new System.Windows.Forms.DragEventHandler(this.indgvCosts_DragEnter);
             this.indgvCosts.DragDrop += new System.Windows.Forms.DragEventHandler(this.indgvCosts_DragDrop);
-            // 
-            // cFRFieldNameDataGridViewTextBoxColumn
-            // 
-            this.cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName = "CFRFieldName";
-            this.cFRFieldNameDataGridViewTextBoxColumn.HeaderText = "Поле";
-            this.cFRFieldNameDataGridViewTextBoxColumn.Name = "cFRFieldNameDataGridViewTextBoxColumn";
-            this.cFRFieldNameDataGridViewTextBoxColumn.ReadOnly = true;
-            this.cFRFieldNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // cFRTextBeginDataGridViewTextBoxColumn
-            // 
-            this.cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName = "CFRTextBegin";
-            this.cFRTextBeginDataGridViewTextBoxColumn.HeaderText = "Начало";
-            this.cFRTextBeginDataGridViewTextBoxColumn.Name = "cFRTextBeginDataGridViewTextBoxColumn";
-            this.cFRTextBeginDataGridViewTextBoxColumn.ReadOnly = true;
-            this.cFRTextBeginDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // cFRTextEndDataGridViewTextBoxColumn
-            // 
-            this.cFRTextEndDataGridViewTextBoxColumn.DataPropertyName = "CFRTextEnd";
-            this.cFRTextEndDataGridViewTextBoxColumn.HeaderText = "Конец";
-            this.cFRTextEndDataGridViewTextBoxColumn.Name = "cFRTextEndDataGridViewTextBoxColumn";
-            this.cFRTextEndDataGridViewTextBoxColumn.ReadOnly = true;
-            this.cFRTextEndDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // cFRCostNameDataGridViewTextBoxColumn
-            // 
-            this.cFRCostNameDataGridViewTextBoxColumn.DataPropertyName = "CFRCostName";
-            this.cFRCostNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
-            this.cFRCostNameDataGridViewTextBoxColumn.Name = "cFRCostNameDataGridViewTextBoxColumn";
-            this.cFRCostNameDataGridViewTextBoxColumn.ReadOnly = true;
-            this.cFRCostNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // bsCostsFormRules
             // 
@@ -3107,6 +3075,38 @@ namespace FREditor
             this.tmrSearch.Interval = 1000;
             this.tmrSearch.Tick += new System.EventHandler(this.tmrSearch_Tick);
             // 
+            // cFRCostNameDataGridViewTextBoxColumn
+            // 
+            this.cFRCostNameDataGridViewTextBoxColumn.DataPropertyName = "CFRCostName";
+            this.cFRCostNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
+            this.cFRCostNameDataGridViewTextBoxColumn.Name = "cFRCostNameDataGridViewTextBoxColumn";
+            this.cFRCostNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRCostNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // cFRFieldNameDataGridViewTextBoxColumn
+            // 
+            this.cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName = "CFRFieldName";
+            this.cFRFieldNameDataGridViewTextBoxColumn.HeaderText = "Поле";
+            this.cFRFieldNameDataGridViewTextBoxColumn.Name = "cFRFieldNameDataGridViewTextBoxColumn";
+            this.cFRFieldNameDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRFieldNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // cFRTextBeginDataGridViewTextBoxColumn
+            // 
+            this.cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName = "CFRTextBegin";
+            this.cFRTextBeginDataGridViewTextBoxColumn.HeaderText = "Начало";
+            this.cFRTextBeginDataGridViewTextBoxColumn.Name = "cFRTextBeginDataGridViewTextBoxColumn";
+            this.cFRTextBeginDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRTextBeginDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // cFRTextEndDataGridViewTextBoxColumn
+            // 
+            this.cFRTextEndDataGridViewTextBoxColumn.DataPropertyName = "CFRTextEnd";
+            this.cFRTextEndDataGridViewTextBoxColumn.HeaderText = "Конец";
+            this.cFRTextEndDataGridViewTextBoxColumn.Name = "cFRTextEndDataGridViewTextBoxColumn";
+            this.cFRTextEndDataGridViewTextBoxColumn.ReadOnly = true;
+            this.cFRTextEndDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
             // frmFREMain
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -3475,9 +3475,9 @@ namespace FREditor
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.BindingSource bsFormRules;
         private System.Windows.Forms.BindingSource bsCostsFormRules;
+        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
-        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
     }
 }
