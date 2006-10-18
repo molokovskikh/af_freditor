@@ -22,19 +22,15 @@ namespace FREditor
 		private System.Windows.Forms.Panel pnlButtons;
 		private System.Windows.Forms.Button btnCheck;
 		private System.Windows.Forms.Button btnCancel;
-		private System.Windows.Forms.Button btnOK;
-		private INDataGrid.INDataGrid indgGroups;
+        private System.Windows.Forms.Button btnOK;
 		private System.Data.DataSet dtSet;
 		private System.Data.DataTable dtGroups;
 		private System.Data.DataColumn GName;
-		private System.Data.DataColumn GValue;
-		private INDataGrid.INDataGridTableStyle GroupsTableStyle;
-		private INDataGrid.INDataGridColorTextBoxColumn GNameTextBoxColumn;
-		private INDataGrid.INDataGridColorTextBoxColumn GValueTextBoxColumn;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        private System.Data.DataColumn GValue;
+        private Inforoom.WinForms.INDataGridView indgvGroups;
+        private DataGridViewTextBoxColumn gNameDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn gValueDataGridViewTextBoxColumn;
+        private IContainer components;
 
 		public frmNameMask()
 		{
@@ -70,6 +66,9 @@ namespace FREditor
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlMask = new System.Windows.Forms.Panel();
             this.txtBoxName = new System.Windows.Forms.TextBox();
             this.txtBoxNameMaskNM = new System.Windows.Forms.TextBox();
@@ -79,19 +78,18 @@ namespace FREditor
             this.btnCheck = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOK = new System.Windows.Forms.Button();
-            this.indgGroups = new INDataGrid.INDataGrid();
             this.dtSet = new System.Data.DataSet();
             this.dtGroups = new System.Data.DataTable();
             this.GName = new System.Data.DataColumn();
             this.GValue = new System.Data.DataColumn();
-            this.GroupsTableStyle = new INDataGrid.INDataGridTableStyle();
-            this.GNameTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.GValueTextBoxColumn = new INDataGrid.INDataGridColorTextBoxColumn();
+            this.indgvGroups = new Inforoom.WinForms.INDataGridView();
+            this.gNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.gValueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlMask.SuspendLayout();
             this.pnlButtons.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.indgGroups)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtGroups)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.indgvGroups)).BeginInit();
             this.SuspendLayout();
             // 
             // pnlMask
@@ -175,21 +173,6 @@ namespace FREditor
             this.btnOK.Text = "OK";
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
-            // indgGroups
-            // 
-            this.indgGroups.CaptionVisible = false;
-            this.indgGroups.DataMember = "dtGroups";
-            this.indgGroups.DataSource = this.dtSet;
-            this.indgGroups.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.indgGroups.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.indgGroups.Location = new System.Drawing.Point(0, 93);
-            this.indgGroups.Name = "indgGroups";
-            this.indgGroups.ReadOnly = true;
-            this.indgGroups.Size = new System.Drawing.Size(400, 216);
-            this.indgGroups.TabIndex = 10;
-            this.indgGroups.TableStyles.AddRange(new System.Windows.Forms.DataGridTableStyle[] {
-            this.GroupsTableStyle});
-            // 
             // dtSet
             // 
             this.dtSet.DataSetName = "NewDataSet";
@@ -212,45 +195,56 @@ namespace FREditor
             // 
             this.GValue.ColumnName = "GValue";
             // 
-            // GroupsTableStyle
+            // indgvGroups
             // 
-            this.GroupsTableStyle.ColumnSizeAutoFit = true;
-            this.GroupsTableStyle.DataGrid = this.indgGroups;
-            this.GroupsTableStyle.GridColumnStyles.AddRange(new System.Windows.Forms.DataGridColumnStyle[] {
-            this.GNameTextBoxColumn,
-            this.GValueTextBoxColumn});
-            this.GroupsTableStyle.HeaderForeColor = System.Drawing.SystemColors.ControlText;
-            this.GroupsTableStyle.MappingName = "dtGroups";
-            this.GroupsTableStyle.RowHeadersVisible = false;
-            this.GroupsTableStyle.RowSelected = false;
+            this.indgvGroups.AllowUserToAddRows = false;
+            this.indgvGroups.AllowUserToDeleteRows = false;
+            this.indgvGroups.AllowUserToResizeRows = false;
+            this.indgvGroups.AutoGenerateColumns = false;
+            this.indgvGroups.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.indgvGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.indgvGroups.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.gNameDataGridViewTextBoxColumn,
+            this.gValueDataGridViewTextBoxColumn});
+            this.indgvGroups.DataMember = "dtGroups";
+            this.indgvGroups.DataSource = this.dtSet;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvGroups.DefaultCellStyle = dataGridViewCellStyle2;
+            this.indgvGroups.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.indgvGroups.Location = new System.Drawing.Point(0, 93);
+            this.indgvGroups.Name = "indgvGroups";
+            this.indgvGroups.ReadOnly = true;
+            this.indgvGroups.RowHeadersVisible = false;
+            this.indgvGroups.Size = new System.Drawing.Size(400, 216);
+            this.indgvGroups.TabIndex = 11;
             // 
-            // GNameTextBoxColumn
+            // gNameDataGridViewTextBoxColumn
             // 
-            this.GNameTextBoxColumn.EditDisable = false;
-            this.GNameTextBoxColumn.Format = "";
-            this.GNameTextBoxColumn.FormatInfo = null;
-            this.GNameTextBoxColumn.HeaderText = "Группа";
-            this.GNameTextBoxColumn.MappingName = "GName";
-            this.GNameTextBoxColumn.NullText = "";
-            this.GNameTextBoxColumn.SearchColumn = false;
-            this.GNameTextBoxColumn.Width = 198;
+            this.gNameDataGridViewTextBoxColumn.DataPropertyName = "GName";
+            this.gNameDataGridViewTextBoxColumn.HeaderText = "Группа";
+            this.gNameDataGridViewTextBoxColumn.Name = "gNameDataGridViewTextBoxColumn";
+            this.gNameDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // GValueTextBoxColumn
+            // gValueDataGridViewTextBoxColumn
             // 
-            this.GValueTextBoxColumn.EditDisable = false;
-            this.GValueTextBoxColumn.Format = "";
-            this.GValueTextBoxColumn.FormatInfo = null;
-            this.GValueTextBoxColumn.HeaderText = "Значение";
-            this.GValueTextBoxColumn.MappingName = "GValue";
-            this.GValueTextBoxColumn.NullText = "Значение не задано";
-            this.GValueTextBoxColumn.SearchColumn = false;
-            this.GValueTextBoxColumn.Width = 198;
+            this.gValueDataGridViewTextBoxColumn.DataPropertyName = "GValue";
+            dataGridViewCellStyle1.NullValue = "Значение не задано";
+            this.gValueDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            this.gValueDataGridViewTextBoxColumn.HeaderText = "Значение";
+            this.gValueDataGridViewTextBoxColumn.Name = "gValueDataGridViewTextBoxColumn";
+            this.gValueDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // frmNameMask
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.ClientSize = new System.Drawing.Size(504, 309);
-            this.Controls.Add(this.indgGroups);
+            this.Controls.Add(this.indgvGroups);
             this.Controls.Add(this.pnlButtons);
             this.Controls.Add(this.pnlMask);
             this.Name = "frmNameMask";
@@ -259,9 +253,9 @@ namespace FREditor
             this.pnlMask.ResumeLayout(false);
             this.pnlMask.PerformLayout();
             this.pnlButtons.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.indgGroups)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtSet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dtGroups)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.indgvGroups)).EndInit();
             this.ResumeLayout(false);
 
 		}
