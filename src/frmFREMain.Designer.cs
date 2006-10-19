@@ -336,7 +336,6 @@ namespace FREditor
             this.inDataGridColorTextBoxColumnName = new INDataGrid.INDataGridColorTextBoxColumn();
             this.tmrSearch = new System.Windows.Forms.Timer(this.components);
             this.cShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cSegmentDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tbControl.SuspendLayout();
@@ -1225,7 +1224,6 @@ namespace FREditor
             this.indgvFirm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.indgvFirm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cShortNameDataGridViewTextBoxColumn,
-            this.Column1,
             this.cRegionDataGridViewTextBoxColumn,
             this.cSegmentDataGridViewTextBoxColumn});
             this.indgvFirm.DataMember = "Поставщики";
@@ -3095,13 +3093,6 @@ namespace FREditor
             this.cShortNameDataGridViewTextBoxColumn.Name = "cShortNameDataGridViewTextBoxColumn";
             this.cShortNameDataGridViewTextBoxColumn.ReadOnly = true;
             // 
-            // Column1
-            // 
-            this.Column1.DataPropertyName = "CCode";
-            this.Column1.HeaderText = "Column1";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
             // cRegionDataGridViewTextBoxColumn
             // 
             this.cRegionDataGridViewTextBoxColumn.DataPropertyName = "CRegion";
@@ -3486,7 +3477,6 @@ namespace FREditor
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cShortNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn cRegionDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cSegmentDataGridViewTextBoxColumn;
     }
