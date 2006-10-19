@@ -98,11 +98,6 @@ namespace FREditor
         bool fileExist = false;
         bool InSearch = false;
 
-        /// <summary>
-        /// Указывает на то, что у фирмы имеется только один прайс-лист
-        /// </summary>
-        bool firstFind = false;
-
         StringFormat sf = new StringFormat();
 
         ArrayList fds;
@@ -1478,30 +1473,6 @@ and pd.CostType = 1
             OpenTable(fmt);
         }
 
-        public delegate void ttAa(INDataGrid.INDataGridTableStyle ts, INDataGrid.INDataGridColorTextBoxColumn cm);
-
-        void aa(INDataGrid.INDataGridTableStyle ts, INDataGrid.INDataGridColorTextBoxColumn cm)
-        {
-            ts.GridColumnStyles.Add(cm);
-        }
-
-        private void CreateColumns(INDataGrid.INDataGridTableStyle ts, DataTable dt)
-        {
-            ts.GridColumnStyles.Clear();
-            for (int i = 0; i < dt.Columns.Count; i++)
-            {
-                INDataGrid.INDataGridColorTextBoxColumn cs = new INDataGrid.INDataGridColorTextBoxColumn();
-                cs.MappingName = dt.Columns[i].ColumnName.ToString();
-                cs.HeaderText = dt.Columns[i].ColumnName;
-                cs.NullText = String.Empty;
-                cs.ReadOnly = true;
-                cs.EditDisable = true;
-                cs.SearchColumn = true;
-                //ts.DataGrid.BeginInvoke(new ttAa(aa), new object[] { ts, cs });
-                ts.GridColumnStyles.Add(cs);
-            }
-        }
-
         private void CreateIndgvColumns(INDataGridView indgv, DataTable dt)
         {
             indgv.Columns.Clear();
@@ -2045,45 +2016,9 @@ and pd.CostType = 1
             }
         }
 
-        //private void PriceGrid_DoubleClick(object sender, System.EventArgs e)
-        //{
-        //    Point p = PriceGrid.PointToClient(Control.MousePosition);
-        //    Debug.WriteLine(String.Format("PriceGrid_DoubleClick : {0} {1}", Control.MousePosition, p));
-        //    DataGrid.HitTestInfo costsHitTestInfo = PriceGrid.HitTest(p.X, p.Y);
-        //    if (costsHitTestInfo.Type == DataGrid.HitTestType.Cell)
-        //    {
-        //        //if (costsHitTestInfo.Row > -1)
-        //        CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
-        //        DataRowView drv = (currencyManager.Position > -1) ? (DataRowView)currencyManager.Current : null;
+        public delegate void TestAsync(OleDbDataAdapter da, DataTable dt);
 
-        //        if (((DataView)currencyManager.List).Table.TableName == dtClients.TableName)
-        //        {
-        //            DataRow[] drs = drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName);
-        //            if (drs.Length > 0)
-        //            {
-        //                firstFind = true;
-        //                tbControl.SelectedTab = tpPrice;
-        //            }
-        //            else
-        //                tbControl.SelectedTab = tpFirms;
-        //        }
-        //        else
-        //            if ((drv.Row.Table.TableName == dtPrices.TableName) && (drv != null))
-        //            {
-        //                if ((currencyManager.Position > -1))
-        //                {
-        //                    if (((DataView)currencyManager.List).Table.TableName == dtPrices.TableName)
-        //                    {
-        //                        tbControl.SelectedTab = tpPrice;
-        //                    }
-        //                }
-        //            }
-        //    }
-        //}
-
-        public delegate void TestAsync(OleDbDataAdapter da, DataTable dt, INDataGrid.INDataGrid dg);
-
-        void TestD(OleDbDataAdapter da, DataTable dt, INDataGrid.INDataGrid dg)
+        void TestD(OleDbDataAdapter da, DataTable dt)
         {
             try
             {
@@ -2128,7 +2063,6 @@ and pd.CostType = 1
         {
             TestAsync ta = new TestAsync(TestD);
             Object state = new Object();
-            INDataGrid.INDataGrid dg = new INDataGrid.INDataGrid();
 
             try
             {
@@ -2136,28 +2070,10 @@ and pd.CostType = 1
 
                 DataTable temp = new DataTable();
 
-                System.IAsyncResult ar = ta.BeginInvoke(da, dt, dg, null, state);
+                System.IAsyncResult ar = ta.BeginInvoke(da, dt, null, state);
                 while (!ar.IsCompleted)
-                Application.DoEvents();
+                    Application.DoEvents();
 
-                //				dt.BeginLoadData();
-                //				try
-                //				{
-                //					dt.Clear();
-                //					dt.Columns.Clear();
-                //					foreach(DataColumn dc in temp.Columns)
-                //					{
-                //						dt.Columns.Add(dc.ColumnName, dc.DataType);
-                //					}
-                //					foreach(DataRow dr in temp.Rows)
-                //					{
-                //						dt.Rows.Add(dr.ItemArray);
-                //					}
-                //				}
-                //				finally
-                //				{
-                //					dt.EndLoadData();
-                //				}
             }
             catch (Exception e)
             {
@@ -2197,7 +2113,6 @@ and pd.CostType = 1
 
         private void btnFloatPanel_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            //Debug.WriteLine(String.Format("{0}, {1}, {2}, {3}", e.ClipRectangle.X, e.ClipRectangle.Y, e.ClipRectangle.Width, e.ClipRectangle.Height));
             e.Graphics.DrawString("Настройки", btnFloatPanel.Font, Brushes.Black, btnFloatPanel.ClientRectangle, new System.Drawing.StringFormat(sf));
         }
 
@@ -2258,8 +2173,6 @@ and pd.CostType = 1
 
         private void CheckErrors(Regex r, string FieldNameToSearch, DataTable dt, INDataGridView indgv)
         {
-            //			DataGrid g = ts.DataGrid;
-
             dt.BeginLoadData();
 
             bool colExist = false;
@@ -2288,12 +2201,6 @@ and pd.CostType = 1
             }
             dt.EndLoadData();
         }
-
-        //private void PriceGrid_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        //{
-        //    if ((e.Clicks > 1))
-        //        Debug.WriteLine(String.Format("PriceGrid_MouseDown : {0} {1}", e.X, e.Y));
-        //}
 
         private string FindNameColumn()
         {
@@ -2332,7 +2239,6 @@ and pd.CostType = 1
 
             if (col != String.Empty)
             {
-//                DataRow dr = dtPrice.Rows[PriceDataGrid.CurrentRowIndex];
                 DataRow dr = dtPrice.Rows[indgvPriceData.CurrentRow.Index];
                 if (dr[col].ToString() != String.Empty)
                 {
@@ -2641,13 +2547,6 @@ WHERE fr.FirmCode = ?PPriceCode;";
 
             if (dtSet.HasChanges())
             {
-                bool ch = false;
-                for(int i=0; i<dtSet.Tables[dtFormRules.TableName].Columns.Count; i++)
-                {
-                    if (!dtSet.Tables[dtFormRules.TableName].Rows[0][i, DataRowVersion.Original].Equals(dtSet.Tables[dtFormRules.TableName].Rows[0][i, DataRowVersion.Current]))
-                        ch = true;
-
-                }
                 tsbApply.Enabled = true;
                 tsbCancel.Enabled = true;
                 if (rtbArticle.Focused)
@@ -2988,14 +2887,8 @@ WHERE fr.FirmCode = ?PPriceCode;";
         }
 
         private bool CostIsValid()
-        {
-            
-            CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-            DataRowView drv = (DataRowView)currencyManager.Current;
-            DataView dv = (DataView)currencyManager.List;
-
-            DataRow drP = drv.Row;
-            if (drP[PCostType.ColumnName] is DBNull)
+        {            
+            if ((indgvPrice.CurrentRow.DataBoundItem == null) || ((indgvPrice.CurrentRow.DataBoundItem != null) && (((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)))
             {
                 MessageBox.Show("Необходимо указать тип цены!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;

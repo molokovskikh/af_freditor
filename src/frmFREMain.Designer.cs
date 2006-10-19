@@ -331,9 +331,6 @@ namespace FREditor
             this.daFormRules = new MySql.Data.MySqlClient.MySqlDataAdapter();
             this.ttMain = new System.Windows.Forms.ToolTip(this.components);
             this.tmrUpdateApply = new System.Windows.Forms.Timer(this.components);
-            this.inDataGridColorTextBoxColumnEnd = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.inDataGridColorTextBoxColumnBegin = new INDataGrid.INDataGridColorTextBoxColumn();
-            this.inDataGridColorTextBoxColumnName = new INDataGrid.INDataGridColorTextBoxColumn();
             this.tmrSearch = new System.Windows.Forms.Timer(this.components);
             this.cShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -3048,39 +3045,6 @@ namespace FREditor
             this.tmrUpdateApply.Interval = 1000;
             this.tmrUpdateApply.Tick += new System.EventHandler(this.tmrUpdateApply_Tick);
             // 
-            // inDataGridColorTextBoxColumnEnd
-            // 
-            this.inDataGridColorTextBoxColumnEnd.EditDisable = false;
-            this.inDataGridColorTextBoxColumnEnd.Format = "";
-            this.inDataGridColorTextBoxColumnEnd.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnEnd.HeaderText = "Конец";
-            this.inDataGridColorTextBoxColumnEnd.MappingName = "MEndField";
-            this.inDataGridColorTextBoxColumnEnd.NullText = "";
-            this.inDataGridColorTextBoxColumnEnd.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnEnd.Width = 115;
-            // 
-            // inDataGridColorTextBoxColumnBegin
-            // 
-            this.inDataGridColorTextBoxColumnBegin.EditDisable = false;
-            this.inDataGridColorTextBoxColumnBegin.Format = "";
-            this.inDataGridColorTextBoxColumnBegin.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnBegin.HeaderText = "Начало";
-            this.inDataGridColorTextBoxColumnBegin.MappingName = "MBeginField";
-            this.inDataGridColorTextBoxColumnBegin.NullText = "";
-            this.inDataGridColorTextBoxColumnBegin.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnBegin.Width = 115;
-            // 
-            // inDataGridColorTextBoxColumnName
-            // 
-            this.inDataGridColorTextBoxColumnName.EditDisable = false;
-            this.inDataGridColorTextBoxColumnName.Format = "";
-            this.inDataGridColorTextBoxColumnName.FormatInfo = null;
-            this.inDataGridColorTextBoxColumnName.HeaderText = "Наименование колонки";
-            this.inDataGridColorTextBoxColumnName.MappingName = "MNameField";
-            this.inDataGridColorTextBoxColumnName.NullText = "";
-            this.inDataGridColorTextBoxColumnName.SearchColumn = false;
-            this.inDataGridColorTextBoxColumnName.Width = 115;
-            // 
             // tmrSearch
             // 
             this.tmrSearch.Interval = 1000;
@@ -3438,9 +3402,6 @@ namespace FREditor
         private Inforoom.WinForms.INDataGridView indgvCosts;
         private Inforoom.WinForms.INDataGridView indgvPriceData;
         private Inforoom.WinForms.INDataGridView indgvMarking;
-        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnEnd;
-        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnBegin;
-        private INDataGrid.INDataGridColorTextBoxColumn inDataGridColorTextBoxColumnName;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn MNameFieldINDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn MBeginFieldINDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn MEndFieldINDataGridViewTextBoxColumn;
