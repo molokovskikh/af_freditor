@@ -2036,8 +2036,11 @@ and pd.CostType = 1
             {
                 if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length == 1)
                 {
-                    tbControl.SelectedTab = tpPrice;
-                    fcs = dgFocus.Firm;
+                    if (CostIsValid())
+                    {
+                        tbControl.SelectedTab = tpPrice;
+                        fcs = dgFocus.Firm;
+                    }
                 }
             }
         }
@@ -2387,9 +2390,7 @@ and pd.CostType = 1
                                 groups[i] = "Name";
                                 i++;
                             }
-
                         }
-
                     }
                 }
 
@@ -2986,6 +2987,23 @@ WHERE fr.FirmCode = ?PPriceCode;";
             CheckOnePrice(currencyManager);
         }
 
+        private bool CostIsValid()
+        {
+            
+            CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+            DataRowView drv = (DataRowView)currencyManager.Current;
+            DataView dv = (DataView)currencyManager.List;
+
+            DataRow drP = drv.Row;
+            if (drP[PCostType.ColumnName] is DBNull)
+            {
+                MessageBox.Show("Необходимо указать тип цены!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            else
+                return true;
+        }
+
         private void indgvFirm_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -3005,15 +3023,27 @@ WHERE fr.FirmCode = ?PPriceCode;";
             if (e.KeyCode == Keys.Enter)
             {
                 e.Handled = true;
-                fcs = dgFocus.Price;
-                tbControl.SelectedTab = tpPrice;
+                
+                CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+                DataRowView drv = (DataRowView)currencyManager.Current;
+                DataView dv = (DataView)currencyManager.List;
+
+                DataRow drP = drv.Row;
+                if(CostIsValid())                
+                {
+                    fcs = dgFocus.Price;
+                    tbControl.SelectedTab = tpPrice;
+                }
             }
         }
 
         private void indgvPrice_DoubleClick(object sender, EventArgs e)
         {
-            fcs = dgFocus.Price;
-            tbControl.SelectedTab = tpPrice;
+            if (CostIsValid())
+            {
+                fcs = dgFocus.Price;
+                tbControl.SelectedTab = tpPrice;
+            }
         }
 
         private void indgvFirm_KeyPress(object sender, KeyPressEventArgs e)
