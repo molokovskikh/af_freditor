@@ -57,12 +57,12 @@ namespace FREditor
         //INDataGrid.INDataGridTableStyle PriceDataTableStyle = new INDataGrid.INDataGridTableStyle();
 
 #if DEBUG
-        //private MySqlConnection MyCn = new MySqlConnection("server=TestSQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
-		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=system; password=123; database=farm; Allow Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #endif
-        private MySqlCommand MyCmd = new MySqlCommand();
+		private MySqlCommand MyCmd = new MySqlCommand();
         private MySqlDataAdapter MyDA = new MySqlDataAdapter();
         private string BaseRegKey = "Software\\Inforoom\\FREditor";
         private string CregKey;
@@ -71,7 +71,6 @@ namespace FREditor
 
         string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
         //string StartPath = "C:\\TEMP\\Base\\";
-        //string StartPath = "\\" + "\\" + "FMS" + "\\" + "Prices" + "\\" + "InboundCopy" + "\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
         string TxtFilePath = String.Empty;
@@ -1824,23 +1823,7 @@ and pd.CostType = 1
                 bsCostsFormRules.SuspendBinding();
                 bsFormRules.SuspendBinding();
 
-                long ClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
-                long PriceCode = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceCode.ColumnName]);
-                FillTables(shortNameFilter, regionCodeFilter, segmentFilter);
-
-                this.Text = "Редактор Правил Формализации";
-                if (fcs == dgFocus.Firm)
-                {
-                    indgvFirm.Focus();
-                    CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, ClientCode);
-                }
-                else
-                    if (fcs == dgFocus.Price)
-                    {
-                        indgvPrice.Select();
-                        CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, ClientCode);
-                        CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceCode.ColumnName, PriceCode);
-                    }
+				RefreshDataBind();
                 tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
                 tmrUpdateApply.Stop();
@@ -1863,6 +1846,27 @@ and pd.CostType = 1
                     bsFormRules.ResumeBinding();
                 }
         }
+
+		private void RefreshDataBind()
+		{
+			long ClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
+			long PriceCode = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceCode.ColumnName]);
+			FillTables(shortNameFilter, regionCodeFilter, segmentFilter);
+
+			this.Text = "Редактор Правил Формализации";
+			if (fcs == dgFocus.Firm)
+			{
+				indgvFirm.Focus();
+				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, ClientCode);
+			}
+			else
+				if (fcs == dgFocus.Price)
+				{
+					indgvPrice.Select();
+					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, ClientCode);
+					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceCode.ColumnName, PriceCode);
+				}
+		}
 
         private void MethodForThread(OleDbDataAdapter da, DataTable dt)
         {
@@ -2507,14 +2511,10 @@ WHERE fr.FirmCode = ?PPriceCode;";
                             daPrice.TableMappings.Clear();
                             daPrice.TableMappings.Add("Table", dtPrices.TableName);
                             daPrice.Update(chg.Tables[dtPrices.TableName]);
-
-                            //mcmdUPriceFormRules.Connection = MyCn;
-                            //daPriceFormRules.TableMappings.Clear();
-                            //daPriceFormRules.TableMappings.Add("Table", dtPrices.TableName);
-                            //daPriceFormRules.Update(chg.Tables[dtPrices.TableName]);
                             
                             tr.Commit();
                             dtSet.AcceptChanges();
+							RefreshDataBind();
                         }
                         catch (Exception ex)
                         {
@@ -2876,10 +2876,6 @@ WHERE fr.FirmCode = ?PPriceCode;";
             }
         }
 
-        private void indgvFirm_Click(object sender, EventArgs e)
-        {
-        }
-
         private void indgvFirm_DoubleClick(object sender, EventArgs e)
         {
             CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
@@ -2950,7 +2946,19 @@ WHERE fr.FirmCode = ?PPriceCode;";
             }
 
         }
-         
+
+		private void indgvPrice_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+		{
+			//Если отображается ComboBox, то привязываемся на его событие: изменение текущего элемента
+			if (e.Control is ComboBox)
+				((ComboBox)e.Control).SelectionChangeCommitted += new EventHandler(frmFREMain_SelectionChangeCommitted);
+		}
+
+		void frmFREMain_SelectionChangeCommitted(object sender, EventArgs e)
+		{
+			//После изменения элемента сразу сохраняем его в ячейке, чтобы возникло событие CellValueChanged
+			indgvPrice.CurrentCell.Value = ((ComboBox)sender).SelectedValue;
+		}         
     }
 
     public class WaitWindowThread
