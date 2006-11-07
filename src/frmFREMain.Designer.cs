@@ -1857,8 +1857,8 @@ namespace FREditor
             // 
             // grpbFields
             // 
-            this.grpbFields.Controls.Add(this.pnlTxtFields);
             this.grpbFields.Controls.Add(this.pnlGeneralFields);
+            this.grpbFields.Controls.Add(this.pnlTxtFields);
             this.grpbFields.Dock = System.Windows.Forms.DockStyle.Left;
             this.grpbFields.Location = new System.Drawing.Point(246, 0);
             this.grpbFields.Name = "grpbFields";
@@ -2564,7 +2564,7 @@ namespace FREditor
             this.label37.Name = "label37";
             this.label37.Size = new System.Drawing.Size(100, 23);
             this.label37.TabIndex = 72;
-            this.label37.Text = "Реестровая цена :";
+            this.label37.Text = "Реестр. цена :";
             this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label36
