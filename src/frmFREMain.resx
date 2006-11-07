@@ -121,10 +121,10 @@
     <value>True</value>
   </metadata>
   <metadata name="dtSet.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>245, 17</value>
+    <value>252, 17</value>
   </metadata>
   <metadata name="bsFormRules.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>119, 54</value>
+    <value>252, 54</value>
   </metadata>
   <metadata name="MNameFieldINDataGridViewTextBoxColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -136,7 +136,7 @@
     <value>True</value>
   </metadata>
   <metadata name="bsCostsFormRules.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>234, 54</value>
+    <value>371, 54</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnEditMask.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -146,7 +146,7 @@
 </value>
   </data>
   <metadata name="ttMain.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>757, 17</value>
+    <value>776, 17</value>
   </metadata>
   <data name="btnCheckAll.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -167,10 +167,10 @@
 </value>
   </data>
   <metadata name="erP.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>322, 17</value>
+    <value>330, 17</value>
   </metadata>
   <metadata name="tsApply.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>389, 17</value>
+    <value>399, 17</value>
   </metadata>
   <data name="tsbCancel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -188,15 +188,15 @@
 </value>
   </data>
   <metadata name="mcmdUCostRules.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>477, 17</value>
+    <value>487, 17</value>
   </metadata>
   <metadata name="mcmdUFormRules.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>615, 17</value>
+    <value>630, 17</value>
   </metadata>
   <metadata name="tmrUpdateApply.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>839, 17</value>
+    <value>17, 54</value>
   </metadata>
   <metadata name="tmrSearch.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 54</value>
+    <value>149, 54</value>
   </metadata>
 </root>

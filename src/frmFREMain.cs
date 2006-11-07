@@ -45,7 +45,10 @@ namespace FREditor
         MinBoundCost,
         Junk,
         Await,
-        OriginalName
+        OriginalName,
+        VitallyImportant,
+        RequestRatio,
+        RegistryCost
     }
 
     public partial class frmFREMain : System.Windows.Forms.Form
@@ -69,8 +72,8 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        //string StartPath = "C:\\TEMP\\Base\\";
+        //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+        string StartPath = "C:\\TEMP\\Base\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
         string TxtFilePath = String.Empty;
@@ -228,6 +231,10 @@ namespace FREditor
   TxtAwaitEnd = ?FRTxtAwaitEnd,
   TxtReserved3Begin = ?FRTxtReserved3Begin,
   TxtReserved3End = ?FRTxtReserved3End,
+  TxtRequestRatioBegin = ?FRTxtRequestRatioBegin,
+  TxtRequestRatioEnd = ?FRTxtRequestRatioEnd,
+  TxtRegistryCostBegin = ?FRTxtRegistryCostBegin,
+  TxtRegistryCostEnd = ?FRTxtRegistryCostEnd,
 
   FCode = ?FRFCode,
   FCodeCr = ?FRFCodeCr,
@@ -246,6 +253,8 @@ namespace FREditor
   FDoc = ?FRFDoc,
   FJunk = ?FRFJunk,
   FAwait = ?FRFAwait,
+  FRequestRatio = ?FRFRequestRatio,
+  FRegistryCost = ?FRFRegistryCost,
   
   Memo = ?FRMemo
 where
@@ -308,6 +317,10 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtAwaitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtReserved3Begin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtReserved3End", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRequestRatioBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRequestRatioEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRegistryCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRegistryCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
@@ -336,6 +349,8 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFDoc", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFJunk", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFAwait", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFRequestRatio", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
             foreach (MySqlParameter ms in this.mcmdUFormRules.Parameters)
@@ -820,6 +835,12 @@ order by 2";
 	PFR.TxtReserved3Begin as FRTxtReserved3Begin,
 	PFR.TxtReserved3End as FRTxtReserved3End,
 
+	PFR.TxtRequestRatioBegin as FRTxtRequestRatioBegin,
+	PFR.TxtRequestRatioEnd as FRTxtRequestRatioEnd,
+
+	PFR.TxtRegistryCostBegin as FRTxtRegistryCostBegin,
+	PFR.TxtRegistryCostEnd as FRTxtRegistryCostEnd,
+
 	PFR.FCode as FRFCode,
 	PFR.FCodeCr as FRFCodeCr,
 	PFR.FName1 as FRFName1,
@@ -837,6 +858,8 @@ order by 2";
 	PFR.FDoc as FRFDoc,
 	PFR.FJunk as FRFJunk,
 	PFR.FAwait as FRFAwait,
+	PFR.FRequestRatio as FRFRequestRatio,
+	PFR.FRegistryCost as FRFRegistryCost,
 
     -- PFR.*,
     CD.FirmStatus,
@@ -1815,6 +1838,7 @@ and pd.CostType = 1
 
         private void tbControl_SelectedIndexChanged(object sender, System.EventArgs e)
         {
+            
             if (tbControl.SelectedTab == tpFirms)
             {
                 SaveCostsSettings();
@@ -2746,7 +2770,7 @@ WHERE fr.FirmCode = ?PPriceCode;";
                 if (pairtb != null)
                 {
                     ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
-                    ((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
+                    ((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[pairtb.DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
                 }
             }
             else
@@ -2757,7 +2781,7 @@ WHERE fr.FirmCode = ?PPriceCode;";
                     if (pairtb != null)
                     {
                         ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
-                        ((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
+                        ((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[pairtb.DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
                     }
                 }
         }
@@ -2942,9 +2966,7 @@ WHERE fr.FirmCode = ?PPriceCode;";
                 tbFirmName.Focus();
                 tbFirmName.Text = e.KeyChar.ToString();
                 tbFirmName.SelectionStart = 1;
-           
             }
-
         }
 
 		private void indgvPrice_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
