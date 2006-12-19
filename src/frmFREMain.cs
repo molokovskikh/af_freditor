@@ -753,6 +753,7 @@ order by 2";
     FR.PosNum AS FRPosNum,
 	PFR.StartLine AS FRStartLine,
     PFR.PriceFMT as FRFormat,
+    pfmt.FileExtention as FRExt,
 	PFR.ListName as FRListName,
 	PFR.NameMask as FRNameMask,
 	PFR.ForbWords as FRForbWords,
@@ -869,7 +870,7 @@ order by 2";
 FROM UserSettings.PricesData AS PD
 INNER JOIN
     UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0
-INNER JOIN 
+INNER JOIN
     farm.regions r on r.regioncode=cd.regioncode
 INNER JOIN
     Farm.formrules AS FR
@@ -877,6 +878,7 @@ INNER JOIN
 LEFT JOIN
     Farm.FormRules AS PFR
     ON PFR.FirmCode=IF(FR.ParentFormRules,FR.ParentFormRules,FR.FirmCode)
+left join Farm.PriceFMTs as pfmt on PFR.PriceFMT = pfmt.Format
 where
 pd.PriceCode in
 (
@@ -995,23 +997,11 @@ and pd.CostType = 1
             frmCaption = String.Format("{0}; {1}; ", drC["CShortName"], drC["CRegion"]);
 
             string f = drFR[0]["FRPriceCode"].ToString();
-            string r = String.Empty;
+            string r = drFR[0]["FRExt"].ToString();
             fmt = drFR[0]["FRFormat"].ToString().ToLower();
             delimiter = drFR[0]["FRDelimiter"].ToString().ToLower();
-            //				if (fmt0 == String.Empty)
-            //					fmt0 = fmt;
 
-            //				if((fmt0 == "win")||(fmt0 == "dos"))
-            //					r = "txt";
-            //				else
-            //					r = fmt;
-
-            if ((fmt == "win") || (fmt == "dos"))
-                r = "txt";
-            else
-                r = fmt;
-
-            string takeFile = f + "." + r;
+            string takeFile = f + r;
             if (!(File.Exists(StartPath + takeFile)))
             {
                 //tbControl.SelectedTab = tpFirms;
