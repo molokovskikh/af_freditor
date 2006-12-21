@@ -178,6 +178,7 @@ namespace FREditor
   ListName = ?FRListName,
   NameMask = ?FRNameMask,
   ForbWords = ?FRForbWords,
+  VitallyImportantMask = ?FRVitallyImportantMask,
 
   TxtCodeBegin = ?FRTxtCodeBegin,
   TxtCodeEnd = ?FRTxtCodeEnd,
@@ -235,6 +236,8 @@ namespace FREditor
   TxtRequestRatioEnd = ?FRTxtRequestRatioEnd,
   TxtRegistryCostBegin = ?FRTxtRegistryCostBegin,
   TxtRegistryCostEnd = ?FRTxtRegistryCostEnd,
+  TxtVitallyImportantBegin = ?FRTxtVitallyImportantBegin,
+  TxtVitallyImportantEnd = ?FRTxtVitallyImportantEnd,
 
   FCode = ?FRFCode,
   FCodeCr = ?FRFCodeCr,
@@ -255,7 +258,8 @@ namespace FREditor
   FAwait = ?FRFAwait,
   FRequestRatio = ?FRFRequestRatio,
   FRegistryCost = ?FRFRegistryCost,
-  
+  FVitallyImportant = ?FRFVitallyImportant,
+
   Memo = ?FRMemo
 where
   FirmCode = ?FRPriceCode;";
@@ -321,6 +325,8 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRequestRatioEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRegistryCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRegistryCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVitallyImportantBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVitallyImportantEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
@@ -331,6 +337,7 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRListName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRNameMask", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRForbWords", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRVitallyImportantMask", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFCode", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFCodeCr", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
@@ -351,6 +358,7 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFAwait", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFRequestRatio", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
             foreach (MySqlParameter ms in this.mcmdUFormRules.Parameters)
@@ -757,6 +765,7 @@ order by 2";
 	PFR.ListName as FRListName,
 	PFR.NameMask as FRNameMask,
 	PFR.ForbWords as FRForbWords,
+    FR.VitallyImportantMask as FRVitallyImportantMask,
 
 	PFR.TxtCodeBegin as FRTxtCodeBegin,
 	PFR.TxtCodeEnd as FRTxtCodeEnd,
@@ -842,6 +851,9 @@ order by 2";
 	PFR.TxtRegistryCostBegin as FRTxtRegistryCostBegin,
 	PFR.TxtRegistryCostEnd as FRTxtRegistryCostEnd,
 
+	PFR.TxtVitallyImportantBegin as FRTxtVitallyImportantBegin,
+	PFR.TxtVitallyImportantEnd as FRTxtVitallyImportantEnd,
+
 	PFR.FCode as FRFCode,
 	PFR.FCodeCr as FRFCodeCr,
 	PFR.FName1 as FRFName1,
@@ -861,6 +873,7 @@ order by 2";
 	PFR.FAwait as FRFAwait,
 	PFR.FRequestRatio as FRFRequestRatio,
 	PFR.FRegistryCost as FRFRegistryCost,
+	PFR.FVitallyImportant as FRFVitallyImportant,
 
     -- PFR.*,
     CD.FirmStatus,
@@ -2970,7 +2983,12 @@ WHERE fr.FirmCode = ?PPriceCode;";
 		{
 			//После изменения элемента сразу сохраняем его в ячейке, чтобы возникло событие CellValueChanged
 			indgvPrice.CurrentCell.Value = ((ComboBox)sender).SelectedValue;
-		}         
+		}
+
+        private void btnVitallyImportantCheck_Click(object sender, EventArgs e)
+        {
+            FindErrors(txtBoxVitallyImportantMask, txtBoxVitalyImportant, txtBoxVitalyImportantBegin, txtBoxVitalyImportantEnd);
+        }         
     }
 
     public class WaitWindowThread
