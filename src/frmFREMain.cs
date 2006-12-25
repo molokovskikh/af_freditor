@@ -547,6 +547,7 @@ where
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
   pd.CostType as PCostType,
+  pd.WaitingDownloadInterval as PWaitingDownloadInterval,
   1 as PIsParent
 FROM
   usersettings.pricesdata pd
@@ -571,6 +572,7 @@ SELECT
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
   pd.CostType as PCostType,
+  pd.WaitingDownloadInterval as PWaitingDownloadInterval,
   (pd.pricecode = pc.CostCode) as PIsParent
 FROM
   usersettings.pricesdata pd
@@ -595,6 +597,7 @@ SELECT
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
   pd.CostType as PCostType,
+  pd.WaitingDownloadInterval as PWaitingDownloadInterval,
   1 as PIsParent
 FROM
   usersettings.pricesdata pd
@@ -2515,7 +2518,8 @@ and pd.CostType = 1
                             mcmdUPrice.CommandText = @"
 UPDATE usersettings.PricesData pd SET
     PriceType = ?PPriceType,
-    CostType = ?PCostType
+    CostType = ?PCostType,
+    WaitingDownloadInterval = ?PWaitingDownloadInterval
 WHERE 
     pd.PriceCode = ?PPriceCode;
 UPDATE farm.FormRules fr SET
@@ -2525,6 +2529,7 @@ WHERE fr.FirmCode = ?PPriceCode;";
                             mcmdUPrice.Parameters.Clear();
                             mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PPriceType", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
                             mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PCostType", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PWaitingDownloadInterval", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
                             mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PMaxOld", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
                             mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
