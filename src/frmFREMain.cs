@@ -438,7 +438,8 @@ where
 
             MyCmd.CommandText =
                 @"SELECT 
-					Format AS FMTFormat
+					Format AS FMTFormat,
+                    FileExtention  as FMTExt
 				FROM 
 					farm.PriceFmts order by Format";
 
@@ -1013,19 +1014,15 @@ and pd.CostType = 1
             frmCaption = String.Format("{0}; {1}; ", drC["CShortName"], drC["CRegion"]);
 
             string f = drFR[0]["FRPriceCode"].ToString();
-            string r = String.Empty;
-            if (!drFR[0]["FRExt"].ToString().ToLower().Equals("." + cmbFormat.Text.ToString().ToLower()))
-            {
-                if (cmbFormat.Text.ToString().ToLower().Equals("dos") || cmbFormat.Text.ToString().ToLower().Equals("win"))
-                    r = ".txt";
-                else
-                    r = "." + cmbFormat.Text.ToString().ToLower();
-            }
-            else
-                r = drFR[0]["FRExt"].ToString();
-            fmt = drFR[0]["FRFormat"].ToString().ToLower();
 
-            delimiter = drFR[0]["FRDelimiter"].ToString().ToLower();
+            fmt = drFR[0]["FRFormat"].ToString();
+
+            string r = ".err";
+            DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + fmt + "'");
+            if (exts.Length == 1)
+                r = exts[0]["FMTExt"].ToString();
+
+            delimiter = drFR[0]["FRDelimiter"].ToString();
 
             string takeFile = f + r;
             if (!(File.Exists(StartPath + takeFile)))
@@ -1044,18 +1041,18 @@ and pd.CostType = 1
 
                 Application.DoEvents();
 
-                if ((fmt == "db") || (fmt == "dbf"))
+                if ((fmt == "DB") || (fmt == "DBF"))
                 {
                     OpenDBFFile(filePath);
                 }
                 else
-                    if (fmt == "xls")
+                    if (fmt == "XLS")
                     {
                         listName = drFR[0]["FRListName"].ToString();
                         OpenEXLFile(filePath);
                     }
                     else
-                        if ((fmt == "dos") || (fmt == "win"))
+                        if ((fmt == "DOS") || (fmt == "WIN"))
                         {
                             //delimiter = drFR[0]["FRDelimiter"].ToString().ToLower();
                             dbcMain.Close();
@@ -1084,14 +1081,13 @@ and pd.CostType = 1
         private void ShowTab(string fmt)
         {
             tcInnerTable.Visible = true;
-
             
             indgvPriceData.DataSource = dtPrice;
 
             //CreateColumns(PriceDataTableStyle, dtPrice);
             //CreateIndgvColumns(indgvPriceData, dtPrice);
 
-            if ((fmt == "win") || (fmt == "dos"))
+            if ((fmt == "WIN") || (fmt == "DOS"))
             {
                 if (delimiter == String.Empty)
                 {
@@ -1130,7 +1126,7 @@ and pd.CostType = 1
             }
             else
             {
-                if (fmt == "xls")
+                if (fmt == "XLS")
                 {
                     tcInnerTable.SizeMode = TabSizeMode.Fixed;
                     tcInnerTable.ItemSize = new Size(0, 1);
@@ -1148,7 +1144,7 @@ and pd.CostType = 1
                     pnlTxtFields.Visible = false;
                 }
                 else
-                    if ((fmt == "db") || (fmt == "dbf"))
+                    if ((fmt == "DB") || (fmt == "DBF"))
                     {
                         tcInnerTable.SizeMode = TabSizeMode.Fixed;
                         tcInnerTable.ItemSize = new Size(0, 1);
@@ -2135,7 +2131,7 @@ and pd.CostType = 1
             {
                 pnlFloat.Visible = false;
                // if (!(fmt0.Equals(cmbFormat.Text.ToLower())) || !(delimiter0.Equals(tbDevider.Text.ToLower())))
-                if (!(fmt.Equals(cmbFormat.Text.ToLower())) || !(delimiter.Equals(tbDevider.Text.ToLower())))
+                if (!(fmt.Equals(cmbFormat.Text)) || !(delimiter.Equals(tbDevider.Text)))
                         DoOpenPrice(openedPriceDR);
                 
                 foreach (INDataGridView indg in gds)
@@ -2687,7 +2683,7 @@ WHERE fr.FirmCode = ?PPriceCode;";
         {
             if (fileExist)
             {
-                if (((fmt == "win") || (fmt == "dos")) && (delimiter == String.Empty))
+                if (((fmt == "WIN") || (fmt == "DOS")) && (delimiter == String.Empty))
                 {
                     CregKey = BaseRegKey + "\\CostsDataGridFixed";
                 }
@@ -2701,7 +2697,7 @@ WHERE fr.FirmCode = ?PPriceCode;";
 
         private void LoadCostsSettings()
         {
-            if (((fmt == "win") || (fmt == "dos")) && (delimiter == String.Empty))
+            if (((fmt == "WIN") || (fmt == "DOS")) && (delimiter == String.Empty))
             {
                 CregKey = BaseRegKey + "\\CostsDataGridFixed";
             }
@@ -3003,7 +2999,8 @@ WHERE fr.FirmCode = ?PPriceCode;";
         private void btnVitallyImportantCheck_Click(object sender, EventArgs e)
         {
             FindErrors(txtBoxVitallyImportantMask, txtBoxVitalyImportant, txtBoxVitalyImportantBegin, txtBoxVitalyImportantEnd);
-        }         
+        }
+
     }
 
     public class WaitWindowThread

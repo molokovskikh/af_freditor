@@ -172,6 +172,7 @@ namespace FREditor
             this.FRVitallyImportantMask = new System.Data.DataColumn();
             this.dtPriceFMTs = new System.Data.DataTable();
             this.FMTFormat = new System.Data.DataColumn();
+            this.FMTExt = new System.Data.DataColumn();
             this.dtCatalogCurrency = new System.Data.DataTable();
             this.CCCurrency = new System.Data.DataColumn();
             this.dtMarking = new System.Data.DataTable();
@@ -1211,12 +1212,17 @@ namespace FREditor
             // dtPriceFMTs
             // 
             this.dtPriceFMTs.Columns.AddRange(new System.Data.DataColumn[] {
-            this.FMTFormat});
+            this.FMTFormat,
+            this.FMTExt});
             this.dtPriceFMTs.TableName = "Форматы прайса";
             // 
             // FMTFormat
             // 
             this.FMTFormat.ColumnName = "FMTFormat";
+            // 
+            // FMTExt
+            // 
+            this.FMTExt.ColumnName = "FMTExt";
             // 
             // dtCatalogCurrency
             // 
@@ -3792,5 +3798,6 @@ namespace FREditor
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewComboBoxColumn pPriceTypeDataGridViewComboBoxColumn;
         private System.Windows.Forms.DataGridViewComboBoxColumn pCostTypeDataGridViewComboBoxColumn;
+        private System.Data.DataColumn FMTExt;
     }
 }
