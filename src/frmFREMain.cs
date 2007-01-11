@@ -1013,8 +1013,18 @@ and pd.CostType = 1
             frmCaption = String.Format("{0}; {1}; ", drC["CShortName"], drC["CRegion"]);
 
             string f = drFR[0]["FRPriceCode"].ToString();
-            string r = drFR[0]["FRExt"].ToString();
+            string r = String.Empty;
+            if (!drFR[0]["FRExt"].ToString().ToLower().Equals("." + cmbFormat.Text.ToString().ToLower()))
+            {
+                if (cmbFormat.Text.ToString().ToLower().Equals("dos") || cmbFormat.Text.ToString().ToLower().Equals("win"))
+                    r = ".txt";
+                else
+                    r = "." + cmbFormat.Text.ToString().ToLower();
+            }
+            else
+                r = drFR[0]["FRExt"].ToString();
             fmt = drFR[0]["FRFormat"].ToString().ToLower();
+
             delimiter = drFR[0]["FRDelimiter"].ToString().ToLower();
 
             string takeFile = f + r;
