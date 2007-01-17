@@ -31,11 +31,11 @@ namespace FREditor
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmFREMain));
             this.tbControl = new System.Windows.Forms.TabControl();
             this.tpFirms = new System.Windows.Forms.TabPage();
@@ -170,6 +170,9 @@ namespace FREditor
             this.FRTxtVitallyImportantBegin = new System.Data.DataColumn();
             this.FRTxtVitallyImportantEnd = new System.Data.DataColumn();
             this.FRVitallyImportantMask = new System.Data.DataColumn();
+            this.FRFMaxBoundCost = new System.Data.DataColumn();
+            this.FRTxtMaxBoundCostBegin = new System.Data.DataColumn();
+            this.FRTxtMaxBoundCostEnd = new System.Data.DataColumn();
             this.dtPriceFMTs = new System.Data.DataTable();
             this.FMTFormat = new System.Data.DataColumn();
             this.FMTExt = new System.Data.DataColumn();
@@ -244,6 +247,8 @@ namespace FREditor
             this.bsCostsFormRules = new System.Windows.Forms.BindingSource(this.components);
             this.grpbFields = new System.Windows.Forms.GroupBox();
             this.pnlGeneralFields = new System.Windows.Forms.Panel();
+            this.label44 = new System.Windows.Forms.Label();
+            this.txtBoxMaxBoundCost = new System.Windows.Forms.TextBox();
             this.txtBoxVitalyImportant = new System.Windows.Forms.TextBox();
             this.label43 = new System.Windows.Forms.Label();
             this.label37 = new System.Windows.Forms.Label();
@@ -283,6 +288,9 @@ namespace FREditor
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.pnlTxtFields = new System.Windows.Forms.Panel();
+            this.txtBoxMaxBoundCostEnd = new System.Windows.Forms.TextBox();
+            this.txtBoxMaxBoundCostBegin = new System.Windows.Forms.TextBox();
+            this.label45 = new System.Windows.Forms.Label();
             this.txtBoxVitalyImportantEnd = new System.Windows.Forms.TextBox();
             this.txtBoxVitalyImportantBegin = new System.Windows.Forms.TextBox();
             this.txtBoxRegistryCostEnd = new System.Windows.Forms.TextBox();
@@ -464,14 +472,14 @@ namespace FREditor
             this.pCostTypeDataGridViewComboBoxColumn});
             this.indgvPrice.DataMember = "Поставщики.Поставщики-Прайсы";
             this.indgvPrice.DataSource = this.dtSet;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle5;
             this.indgvPrice.Dock = System.Windows.Forms.DockStyle.Fill;
             this.indgvPrice.Location = new System.Drawing.Point(0, 0);
             this.indgvPrice.Name = "indgvPrice";
@@ -810,7 +818,10 @@ namespace FREditor
             this.FRFVitallyImportant,
             this.FRTxtVitallyImportantBegin,
             this.FRTxtVitallyImportantEnd,
-            this.FRVitallyImportantMask});
+            this.FRVitallyImportantMask,
+            this.FRFMaxBoundCost,
+            this.FRTxtMaxBoundCostBegin,
+            this.FRTxtMaxBoundCostEnd});
             this.dtFormRules.Constraints.AddRange(new System.Data.Constraint[] {
             new System.Data.ForeignKeyConstraint("Relation1", "Прайсы", new string[] {
                         "PPriceCode"}, new string[] {
@@ -1209,6 +1220,18 @@ namespace FREditor
             // 
             this.FRVitallyImportantMask.ColumnName = "FRVitallyImportantMask";
             // 
+            // FRFMaxBoundCost
+            // 
+            this.FRFMaxBoundCost.ColumnName = "FRFMaxBoundCost";
+            // 
+            // FRTxtMaxBoundCostBegin
+            // 
+            this.FRTxtMaxBoundCostBegin.ColumnName = "FRTxtMaxBoundCostBegin";
+            // 
+            // FRTxtMaxBoundCostEnd
+            // 
+            this.FRTxtMaxBoundCostEnd.ColumnName = "FRTxtMaxBoundCostEnd";
+            // 
             // dtPriceFMTs
             // 
             this.dtPriceFMTs.Columns.AddRange(new System.Data.DataColumn[] {
@@ -1331,14 +1354,14 @@ namespace FREditor
             this.cSegmentDataGridViewTextBoxColumn});
             this.indgvFirm.DataMember = "Поставщики";
             this.indgvFirm.DataSource = this.dtSet;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle1;
             this.indgvFirm.Dock = System.Windows.Forms.DockStyle.Fill;
             this.indgvFirm.Location = new System.Drawing.Point(0, 30);
             this.indgvFirm.Name = "indgvFirm";
@@ -1743,14 +1766,14 @@ namespace FREditor
             // indgvPriceData
             // 
             this.indgvPriceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle2;
             this.indgvPriceData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.indgvPriceData.Location = new System.Drawing.Point(0, 0);
             this.indgvPriceData.Name = "indgvPriceData";
@@ -1780,14 +1803,14 @@ namespace FREditor
             this.MNameFieldINDataGridViewTextBoxColumn,
             this.MBeginFieldINDataGridViewTextBoxColumn,
             this.MEndFieldINDataGridViewTextBoxColumn});
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle3;
             this.indgvMarking.Dock = System.Windows.Forms.DockStyle.Fill;
             this.indgvMarking.HideEmptyColumns = false;
             this.indgvMarking.Location = new System.Drawing.Point(0, 0);
@@ -1855,14 +1878,14 @@ namespace FREditor
             this.cFRTextBeginDataGridViewTextBoxColumn,
             this.cFRTextEndDataGridViewTextBoxColumn});
             this.indgvCosts.DataSource = this.bsCostsFormRules;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle6;
             this.indgvCosts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.indgvCosts.HideEmptyColumns = false;
             this.indgvCosts.Location = new System.Drawing.Point(766, 0);
@@ -1916,8 +1939,8 @@ namespace FREditor
             // 
             // grpbFields
             // 
-            this.grpbFields.Controls.Add(this.pnlGeneralFields);
             this.grpbFields.Controls.Add(this.pnlTxtFields);
+            this.grpbFields.Controls.Add(this.pnlGeneralFields);
             this.grpbFields.Dock = System.Windows.Forms.DockStyle.Left;
             this.grpbFields.Location = new System.Drawing.Point(264, 0);
             this.grpbFields.Name = "grpbFields";
@@ -1928,6 +1951,8 @@ namespace FREditor
             // 
             // pnlGeneralFields
             // 
+            this.pnlGeneralFields.Controls.Add(this.label44);
+            this.pnlGeneralFields.Controls.Add(this.txtBoxMaxBoundCost);
             this.pnlGeneralFields.Controls.Add(this.txtBoxVitalyImportant);
             this.pnlGeneralFields.Controls.Add(this.label43);
             this.pnlGeneralFields.Controls.Add(this.label37);
@@ -1971,6 +1996,28 @@ namespace FREditor
             this.pnlGeneralFields.Name = "pnlGeneralFields";
             this.pnlGeneralFields.Size = new System.Drawing.Size(496, 176);
             this.pnlGeneralFields.TabIndex = 0;
+            // 
+            // label44
+            // 
+            this.label44.Location = new System.Drawing.Point(321, 129);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(112, 23);
+            this.label44.TabIndex = 77;
+            this.label44.Text = "Цена макс. :";
+            this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // txtBoxMaxBoundCost
+            // 
+            this.txtBoxMaxBoundCost.AllowDrop = true;
+            this.txtBoxMaxBoundCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMaxBoundCost", true));
+            this.txtBoxMaxBoundCost.Location = new System.Drawing.Point(438, 133);
+            this.txtBoxMaxBoundCost.Name = "txtBoxMaxBoundCost";
+            this.txtBoxMaxBoundCost.ReadOnly = true;
+            this.txtBoxMaxBoundCost.Size = new System.Drawing.Size(40, 20);
+            this.txtBoxMaxBoundCost.TabIndex = 76;
+            this.txtBoxMaxBoundCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+            this.txtBoxMaxBoundCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+            this.txtBoxMaxBoundCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
             // 
             // txtBoxVitalyImportant
             // 
@@ -2392,6 +2439,9 @@ namespace FREditor
             // 
             // pnlTxtFields
             // 
+            this.pnlTxtFields.Controls.Add(this.txtBoxMaxBoundCostEnd);
+            this.pnlTxtFields.Controls.Add(this.txtBoxMaxBoundCostBegin);
+            this.pnlTxtFields.Controls.Add(this.label45);
             this.pnlTxtFields.Controls.Add(this.txtBoxVitalyImportantEnd);
             this.pnlTxtFields.Controls.Add(this.txtBoxVitalyImportantBegin);
             this.pnlTxtFields.Controls.Add(this.txtBoxRegistryCostEnd);
@@ -2448,6 +2498,43 @@ namespace FREditor
             this.pnlTxtFields.Name = "pnlTxtFields";
             this.pnlTxtFields.Size = new System.Drawing.Size(496, 176);
             this.pnlTxtFields.TabIndex = 1;
+            // 
+            // txtBoxMaxBoundCostEnd
+            // 
+            this.txtBoxMaxBoundCostEnd.AccessibleName = "VitalyImportantEnd";
+            this.txtBoxMaxBoundCostEnd.AllowDrop = true;
+            this.txtBoxMaxBoundCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMaxBoundCostEnd", true));
+            this.txtBoxMaxBoundCostEnd.Location = new System.Drawing.Point(463, 148);
+            this.txtBoxMaxBoundCostEnd.Name = "txtBoxMaxBoundCostEnd";
+            this.txtBoxMaxBoundCostEnd.ReadOnly = true;
+            this.txtBoxMaxBoundCostEnd.Size = new System.Drawing.Size(24, 20);
+            this.txtBoxMaxBoundCostEnd.TabIndex = 112;
+            this.txtBoxMaxBoundCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+            this.txtBoxMaxBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+            this.txtBoxMaxBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+            // 
+            // txtBoxMaxBoundCostBegin
+            // 
+            this.txtBoxMaxBoundCostBegin.AccessibleName = "VitalyImportantBegin";
+            this.txtBoxMaxBoundCostBegin.AllowDrop = true;
+            this.txtBoxMaxBoundCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMaxBoundCostBegin", true));
+            this.txtBoxMaxBoundCostBegin.Location = new System.Drawing.Point(436, 148);
+            this.txtBoxMaxBoundCostBegin.Name = "txtBoxMaxBoundCostBegin";
+            this.txtBoxMaxBoundCostBegin.ReadOnly = true;
+            this.txtBoxMaxBoundCostBegin.Size = new System.Drawing.Size(24, 20);
+            this.txtBoxMaxBoundCostBegin.TabIndex = 111;
+            this.txtBoxMaxBoundCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+            this.txtBoxMaxBoundCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+            this.txtBoxMaxBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+            // 
+            // label45
+            // 
+            this.label45.Location = new System.Drawing.Point(324, 146);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(104, 23);
+            this.label45.TabIndex = 110;
+            this.label45.Text = "Цена макс. :";
+            this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // txtBoxVitalyImportantEnd
             // 
@@ -3799,5 +3886,13 @@ namespace FREditor
         private System.Windows.Forms.DataGridViewComboBoxColumn pPriceTypeDataGridViewComboBoxColumn;
         private System.Windows.Forms.DataGridViewComboBoxColumn pCostTypeDataGridViewComboBoxColumn;
         private System.Data.DataColumn FMTExt;
+        private System.Windows.Forms.Label label44;
+        private System.Windows.Forms.TextBox txtBoxMaxBoundCost;
+        private System.Data.DataColumn FRFMaxBoundCost;
+        private System.Data.DataColumn FRTxtMaxBoundCostBegin;
+        private System.Data.DataColumn FRTxtMaxBoundCostEnd;
+        private System.Windows.Forms.TextBox txtBoxMaxBoundCostEnd;
+        private System.Windows.Forms.TextBox txtBoxMaxBoundCostBegin;
+        private System.Windows.Forms.Label label45;
     }
 }

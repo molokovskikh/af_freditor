@@ -48,7 +48,8 @@ namespace FREditor
         OriginalName,
         VitallyImportant,
         RequestRatio,
-        RegistryCost
+        RegistryCost,
+        MaxBoundCost
     }
 
     public partial class frmFREMain : System.Windows.Forms.Form
@@ -72,8 +73,8 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        //string StartPath = "C:\\TEMP\\Base\\";
+        //string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+        string StartPath = "C:\\TEMP\\Base\\";
         string EndPath = Path.GetTempPath();
         //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
         string TxtFilePath = String.Empty;
@@ -179,6 +180,7 @@ namespace FREditor
   NameMask = ?FRNameMask,
   ForbWords = ?FRForbWords,
   VitallyImportantMask = ?FRVitallyImportantMask,
+  FMaxBoundCost = ?FRFMaxBoundCost,
 
   TxtCodeBegin = ?FRTxtCodeBegin,
   TxtCodeEnd = ?FRTxtCodeEnd,
@@ -238,6 +240,8 @@ namespace FREditor
   TxtRegistryCostEnd = ?FRTxtRegistryCostEnd,
   TxtVitallyImportantBegin = ?FRTxtVitallyImportantBegin,
   TxtVitallyImportantEnd = ?FRTxtVitallyImportantEnd,
+  TxtMaxBoundCostBegin = ?FRTxtMaxBoundCostBegin,
+  TxtMaxBoundCostEnd = ?FRTxtMaxBoundCostEnd,
 
   FCode = ?FRFCode,
   FCodeCr = ?FRFCodeCr,
@@ -327,6 +331,8 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRegistryCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVitallyImportantBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVitallyImportantEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtMaxBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtMaxBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
@@ -359,6 +365,7 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFRequestRatio", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFMaxBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
             foreach (MySqlParameter ms in this.mcmdUFormRules.Parameters)
@@ -858,6 +865,9 @@ order by 2";
 	PFR.TxtVitallyImportantBegin as FRTxtVitallyImportantBegin,
 	PFR.TxtVitallyImportantEnd as FRTxtVitallyImportantEnd,
 
+	PFR.TxtMaxBoundCostBegin as FRTxtMaxBoundCostBegin,
+	PFR.TxtMaxBoundCostEnd as FRTxtMaxBoundCostEnd,
+
 	PFR.FCode as FRFCode,
 	PFR.FCodeCr as FRFCodeCr,
 	PFR.FName1 as FRFName1,
@@ -878,6 +888,7 @@ order by 2";
 	PFR.FRequestRatio as FRFRequestRatio,
 	PFR.FRegistryCost as FRFRegistryCost,
 	PFR.FVitallyImportant as FRFVitallyImportant,
+	PFR.FMaxBoundCost as FRFMaxBoundCost,
 
     -- PFR.*,
     CD.FirmStatus,
