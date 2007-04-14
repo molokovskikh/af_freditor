@@ -58,11 +58,10 @@ namespace FREditor
         ArrayList dtables = new ArrayList();
         ArrayList tblstyles = new ArrayList();
         DataTable dtPrice = new DataTable();
-        //INDataGrid.INDataGridTableStyle PriceDataTableStyle = new INDataGrid.INDataGridTableStyle();
 
 #if DEBUG
-		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
-		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+		//private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #endif
@@ -73,13 +72,16 @@ namespace FREditor
 
         private OleDbConnection dbcMain = new OleDbConnection();
 
-        string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-        //string StartPath = "C:\\TEMP\\Base\\";
+#if DEBUG
+		//string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+		string StartPath = "C:\\TEMP\\Base\\";
+#else
+		string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+#endif
+
         string EndPath = Path.GetTempPath();
-        //string EndPath = "C:" + "\\" + "PricesCopy" + "\\";
         string TxtFilePath = String.Empty;
         string frmCaption = String.Empty;
-        //bool Opened = false;
 
         DataRow openedPriceDR;
         string listName = String.Empty;
@@ -157,7 +159,6 @@ namespace FREditor
             indgvMarking.DataSource = dtSet;
             indgvMarking.DataMember = dtMarking.TableName;
 
-			//this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FirmCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFR_if", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRCost_Code", System.Data.DataRowVersion.Current, null));
             this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFieldName", System.Data.DataRowVersion.Current, null));
 			this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRTextBegin", System.Data.DataRowVersion.Current, null));
@@ -196,30 +197,12 @@ namespace FREditor
   TxtBaseCostEnd = ?FRTxtBaseCostEnd,
   TxtMinBoundCostBegin = ?FRTxtMinBoundCostBegin,
   TxtMinBoundCostEnd = ?FRTxtMinBoundCostEnd,
-  TxtAsFactCostBegin = ?FRTxtAsFactCostBegin,
-  TxtAsFactCostEnd = ?FRTxtAsFactCostEnd,
-  Txt5DayCostBegin = ?FRTxt5DayCostBegin,
-  Txt5DayCostEnd = ?FRTxt5DayCostEnd,
-  Txt10DayCostBegin = ?FRTxt10DayCostBegin,
-  Txt10DayCostEnd = ?FRTxt10DayCostEnd,
-  Txt15DayCostBegin = ?FRTxt15DayCostBegin,
-  Txt15DayCostEnd = ?FRTxt15DayCostEnd,
-  Txt20DayCostBegin = ?FRTxt20DayCostBegin,
-  Txt20DayCostEnd = ?FRTxt20DayCostEnd,
-  Txt25DayCostBegin = ?FRTxt25DayCostBegin,
-  Txt25DayCostEnd = ?FRTxt25DayCostEnd,
-  Txt30DayCostBegin = ?FRTxt30DayCostBegin,
-  Txt30DayCostEnd = ?FRTxt30DayCostEnd,
-  Txt45DayCostBegin = ?FRTxt45DayCostBegin,
-  Txt45DayCostEnd = ?FRTxt45DayCostEnd,
   TxtCurrencyBegin = ?FRTxtCurrencyBegin,
   TxtCurrencyEnd = ?FRTxtCurrencyEnd,
   TxtUnitBegin = ?FRTxtUnitBegin,
   TxtUnitEnd = ?FRTxtUnitEnd,
   TxtVolumeBegin = ?FRTxtVolumeBegin,
   TxtVolumeEnd = ?FRTxtVolumeEnd,
-  TxtUpCostBegin = ?FRTxtUpCostBegin,
-  TxtUpCostEnd = ?FRTxtUpCostEnd,
   TxtQuantityBegin = ?FRTxtQuantityBegin,
   TxtQuantityEnd = ?FRTxtQuantityEnd,
   TxtNoteBegin = ?FRTxtNoteBegin,
@@ -232,8 +215,6 @@ namespace FREditor
   TxtJunkEnd = ?FRTxtJunkEnd,
   TxtAwaitBegin = ?FRTxtAwaitBegin,
   TxtAwaitEnd = ?FRTxtAwaitEnd,
-  TxtReserved3Begin = ?FRTxtReserved3Begin,
-  TxtReserved3End = ?FRTxtReserved3End,
   TxtRequestRatioBegin = ?FRTxtRequestRatioBegin,
   TxtRequestRatioEnd = ?FRTxtRequestRatioEnd,
   TxtRegistryCostBegin = ?FRTxtRegistryCostBegin,
@@ -287,30 +268,12 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtBaseCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtMinBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtMinBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtAsFactCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtAsFactCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt5DayCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt5DayCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt10DayCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt10DayCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt15DayCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt15DayCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt20DayCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt20DayCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt25DayCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt25DayCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt30DayCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt30DayCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt45DayCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxt45DayCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCurrencyBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCurrencyEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtUnitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtUnitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVolumeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVolumeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtUpCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtUpCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtQuantityBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtQuantityEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtNoteBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
@@ -323,8 +286,6 @@ where
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtJunkEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtAwaitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtAwaitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtReserved3Begin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtReserved3End", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRequestRatioBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRequestRatioEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
             this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRegistryCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
@@ -382,7 +343,6 @@ where
             cbRegionsFill();
             //FillTables(String.Empty, 0, -1);
 
-            //PriceDataTableStyle.ColumnSizeAutoFit = true;
 
             MyCn.Close();
         }
@@ -520,8 +480,6 @@ where
 
         private void dtClientsFill(string param)
         {
-            //dtClients.Clear();
-
             MyCmd.CommandText =
                 @"SELECT 
 					cd.FirmCode AS CCode,
@@ -541,8 +499,6 @@ where
 
         private void dtPricesFill(string param)
         {
-            //dtPrices.Clear();
-
             MyCmd.CommandText =
 @"SELECT
   distinct
@@ -641,17 +597,7 @@ Order By Region
 ";
             MyDA.Fill(dtRegions);
 
-            //cbRegions.Items.Clear();
-            //cbRegions.Items.Add("Все");
-            //if(dtRegions.Rows.Count > 0)
-            //{
-            //    foreach (DataRow dr in dtRegions.Rows)
-            //    {
-            //         cbRegions.Items.Add(dr["Region"].ToString());
-            //    }
-            //}
-
-            cbRegions.DataSource = dtRegions;
+			cbRegions.DataSource = dtRegions;
             cbRegions.DisplayMember = "Region";
             cbRegions.ValueMember = "RegionCode";
 
@@ -659,8 +605,6 @@ Order By Region
 
         private void dtPricesCostFill(string param)
         {
-            //dtPricesCost.Clear();
-
             MyCmd.CommandText =
 @"SELECT 
   distinct
@@ -702,8 +646,6 @@ order by 4";
 
         private void dtCostsFormRulesFill(string param)
         {
-            //dtCostsFormRules.Clear();
-
             MyCmd.CommandText =
 @"SELECT 
   distinct
@@ -751,8 +693,6 @@ order by 2";
 
         private void dtFormRulesFill(string param)
         {
-            //dtFormRules.Clear();
-
             MyCmd.CommandText =
                 @"SELECT
     IF(FR.ParentFormRules,FR.ParentFormRules,FR.FirmCode) AS FormID,
@@ -799,30 +739,6 @@ order by 2";
 	PFR.TxtMinBoundCostBegin as FRTxtMinBoundCostBegin,
 	PFR.TxtMinBoundCostEnd as FRTxtMinBoundCostEnd,
 
-	PFR.TxtAsFactCostBegin as FRTxtAsFactCostBegin,
-	PFR.TxtAsFactCostEnd as FRTxtAsFactCostEnd,
-
-	PFR.Txt5DayCostBegin as FRTxt5DayCostBegin,
-	PFR.Txt5DayCostEnd as FRTxt5DayCostEnd,
-
-	PFR.Txt10DayCostBegin as FRTxt10DayCostBegin,
-	PFR.Txt10DayCostEnd as FRTxt10DayCostEnd,
-
-	PFR.Txt15DayCostBegin as FRTxt15DayCostBegin,
-	PFR.Txt15DayCostEnd as FRTxt15DayCostEnd,
-
-	PFR.Txt20DayCostBegin as FRTxt20DayCostBegin,
-	PFR.Txt20DayCostEnd as FRTxt20DayCostEnd,
-
-	PFR.Txt25DayCostBegin as FRTxt25DayCostBegin,
-	PFR.Txt25DayCostEnd as FRTxt25DayCostEnd,
-
-	PFR.Txt30DayCostBegin as FRTxt30DayCostBegin,
-	PFR.Txt30DayCostEnd as FRTxt30DayCostEnd,
-
-	PFR.Txt45DayCostBegin as FRTxt45DayCostBegin,
-	PFR.Txt45DayCostEnd as FRTxt45DayCostEnd,
-
 	PFR.TxtCurrencyBegin as FRTxtCurrencyBegin,
 	PFR.TxtCurrencyEnd as FRTxtCurrencyEnd,
 
@@ -831,9 +747,6 @@ order by 2";
 
 	PFR.TxtVolumeBegin as FRTxtVolumeBegin,
 	PFR.TxtVolumeEnd as FRTxtVolumeEnd,
-
-	PFR.TxtUpCostBegin as FRTxtUpCostBegin,
-	PFR.TxtUpCostEnd as FRTxtUpCostEnd,
 
 	PFR.TxtQuantityBegin as FRTxtQuantityBegin,
 	PFR.TxtQuantityEnd as FRTxtQuantityEnd,
@@ -852,9 +765,6 @@ order by 2";
 
 	PFR.TxtAwaitBegin as FRTxtAwaitBegin,
 	PFR.TxtAwaitEnd as FRTxtAwaitEnd,
-
-	PFR.TxtReserved3Begin as FRTxtReserved3Begin,
-	PFR.TxtReserved3End as FRTxtReserved3End,
 
 	PFR.TxtRequestRatioBegin as FRTxtRequestRatioBegin,
 	PFR.TxtRequestRatioEnd as FRTxtRequestRatioEnd,
@@ -933,9 +843,6 @@ where
 and pd.CostType = 1
 )";
             MyCmd.CommandText += param;
-
-            //WHERE FR.DateCurPrice > '2005.01.01'
-
             MyDA.Fill(dtFormRules);
         }
 
@@ -943,42 +850,6 @@ and pd.CostType = 1
         {
             MyCn.Close();
         }
-
-        //private void PriceGrid_ButtonPress(object sender, KeyEventArgs e)
-        //{
-        //    CurrencyManager currencyManager = (CurrencyManager)BindingContext[PriceGrid.DataSource, PriceGrid.DataMember];
-        //    DataRowView drv = (currencyManager.Position > -1) ? (DataRowView)currencyManager.Current : null;
-        //    DataView dv = (DataView)currencyManager.List;
-
-        //    if (e.KeyCode == Keys.Enter)
-        //    {
-        //        if ((currencyManager.Position > -1))
-        //        {
-        //            if (((DataView)currencyManager.List).Table.TableName == dtClients.TableName)
-        //            {
-        //                CheckOnePrice(currencyManager);
-        //            }
-        //            else
-        //            {
-        //                if (((DataView)currencyManager.List).Table.TableName == dtPrices.TableName)
-        //                {
-        //                    tbControl.SelectedTab = tpPrice;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //        if (e.KeyCode == Keys.Escape)
-        //        {
-        //            if (dv.Table.ParentRelations.Count > 0)
-        //            {
-        //                PriceGrid.NavigateBack();
-        //                PriceGrid.Focus();
-        //                PriceGrid.Select();
-        //                e.Handled = true;
-        //            }
-        //        }
-        //}
 
         private void DoOpenPrice(DataRow drP)
         {
@@ -1016,10 +887,6 @@ and pd.CostType = 1
             DataRow[] drFR;
             drFR = dtFormRules.Select("FRPriceCode = " + drP["PPriceCode"].ToString());
             existParentRules = drFR[0]["FRRules"].ToString();
-            //			if (existParentRules != String.Empty)
-            //			{
-            //				drFR = dtFormRules.Select(String.Format("FRPriceCode = {0}", existParentRules));
-            //			}
 
             DataRow drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
             frmCaption = String.Format("{0}; {1}; ", drC["CShortName"], drC["CRegion"]);
@@ -1038,7 +905,6 @@ and pd.CostType = 1
             string takeFile = f + r;
             if (!(File.Exists(StartPath + takeFile)))
             {
-                //tbControl.SelectedTab = tpFirms;
                 fileExist = false;
                 MessageBox.Show(String.Format("Файл {0} выбранного Прайс-листа отсутствует в директории по умолчанию ({1})", takeFile, StartPath), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
@@ -1065,7 +931,6 @@ and pd.CostType = 1
                     else
                         if ((fmt == "DOS") || (fmt == "WIN"))
                         {
-                            //delimiter = drFR[0]["FRDelimiter"].ToString().ToLower();
                             dbcMain.Close();
                             dbcMain.Dispose();
                             if (delimiter == String.Empty)
@@ -1095,9 +960,6 @@ and pd.CostType = 1
             
             indgvPriceData.DataSource = dtPrice;
 
-            //CreateColumns(PriceDataTableStyle, dtPrice);
-            //CreateIndgvColumns(indgvPriceData, dtPrice);
-
             if ((fmt == "WIN") || (fmt == "DOS"))
             {
                 if (delimiter == String.Empty)
@@ -1106,8 +968,6 @@ and pd.CostType = 1
                     tcInnerTable.ItemSize = new Size(58, 18);
                     tcInnerTable.Appearance = TabAppearance.Normal;
 
-                    //lStartLine.Visible = true;
-                    //txtBoxStartLine.Visible = true;
                     label23.Visible = false;
                     txtBoxSheetName.Visible = false;
                     pnlGeneralFields.Visible = false;
@@ -1122,8 +982,6 @@ and pd.CostType = 1
                     tcInnerTable.ItemSize = new Size(0, 1);
                     tcInnerTable.Appearance = TabAppearance.Buttons;
 
-                    //lStartLine.Visible = true;
-                    //txtBoxStartLine.Visible = true;
                     label23.Visible = false;
                     txtBoxSheetName.Visible = false;
                     pnlGeneralFields.Visible = true;
@@ -1147,8 +1005,6 @@ and pd.CostType = 1
                     tcInnerSheets.ItemSize = new Size(58, 18);
                     tcInnerSheets.Appearance = TabAppearance.Normal;
 
-                    //lStartLine.Visible = true;
-                    //txtBoxStartLine.Visible = true;
                     label23.Visible = true;
                     txtBoxSheetName.Visible = true;
                     pnlGeneralFields.Visible = true;
@@ -1165,8 +1021,6 @@ and pd.CostType = 1
                         tcInnerSheets.ItemSize = new Size(0, 1);
                         tcInnerSheets.Appearance = TabAppearance.Buttons;
 
-                        //lStartLine.Visible = false;
-                        //txtBoxStartLine.Visible = false;
                         label23.Visible = false;
                         txtBoxSheetName.Visible = false;
                         pnlGeneralFields.Visible = true;
@@ -1194,7 +1048,6 @@ and pd.CostType = 1
             LoadCostsSettings();
             indgvPriceData.Focus();
             indgvPriceData.Select();
-            //pnlFloat.Visible = true;
         }
 
         private void OpenDBFFile(string filePath)
@@ -1207,7 +1060,6 @@ and pd.CostType = 1
                 Application.DoEvents();
                 OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from [{0}]", System.IO.Path.GetFileNameWithoutExtension(filePath)), dbcMain);
                 CreateThread(da, dtPrice, indgvPriceData);
-                //PriceDataGrid.DataSource = dtPrice;
             }
             finally
             {
@@ -1253,7 +1105,6 @@ and pd.CostType = 1
                             indgv.Parent = tp;
                             indgv.KeyDown += new System.Windows.Forms.KeyEventHandler(indgvPriceData_KeyDown);
                             indgv.Dock = DockStyle.Fill;
-                            //indgv.CaptionVisible = false;
                             indgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
                             indgv.ReadOnly = true;
                             indgv.RowHeadersVisible = false;
@@ -1265,7 +1116,6 @@ and pd.CostType = 1
                             DataTable dt = new DataTable();
                             dt.TableName = "Прайс" + (i + 1);
                             dtables.Add(dt);
-                            //indg.DataSource = dt;
                         }
                         Application.DoEvents();
                     }
@@ -1285,15 +1135,12 @@ and pd.CostType = 1
                             if (j == 0)
                             {
                                 CreateThread(da, dtPrice, indgvPriceData);
-                                //PriceDataGrid.DataSource = dtPrice;
                             }
                             else
                             {
                                 ((INDataGridView)gds[j - 1]).Columns.Clear();
-//                                CreateThread(da, ((DataTable)(dtables[j - 1])), ((INDataGrid.INDataGrid)gds[j - 1]), indgvPriceData);
                                 CreateThread(da, ((DataTable)(dtables[j - 1])), ((INDataGridView)gds[j - 1]));
                                 ((INDataGridView)gds[j - 1]).DataSource = ((DataTable)(dtables[j - 1]));
-                                //CreateColumns((INDataGrid.INDataGridTableStyle)tblstyles[j-1], (DataTable)(dtables[j-1]));
                             }
                         }
                         catch
@@ -1369,7 +1216,6 @@ and pd.CostType = 1
             OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from {0}", System.IO.Path.GetFileName(filePath).Replace(".", "#")), dbcMain);
 
             CreateThread(da, dtPrice, indgvPriceData);
-            //PriceDataGrid.DataSource = dtPrice;
             dbcMain.Close();
             dbcMain.Dispose();
             Application.DoEvents();
@@ -1411,10 +1257,8 @@ and pd.CostType = 1
 
             fds = new ArrayList();
             int TxtBegin, TxtEnd;
-            //foreach (string pf in FFieldNames)
             foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields)))
             {
-//                TmpName = pf;
                 TmpName = GetFieldName(pf);
                 if (PriceFields.OriginalName != pf && PriceFields.BaseCost != pf && String.Empty != TmpName)
                 {
@@ -1450,7 +1294,6 @@ and pd.CostType = 1
                     mdr["MNameField"] = String.Format("x{0}", countx);
                     mdr["MBeginField"] = "1";
                     mdr["MEndField"] = currTFD.posBegin-1;
-//                    mdr["MEndField"] = currTFD.posEnd;
                     dtMarking.Rows.Add(mdr);
 
                     countx++;
@@ -1518,36 +1361,11 @@ and pd.CostType = 1
             OpenTable(fmt);
         }
 
-        private void CreateIndgvColumns(INDataGridView indgv, DataTable dt)
-        {
-            indgv.Columns.Clear();
-            for (int i = 0; i < dt.Columns.Count; i++)
-            {
-                INDataGridViewTextBoxColumn cs = new INDataGridViewTextBoxColumn();
-                cs.Name = dt.Columns[i].ColumnName.ToString();
-                cs.HeaderText = dt.Columns[i].ColumnName;
-                cs.ReadOnly = true;
-                indgv.SearchColumnName = cs.Name;
-                indgv.Columns.Add(cs);
-            }
-        }
-
         private void DelCostsColumns()
         {
             indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = false;
             indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = false;
             indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = false;
-
-            //for (int i = indgvCosts.Columns.Count - 1; i > 0; i--)
-            //{
-            //    if ((indgvCosts.Columns[i].Name == CFRCost_Code.ColumnName) || (indgvCosts.Columns[i].Name == CFRCostName.ColumnName))
-            //    {
-            //    }
-            //    else
-            //    {
-            //        indgvCosts.Columns.Remove(indgvCosts.Columns[i]);
-            //    }
-            //  }
         }
 
         public string strToANSI(string Dest)
@@ -1557,12 +1375,6 @@ and pd.CostType = 1
             byte[] ansiBytes = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, ansi, unicodeBytes);
             return ansi.GetString(ansiBytes);
         }
-
-        //private void PriceDataGrid_ButtonPress(object sender, KeyEventArgs e)
-        //{
-        //    if (e.KeyCode == Keys.Escape)
-        //        tbControl.SelectedTab = tpFirms;
-        //}
 
         private void tcInnerSheets_SelectedIndexChanged(object sender, System.EventArgs e)
         {
@@ -1874,7 +1686,6 @@ and pd.CostType = 1
                 tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
                 tmrUpdateApply.Stop();
-                //pnlFloat.Visible = false;
             }
             else
                 if (tbControl.SelectedTab == tpPrice)
@@ -2052,7 +1863,6 @@ and pd.CostType = 1
             if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length > 1)
             {
                 indgvPrice.Focus();
-                //PriceGrid.NavigateTo(currencyManager.Position, dtClients.TableName + "-" + dtPrices.TableName);
             }
             else
             {
@@ -2093,23 +1903,6 @@ and pd.CostType = 1
             fW.Close();
         }
 
-        //		public void FillComplete(IAsyncResult ar)
-        //		{
-        //			try
-        //			{
-        //				Debug.WriteLine("FillComplete begin");
-        //				fW.BeginInvoke(new CloseDelegate(WaitClose));
-        //			}
-        //			catch(Exception e)
-        //			{
-        //				Debug.WriteLine(String.Format("FillComplete error {0}", e));
-        //			}
-        //			finally
-        //			{
-        //				Debug.WriteLine("FillComplete end");
-        //			}
-        //		}
-
         private void CreateThread(OleDbDataAdapter da, DataTable dt, INDataGridView dgv)
         {
             TestAsync ta = new TestAsync(TestD);
@@ -2141,7 +1934,6 @@ and pd.CostType = 1
             if (pnlFloat.Visible)
             {
                 pnlFloat.Visible = false;
-               // if (!(fmt0.Equals(cmbFormat.Text.ToLower())) || !(delimiter0.Equals(tbDevider.Text.ToLower())))
                 if (!(fmt.Equals(cmbFormat.Text)) || !(delimiter.Equals(tbDevider.Text)))
                         DoOpenPrice(openedPriceDR);
                 
@@ -2149,16 +1941,12 @@ and pd.CostType = 1
                 {
                     indg.RowHeadersVisible = false;
                 }
-                //PriceDataTableStyle.RowHeadersVisible = false;
 
-                //erP.Clear();
             }
             else
             {
                 pnlFloat.Visible = true;
                 pnlFloat.BringToFront();
-                //fmt0 = fmt;
-                //delimiter0 = delimiter;
             }
         }
 
@@ -2186,7 +1974,6 @@ and pd.CostType = 1
                 try
                 {
                     erP.Dispose();
-                    //r = new Regex(@"((?<Day>\d*?)[\s\.\-\/])?(?<Month>[^\s\.\-\/]*?)[\s\.\-\/](?<Year>\d*)$"); 
                     r = new Regex(txtMask.Text);
                     if ((fmt.ToUpper() == "WIN") && (delimiter == String.Empty))
                     {
@@ -2217,7 +2004,6 @@ and pd.CostType = 1
                     erP.SetIconAlignment(txtMask, ErrorIconAlignment.MiddleLeft);
 
                     erP.SetError(txtMask, "Неправильно задана маска!");
-                    //MessageBox.Show(String.Format("Неправильно задана маска"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
@@ -2780,7 +2566,7 @@ WHERE fr.FirmCode = ?PPriceCode;";
         {
             ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
 
-            //CommitAllEdit();
+			//TODO: Возможно этот код не нужен, а был вставлен для отладки
             DataTable dt = new DataTable();
             if(dtSet.HasChanges())
                 dt = dtFormRules.GetChanges();
@@ -2879,33 +2665,12 @@ WHERE fr.FirmCode = ?PPriceCode;";
                 regionCodeFilter = regcode;
                 segmentFilter = seg;
                 indgvFirm.Focus();
-                //tbFirmName.Text = String.Empty;
             }
             finally
             {
                 InSearch = false;
             }
 
-            //{
-            //    if (FilterString != String.Empty)
-            //        FilterString += " and ";
-            //    int segment = -1;
-            //    if (cbSegment.SelectedItem.ToString() == "Опт")
-            //        segment = 0;
-            //    else if (cbSegment.SelectedItem.ToString() == "Розница")
-            //        segment = 1;
-            //    FilterString += String.Format("CSegment = {0}", segment);
-            //}
-            //if (tbFirmName.Text != String.Empty)
-            //{
-            //    if (FilterString != String.Empty)
-            //        FilterString += " and ";
-            //    FilterString += String.Format("CShortName like '%{0}%'", tbFirmName.Text);
-            //}
-
-            //CurrencyManager cm = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
-            //((DataView)cm.List).RowFilter = FilterString;
-            //FillTables(shname, 0, seg);
         }
 
         private void indgvPrice_CellValueChanged(object sender, DataGridViewCellEventArgs e)
