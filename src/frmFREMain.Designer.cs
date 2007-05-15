@@ -153,6 +153,9 @@ namespace FREditor
 			this.FRFMaxBoundCost = new System.Data.DataColumn();
 			this.FRTxtMaxBoundCostBegin = new System.Data.DataColumn();
 			this.FRTxtMaxBoundCostEnd = new System.Data.DataColumn();
+			this.FRFOrderCost = new System.Data.DataColumn();
+			this.FRTxtOrderCostBegin = new System.Data.DataColumn();
+			this.FRTxtOrderCostEnd = new System.Data.DataColumn();
 			this.dtPriceFMTs = new System.Data.DataTable();
 			this.FMTFormat = new System.Data.DataColumn();
 			this.FMTExt = new System.Data.DataColumn();
@@ -226,7 +229,53 @@ namespace FREditor
 			this.cFRTextEndDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
 			this.bsCostsFormRules = new System.Windows.Forms.BindingSource(this.components);
 			this.grpbFields = new System.Windows.Forms.GroupBox();
+			this.pnlGeneralFields = new System.Windows.Forms.Panel();
+			this.label48 = new System.Windows.Forms.Label();
+			this.txtBoxOrderCost = new System.Windows.Forms.TextBox();
+			this.label44 = new System.Windows.Forms.Label();
+			this.txtBoxMaxBoundCost = new System.Windows.Forms.TextBox();
+			this.txtBoxVitalyImportant = new System.Windows.Forms.TextBox();
+			this.label43 = new System.Windows.Forms.Label();
+			this.label37 = new System.Windows.Forms.Label();
+			this.label36 = new System.Windows.Forms.Label();
+			this.txtBoxRegistryCost = new System.Windows.Forms.TextBox();
+			this.txtBoxRequestRatio = new System.Windows.Forms.TextBox();
+			this.txtBoxAwait = new System.Windows.Forms.TextBox();
+			this.txtBoxJunk = new System.Windows.Forms.TextBox();
+			this.txtBoxMinBoundCost = new System.Windows.Forms.TextBox();
+			this.txtBoxCurrency = new System.Windows.Forms.TextBox();
+			this.label17 = new System.Windows.Forms.Label();
+			this.label16 = new System.Windows.Forms.Label();
+			this.label15 = new System.Windows.Forms.Label();
+			this.label14 = new System.Windows.Forms.Label();
+			this.txtBoxDoc = new System.Windows.Forms.TextBox();
+			this.txtBoxPeriod = new System.Windows.Forms.TextBox();
+			this.txtBoxNote = new System.Windows.Forms.TextBox();
+			this.txtBoxQuantity = new System.Windows.Forms.TextBox();
+			this.txtBoxUnit = new System.Windows.Forms.TextBox();
+			this.txtBoxVolume = new System.Windows.Forms.TextBox();
+			this.label12 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.txtBoxFirmCr = new System.Windows.Forms.TextBox();
+			this.txtBoxName3 = new System.Windows.Forms.TextBox();
+			this.txtBoxName2 = new System.Windows.Forms.TextBox();
+			this.txtBoxName1 = new System.Windows.Forms.TextBox();
+			this.txtBoxCodeCr = new System.Windows.Forms.TextBox();
+			this.txtBoxCode = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.pnlTxtFields = new System.Windows.Forms.Panel();
+			this.txtBoxOrderCostEnd = new System.Windows.Forms.TextBox();
+			this.txtBoxOrderCostBegin = new System.Windows.Forms.TextBox();
+			this.label49 = new System.Windows.Forms.Label();
 			this.txtBoxMaxBoundCostEnd = new System.Windows.Forms.TextBox();
 			this.txtBoxMaxBoundCostBegin = new System.Windows.Forms.TextBox();
 			this.label45 = new System.Windows.Forms.Label();
@@ -281,47 +330,6 @@ namespace FREditor
 			this.label39 = new System.Windows.Forms.Label();
 			this.label40 = new System.Windows.Forms.Label();
 			this.label46 = new System.Windows.Forms.Label();
-			this.pnlGeneralFields = new System.Windows.Forms.Panel();
-			this.label44 = new System.Windows.Forms.Label();
-			this.txtBoxMaxBoundCost = new System.Windows.Forms.TextBox();
-			this.txtBoxVitalyImportant = new System.Windows.Forms.TextBox();
-			this.label43 = new System.Windows.Forms.Label();
-			this.label37 = new System.Windows.Forms.Label();
-			this.label36 = new System.Windows.Forms.Label();
-			this.txtBoxRegistryCost = new System.Windows.Forms.TextBox();
-			this.txtBoxRequestRatio = new System.Windows.Forms.TextBox();
-			this.txtBoxAwait = new System.Windows.Forms.TextBox();
-			this.txtBoxJunk = new System.Windows.Forms.TextBox();
-			this.txtBoxMinBoundCost = new System.Windows.Forms.TextBox();
-			this.txtBoxCurrency = new System.Windows.Forms.TextBox();
-			this.label17 = new System.Windows.Forms.Label();
-			this.label16 = new System.Windows.Forms.Label();
-			this.label15 = new System.Windows.Forms.Label();
-			this.label14 = new System.Windows.Forms.Label();
-			this.txtBoxDoc = new System.Windows.Forms.TextBox();
-			this.txtBoxPeriod = new System.Windows.Forms.TextBox();
-			this.txtBoxNote = new System.Windows.Forms.TextBox();
-			this.txtBoxQuantity = new System.Windows.Forms.TextBox();
-			this.txtBoxUnit = new System.Windows.Forms.TextBox();
-			this.txtBoxVolume = new System.Windows.Forms.TextBox();
-			this.label12 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
-			this.label9 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
-			this.label7 = new System.Windows.Forms.Label();
-			this.txtBoxFirmCr = new System.Windows.Forms.TextBox();
-			this.txtBoxName3 = new System.Windows.Forms.TextBox();
-			this.txtBoxName2 = new System.Windows.Forms.TextBox();
-			this.txtBoxName1 = new System.Windows.Forms.TextBox();
-			this.txtBoxCodeCr = new System.Windows.Forms.TextBox();
-			this.txtBoxCode = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
 			this.grpbSettings = new System.Windows.Forms.GroupBox();
 			this.pnlSettings = new System.Windows.Forms.Panel();
 			this.btnVitallyImportantCheck = new System.Windows.Forms.Button();
@@ -389,8 +397,8 @@ namespace FREditor
 			((System.ComponentModel.ISupportInitialize)(this.indgvCosts)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.bsCostsFormRules)).BeginInit();
 			this.grpbFields.SuspendLayout();
-			this.pnlTxtFields.SuspendLayout();
 			this.pnlGeneralFields.SuspendLayout();
+			this.pnlTxtFields.SuspendLayout();
 			this.grpbSettings.SuspendLayout();
 			this.pnlSettings.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.erP)).BeginInit();
@@ -781,7 +789,10 @@ namespace FREditor
             this.FRVitallyImportantMask,
             this.FRFMaxBoundCost,
             this.FRTxtMaxBoundCostBegin,
-            this.FRTxtMaxBoundCostEnd});
+            this.FRTxtMaxBoundCostEnd,
+            this.FRFOrderCost,
+            this.FRTxtOrderCostBegin,
+            this.FRTxtOrderCostEnd});
 			this.dtFormRules.Constraints.AddRange(new System.Data.Constraint[] {
             new System.Data.ForeignKeyConstraint("Relation1", "Прайсы", new string[] {
                         "PPriceCode"}, new string[] {
@@ -1111,6 +1122,18 @@ namespace FREditor
 			// FRTxtMaxBoundCostEnd
 			// 
 			this.FRTxtMaxBoundCostEnd.ColumnName = "FRTxtMaxBoundCostEnd";
+			// 
+			// FRFOrderCost
+			// 
+			this.FRFOrderCost.ColumnName = "FRFOrderCost";
+			// 
+			// FRTxtOrderCostBegin
+			// 
+			this.FRTxtOrderCostBegin.ColumnName = "FRTxtOrderCostBegin";
+			// 
+			// FRTxtOrderCostEnd
+			// 
+			this.FRTxtOrderCostEnd.ColumnName = "FRTxtOrderCostEnd";
 			// 
 			// dtPriceFMTs
 			// 
@@ -1815,8 +1838,8 @@ namespace FREditor
 			// 
 			// grpbFields
 			// 
-			this.grpbFields.Controls.Add(this.pnlTxtFields);
 			this.grpbFields.Controls.Add(this.pnlGeneralFields);
+			this.grpbFields.Controls.Add(this.pnlTxtFields);
 			this.grpbFields.Dock = System.Windows.Forms.DockStyle.Left;
 			this.grpbFields.Location = new System.Drawing.Point(264, 0);
 			this.grpbFields.Name = "grpbFields";
@@ -1825,735 +1848,10 @@ namespace FREditor
 			this.grpbFields.TabStop = false;
 			this.grpbFields.Text = "Поля";
 			// 
-			// pnlTxtFields
-			// 
-			this.pnlTxtFields.Controls.Add(this.txtBoxMaxBoundCostEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxMaxBoundCostBegin);
-			this.pnlTxtFields.Controls.Add(this.label45);
-			this.pnlTxtFields.Controls.Add(this.txtBoxVitalyImportantEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxVitalyImportantBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxRegistryCostEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxRegistryCostBegin);
-			this.pnlTxtFields.Controls.Add(this.label42);
-			this.pnlTxtFields.Controls.Add(this.txtBoxRequestRatioEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxRequestRatioBegin);
-			this.pnlTxtFields.Controls.Add(this.label41);
-			this.pnlTxtFields.Controls.Add(this.txtBoxAwaitEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxJunkEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxAwaitBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxJunkBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxMinBoundCostEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxMinBoundCostBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxCurrencyEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxDocEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxPeriodEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxNoteEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxCurrencyBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxDocBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxPeriodBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxNoteBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxQuantityEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxQuantityBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxVolumeEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxVolumeBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxUnitEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxUnitBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxFirmCrEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxFirmCrBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxName1End);
-			this.pnlTxtFields.Controls.Add(this.txtBoxName1Begin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxCodeCrEnd);
-			this.pnlTxtFields.Controls.Add(this.txtBoxCodeCrBegin);
-			this.pnlTxtFields.Controls.Add(this.txtBoxCodeEnd);
-			this.pnlTxtFields.Controls.Add(this.label24);
-			this.pnlTxtFields.Controls.Add(this.label25);
-			this.pnlTxtFields.Controls.Add(this.label26);
-			this.pnlTxtFields.Controls.Add(this.label27);
-			this.pnlTxtFields.Controls.Add(this.label29);
-			this.pnlTxtFields.Controls.Add(this.label30);
-			this.pnlTxtFields.Controls.Add(this.label31);
-			this.pnlTxtFields.Controls.Add(this.label32);
-			this.pnlTxtFields.Controls.Add(this.label33);
-			this.pnlTxtFields.Controls.Add(this.label34);
-			this.pnlTxtFields.Controls.Add(this.txtBoxCodeBegin);
-			this.pnlTxtFields.Controls.Add(this.label35);
-			this.pnlTxtFields.Controls.Add(this.label38);
-			this.pnlTxtFields.Controls.Add(this.label39);
-			this.pnlTxtFields.Controls.Add(this.label40);
-			this.pnlTxtFields.Controls.Add(this.label46);
-			this.pnlTxtFields.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pnlTxtFields.Location = new System.Drawing.Point(3, 16);
-			this.pnlTxtFields.Name = "pnlTxtFields";
-			this.pnlTxtFields.Size = new System.Drawing.Size(496, 176);
-			this.pnlTxtFields.TabIndex = 1;
-			// 
-			// txtBoxMaxBoundCostEnd
-			// 
-			this.txtBoxMaxBoundCostEnd.AccessibleName = "VitalyImportantEnd";
-			this.txtBoxMaxBoundCostEnd.AllowDrop = true;
-			this.txtBoxMaxBoundCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMaxBoundCostEnd", true));
-			this.txtBoxMaxBoundCostEnd.Location = new System.Drawing.Point(463, 148);
-			this.txtBoxMaxBoundCostEnd.Name = "txtBoxMaxBoundCostEnd";
-			this.txtBoxMaxBoundCostEnd.ReadOnly = true;
-			this.txtBoxMaxBoundCostEnd.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxMaxBoundCostEnd.TabIndex = 112;
-			this.txtBoxMaxBoundCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxMaxBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxMaxBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxMaxBoundCostBegin
-			// 
-			this.txtBoxMaxBoundCostBegin.AccessibleName = "VitalyImportantBegin";
-			this.txtBoxMaxBoundCostBegin.AllowDrop = true;
-			this.txtBoxMaxBoundCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMaxBoundCostBegin", true));
-			this.txtBoxMaxBoundCostBegin.Location = new System.Drawing.Point(436, 148);
-			this.txtBoxMaxBoundCostBegin.Name = "txtBoxMaxBoundCostBegin";
-			this.txtBoxMaxBoundCostBegin.ReadOnly = true;
-			this.txtBoxMaxBoundCostBegin.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxMaxBoundCostBegin.TabIndex = 111;
-			this.txtBoxMaxBoundCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxMaxBoundCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxMaxBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// label45
-			// 
-			this.label45.Location = new System.Drawing.Point(324, 146);
-			this.label45.Name = "label45";
-			this.label45.Size = new System.Drawing.Size(104, 23);
-			this.label45.TabIndex = 110;
-			this.label45.Text = "Цена макс. :";
-			this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxVitalyImportantEnd
-			// 
-			this.txtBoxVitalyImportantEnd.AccessibleName = "VitalyImportantEnd";
-			this.txtBoxVitalyImportantEnd.AllowDrop = true;
-			this.txtBoxVitalyImportantEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVitallyImportantEnd", true));
-			this.txtBoxVitalyImportantEnd.Location = new System.Drawing.Point(462, 120);
-			this.txtBoxVitalyImportantEnd.Name = "txtBoxVitalyImportantEnd";
-			this.txtBoxVitalyImportantEnd.ReadOnly = true;
-			this.txtBoxVitalyImportantEnd.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxVitalyImportantEnd.TabIndex = 109;
-			this.txtBoxVitalyImportantEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxVitalyImportantEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxVitalyImportantEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxVitalyImportantBegin
-			// 
-			this.txtBoxVitalyImportantBegin.AccessibleName = "VitalyImportantBegin";
-			this.txtBoxVitalyImportantBegin.AllowDrop = true;
-			this.txtBoxVitalyImportantBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVitallyImportantBegin", true));
-			this.txtBoxVitalyImportantBegin.Location = new System.Drawing.Point(435, 120);
-			this.txtBoxVitalyImportantBegin.Name = "txtBoxVitalyImportantBegin";
-			this.txtBoxVitalyImportantBegin.ReadOnly = true;
-			this.txtBoxVitalyImportantBegin.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxVitalyImportantBegin.TabIndex = 108;
-			this.txtBoxVitalyImportantBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxVitalyImportantBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxVitalyImportantBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxRegistryCostEnd
-			// 
-			this.txtBoxRegistryCostEnd.AccessibleName = "RegistryCostEnd";
-			this.txtBoxRegistryCostEnd.AllowDrop = true;
-			this.txtBoxRegistryCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRegistryCostEnd", true));
-			this.txtBoxRegistryCostEnd.Location = new System.Drawing.Point(462, 94);
-			this.txtBoxRegistryCostEnd.Name = "txtBoxRegistryCostEnd";
-			this.txtBoxRegistryCostEnd.ReadOnly = true;
-			this.txtBoxRegistryCostEnd.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxRegistryCostEnd.TabIndex = 103;
-			this.txtBoxRegistryCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxRegistryCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxRegistryCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxRegistryCostBegin
-			// 
-			this.txtBoxRegistryCostBegin.AccessibleName = "RegistryCostBegin";
-			this.txtBoxRegistryCostBegin.AllowDrop = true;
-			this.txtBoxRegistryCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRegistryCostBegin", true));
-			this.txtBoxRegistryCostBegin.Location = new System.Drawing.Point(435, 94);
-			this.txtBoxRegistryCostBegin.Name = "txtBoxRegistryCostBegin";
-			this.txtBoxRegistryCostBegin.ReadOnly = true;
-			this.txtBoxRegistryCostBegin.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxRegistryCostBegin.TabIndex = 102;
-			this.txtBoxRegistryCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxRegistryCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxRegistryCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// label42
-			// 
-			this.label42.Location = new System.Drawing.Point(348, 92);
-			this.label42.Name = "label42";
-			this.label42.Size = new System.Drawing.Size(80, 23);
-			this.label42.TabIndex = 101;
-			this.label42.Text = "Реестр. цена :";
-			this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxRequestRatioEnd
-			// 
-			this.txtBoxRequestRatioEnd.AccessibleName = "RequestRatioEnd";
-			this.txtBoxRequestRatioEnd.AllowDrop = true;
-			this.txtBoxRequestRatioEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRequestRatioEnd", true));
-			this.txtBoxRequestRatioEnd.Location = new System.Drawing.Point(462, 67);
-			this.txtBoxRequestRatioEnd.Name = "txtBoxRequestRatioEnd";
-			this.txtBoxRequestRatioEnd.ReadOnly = true;
-			this.txtBoxRequestRatioEnd.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxRequestRatioEnd.TabIndex = 100;
-			this.txtBoxRequestRatioEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxRequestRatioEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxRequestRatioEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxRequestRatioBegin
-			// 
-			this.txtBoxRequestRatioBegin.AccessibleName = "RequestRatioBegin";
-			this.txtBoxRequestRatioBegin.AllowDrop = true;
-			this.txtBoxRequestRatioBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRequestRatioBegin", true));
-			this.txtBoxRequestRatioBegin.Location = new System.Drawing.Point(435, 67);
-			this.txtBoxRequestRatioBegin.Name = "txtBoxRequestRatioBegin";
-			this.txtBoxRequestRatioBegin.ReadOnly = true;
-			this.txtBoxRequestRatioBegin.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxRequestRatioBegin.TabIndex = 99;
-			this.txtBoxRequestRatioBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxRequestRatioBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxRequestRatioBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// label41
-			// 
-			this.label41.Location = new System.Drawing.Point(351, 64);
-			this.label41.Name = "label41";
-			this.label41.Size = new System.Drawing.Size(77, 23);
-			this.label41.TabIndex = 98;
-			this.label41.Text = "Мин. заказ :";
-			this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxAwaitEnd
-			// 
-			this.txtBoxAwaitEnd.AccessibleName = "AwaitEnd";
-			this.txtBoxAwaitEnd.AllowDrop = true;
-			this.txtBoxAwaitEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtAwaitEnd", true));
-			this.txtBoxAwaitEnd.Location = new System.Drawing.Point(462, 39);
-			this.txtBoxAwaitEnd.Name = "txtBoxAwaitEnd";
-			this.txtBoxAwaitEnd.ReadOnly = true;
-			this.txtBoxAwaitEnd.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxAwaitEnd.TabIndex = 97;
-			this.txtBoxAwaitEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxAwaitEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxAwaitEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxJunkEnd
-			// 
-			this.txtBoxJunkEnd.AccessibleName = "JunkEnd";
-			this.txtBoxJunkEnd.AllowDrop = true;
-			this.txtBoxJunkEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtJunkEnd", true));
-			this.txtBoxJunkEnd.Location = new System.Drawing.Point(462, 11);
-			this.txtBoxJunkEnd.Name = "txtBoxJunkEnd";
-			this.txtBoxJunkEnd.ReadOnly = true;
-			this.txtBoxJunkEnd.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxJunkEnd.TabIndex = 96;
-			this.txtBoxJunkEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxJunkEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxJunkEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxAwaitBegin
-			// 
-			this.txtBoxAwaitBegin.AccessibleName = "AwaitBegin";
-			this.txtBoxAwaitBegin.AllowDrop = true;
-			this.txtBoxAwaitBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtAwaitBegin", true));
-			this.txtBoxAwaitBegin.Location = new System.Drawing.Point(435, 39);
-			this.txtBoxAwaitBegin.Name = "txtBoxAwaitBegin";
-			this.txtBoxAwaitBegin.ReadOnly = true;
-			this.txtBoxAwaitBegin.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxAwaitBegin.TabIndex = 95;
-			this.txtBoxAwaitBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxAwaitBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxAwaitBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxJunkBegin
-			// 
-			this.txtBoxJunkBegin.AccessibleName = "JunkBegin";
-			this.txtBoxJunkBegin.AllowDrop = true;
-			this.txtBoxJunkBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtJunkBegin", true));
-			this.txtBoxJunkBegin.Location = new System.Drawing.Point(435, 11);
-			this.txtBoxJunkBegin.Name = "txtBoxJunkBegin";
-			this.txtBoxJunkBegin.ReadOnly = true;
-			this.txtBoxJunkBegin.Size = new System.Drawing.Size(24, 20);
-			this.txtBoxJunkBegin.TabIndex = 94;
-			this.txtBoxJunkBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxJunkBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxJunkBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxMinBoundCostEnd
-			// 
-			this.txtBoxMinBoundCostEnd.AccessibleName = "MinBoundCostEnd";
-			this.txtBoxMinBoundCostEnd.AllowDrop = true;
-			this.txtBoxMinBoundCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMinBoundCostEnd", true));
-			this.txtBoxMinBoundCostEnd.Location = new System.Drawing.Point(286, 149);
-			this.txtBoxMinBoundCostEnd.Name = "txtBoxMinBoundCostEnd";
-			this.txtBoxMinBoundCostEnd.ReadOnly = true;
-			this.txtBoxMinBoundCostEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxMinBoundCostEnd.TabIndex = 93;
-			this.txtBoxMinBoundCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxMinBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxMinBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxMinBoundCostBegin
-			// 
-			this.txtBoxMinBoundCostBegin.AccessibleName = "MinBoundCostBegin";
-			this.txtBoxMinBoundCostBegin.AllowDrop = true;
-			this.txtBoxMinBoundCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMinBoundCostBegin", true));
-			this.txtBoxMinBoundCostBegin.Location = new System.Drawing.Point(259, 149);
-			this.txtBoxMinBoundCostBegin.Name = "txtBoxMinBoundCostBegin";
-			this.txtBoxMinBoundCostBegin.ReadOnly = true;
-			this.txtBoxMinBoundCostBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxMinBoundCostBegin.TabIndex = 92;
-			this.txtBoxMinBoundCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxMinBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.CostsDataGrid_DragEnter);
-			// 
-			// txtBoxCurrencyEnd
-			// 
-			this.txtBoxCurrencyEnd.AccessibleName = "CurrencyEnd";
-			this.txtBoxCurrencyEnd.AllowDrop = true;
-			this.txtBoxCurrencyEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCurrencyEnd", true));
-			this.txtBoxCurrencyEnd.Location = new System.Drawing.Point(286, 120);
-			this.txtBoxCurrencyEnd.Name = "txtBoxCurrencyEnd";
-			this.txtBoxCurrencyEnd.ReadOnly = true;
-			this.txtBoxCurrencyEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxCurrencyEnd.TabIndex = 91;
-			this.txtBoxCurrencyEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxCurrencyEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxCurrencyEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxDocEnd
-			// 
-			this.txtBoxDocEnd.AccessibleName = "DocEnd";
-			this.txtBoxDocEnd.AllowDrop = true;
-			this.txtBoxDocEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtDocEnd", true));
-			this.txtBoxDocEnd.Location = new System.Drawing.Point(286, 92);
-			this.txtBoxDocEnd.Name = "txtBoxDocEnd";
-			this.txtBoxDocEnd.ReadOnly = true;
-			this.txtBoxDocEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxDocEnd.TabIndex = 89;
-			this.txtBoxDocEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxDocEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxDocEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxPeriodEnd
-			// 
-			this.txtBoxPeriodEnd.AccessibleName = "PeriodEnd";
-			this.txtBoxPeriodEnd.AllowDrop = true;
-			this.txtBoxPeriodEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtPeriodEnd", true));
-			this.txtBoxPeriodEnd.Location = new System.Drawing.Point(286, 64);
-			this.txtBoxPeriodEnd.Name = "txtBoxPeriodEnd";
-			this.txtBoxPeriodEnd.ReadOnly = true;
-			this.txtBoxPeriodEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxPeriodEnd.TabIndex = 88;
-			this.txtBoxPeriodEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxPeriodEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxPeriodEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxNoteEnd
-			// 
-			this.txtBoxNoteEnd.AccessibleName = "NoteEnd";
-			this.txtBoxNoteEnd.AllowDrop = true;
-			this.txtBoxNoteEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNoteEnd", true));
-			this.txtBoxNoteEnd.Location = new System.Drawing.Point(286, 37);
-			this.txtBoxNoteEnd.Name = "txtBoxNoteEnd";
-			this.txtBoxNoteEnd.ReadOnly = true;
-			this.txtBoxNoteEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxNoteEnd.TabIndex = 87;
-			this.txtBoxNoteEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxNoteEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxNoteEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxCurrencyBegin
-			// 
-			this.txtBoxCurrencyBegin.AccessibleName = "CurrencyBegin";
-			this.txtBoxCurrencyBegin.AllowDrop = true;
-			this.txtBoxCurrencyBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCurrencyBegin", true));
-			this.txtBoxCurrencyBegin.Location = new System.Drawing.Point(259, 120);
-			this.txtBoxCurrencyBegin.Name = "txtBoxCurrencyBegin";
-			this.txtBoxCurrencyBegin.ReadOnly = true;
-			this.txtBoxCurrencyBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxCurrencyBegin.TabIndex = 86;
-			this.txtBoxCurrencyBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxCurrencyBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxCurrencyBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxDocBegin
-			// 
-			this.txtBoxDocBegin.AccessibleName = "DocBegin";
-			this.txtBoxDocBegin.AllowDrop = true;
-			this.txtBoxDocBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtDocBegin", true));
-			this.txtBoxDocBegin.Location = new System.Drawing.Point(259, 92);
-			this.txtBoxDocBegin.Name = "txtBoxDocBegin";
-			this.txtBoxDocBegin.ReadOnly = true;
-			this.txtBoxDocBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxDocBegin.TabIndex = 84;
-			this.txtBoxDocBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxDocBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxDocBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxPeriodBegin
-			// 
-			this.txtBoxPeriodBegin.AccessibleName = "PeriodBegin";
-			this.txtBoxPeriodBegin.AllowDrop = true;
-			this.txtBoxPeriodBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtPeriodBegin", true));
-			this.txtBoxPeriodBegin.Location = new System.Drawing.Point(259, 64);
-			this.txtBoxPeriodBegin.Name = "txtBoxPeriodBegin";
-			this.txtBoxPeriodBegin.ReadOnly = true;
-			this.txtBoxPeriodBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxPeriodBegin.TabIndex = 83;
-			this.txtBoxPeriodBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxPeriodBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxPeriodBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxNoteBegin
-			// 
-			this.txtBoxNoteBegin.AccessibleName = "NoteBegin";
-			this.txtBoxNoteBegin.AllowDrop = true;
-			this.txtBoxNoteBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNoteBegin", true));
-			this.txtBoxNoteBegin.Location = new System.Drawing.Point(259, 37);
-			this.txtBoxNoteBegin.Name = "txtBoxNoteBegin";
-			this.txtBoxNoteBegin.ReadOnly = true;
-			this.txtBoxNoteBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxNoteBegin.TabIndex = 82;
-			this.txtBoxNoteBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxNoteBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxNoteBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxQuantityEnd
-			// 
-			this.txtBoxQuantityEnd.AccessibleName = "QuantityEnd";
-			this.txtBoxQuantityEnd.AllowDrop = true;
-			this.txtBoxQuantityEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtQuantityEnd", true));
-			this.txtBoxQuantityEnd.Location = new System.Drawing.Point(286, 8);
-			this.txtBoxQuantityEnd.Name = "txtBoxQuantityEnd";
-			this.txtBoxQuantityEnd.ReadOnly = true;
-			this.txtBoxQuantityEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxQuantityEnd.TabIndex = 81;
-			this.txtBoxQuantityEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxQuantityEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxQuantityEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxQuantityBegin
-			// 
-			this.txtBoxQuantityBegin.AccessibleName = "QuantityBegin";
-			this.txtBoxQuantityBegin.AllowDrop = true;
-			this.txtBoxQuantityBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtQuantityBegin", true));
-			this.txtBoxQuantityBegin.Location = new System.Drawing.Point(259, 8);
-			this.txtBoxQuantityBegin.Name = "txtBoxQuantityBegin";
-			this.txtBoxQuantityBegin.ReadOnly = true;
-			this.txtBoxQuantityBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxQuantityBegin.TabIndex = 80;
-			this.txtBoxQuantityBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxQuantityBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxQuantityBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxVolumeEnd
-			// 
-			this.txtBoxVolumeEnd.AccessibleName = "VolumeEnd";
-			this.txtBoxVolumeEnd.AllowDrop = true;
-			this.txtBoxVolumeEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVolumeEnd", true));
-			this.txtBoxVolumeEnd.Location = new System.Drawing.Point(133, 149);
-			this.txtBoxVolumeEnd.Name = "txtBoxVolumeEnd";
-			this.txtBoxVolumeEnd.ReadOnly = true;
-			this.txtBoxVolumeEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxVolumeEnd.TabIndex = 79;
-			this.txtBoxVolumeEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxVolumeEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxVolumeEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxVolumeBegin
-			// 
-			this.txtBoxVolumeBegin.AccessibleName = "VolumeBegin";
-			this.txtBoxVolumeBegin.AllowDrop = true;
-			this.txtBoxVolumeBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVolumeBegin", true));
-			this.txtBoxVolumeBegin.Location = new System.Drawing.Point(106, 149);
-			this.txtBoxVolumeBegin.Name = "txtBoxVolumeBegin";
-			this.txtBoxVolumeBegin.ReadOnly = true;
-			this.txtBoxVolumeBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxVolumeBegin.TabIndex = 78;
-			this.txtBoxVolumeBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxVolumeBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxVolumeBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxUnitEnd
-			// 
-			this.txtBoxUnitEnd.AccessibleName = "UnitEnd";
-			this.txtBoxUnitEnd.AllowDrop = true;
-			this.txtBoxUnitEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtUnitEnd", true));
-			this.txtBoxUnitEnd.Location = new System.Drawing.Point(133, 120);
-			this.txtBoxUnitEnd.Name = "txtBoxUnitEnd";
-			this.txtBoxUnitEnd.ReadOnly = true;
-			this.txtBoxUnitEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxUnitEnd.TabIndex = 77;
-			this.txtBoxUnitEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxUnitEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxUnitEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxUnitBegin
-			// 
-			this.txtBoxUnitBegin.AccessibleName = "UnitBegin";
-			this.txtBoxUnitBegin.AllowDrop = true;
-			this.txtBoxUnitBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtUnitBegin", true));
-			this.txtBoxUnitBegin.Location = new System.Drawing.Point(106, 120);
-			this.txtBoxUnitBegin.Name = "txtBoxUnitBegin";
-			this.txtBoxUnitBegin.ReadOnly = true;
-			this.txtBoxUnitBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxUnitBegin.TabIndex = 76;
-			this.txtBoxUnitBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxUnitBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxUnitBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxFirmCrEnd
-			// 
-			this.txtBoxFirmCrEnd.AccessibleName = "FirmCrEnd";
-			this.txtBoxFirmCrEnd.AllowDrop = true;
-			this.txtBoxFirmCrEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtFirmCrEnd", true));
-			this.txtBoxFirmCrEnd.Location = new System.Drawing.Point(133, 92);
-			this.txtBoxFirmCrEnd.Name = "txtBoxFirmCrEnd";
-			this.txtBoxFirmCrEnd.ReadOnly = true;
-			this.txtBoxFirmCrEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxFirmCrEnd.TabIndex = 75;
-			this.txtBoxFirmCrEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxFirmCrEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxFirmCrEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxFirmCrBegin
-			// 
-			this.txtBoxFirmCrBegin.AccessibleName = "FirmCrBegin";
-			this.txtBoxFirmCrBegin.AllowDrop = true;
-			this.txtBoxFirmCrBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtFirmCrBegin", true));
-			this.txtBoxFirmCrBegin.Location = new System.Drawing.Point(106, 92);
-			this.txtBoxFirmCrBegin.Name = "txtBoxFirmCrBegin";
-			this.txtBoxFirmCrBegin.ReadOnly = true;
-			this.txtBoxFirmCrBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxFirmCrBegin.TabIndex = 74;
-			this.txtBoxFirmCrBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxFirmCrBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxFirmCrBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxName1End
-			// 
-			this.txtBoxName1End.AccessibleName = "Name1End";
-			this.txtBoxName1End.AllowDrop = true;
-			this.txtBoxName1End.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNameEnd", true));
-			this.txtBoxName1End.Location = new System.Drawing.Point(133, 64);
-			this.txtBoxName1End.Name = "txtBoxName1End";
-			this.txtBoxName1End.ReadOnly = true;
-			this.txtBoxName1End.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxName1End.TabIndex = 73;
-			this.txtBoxName1End.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxName1End.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxName1End.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxName1Begin
-			// 
-			this.txtBoxName1Begin.AccessibleName = "Name1Begin";
-			this.txtBoxName1Begin.AllowDrop = true;
-			this.txtBoxName1Begin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNameBegin", true));
-			this.txtBoxName1Begin.Location = new System.Drawing.Point(106, 64);
-			this.txtBoxName1Begin.Name = "txtBoxName1Begin";
-			this.txtBoxName1Begin.ReadOnly = true;
-			this.txtBoxName1Begin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxName1Begin.TabIndex = 72;
-			this.txtBoxName1Begin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxName1Begin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxName1Begin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxCodeCrEnd
-			// 
-			this.txtBoxCodeCrEnd.AccessibleName = "CodeCrEnd";
-			this.txtBoxCodeCrEnd.AllowDrop = true;
-			this.txtBoxCodeCrEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeCrEnd", true));
-			this.txtBoxCodeCrEnd.Location = new System.Drawing.Point(133, 36);
-			this.txtBoxCodeCrEnd.Name = "txtBoxCodeCrEnd";
-			this.txtBoxCodeCrEnd.ReadOnly = true;
-			this.txtBoxCodeCrEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxCodeCrEnd.TabIndex = 71;
-			this.txtBoxCodeCrEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxCodeCrEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxCodeCrEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxCodeCrBegin
-			// 
-			this.txtBoxCodeCrBegin.AccessibleName = "CodeCrBegin";
-			this.txtBoxCodeCrBegin.AllowDrop = true;
-			this.txtBoxCodeCrBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeCrBegin", true));
-			this.txtBoxCodeCrBegin.Location = new System.Drawing.Point(106, 36);
-			this.txtBoxCodeCrBegin.Name = "txtBoxCodeCrBegin";
-			this.txtBoxCodeCrBegin.ReadOnly = true;
-			this.txtBoxCodeCrBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxCodeCrBegin.TabIndex = 70;
-			this.txtBoxCodeCrBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxCodeCrBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxCodeCrBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// txtBoxCodeEnd
-			// 
-			this.txtBoxCodeEnd.AccessibleName = "CodeEnd";
-			this.txtBoxCodeEnd.AllowDrop = true;
-			this.txtBoxCodeEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeEnd", true));
-			this.txtBoxCodeEnd.Location = new System.Drawing.Point(133, 8);
-			this.txtBoxCodeEnd.Name = "txtBoxCodeEnd";
-			this.txtBoxCodeEnd.ReadOnly = true;
-			this.txtBoxCodeEnd.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxCodeEnd.TabIndex = 69;
-			this.txtBoxCodeEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxCodeEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxCodeEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// label24
-			// 
-			this.label24.Location = new System.Drawing.Point(350, 36);
-			this.label24.Name = "label24";
-			this.label24.Size = new System.Drawing.Size(77, 23);
-			this.label24.TabIndex = 63;
-			this.label24.Text = "Ожидается :";
-			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label25
-			// 
-			this.label25.Location = new System.Drawing.Point(350, 7);
-			this.label25.Name = "label25";
-			this.label25.Size = new System.Drawing.Size(77, 23);
-			this.label25.TabIndex = 62;
-			this.label25.Text = "Срок :";
-			this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label26
-			// 
-			this.label26.Location = new System.Drawing.Point(173, 148);
-			this.label26.Name = "label26";
-			this.label26.Size = new System.Drawing.Size(80, 23);
-			this.label26.TabIndex = 61;
-			this.label26.Text = "Цена мин. :";
-			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label27
-			// 
-			this.label27.Location = new System.Drawing.Point(197, 120);
-			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(56, 23);
-			this.label27.TabIndex = 60;
-			this.label27.Text = "Валюта :";
-			this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label29
-			// 
-			this.label29.Location = new System.Drawing.Point(161, 92);
-			this.label29.Name = "label29";
-			this.label29.Size = new System.Drawing.Size(92, 23);
-			this.label29.TabIndex = 52;
-			this.label29.Text = "Документ :";
-			this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label30
-			// 
-			this.label30.Location = new System.Drawing.Point(158, 64);
-			this.label30.Name = "label30";
-			this.label30.Size = new System.Drawing.Size(95, 23);
-			this.label30.TabIndex = 51;
-			this.label30.Text = "Срок годности :";
-			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label31
-			// 
-			this.label31.Location = new System.Drawing.Point(169, 36);
-			this.label31.Name = "label31";
-			this.label31.Size = new System.Drawing.Size(84, 23);
-			this.label31.TabIndex = 50;
-			this.label31.Text = "Примечание :";
-			this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label32
-			// 
-			this.label32.Location = new System.Drawing.Point(169, 9);
-			this.label32.Name = "label32";
-			this.label32.Size = new System.Drawing.Size(84, 23);
-			this.label32.TabIndex = 49;
-			this.label32.Text = "Количество :";
-			this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label33
-			// 
-			this.label33.Location = new System.Drawing.Point(21, 148);
-			this.label33.Name = "label33";
-			this.label33.Size = new System.Drawing.Size(80, 23);
-			this.label33.TabIndex = 48;
-			this.label33.Text = "Цех. уп. :";
-			this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label34
-			// 
-			this.label34.Location = new System.Drawing.Point(2, 120);
-			this.label34.Name = "label34";
-			this.label34.Size = new System.Drawing.Size(100, 23);
-			this.label34.TabIndex = 47;
-			this.label34.Text = "Ед. измерения :";
-			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxCodeBegin
-			// 
-			this.txtBoxCodeBegin.AccessibleName = "CodeBegin";
-			this.txtBoxCodeBegin.AllowDrop = true;
-			this.txtBoxCodeBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeBegin", true));
-			this.txtBoxCodeBegin.Location = new System.Drawing.Point(106, 8);
-			this.txtBoxCodeBegin.Name = "txtBoxCodeBegin";
-			this.txtBoxCodeBegin.ReadOnly = true;
-			this.txtBoxCodeBegin.Size = new System.Drawing.Size(27, 20);
-			this.txtBoxCodeBegin.TabIndex = 41;
-			this.txtBoxCodeBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxCodeBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
-			this.txtBoxCodeBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
-			// 
-			// label35
-			// 
-			this.label35.Location = new System.Drawing.Point(2, 92);
-			this.label35.Name = "label35";
-			this.label35.Size = new System.Drawing.Size(100, 23);
-			this.label35.TabIndex = 40;
-			this.label35.Text = "Производитель :";
-			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label38
-			// 
-			this.label38.Location = new System.Drawing.Point(3, 64);
-			this.label38.Name = "label38";
-			this.label38.Size = new System.Drawing.Size(98, 23);
-			this.label38.TabIndex = 37;
-			this.label38.Text = "Наименование 1 :";
-			this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label39
-			// 
-			this.label39.Location = new System.Drawing.Point(2, 36);
-			this.label39.Name = "label39";
-			this.label39.Size = new System.Drawing.Size(100, 23);
-			this.label39.TabIndex = 36;
-			this.label39.Text = "Код производ. :";
-			this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label40
-			// 
-			this.label40.Location = new System.Drawing.Point(2, 8);
-			this.label40.Name = "label40";
-			this.label40.Size = new System.Drawing.Size(100, 23);
-			this.label40.TabIndex = 35;
-			this.label40.Text = "Код :";
-			this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label46
-			// 
-			this.label46.Location = new System.Drawing.Point(311, 118);
-			this.label46.Name = "label46";
-			this.label46.Size = new System.Drawing.Size(116, 23);
-			this.label46.TabIndex = 107;
-			this.label46.Text = "Жизненно важный :";
-			this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
 			// pnlGeneralFields
 			// 
+			this.pnlGeneralFields.Controls.Add(this.label48);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxOrderCost);
 			this.pnlGeneralFields.Controls.Add(this.label44);
 			this.pnlGeneralFields.Controls.Add(this.txtBoxMaxBoundCost);
 			this.pnlGeneralFields.Controls.Add(this.txtBoxVitalyImportant);
@@ -2599,6 +1897,28 @@ namespace FREditor
 			this.pnlGeneralFields.Name = "pnlGeneralFields";
 			this.pnlGeneralFields.Size = new System.Drawing.Size(496, 176);
 			this.pnlGeneralFields.TabIndex = 0;
+			// 
+			// label48
+			// 
+			this.label48.Location = new System.Drawing.Point(321, 151);
+			this.label48.Name = "label48";
+			this.label48.Size = new System.Drawing.Size(112, 23);
+			this.label48.TabIndex = 79;
+			this.label48.Text = "Мин. заказ :";
+			this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxOrderCost
+			// 
+			this.txtBoxOrderCost.AllowDrop = true;
+			this.txtBoxOrderCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFOrderCost", true));
+			this.txtBoxOrderCost.Location = new System.Drawing.Point(438, 155);
+			this.txtBoxOrderCost.Name = "txtBoxOrderCost";
+			this.txtBoxOrderCost.ReadOnly = true;
+			this.txtBoxOrderCost.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxOrderCost.TabIndex = 78;
+			this.txtBoxOrderCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxOrderCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxOrderCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			// 
 			// label44
 			// 
@@ -2659,7 +1979,7 @@ namespace FREditor
 			this.label36.Name = "label36";
 			this.label36.Size = new System.Drawing.Size(100, 23);
 			this.label36.TabIndex = 71;
-			this.label36.Text = "Мин. заказ :";
+			this.label36.Text = "Кратность :";
 			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// txtBoxRegistryCost
@@ -3040,6 +2360,773 @@ namespace FREditor
 			this.label1.Text = "Код :";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// pnlTxtFields
+			// 
+			this.pnlTxtFields.Controls.Add(this.txtBoxOrderCostEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxOrderCostBegin);
+			this.pnlTxtFields.Controls.Add(this.label49);
+			this.pnlTxtFields.Controls.Add(this.txtBoxMaxBoundCostEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxMaxBoundCostBegin);
+			this.pnlTxtFields.Controls.Add(this.label45);
+			this.pnlTxtFields.Controls.Add(this.txtBoxVitalyImportantEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxVitalyImportantBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxRegistryCostEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxRegistryCostBegin);
+			this.pnlTxtFields.Controls.Add(this.label42);
+			this.pnlTxtFields.Controls.Add(this.txtBoxRequestRatioEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxRequestRatioBegin);
+			this.pnlTxtFields.Controls.Add(this.label41);
+			this.pnlTxtFields.Controls.Add(this.txtBoxAwaitEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxJunkEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxAwaitBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxJunkBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxMinBoundCostEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxMinBoundCostBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxCurrencyEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxDocEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxPeriodEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxNoteEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxCurrencyBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxDocBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxPeriodBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxNoteBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxQuantityEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxQuantityBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxVolumeEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxVolumeBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxUnitEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxUnitBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxFirmCrEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxFirmCrBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxName1End);
+			this.pnlTxtFields.Controls.Add(this.txtBoxName1Begin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxCodeCrEnd);
+			this.pnlTxtFields.Controls.Add(this.txtBoxCodeCrBegin);
+			this.pnlTxtFields.Controls.Add(this.txtBoxCodeEnd);
+			this.pnlTxtFields.Controls.Add(this.label24);
+			this.pnlTxtFields.Controls.Add(this.label25);
+			this.pnlTxtFields.Controls.Add(this.label26);
+			this.pnlTxtFields.Controls.Add(this.label27);
+			this.pnlTxtFields.Controls.Add(this.label29);
+			this.pnlTxtFields.Controls.Add(this.label30);
+			this.pnlTxtFields.Controls.Add(this.label31);
+			this.pnlTxtFields.Controls.Add(this.label32);
+			this.pnlTxtFields.Controls.Add(this.label33);
+			this.pnlTxtFields.Controls.Add(this.label34);
+			this.pnlTxtFields.Controls.Add(this.txtBoxCodeBegin);
+			this.pnlTxtFields.Controls.Add(this.label35);
+			this.pnlTxtFields.Controls.Add(this.label38);
+			this.pnlTxtFields.Controls.Add(this.label39);
+			this.pnlTxtFields.Controls.Add(this.label40);
+			this.pnlTxtFields.Controls.Add(this.label46);
+			this.pnlTxtFields.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pnlTxtFields.Location = new System.Drawing.Point(3, 16);
+			this.pnlTxtFields.Name = "pnlTxtFields";
+			this.pnlTxtFields.Size = new System.Drawing.Size(496, 176);
+			this.pnlTxtFields.TabIndex = 1;
+			// 
+			// txtBoxOrderCostEnd
+			// 
+			this.txtBoxOrderCostEnd.AccessibleName = "OrderCostEnd";
+			this.txtBoxOrderCostEnd.AllowDrop = true;
+			this.txtBoxOrderCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtOrderCostEnd", true));
+			this.txtBoxOrderCostEnd.Location = new System.Drawing.Point(464, 100);
+			this.txtBoxOrderCostEnd.Name = "txtBoxOrderCostEnd";
+			this.txtBoxOrderCostEnd.ReadOnly = true;
+			this.txtBoxOrderCostEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxOrderCostEnd.TabIndex = 115;
+			this.txtBoxOrderCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxOrderCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxOrderCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxOrderCostBegin
+			// 
+			this.txtBoxOrderCostBegin.AccessibleName = "OrderCostBegin";
+			this.txtBoxOrderCostBegin.AllowDrop = true;
+			this.txtBoxOrderCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtOrderCostBegin", true));
+			this.txtBoxOrderCostBegin.Location = new System.Drawing.Point(437, 100);
+			this.txtBoxOrderCostBegin.Name = "txtBoxOrderCostBegin";
+			this.txtBoxOrderCostBegin.ReadOnly = true;
+			this.txtBoxOrderCostBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxOrderCostBegin.TabIndex = 114;
+			this.txtBoxOrderCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxOrderCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxOrderCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// label49
+			// 
+			this.label49.Location = new System.Drawing.Point(326, 100);
+			this.label49.Name = "label49";
+			this.label49.Size = new System.Drawing.Size(104, 23);
+			this.label49.TabIndex = 113;
+			this.label49.Text = "Мин. заказ :";
+			this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxMaxBoundCostEnd
+			// 
+			this.txtBoxMaxBoundCostEnd.AccessibleName = "MaxBoundCostEnd";
+			this.txtBoxMaxBoundCostEnd.AllowDrop = true;
+			this.txtBoxMaxBoundCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMaxBoundCostEnd", true));
+			this.txtBoxMaxBoundCostEnd.Location = new System.Drawing.Point(464, 77);
+			this.txtBoxMaxBoundCostEnd.Name = "txtBoxMaxBoundCostEnd";
+			this.txtBoxMaxBoundCostEnd.ReadOnly = true;
+			this.txtBoxMaxBoundCostEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxMaxBoundCostEnd.TabIndex = 112;
+			this.txtBoxMaxBoundCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxMaxBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxMaxBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxMaxBoundCostBegin
+			// 
+			this.txtBoxMaxBoundCostBegin.AccessibleName = "MaxBoundCostBegin";
+			this.txtBoxMaxBoundCostBegin.AllowDrop = true;
+			this.txtBoxMaxBoundCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMaxBoundCostBegin", true));
+			this.txtBoxMaxBoundCostBegin.Location = new System.Drawing.Point(437, 77);
+			this.txtBoxMaxBoundCostBegin.Name = "txtBoxMaxBoundCostBegin";
+			this.txtBoxMaxBoundCostBegin.ReadOnly = true;
+			this.txtBoxMaxBoundCostBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxMaxBoundCostBegin.TabIndex = 111;
+			this.txtBoxMaxBoundCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxMaxBoundCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxMaxBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// label45
+			// 
+			this.label45.Location = new System.Drawing.Point(326, 77);
+			this.label45.Name = "label45";
+			this.label45.Size = new System.Drawing.Size(104, 23);
+			this.label45.TabIndex = 110;
+			this.label45.Text = "Цена макс. :";
+			this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxVitalyImportantEnd
+			// 
+			this.txtBoxVitalyImportantEnd.AccessibleName = "VitalyImportantEnd";
+			this.txtBoxVitalyImportantEnd.AllowDrop = true;
+			this.txtBoxVitalyImportantEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVitallyImportantEnd", true));
+			this.txtBoxVitalyImportantEnd.Location = new System.Drawing.Point(464, 54);
+			this.txtBoxVitalyImportantEnd.Name = "txtBoxVitalyImportantEnd";
+			this.txtBoxVitalyImportantEnd.ReadOnly = true;
+			this.txtBoxVitalyImportantEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxVitalyImportantEnd.TabIndex = 109;
+			this.txtBoxVitalyImportantEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxVitalyImportantEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxVitalyImportantEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxVitalyImportantBegin
+			// 
+			this.txtBoxVitalyImportantBegin.AccessibleName = "VitalyImportantBegin";
+			this.txtBoxVitalyImportantBegin.AllowDrop = true;
+			this.txtBoxVitalyImportantBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVitallyImportantBegin", true));
+			this.txtBoxVitalyImportantBegin.Location = new System.Drawing.Point(437, 54);
+			this.txtBoxVitalyImportantBegin.Name = "txtBoxVitalyImportantBegin";
+			this.txtBoxVitalyImportantBegin.ReadOnly = true;
+			this.txtBoxVitalyImportantBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxVitalyImportantBegin.TabIndex = 108;
+			this.txtBoxVitalyImportantBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxVitalyImportantBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxVitalyImportantBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxRegistryCostEnd
+			// 
+			this.txtBoxRegistryCostEnd.AccessibleName = "RegistryCostEnd";
+			this.txtBoxRegistryCostEnd.AllowDrop = true;
+			this.txtBoxRegistryCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRegistryCostEnd", true));
+			this.txtBoxRegistryCostEnd.Location = new System.Drawing.Point(464, 31);
+			this.txtBoxRegistryCostEnd.Name = "txtBoxRegistryCostEnd";
+			this.txtBoxRegistryCostEnd.ReadOnly = true;
+			this.txtBoxRegistryCostEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxRegistryCostEnd.TabIndex = 103;
+			this.txtBoxRegistryCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxRegistryCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxRegistryCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxRegistryCostBegin
+			// 
+			this.txtBoxRegistryCostBegin.AccessibleName = "RegistryCostBegin";
+			this.txtBoxRegistryCostBegin.AllowDrop = true;
+			this.txtBoxRegistryCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRegistryCostBegin", true));
+			this.txtBoxRegistryCostBegin.Location = new System.Drawing.Point(437, 31);
+			this.txtBoxRegistryCostBegin.Name = "txtBoxRegistryCostBegin";
+			this.txtBoxRegistryCostBegin.ReadOnly = true;
+			this.txtBoxRegistryCostBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxRegistryCostBegin.TabIndex = 102;
+			this.txtBoxRegistryCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxRegistryCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxRegistryCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// label42
+			// 
+			this.label42.Location = new System.Drawing.Point(350, 31);
+			this.label42.Name = "label42";
+			this.label42.Size = new System.Drawing.Size(80, 23);
+			this.label42.TabIndex = 101;
+			this.label42.Text = "Реестр. цена :";
+			this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxRequestRatioEnd
+			// 
+			this.txtBoxRequestRatioEnd.AccessibleName = "RequestRatioEnd";
+			this.txtBoxRequestRatioEnd.AllowDrop = true;
+			this.txtBoxRequestRatioEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRequestRatioEnd", true));
+			this.txtBoxRequestRatioEnd.Location = new System.Drawing.Point(464, 8);
+			this.txtBoxRequestRatioEnd.Name = "txtBoxRequestRatioEnd";
+			this.txtBoxRequestRatioEnd.ReadOnly = true;
+			this.txtBoxRequestRatioEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxRequestRatioEnd.TabIndex = 100;
+			this.txtBoxRequestRatioEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxRequestRatioEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxRequestRatioEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxRequestRatioBegin
+			// 
+			this.txtBoxRequestRatioBegin.AccessibleName = "RequestRatioBegin";
+			this.txtBoxRequestRatioBegin.AllowDrop = true;
+			this.txtBoxRequestRatioBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRequestRatioBegin", true));
+			this.txtBoxRequestRatioBegin.Location = new System.Drawing.Point(437, 8);
+			this.txtBoxRequestRatioBegin.Name = "txtBoxRequestRatioBegin";
+			this.txtBoxRequestRatioBegin.ReadOnly = true;
+			this.txtBoxRequestRatioBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxRequestRatioBegin.TabIndex = 99;
+			this.txtBoxRequestRatioBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxRequestRatioBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxRequestRatioBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// label41
+			// 
+			this.label41.Location = new System.Drawing.Point(353, 8);
+			this.label41.Name = "label41";
+			this.label41.Size = new System.Drawing.Size(77, 23);
+			this.label41.TabIndex = 98;
+			this.label41.Text = "Кратность :";
+			this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxAwaitEnd
+			// 
+			this.txtBoxAwaitEnd.AccessibleName = "AwaitEnd";
+			this.txtBoxAwaitEnd.AllowDrop = true;
+			this.txtBoxAwaitEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtAwaitEnd", true));
+			this.txtBoxAwaitEnd.Location = new System.Drawing.Point(283, 146);
+			this.txtBoxAwaitEnd.Name = "txtBoxAwaitEnd";
+			this.txtBoxAwaitEnd.ReadOnly = true;
+			this.txtBoxAwaitEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxAwaitEnd.TabIndex = 97;
+			this.txtBoxAwaitEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxAwaitEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxAwaitEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxJunkEnd
+			// 
+			this.txtBoxJunkEnd.AccessibleName = "JunkEnd";
+			this.txtBoxJunkEnd.AllowDrop = true;
+			this.txtBoxJunkEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtJunkEnd", true));
+			this.txtBoxJunkEnd.Location = new System.Drawing.Point(283, 123);
+			this.txtBoxJunkEnd.Name = "txtBoxJunkEnd";
+			this.txtBoxJunkEnd.ReadOnly = true;
+			this.txtBoxJunkEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxJunkEnd.TabIndex = 96;
+			this.txtBoxJunkEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxJunkEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxJunkEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxAwaitBegin
+			// 
+			this.txtBoxAwaitBegin.AccessibleName = "AwaitBegin";
+			this.txtBoxAwaitBegin.AllowDrop = true;
+			this.txtBoxAwaitBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtAwaitBegin", true));
+			this.txtBoxAwaitBegin.Location = new System.Drawing.Point(256, 146);
+			this.txtBoxAwaitBegin.Name = "txtBoxAwaitBegin";
+			this.txtBoxAwaitBegin.ReadOnly = true;
+			this.txtBoxAwaitBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxAwaitBegin.TabIndex = 95;
+			this.txtBoxAwaitBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxAwaitBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxAwaitBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxJunkBegin
+			// 
+			this.txtBoxJunkBegin.AccessibleName = "JunkBegin";
+			this.txtBoxJunkBegin.AllowDrop = true;
+			this.txtBoxJunkBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtJunkBegin", true));
+			this.txtBoxJunkBegin.Location = new System.Drawing.Point(256, 123);
+			this.txtBoxJunkBegin.Name = "txtBoxJunkBegin";
+			this.txtBoxJunkBegin.ReadOnly = true;
+			this.txtBoxJunkBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxJunkBegin.TabIndex = 94;
+			this.txtBoxJunkBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxJunkBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxJunkBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxMinBoundCostEnd
+			// 
+			this.txtBoxMinBoundCostEnd.AccessibleName = "MinBoundCostEnd";
+			this.txtBoxMinBoundCostEnd.AllowDrop = true;
+			this.txtBoxMinBoundCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMinBoundCostEnd", true));
+			this.txtBoxMinBoundCostEnd.Location = new System.Drawing.Point(283, 100);
+			this.txtBoxMinBoundCostEnd.Name = "txtBoxMinBoundCostEnd";
+			this.txtBoxMinBoundCostEnd.ReadOnly = true;
+			this.txtBoxMinBoundCostEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxMinBoundCostEnd.TabIndex = 93;
+			this.txtBoxMinBoundCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxMinBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxMinBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxMinBoundCostBegin
+			// 
+			this.txtBoxMinBoundCostBegin.AccessibleName = "MinBoundCostBegin";
+			this.txtBoxMinBoundCostBegin.AllowDrop = true;
+			this.txtBoxMinBoundCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMinBoundCostBegin", true));
+			this.txtBoxMinBoundCostBegin.Location = new System.Drawing.Point(256, 100);
+			this.txtBoxMinBoundCostBegin.Name = "txtBoxMinBoundCostBegin";
+			this.txtBoxMinBoundCostBegin.ReadOnly = true;
+			this.txtBoxMinBoundCostBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxMinBoundCostBegin.TabIndex = 92;
+			this.txtBoxMinBoundCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxMinBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.CostsDataGrid_DragEnter);
+			// 
+			// txtBoxCurrencyEnd
+			// 
+			this.txtBoxCurrencyEnd.AccessibleName = "CurrencyEnd";
+			this.txtBoxCurrencyEnd.AllowDrop = true;
+			this.txtBoxCurrencyEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCurrencyEnd", true));
+			this.txtBoxCurrencyEnd.Location = new System.Drawing.Point(283, 77);
+			this.txtBoxCurrencyEnd.Name = "txtBoxCurrencyEnd";
+			this.txtBoxCurrencyEnd.ReadOnly = true;
+			this.txtBoxCurrencyEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxCurrencyEnd.TabIndex = 91;
+			this.txtBoxCurrencyEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxCurrencyEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxCurrencyEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxDocEnd
+			// 
+			this.txtBoxDocEnd.AccessibleName = "DocEnd";
+			this.txtBoxDocEnd.AllowDrop = true;
+			this.txtBoxDocEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtDocEnd", true));
+			this.txtBoxDocEnd.Location = new System.Drawing.Point(283, 54);
+			this.txtBoxDocEnd.Name = "txtBoxDocEnd";
+			this.txtBoxDocEnd.ReadOnly = true;
+			this.txtBoxDocEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxDocEnd.TabIndex = 89;
+			this.txtBoxDocEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxDocEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxDocEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxPeriodEnd
+			// 
+			this.txtBoxPeriodEnd.AccessibleName = "PeriodEnd";
+			this.txtBoxPeriodEnd.AllowDrop = true;
+			this.txtBoxPeriodEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtPeriodEnd", true));
+			this.txtBoxPeriodEnd.Location = new System.Drawing.Point(283, 31);
+			this.txtBoxPeriodEnd.Name = "txtBoxPeriodEnd";
+			this.txtBoxPeriodEnd.ReadOnly = true;
+			this.txtBoxPeriodEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxPeriodEnd.TabIndex = 88;
+			this.txtBoxPeriodEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxPeriodEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxPeriodEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxNoteEnd
+			// 
+			this.txtBoxNoteEnd.AccessibleName = "NoteEnd";
+			this.txtBoxNoteEnd.AllowDrop = true;
+			this.txtBoxNoteEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNoteEnd", true));
+			this.txtBoxNoteEnd.Location = new System.Drawing.Point(283, 8);
+			this.txtBoxNoteEnd.Name = "txtBoxNoteEnd";
+			this.txtBoxNoteEnd.ReadOnly = true;
+			this.txtBoxNoteEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxNoteEnd.TabIndex = 87;
+			this.txtBoxNoteEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxNoteEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxNoteEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxCurrencyBegin
+			// 
+			this.txtBoxCurrencyBegin.AccessibleName = "CurrencyBegin";
+			this.txtBoxCurrencyBegin.AllowDrop = true;
+			this.txtBoxCurrencyBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCurrencyBegin", true));
+			this.txtBoxCurrencyBegin.Location = new System.Drawing.Point(256, 77);
+			this.txtBoxCurrencyBegin.Name = "txtBoxCurrencyBegin";
+			this.txtBoxCurrencyBegin.ReadOnly = true;
+			this.txtBoxCurrencyBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxCurrencyBegin.TabIndex = 86;
+			this.txtBoxCurrencyBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxCurrencyBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxCurrencyBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxDocBegin
+			// 
+			this.txtBoxDocBegin.AccessibleName = "DocBegin";
+			this.txtBoxDocBegin.AllowDrop = true;
+			this.txtBoxDocBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtDocBegin", true));
+			this.txtBoxDocBegin.Location = new System.Drawing.Point(256, 54);
+			this.txtBoxDocBegin.Name = "txtBoxDocBegin";
+			this.txtBoxDocBegin.ReadOnly = true;
+			this.txtBoxDocBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxDocBegin.TabIndex = 84;
+			this.txtBoxDocBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxDocBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxDocBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxPeriodBegin
+			// 
+			this.txtBoxPeriodBegin.AccessibleName = "PeriodBegin";
+			this.txtBoxPeriodBegin.AllowDrop = true;
+			this.txtBoxPeriodBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtPeriodBegin", true));
+			this.txtBoxPeriodBegin.Location = new System.Drawing.Point(256, 31);
+			this.txtBoxPeriodBegin.Name = "txtBoxPeriodBegin";
+			this.txtBoxPeriodBegin.ReadOnly = true;
+			this.txtBoxPeriodBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxPeriodBegin.TabIndex = 83;
+			this.txtBoxPeriodBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxPeriodBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxPeriodBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxNoteBegin
+			// 
+			this.txtBoxNoteBegin.AccessibleName = "NoteBegin";
+			this.txtBoxNoteBegin.AllowDrop = true;
+			this.txtBoxNoteBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNoteBegin", true));
+			this.txtBoxNoteBegin.Location = new System.Drawing.Point(256, 8);
+			this.txtBoxNoteBegin.Name = "txtBoxNoteBegin";
+			this.txtBoxNoteBegin.ReadOnly = true;
+			this.txtBoxNoteBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxNoteBegin.TabIndex = 82;
+			this.txtBoxNoteBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxNoteBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxNoteBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxQuantityEnd
+			// 
+			this.txtBoxQuantityEnd.AccessibleName = "QuantityEnd";
+			this.txtBoxQuantityEnd.AllowDrop = true;
+			this.txtBoxQuantityEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtQuantityEnd", true));
+			this.txtBoxQuantityEnd.Location = new System.Drawing.Point(133, 146);
+			this.txtBoxQuantityEnd.Name = "txtBoxQuantityEnd";
+			this.txtBoxQuantityEnd.ReadOnly = true;
+			this.txtBoxQuantityEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxQuantityEnd.TabIndex = 81;
+			this.txtBoxQuantityEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxQuantityEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxQuantityEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxQuantityBegin
+			// 
+			this.txtBoxQuantityBegin.AccessibleName = "QuantityBegin";
+			this.txtBoxQuantityBegin.AllowDrop = true;
+			this.txtBoxQuantityBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtQuantityBegin", true));
+			this.txtBoxQuantityBegin.Location = new System.Drawing.Point(106, 146);
+			this.txtBoxQuantityBegin.Name = "txtBoxQuantityBegin";
+			this.txtBoxQuantityBegin.ReadOnly = true;
+			this.txtBoxQuantityBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxQuantityBegin.TabIndex = 80;
+			this.txtBoxQuantityBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxQuantityBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxQuantityBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxVolumeEnd
+			// 
+			this.txtBoxVolumeEnd.AccessibleName = "VolumeEnd";
+			this.txtBoxVolumeEnd.AllowDrop = true;
+			this.txtBoxVolumeEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVolumeEnd", true));
+			this.txtBoxVolumeEnd.Location = new System.Drawing.Point(133, 123);
+			this.txtBoxVolumeEnd.Name = "txtBoxVolumeEnd";
+			this.txtBoxVolumeEnd.ReadOnly = true;
+			this.txtBoxVolumeEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxVolumeEnd.TabIndex = 79;
+			this.txtBoxVolumeEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxVolumeEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxVolumeEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxVolumeBegin
+			// 
+			this.txtBoxVolumeBegin.AccessibleName = "VolumeBegin";
+			this.txtBoxVolumeBegin.AllowDrop = true;
+			this.txtBoxVolumeBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVolumeBegin", true));
+			this.txtBoxVolumeBegin.Location = new System.Drawing.Point(106, 123);
+			this.txtBoxVolumeBegin.Name = "txtBoxVolumeBegin";
+			this.txtBoxVolumeBegin.ReadOnly = true;
+			this.txtBoxVolumeBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxVolumeBegin.TabIndex = 78;
+			this.txtBoxVolumeBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxVolumeBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxVolumeBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxUnitEnd
+			// 
+			this.txtBoxUnitEnd.AccessibleName = "UnitEnd";
+			this.txtBoxUnitEnd.AllowDrop = true;
+			this.txtBoxUnitEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtUnitEnd", true));
+			this.txtBoxUnitEnd.Location = new System.Drawing.Point(133, 100);
+			this.txtBoxUnitEnd.Name = "txtBoxUnitEnd";
+			this.txtBoxUnitEnd.ReadOnly = true;
+			this.txtBoxUnitEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxUnitEnd.TabIndex = 77;
+			this.txtBoxUnitEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxUnitEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxUnitEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxUnitBegin
+			// 
+			this.txtBoxUnitBegin.AccessibleName = "UnitBegin";
+			this.txtBoxUnitBegin.AllowDrop = true;
+			this.txtBoxUnitBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtUnitBegin", true));
+			this.txtBoxUnitBegin.Location = new System.Drawing.Point(106, 100);
+			this.txtBoxUnitBegin.Name = "txtBoxUnitBegin";
+			this.txtBoxUnitBegin.ReadOnly = true;
+			this.txtBoxUnitBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxUnitBegin.TabIndex = 76;
+			this.txtBoxUnitBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxUnitBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxUnitBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxFirmCrEnd
+			// 
+			this.txtBoxFirmCrEnd.AccessibleName = "FirmCrEnd";
+			this.txtBoxFirmCrEnd.AllowDrop = true;
+			this.txtBoxFirmCrEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtFirmCrEnd", true));
+			this.txtBoxFirmCrEnd.Location = new System.Drawing.Point(133, 77);
+			this.txtBoxFirmCrEnd.Name = "txtBoxFirmCrEnd";
+			this.txtBoxFirmCrEnd.ReadOnly = true;
+			this.txtBoxFirmCrEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxFirmCrEnd.TabIndex = 75;
+			this.txtBoxFirmCrEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxFirmCrEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxFirmCrEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxFirmCrBegin
+			// 
+			this.txtBoxFirmCrBegin.AccessibleName = "FirmCrBegin";
+			this.txtBoxFirmCrBegin.AllowDrop = true;
+			this.txtBoxFirmCrBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtFirmCrBegin", true));
+			this.txtBoxFirmCrBegin.Location = new System.Drawing.Point(106, 77);
+			this.txtBoxFirmCrBegin.Name = "txtBoxFirmCrBegin";
+			this.txtBoxFirmCrBegin.ReadOnly = true;
+			this.txtBoxFirmCrBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxFirmCrBegin.TabIndex = 74;
+			this.txtBoxFirmCrBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxFirmCrBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxFirmCrBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxName1End
+			// 
+			this.txtBoxName1End.AccessibleName = "Name1End";
+			this.txtBoxName1End.AllowDrop = true;
+			this.txtBoxName1End.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNameEnd", true));
+			this.txtBoxName1End.Location = new System.Drawing.Point(133, 54);
+			this.txtBoxName1End.Name = "txtBoxName1End";
+			this.txtBoxName1End.ReadOnly = true;
+			this.txtBoxName1End.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxName1End.TabIndex = 73;
+			this.txtBoxName1End.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxName1End.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxName1End.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxName1Begin
+			// 
+			this.txtBoxName1Begin.AccessibleName = "Name1Begin";
+			this.txtBoxName1Begin.AllowDrop = true;
+			this.txtBoxName1Begin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNameBegin", true));
+			this.txtBoxName1Begin.Location = new System.Drawing.Point(106, 54);
+			this.txtBoxName1Begin.Name = "txtBoxName1Begin";
+			this.txtBoxName1Begin.ReadOnly = true;
+			this.txtBoxName1Begin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxName1Begin.TabIndex = 72;
+			this.txtBoxName1Begin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxName1Begin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxName1Begin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxCodeCrEnd
+			// 
+			this.txtBoxCodeCrEnd.AccessibleName = "CodeCrEnd";
+			this.txtBoxCodeCrEnd.AllowDrop = true;
+			this.txtBoxCodeCrEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeCrEnd", true));
+			this.txtBoxCodeCrEnd.Location = new System.Drawing.Point(133, 31);
+			this.txtBoxCodeCrEnd.Name = "txtBoxCodeCrEnd";
+			this.txtBoxCodeCrEnd.ReadOnly = true;
+			this.txtBoxCodeCrEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxCodeCrEnd.TabIndex = 71;
+			this.txtBoxCodeCrEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxCodeCrEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxCodeCrEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxCodeCrBegin
+			// 
+			this.txtBoxCodeCrBegin.AccessibleName = "CodeCrBegin";
+			this.txtBoxCodeCrBegin.AllowDrop = true;
+			this.txtBoxCodeCrBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeCrBegin", true));
+			this.txtBoxCodeCrBegin.Location = new System.Drawing.Point(106, 31);
+			this.txtBoxCodeCrBegin.Name = "txtBoxCodeCrBegin";
+			this.txtBoxCodeCrBegin.ReadOnly = true;
+			this.txtBoxCodeCrBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxCodeCrBegin.TabIndex = 70;
+			this.txtBoxCodeCrBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxCodeCrBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxCodeCrBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// txtBoxCodeEnd
+			// 
+			this.txtBoxCodeEnd.AccessibleName = "CodeEnd";
+			this.txtBoxCodeEnd.AllowDrop = true;
+			this.txtBoxCodeEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeEnd", true));
+			this.txtBoxCodeEnd.Location = new System.Drawing.Point(133, 8);
+			this.txtBoxCodeEnd.Name = "txtBoxCodeEnd";
+			this.txtBoxCodeEnd.ReadOnly = true;
+			this.txtBoxCodeEnd.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxCodeEnd.TabIndex = 69;
+			this.txtBoxCodeEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxCodeEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxCodeEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// label24
+			// 
+			this.label24.Location = new System.Drawing.Point(173, 146);
+			this.label24.Name = "label24";
+			this.label24.Size = new System.Drawing.Size(77, 23);
+			this.label24.TabIndex = 63;
+			this.label24.Text = "Ожидается :";
+			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label25
+			// 
+			this.label25.Location = new System.Drawing.Point(173, 123);
+			this.label25.Name = "label25";
+			this.label25.Size = new System.Drawing.Size(77, 23);
+			this.label25.TabIndex = 62;
+			this.label25.Text = "Срок :";
+			this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label26
+			// 
+			this.label26.Location = new System.Drawing.Point(173, 100);
+			this.label26.Name = "label26";
+			this.label26.Size = new System.Drawing.Size(80, 23);
+			this.label26.TabIndex = 61;
+			this.label26.Text = "Цена мин. :";
+			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label27
+			// 
+			this.label27.Location = new System.Drawing.Point(194, 77);
+			this.label27.Name = "label27";
+			this.label27.Size = new System.Drawing.Size(56, 23);
+			this.label27.TabIndex = 60;
+			this.label27.Text = "Валюта :";
+			this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label29
+			// 
+			this.label29.Location = new System.Drawing.Point(158, 54);
+			this.label29.Name = "label29";
+			this.label29.Size = new System.Drawing.Size(92, 23);
+			this.label29.TabIndex = 52;
+			this.label29.Text = "Документ :";
+			this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label30
+			// 
+			this.label30.Location = new System.Drawing.Point(158, 31);
+			this.label30.Name = "label30";
+			this.label30.Size = new System.Drawing.Size(95, 23);
+			this.label30.TabIndex = 51;
+			this.label30.Text = "Срок годности :";
+			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label31
+			// 
+			this.label31.Location = new System.Drawing.Point(166, 8);
+			this.label31.Name = "label31";
+			this.label31.Size = new System.Drawing.Size(84, 23);
+			this.label31.TabIndex = 50;
+			this.label31.Text = "Примечание :";
+			this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label32
+			// 
+			this.label32.Location = new System.Drawing.Point(16, 146);
+			this.label32.Name = "label32";
+			this.label32.Size = new System.Drawing.Size(84, 23);
+			this.label32.TabIndex = 49;
+			this.label32.Text = "Количество :";
+			this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label33
+			// 
+			this.label33.Location = new System.Drawing.Point(20, 123);
+			this.label33.Name = "label33";
+			this.label33.Size = new System.Drawing.Size(80, 23);
+			this.label33.TabIndex = 48;
+			this.label33.Text = "Цех. уп. :";
+			this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label34
+			// 
+			this.label34.Location = new System.Drawing.Point(2, 100);
+			this.label34.Name = "label34";
+			this.label34.Size = new System.Drawing.Size(100, 23);
+			this.label34.TabIndex = 47;
+			this.label34.Text = "Ед. измерения :";
+			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxCodeBegin
+			// 
+			this.txtBoxCodeBegin.AccessibleName = "CodeBegin";
+			this.txtBoxCodeBegin.AllowDrop = true;
+			this.txtBoxCodeBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeBegin", true));
+			this.txtBoxCodeBegin.Location = new System.Drawing.Point(106, 8);
+			this.txtBoxCodeBegin.Name = "txtBoxCodeBegin";
+			this.txtBoxCodeBegin.ReadOnly = true;
+			this.txtBoxCodeBegin.Size = new System.Drawing.Size(27, 20);
+			this.txtBoxCodeBegin.TabIndex = 41;
+			this.txtBoxCodeBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.txtBoxCodeBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxCodeBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			// 
+			// label35
+			// 
+			this.label35.Location = new System.Drawing.Point(1, 77);
+			this.label35.Name = "label35";
+			this.label35.Size = new System.Drawing.Size(100, 23);
+			this.label35.TabIndex = 40;
+			this.label35.Text = "Производитель :";
+			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label38
+			// 
+			this.label38.Location = new System.Drawing.Point(3, 54);
+			this.label38.Name = "label38";
+			this.label38.Size = new System.Drawing.Size(98, 23);
+			this.label38.TabIndex = 37;
+			this.label38.Text = "Наименование 1 :";
+			this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label39
+			// 
+			this.label39.Location = new System.Drawing.Point(2, 31);
+			this.label39.Name = "label39";
+			this.label39.Size = new System.Drawing.Size(100, 23);
+			this.label39.TabIndex = 36;
+			this.label39.Text = "Код производ. :";
+			this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label40
+			// 
+			this.label40.Location = new System.Drawing.Point(2, 8);
+			this.label40.Name = "label40";
+			this.label40.Size = new System.Drawing.Size(100, 23);
+			this.label40.TabIndex = 35;
+			this.label40.Text = "Код :";
+			this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label46
+			// 
+			this.label46.Location = new System.Drawing.Point(314, 54);
+			this.label46.Name = "label46";
+			this.label46.Size = new System.Drawing.Size(116, 23);
+			this.label46.TabIndex = 107;
+			this.label46.Text = "Жизненно важный :";
+			this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// grpbSettings
 			// 
 			this.grpbSettings.Controls.Add(this.pnlSettings);
@@ -3410,10 +3497,10 @@ namespace FREditor
 			((System.ComponentModel.ISupportInitialize)(this.indgvCosts)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.bsCostsFormRules)).EndInit();
 			this.grpbFields.ResumeLayout(false);
-			this.pnlTxtFields.ResumeLayout(false);
-			this.pnlTxtFields.PerformLayout();
 			this.pnlGeneralFields.ResumeLayout(false);
 			this.pnlGeneralFields.PerformLayout();
+			this.pnlTxtFields.ResumeLayout(false);
+			this.pnlTxtFields.PerformLayout();
 			this.grpbSettings.ResumeLayout(false);
 			this.pnlSettings.ResumeLayout(false);
 			this.pnlSettings.PerformLayout();
@@ -3749,5 +3836,13 @@ namespace FREditor
         private System.Windows.Forms.Label label45;
 		private System.Windows.Forms.ComboBox cmbParentRules;
 		private System.Windows.Forms.ComboBox cmbParentSynonyms;
+		private System.Data.DataColumn FRFOrderCost;
+		private System.Data.DataColumn FRTxtOrderCostBegin;
+		private System.Data.DataColumn FRTxtOrderCostEnd;
+		private System.Windows.Forms.Label label48;
+		private System.Windows.Forms.TextBox txtBoxOrderCost;
+		private System.Windows.Forms.TextBox txtBoxOrderCostEnd;
+		private System.Windows.Forms.TextBox txtBoxOrderCostBegin;
+		private System.Windows.Forms.Label label49;
     }
 }

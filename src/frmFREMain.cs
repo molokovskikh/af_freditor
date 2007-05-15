@@ -60,8 +60,8 @@ namespace FREditor
         DataTable dtPrice = new DataTable();
 
 #if DEBUG
-		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
-		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+		//private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #endif
@@ -179,7 +179,6 @@ namespace FREditor
   NameMask = ?FRNameMask,
   ForbWords = ?FRForbWords,
   VitallyImportantMask = ?FRVitallyImportantMask,
-  FMaxBoundCost = ?FRFMaxBoundCost,
 
   TxtCodeBegin = ?FRTxtCodeBegin,
   TxtCodeEnd = ?FRTxtCodeEnd,
@@ -221,6 +220,8 @@ namespace FREditor
   TxtVitallyImportantEnd = ?FRTxtVitallyImportantEnd,
   TxtMaxBoundCostBegin = ?FRTxtMaxBoundCostBegin,
   TxtMaxBoundCostEnd = ?FRTxtMaxBoundCostEnd,
+  TxtOrderCostBegin = ?FRTxtOrderCostBegin,
+  TxtOrderCostEnd = ?FRTxtOrderCostEnd,
 
   FCode = ?FRFCode,
   FCodeCr = ?FRFCodeCr,
@@ -242,6 +243,8 @@ namespace FREditor
   FRequestRatio = ?FRFRequestRatio,
   FRegistryCost = ?FRFRegistryCost,
   FVitallyImportant = ?FRFVitallyImportant,
+  FMaxBoundCost = ?FRFMaxBoundCost,
+  FOrderCost = ?FRFOrderCost,
 
   Memo = ?FRMemo
 where
@@ -292,6 +295,8 @@ where
             this.mcmdUFormRules.Parameters.Add("?FRTxtVitallyImportantEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUFormRules.Parameters.Add("?FRTxtMaxBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUFormRules.Parameters.Add("?FRTxtMaxBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUFormRules.Parameters.Add("?FRTxtOrderCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUFormRules.Parameters.Add("?FRTxtOrderCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);			
 
             this.mcmdUFormRules.Parameters.Add("?FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString);
@@ -325,6 +330,7 @@ where
             this.mcmdUFormRules.Parameters.Add("?FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFMaxBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+			this.mcmdUFormRules.Parameters.Add("?FRFOrderCost", MySql.Data.MySqlClient.MySqlDbType.VarString);			
             this.mcmdUFormRules.Parameters.Add("?FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString);
 
             foreach (MySqlParameter ms in this.mcmdUFormRules.Parameters)
@@ -694,7 +700,7 @@ order by 2";
         private void dtFormRulesFill(string param)
         {
             MyCmd.CommandText =
-                @"SELECT
+				@"SELECT
     IF(FR.ParentFormRules,FR.ParentFormRules,FR.FirmCode) AS FormID,
     FR.ParentSynonym AS FRSynonyms,
     FR.FirmCode AS FRPriceCode,
@@ -778,6 +784,10 @@ order by 2";
 	PFR.TxtMaxBoundCostBegin as FRTxtMaxBoundCostBegin,
 	PFR.TxtMaxBoundCostEnd as FRTxtMaxBoundCostEnd,
 
+	PFR.TxtOrderCostBegin as FRTxtOrderCostBegin,
+	PFR.TxtOrderCostEnd as FRTxtOrderCostEnd,
+
+
 	PFR.FCode as FRFCode,
 	PFR.FCodeCr as FRFCodeCr,
 	PFR.FName1 as FRFName1,
@@ -799,6 +809,7 @@ order by 2";
 	PFR.FRegistryCost as FRFRegistryCost,
 	PFR.FVitallyImportant as FRFVitallyImportant,
 	PFR.FMaxBoundCost as FRFMaxBoundCost,
+	PFR.FOrderCost as FRFOrderCost,
 
     -- PFR.*,
     CD.FirmStatus,
