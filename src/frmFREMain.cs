@@ -90,8 +90,6 @@ namespace FREditor
 		//Текущий клиент, с которым происходит работа и текущий прайс
 		long currentPriceCode = 0;
 		long currentClientCode = 0;
-		string delimiter0 = String.Empty;
-        string fmt0 = String.Empty;
         long startLine = 0;
         string[] FFieldNames;
         string existParentRules = String.Empty;
