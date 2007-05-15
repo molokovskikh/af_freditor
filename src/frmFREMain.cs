@@ -159,10 +159,10 @@ namespace FREditor
             indgvMarking.DataSource = dtSet;
             indgvMarking.DataMember = dtMarking.TableName;
 
-            this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRCost_Code", System.Data.DataRowVersion.Current, null));
-            this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRFieldName", System.Data.DataRowVersion.Current, null));
-			this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRTextBegin", System.Data.DataRowVersion.Current, null));
-			this.mcmdUCostRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("TxtEnd", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), "CFRTextEnd", System.Data.DataRowVersion.Current, null));
+            this.mcmdUCostRules.Parameters.Add("?CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRCost_Code");
+            this.mcmdUCostRules.Parameters.Add("?FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRFieldName");
+			this.mcmdUCostRules.Parameters.Add("?TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextBegin");
+			this.mcmdUCostRules.Parameters.Add("?TxtEnd", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextEnd");
 
             this.mcmdUFormRules.CommandText =
 @"UPDATE formrules SET
@@ -248,90 +248,90 @@ namespace FREditor
   Memo = ?FRMemo
 where
   FirmCode = ?FRPriceCode;";
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRSynonyms", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRRules", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("SelfFlag", MySql.Data.MySqlClient.MySqlDbType.Int16, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRStartLine", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add("?FRPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
+            this.mcmdUFormRules.Parameters.Add("?FRSynonyms", MySql.Data.MySqlClient.MySqlDbType.Int64);
+            this.mcmdUFormRules.Parameters.Add("?FRRules", MySql.Data.MySqlClient.MySqlDbType.Int64);
+            this.mcmdUFormRules.Parameters.Add("?SelfFlag", MySql.Data.MySqlClient.MySqlDbType.Int16);
+            this.mcmdUFormRules.Parameters.Add("?FRStartLine", MySql.Data.MySqlClient.MySqlDbType.Int32);
 
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCodeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCodeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCodeCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCodeCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtNameBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtNameEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtFirmCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtFirmCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCountryCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCountryCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtBaseCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtBaseCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtMinBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtMinBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCurrencyBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtCurrencyEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtUnitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtUnitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVolumeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVolumeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtQuantityBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtQuantityEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtNoteBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtNoteEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtPeriodBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtPeriodEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtDocBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtDocEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtJunkBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtJunkEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtAwaitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtAwaitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRequestRatioBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRequestRatioEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRegistryCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtRegistryCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVitallyImportantBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtVitallyImportantEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtMaxBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRTxtMaxBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add("?FRTxtCodeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtCodeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtCodeCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtCodeCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtNameBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtNameEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtFirmCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtFirmCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtCountryCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtCountryCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtBaseCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtBaseCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtMinBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtMinBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtCurrencyBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtCurrencyEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtUnitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtUnitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtVolumeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtVolumeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtQuantityBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtQuantityEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtNoteBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtNoteEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtPeriodBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtPeriodEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtDocBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtDocEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtJunkBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtJunkEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtAwaitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtAwaitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtRequestRatioBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtRequestRatioEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtRegistryCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtRegistryCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtVitallyImportantBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtVitallyImportantEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtMaxBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUFormRules.Parameters.Add("?FRTxtMaxBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
 
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRPosNum", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRSelfJunkPos", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRSelfAwaitPos", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFormat", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRListName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRNameMask", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRForbWords", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRVitallyImportantMask", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add("?FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRPosNum", MySql.Data.MySqlClient.MySqlDbType.Int64);
+            this.mcmdUFormRules.Parameters.Add("?FRSelfJunkPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRSelfAwaitPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFormat", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRListName", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRNameMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRForbWords", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRVitallyImportantMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
 
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFCode", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFCodeCr", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFName1", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFName2", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFName3", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFFirmCr", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFBaseCost", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFMinBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFUnit", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFVolume", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFQuantity", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFNote", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFPeriod", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFDoc", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFJunk", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFAwait", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFRequestRatio", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRFMaxBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-            this.mcmdUFormRules.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+            this.mcmdUFormRules.Parameters.Add("?FRFCode", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFCodeCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFName1", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFName2", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFName3", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFFirmCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFBaseCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFMinBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFUnit", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFVolume", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFQuantity", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFNote", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFPeriod", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFDoc", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFJunk", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFAwait", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFRequestRatio", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRFMaxBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUFormRules.Parameters.Add("?FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString);
 
             foreach (MySqlParameter ms in this.mcmdUFormRules.Parameters)
             {
-                ms.SourceColumn = ms.ParameterName;
+                ms.SourceColumn = ms.ParameterName.Substring(1);
             }
 
             MyCn.Open();
@@ -341,8 +341,6 @@ where
             dtCatalogCurrencyFill();
             dtPriceFMTsFill();
             cbRegionsFill();
-            //FillTables(String.Empty, 0, -1);
-
 
             MyCn.Close();
         }
@@ -462,11 +460,11 @@ where
                 MyCmd.Parameters.Clear();
 
                 if (shname != String.Empty)
-                    MyCmd.Parameters.Add("ShortName", "%" + shname + "%");
+                    MyCmd.Parameters.Add("?ShortName", "%" + shname + "%");
                 if (regcode != 0)
-                    MyCmd.Parameters.Add("RegionCode", regcode);
+                    MyCmd.Parameters.Add("?RegionCode", regcode);
                 if (seg != -1)
-                    MyCmd.Parameters.Add("Segment", seg);
+                    MyCmd.Parameters.Add("?Segment", seg);
 
                 FilterParams = AddParams(shname, regcode, seg);
 
@@ -530,7 +528,7 @@ union all
 SELECT 
   distinct
   pd.FirmCode AS PFirmCode,
-  if((parentpd.PriceCode = pc.pricecode), pd.PriceName, concat('[Колонка] ', pc.CostName)) AS PFirmName,,
+  if((parentpd.PriceCode = pc.pricecode), pd.PriceName, concat('[Колонка] ', pc.CostName)) AS PFirmName,
   pc.CostCode as PPriceCode,
   fr.DatePrevPrice as PDatePrevPrice,
   fr.DateCurPrice as PDateCurPrice,
@@ -2276,8 +2274,8 @@ and pd.CostType = 1
                         try
                         {
                             MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
-                            SetCMD.Parameters.Add("INHost", Environment.MachineName);
-                            SetCMD.Parameters.Add("INUser", Environment.UserName);
+                            SetCMD.Parameters.Add("?INHost", Environment.MachineName);
+                            SetCMD.Parameters.Add("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
 
                             mcmdUCostRules.Connection = MyCn;
@@ -2316,8 +2314,8 @@ and pd.CostType = 1
                         try
                         {
                             MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
-                            SetCMD.Parameters.Add("INHost", Environment.MachineName);
-                            SetCMD.Parameters.Add("INUser", Environment.UserName);
+                            SetCMD.Parameters.Add("?INHost", Environment.MachineName);
+                            SetCMD.Parameters.Add("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
 
                             MySqlCommand mcmdUPrice = new MySqlCommand();
@@ -2334,16 +2332,16 @@ UPDATE farm.FormRules fr SET
 WHERE fr.FirmCode = ?PPriceCode;";
 
                             mcmdUPrice.Parameters.Clear();
-                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PPriceType", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PCostType", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PWaitingDownloadInterval", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PMaxOld", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-                            mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
-							mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PIsParent", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+                            mcmdUPrice.Parameters.Add("?PPriceType", MySql.Data.MySqlClient.MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PCostType", MySql.Data.MySqlClient.MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PWaitingDownloadInterval", MySql.Data.MySqlClient.MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PMaxOld", MySql.Data.MySqlClient.MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
+							mcmdUPrice.Parameters.Add("?PIsParent", MySql.Data.MySqlClient.MySqlDbType.Int32);
 
                             foreach (MySqlParameter ms in mcmdUPrice.Parameters)
                             {
-                                ms.SourceColumn = ms.ParameterName;
+                                ms.SourceColumn = ms.ParameterName.Substring(1);
                             }
 
                             mcmdUPrice.Connection = MyCn;
