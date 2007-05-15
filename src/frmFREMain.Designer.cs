@@ -1155,10 +1155,12 @@ namespace FREditor
 			// MBeginField
 			// 
 			this.MBeginField.ColumnName = "MBeginField";
+			this.MBeginField.DataType = typeof(int);
 			// 
 			// MEndField
 			// 
 			this.MEndField.ColumnName = "MEndField";
+			this.MEndField.DataType = typeof(int);
 			// 
 			// dtCostsFormRules
 			// 
@@ -1676,7 +1678,7 @@ namespace FREditor
 			// indgvMarking
 			// 
 			this.indgvMarking.AllowDrop = true;
-			this.indgvMarking.AllowUserToAddRows = false;
+			this.indgvMarking.AllowUserToResizeRows = false;
 			this.indgvMarking.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.indgvMarking.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvMarking.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -1695,9 +1697,6 @@ namespace FREditor
 			this.indgvMarking.HideEmptyColumns = false;
 			this.indgvMarking.Location = new System.Drawing.Point(0, 0);
 			this.indgvMarking.Name = "indgvMarking";
-			this.indgvMarking.ReadOnly = true;
-			this.indgvMarking.RowHeadersVisible = false;
-			this.indgvMarking.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
 			this.indgvMarking.Size = new System.Drawing.Size(824, 498);
 			this.indgvMarking.TabIndex = 7;
 			// 
@@ -1706,21 +1705,18 @@ namespace FREditor
 			this.MNameFieldINDataGridViewTextBoxColumn.DataPropertyName = "MNameField";
 			this.MNameFieldINDataGridViewTextBoxColumn.HeaderText = "Наименование колонки";
 			this.MNameFieldINDataGridViewTextBoxColumn.Name = "MNameFieldINDataGridViewTextBoxColumn";
-			this.MNameFieldINDataGridViewTextBoxColumn.ReadOnly = true;
 			// 
 			// MBeginFieldINDataGridViewTextBoxColumn
 			// 
 			this.MBeginFieldINDataGridViewTextBoxColumn.DataPropertyName = "MBeginField";
 			this.MBeginFieldINDataGridViewTextBoxColumn.HeaderText = "Начало";
 			this.MBeginFieldINDataGridViewTextBoxColumn.Name = "MBeginFieldINDataGridViewTextBoxColumn";
-			this.MBeginFieldINDataGridViewTextBoxColumn.ReadOnly = true;
 			// 
 			// MEndFieldINDataGridViewTextBoxColumn
 			// 
 			this.MEndFieldINDataGridViewTextBoxColumn.DataPropertyName = "MEndField";
 			this.MEndFieldINDataGridViewTextBoxColumn.HeaderText = "Конец";
 			this.MEndFieldINDataGridViewTextBoxColumn.Name = "MEndFieldINDataGridViewTextBoxColumn";
-			this.MEndFieldINDataGridViewTextBoxColumn.ReadOnly = true;
 			// 
 			// btnFloatPanel
 			// 

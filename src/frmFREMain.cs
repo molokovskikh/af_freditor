@@ -156,9 +156,6 @@ namespace FREditor
             cbSegment.DisplayMember = "Segment";
             cbSegment.ValueMember = "ID";
 
-            indgvMarking.DataSource = dtSet;
-            indgvMarking.DataMember = dtMarking.TableName;
-
             this.mcmdUCostRules.Parameters.Add("?CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRCost_Code");
             this.mcmdUCostRules.Parameters.Add("?FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRFieldName");
 			this.mcmdUCostRules.Parameters.Add("?TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextBegin");
@@ -1286,7 +1283,7 @@ and pd.CostType = 1
                 {
                     mdr = dtMarking.NewRow();
                     mdr["MNameField"] = currTFD.fieldName;
-                    mdr["MBeginField"] = "1";
+                    mdr["MBeginField"] = 1;
                     mdr["MEndField"] = currTFD.posEnd;
                     dtMarking.Rows.Add(mdr);
                 }
@@ -1294,7 +1291,7 @@ and pd.CostType = 1
                 {
                     mdr = dtMarking.NewRow();
                     mdr["MNameField"] = String.Format("x{0}", countx);
-                    mdr["MBeginField"] = "1";
+                    mdr["MBeginField"] = 1;
                     mdr["MEndField"] = currTFD.posBegin-1;
                     dtMarking.Rows.Add(mdr);
 
@@ -1342,7 +1339,7 @@ and pd.CostType = 1
                     mdr = dtMarking.NewRow();
                     mdr["MNameField"] = String.Format("x{0}", countx);
                     mdr["MBeginField"] = lastTFD.posEnd + 1;
-                    mdr["MEndField"] = "255";
+                    mdr["MEndField"] = 255;
                     dtMarking.Rows.Add(mdr);
                 }
             }
@@ -1350,11 +1347,11 @@ and pd.CostType = 1
             {
                 mdr = dtMarking.NewRow();
                 mdr["MNameField"] = "x1";
-                mdr["MBeginField"] = "1";
-                mdr["MEndField"] = "255";
+                mdr["MBeginField"] = 1;
+                mdr["MEndField"] = 255;
                 dtMarking.Rows.Add(mdr);
             }
-            dtSet.AcceptChanges();
+			dtMarking.AcceptChanges();
         }
 
         private void OpenTXTFFile(string filePath, DataRow dr)
@@ -1396,10 +1393,11 @@ and pd.CostType = 1
             int i = 1;
             if (dtMarking.Rows.Count > 2)
             {
-                while ((i < dtMarking.Rows.Count) && (flag))
+				DataTable newMarking = dtMarking.DefaultView.ToTable();
+				while ((i < newMarking.Rows.Count) && (flag))
                 {
-                    DataRow drP = dtMarking.Rows[i - 1];
-                    DataRow drN = dtMarking.Rows[i];
+					DataRow drP = newMarking.Rows[i - 1];
+					DataRow drN = newMarking.Rows[i];
                     if ((!(drP["MBeginField"] is DBNull)) || (!(drP["MEndField"] is DBNull)))
                     {
                         int beg = Convert.ToInt32(drP["MBeginField"]);
@@ -1511,6 +1509,10 @@ and pd.CostType = 1
                     OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from {0}", System.IO.Path.GetFileName(TxtFilePath).Replace(".", "#")), dbcMain);
                     indgvPriceData.Columns.Clear();
 
+					dtPrice.Rows.Clear();
+					dtPrice.Columns.Clear();
+					dtPrice.Clear();
+
                     CreateThread(da, dtPrice, indgvPriceData);
                 }
                 finally
@@ -1560,7 +1562,6 @@ and pd.CostType = 1
                         fW = null;
                     }
                 }
-                dtSet.AcceptChanges();
             }
             else if (tcInnerTable.SelectedTab == tbpMarking)
             {
@@ -2510,6 +2511,8 @@ WHERE fr.FirmCode = ?PPriceCode;";
 
         private void LoadMarkingSettings()
         {
+			dtMarking.DefaultView.Sort = "MBeginField";
+			indgvMarking.DataSource = dtMarking.DefaultView;
             indgvMarking.LoadSettings(BaseRegKey + "\\MarkingDataGrid");
         }
 
@@ -2730,11 +2733,6 @@ WHERE fr.FirmCode = ?PPriceCode;";
             {
                 e.Handled = true;
                 
-                CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-                DataRowView drv = (DataRowView)currencyManager.Current;
-                DataView dv = (DataView)currencyManager.List;
-
-                DataRow drP = drv.Row;
                 if(CostIsValid())                
                 {
                     fcs = dgFocus.Price;
