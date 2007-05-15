@@ -895,6 +895,9 @@ and pd.CostType = 1
 
             fmt = drFR[0]["FRFormat"].ToString();
 
+			FillParentComboBox(cmbParentRules, drFR[0]["FRRules"]);
+			FillParentComboBox(cmbParentSynonyms, drFR[0]["FRSynonyms"]);
+
             string r = ".err";
             DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + fmt + "'");
             if (exts.Length == 1)
@@ -953,6 +956,69 @@ and pd.CostType = 1
                 Application.DoEvents();
             }
         }
+
+		private void FillParentComboBox(ComboBox cmbParent, object ParentValue)
+		{
+			DataSet ParentDS = MySqlHelper.ExecuteDataset(MyCn, @"
+select
+  pd.PriceCode,
+  concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
+from
+  usersettings.clientsdata cd,
+  usersettings.pricesdata pd,
+  farm.regions r
+where
+  pd.FirmCode = cd.FirmCode
+and pd.CostType is not null
+and r.RegionCode = cd.RegionCode
+and pd.PriceCode = ?PriceCode
+order by 2", new MySqlParameter("?PriceCode", ParentValue));
+			FillParentComboBoxFromTable(cmbParent, ParentDS.Tables[0]);
+		}
+
+		private void FillParentComboBoxBySearch(ComboBox cmbParent)
+		{
+			//Возможно есть способ более проще получить значение биндинга
+			object SelectedValue = ((DataRowView)bsFormRules.Current).Row[cmbParent.DataBindings["SelectedValue"].BindingMemberInfo.BindingField];
+			DataSet ParentDS = MySqlHelper.ExecuteDataset(MyCn, @"
+select
+  distinct
+  pd.PriceCode,
+  concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
+from
+  usersettings.clientsdata cd,
+  usersettings.pricesdata pd,
+  farm.regions r
+where
+  pd.FirmCode = cd.FirmCode
+and pd.CostType is not null
+and r.RegionCode = cd.RegionCode
+and ((pd.PriceCode = ?PrevPriceCode) or (pd.PriceName like ?SearchText) or (cd.ShortName like ?SearchText))
+order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParameter("?SearchText", "%" + cmbParent.Text + "%"));
+			FillParentComboBoxFromTable(cmbParent, ParentDS.Tables[0]);
+		}
+
+		private void FillParentComboBoxFromTable(ComboBox cmbParent, DataTable dtParent)
+		{
+			bsFormRules.SuspendBinding();
+			try
+			{
+				cmbParent.DataSource = null;
+				cmbParent.Items.Clear();
+				DataRow drNull = dtParent.NewRow();
+				drNull["PriceCode"] = DBNull.Value;
+				drNull["PriceName"] = "<не установлены>";
+				dtParent.Rows.InsertAt(drNull, 0);
+				cmbParent.Items.Add(drNull);
+				cmbParent.DataSource = dtParent;
+				cmbParent.DisplayMember = "PriceName";
+				cmbParent.ValueMember = "PriceCode";
+			}
+			finally
+			{
+				bsFormRules.ResumeBinding();
+			}
+		}
 
         private void ShowTab(string fmt)
         {
@@ -1706,13 +1772,14 @@ and pd.CostType = 1
 					currentClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
 					currentPriceCode = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceCode.ColumnName]);
 
-                    DoOpenPrice(drP);
+					bsCostsFormRules.Filter = "CFRfr_if = " + drP[PPriceCode.ColumnName].ToString();
+					bsFormRules.Filter = "FRPriceCode = " + drP[PPriceCode.ColumnName].ToString();
+					bsCostsFormRules.ResumeBinding();
+					bsFormRules.ResumeBinding();
+
+					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
-                    bsCostsFormRules.Filter = "CFRfr_if = " + drP[PPriceCode.ColumnName].ToString();
-                    bsFormRules.Filter = "FRPriceCode = " + drP[PPriceCode.ColumnName].ToString();
-                    bsCostsFormRules.ResumeBinding();
-                    bsFormRules.ResumeBinding();
-                }
+				}
         }
 
 		private void RefreshDataBind()
@@ -2782,6 +2849,14 @@ WHERE fr.FirmCode = ?PPriceCode;";
         {
             FindErrors(txtBoxVitallyImportantMask, txtBoxVitalyImportant, txtBoxVitalyImportantBegin, txtBoxVitalyImportantEnd);
         }
+
+		private void cmbParentComboBox_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				FillParentComboBoxBySearch((ComboBox)sender);
+			}
+		}
 
     }
 

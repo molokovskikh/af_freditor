@@ -192,10 +192,10 @@ namespace FREditor
 			this.lLblMaster = new System.Windows.Forms.LinkLabel();
 			this.lblMaster = new System.Windows.Forms.Label();
 			this.grpbParent = new System.Windows.Forms.GroupBox();
+			this.cmbParentSynonyms = new System.Windows.Forms.ComboBox();
+			this.cmbParentRules = new System.Windows.Forms.ComboBox();
 			this.lblSynonyms = new System.Windows.Forms.Label();
 			this.lblRules = new System.Windows.Forms.Label();
-			this.tbSynonyms = new System.Windows.Forms.TextBox();
-			this.tbRules = new System.Windows.Forms.TextBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.lblDevider = new System.Windows.Forms.Label();
 			this.tbDevider = new System.Windows.Forms.TextBox();
@@ -1294,12 +1294,12 @@ namespace FREditor
 			// 
 			// cbSegment
 			// 
+			this.cbSegment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbSegment.FormattingEnabled = true;
 			this.cbSegment.Location = new System.Drawing.Point(470, 5);
 			this.cbSegment.Name = "cbSegment";
 			this.cbSegment.Size = new System.Drawing.Size(121, 21);
 			this.cbSegment.TabIndex = 5;
-			this.cbSegment.Text = "Все";
 			this.cbSegment.SelectedValueChanged += new System.EventHandler(this.cbRegions_SelectedValueChanged);
 			// 
 			// label28
@@ -1313,12 +1313,12 @@ namespace FREditor
 			// 
 			// cbRegions
 			// 
+			this.cbRegions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbRegions.FormattingEnabled = true;
 			this.cbRegions.Location = new System.Drawing.Point(275, 5);
 			this.cbRegions.Name = "cbRegions";
 			this.cbRegions.Size = new System.Drawing.Size(121, 21);
 			this.cbRegions.TabIndex = 3;
-			this.cbRegions.Text = "Все";
 			this.cbRegions.SelectedValueChanged += new System.EventHandler(this.cbRegions_SelectedValueChanged);
 			// 
 			// label22
@@ -1420,7 +1420,7 @@ namespace FREditor
 			// 
 			// lLblMaster
 			// 
-			this.lLblMaster.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dtSet, "Поставщики.Поставщики-Прайсы.Прайсы-правила.FRManager", true));
+			this.lLblMaster.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRManager", true));
 			this.lLblMaster.Location = new System.Drawing.Point(6, 39);
 			this.lLblMaster.Name = "lLblMaster";
 			this.lLblMaster.Size = new System.Drawing.Size(168, 16);
@@ -1437,20 +1437,40 @@ namespace FREditor
 			// 
 			// grpbParent
 			// 
+			this.grpbParent.Controls.Add(this.cmbParentSynonyms);
+			this.grpbParent.Controls.Add(this.cmbParentRules);
 			this.grpbParent.Controls.Add(this.lblSynonyms);
 			this.grpbParent.Controls.Add(this.lblRules);
-			this.grpbParent.Controls.Add(this.tbSynonyms);
-			this.grpbParent.Controls.Add(this.tbRules);
 			this.grpbParent.Location = new System.Drawing.Point(20, 220);
 			this.grpbParent.Name = "grpbParent";
-			this.grpbParent.Size = new System.Drawing.Size(200, 112);
+			this.grpbParent.Size = new System.Drawing.Size(200, 118);
 			this.grpbParent.TabIndex = 31;
 			this.grpbParent.TabStop = false;
 			this.grpbParent.Text = "Родительские...";
 			// 
+			// cmbParentSynonyms
+			// 
+			this.cmbParentSynonyms.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRSynonyms", true));
+			this.cmbParentSynonyms.FormattingEnabled = true;
+			this.cmbParentSynonyms.Location = new System.Drawing.Point(6, 86);
+			this.cmbParentSynonyms.Name = "cmbParentSynonyms";
+			this.cmbParentSynonyms.Size = new System.Drawing.Size(188, 21);
+			this.cmbParentSynonyms.TabIndex = 5;
+			this.cmbParentSynonyms.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbParentComboBox_KeyDown);
+			// 
+			// cmbParentRules
+			// 
+			this.cmbParentRules.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRRules", true));
+			this.cmbParentRules.FormattingEnabled = true;
+			this.cmbParentRules.Location = new System.Drawing.Point(6, 39);
+			this.cmbParentRules.Name = "cmbParentRules";
+			this.cmbParentRules.Size = new System.Drawing.Size(185, 21);
+			this.cmbParentRules.TabIndex = 4;
+			this.cmbParentRules.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbParentComboBox_KeyDown);
+			// 
 			// lblSynonyms
 			// 
-			this.lblSynonyms.Location = new System.Drawing.Point(40, 72);
+			this.lblSynonyms.Location = new System.Drawing.Point(6, 63);
 			this.lblSynonyms.Name = "lblSynonyms";
 			this.lblSynonyms.Size = new System.Drawing.Size(80, 20);
 			this.lblSynonyms.TabIndex = 3;
@@ -1459,32 +1479,12 @@ namespace FREditor
 			// 
 			// lblRules
 			// 
-			this.lblRules.Location = new System.Drawing.Point(48, 32);
+			this.lblRules.Location = new System.Drawing.Point(6, 16);
 			this.lblRules.Name = "lblRules";
 			this.lblRules.Size = new System.Drawing.Size(72, 20);
 			this.lblRules.TabIndex = 2;
 			this.lblRules.Text = "... правила :";
 			this.lblRules.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// tbSynonyms
-			// 
-			this.tbSynonyms.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRSynonyms", true));
-			this.tbSynonyms.Location = new System.Drawing.Point(120, 72);
-			this.tbSynonyms.Name = "tbSynonyms";
-			this.tbSynonyms.Size = new System.Drawing.Size(64, 20);
-			this.tbSynonyms.TabIndex = 1;
-			this.tbSynonyms.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.tbSynonyms.TextChanged += new System.EventHandler(this.tbRules_TextChanged);
-			// 
-			// tbRules
-			// 
-			this.tbRules.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRRules", true));
-			this.tbRules.Location = new System.Drawing.Point(120, 32);
-			this.tbRules.Name = "tbRules";
-			this.tbRules.Size = new System.Drawing.Size(64, 20);
-			this.tbRules.TabIndex = 0;
-			this.tbRules.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.tbRules.TextChanged += new System.EventHandler(this.tbRules_TextChanged);
 			// 
 			// groupBox2
 			// 
@@ -1549,7 +1549,7 @@ namespace FREditor
 			// 
 			// cmbFormat
 			// 
-			this.cmbFormat.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.dtSet, "Поставщики.Поставщики-Прайсы.Прайсы-правила.FRFormat", true));
+			this.cmbFormat.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRFormat", true));
 			this.cmbFormat.DataSource = this.dtSet;
 			this.cmbFormat.DisplayMember = "Форматы прайса.FMTFormat";
 			this.cmbFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1570,7 +1570,7 @@ namespace FREditor
 			// 
 			// cmbMoney
 			// 
-			this.cmbMoney.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.dtSet, "Поставщики.Поставщики-Прайсы.Прайсы-правила.FRCurrency", true));
+			this.cmbMoney.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRCurrency", true));
 			this.cmbMoney.DataSource = this.dtSet;
 			this.cmbMoney.DisplayMember = "Каталог валют.CCCurrency";
 			this.cmbMoney.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1582,7 +1582,7 @@ namespace FREditor
 			// 
 			// lblPriceName
 			// 
-			this.lblPriceName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dtSet, "Поставщики.Поставщики-Прайсы.Прайсы-правила.FRName", true));
+			this.lblPriceName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRName", true));
 			this.lblPriceName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.lblPriceName.Location = new System.Drawing.Point(17, 32);
 			this.lblPriceName.Name = "lblPriceName";
@@ -3397,7 +3397,6 @@ namespace FREditor
 			this.groupBox1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.bsFormRules)).EndInit();
 			this.grpbParent.ResumeLayout(false);
-			this.grpbParent.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.tcInnerTable.ResumeLayout(false);
@@ -3638,9 +3637,7 @@ namespace FREditor
         private System.Windows.Forms.Label lblMaster;
         private System.Windows.Forms.GroupBox grpbParent;
         private System.Windows.Forms.Label lblSynonyms;
-        private System.Windows.Forms.Label lblRules;
-        private System.Windows.Forms.TextBox tbSynonyms;
-        private System.Windows.Forms.TextBox tbRules;
+		private System.Windows.Forms.Label lblRules;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label lblDevider;
         private System.Windows.Forms.TextBox tbDevider;
@@ -3750,5 +3747,7 @@ namespace FREditor
         private System.Windows.Forms.TextBox txtBoxMaxBoundCostEnd;
         private System.Windows.Forms.TextBox txtBoxMaxBoundCostBegin;
         private System.Windows.Forms.Label label45;
+		private System.Windows.Forms.ComboBox cmbParentRules;
+		private System.Windows.Forms.ComboBox cmbParentSynonyms;
     }
 }
