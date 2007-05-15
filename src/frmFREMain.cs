@@ -60,8 +60,8 @@ namespace FREditor
         DataTable dtPrice = new DataTable();
 
 #if DEBUG
-		//private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #endif
@@ -499,6 +499,7 @@ where
 
         private void dtPricesFill(string param)
         {
+			//Выбираем прайс-листы с мультиколоночными ценами
             MyCmd.CommandText =
 @"SELECT
   distinct
@@ -523,31 +524,34 @@ where
   cd.FirmType = 0
 and pd.CostType = 0 ";
             MyCmd.CommandText += param;
+			//Выбираем прайс-листы с многофайловыми ценами и сами многофайловые цены как прайс-листы
             MyCmd.CommandText += @" 
 union all
 SELECT 
   distinct
   pd.FirmCode AS PFirmCode,
-  pc.CostName AS PFirmName,
+  if((parentpd.PriceCode = pc.pricecode), pd.PriceName, concat('[Колонка] ', pc.CostName)) AS PFirmName,,
   pc.CostCode as PPriceCode,
   fr.DatePrevPrice as PDatePrevPrice,
   fr.DateCurPrice as PDateCurPrice,
   fr.DateLastForm as PDateLastForm,
   fr.MaxOld as PMaxOld,
-  pd.PriceType as PPriceType,
-  pd.CostType as PCostType,
+  parentpd.PriceType as PPriceType,
+  parentpd.CostType as PCostType,
   pd.WaitingDownloadInterval as PWaitingDownloadInterval,
-  (pd.pricecode = pc.CostCode) as PIsParent
+  (parentpd.PriceCode = pc.pricecode) as PIsParent
 FROM
   usersettings.pricesdata pd
-inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
+inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
 inner join farm.formrules fr on fr.FirmCode=pc.CostCode
 inner join farm.regions r on r.regioncode=cd.regioncode
+inner join usersettings.pricesdata parentpd on parentpd.PriceCode = pc.showpricecode
 where
   cd.FirmType = 0
-and pd.CostType = 1 ";
+and parentpd.CostType = 1 ";
             MyCmd.CommandText += param;
+			//Выбираем прайс-листы, у которых еще не выставлен тип ценовых колонок
             MyCmd.CommandText += @" 
 union all
 SELECT
@@ -2320,8 +2324,8 @@ and pd.CostType = 1
                             MySqlDataAdapter daPrice = new MySqlDataAdapter();
                             mcmdUPrice.CommandText = @"
 UPDATE usersettings.PricesData pd SET
-    PriceType = ?PPriceType,
-    CostType = ?PCostType,
+    PriceType = if(?PIsParent = 1, ?PPriceType, PriceType),
+    CostType = if(?PIsParent = 1, ?PCostType, CostType), 
     WaitingDownloadInterval = ?PWaitingDownloadInterval
 WHERE 
     pd.PriceCode = ?PPriceCode;
@@ -2335,6 +2339,7 @@ WHERE fr.FirmCode = ?PPriceCode;";
                             mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PWaitingDownloadInterval", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
                             mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PMaxOld", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
                             mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
+							mcmdUPrice.Parameters.Add(new MySql.Data.MySqlClient.MySqlParameter("PIsParent", MySql.Data.MySqlClient.MySqlDbType.Int32, 0, System.Data.ParameterDirection.Input, false, ((byte)(0)), ((byte)(0)), null, System.Data.DataRowVersion.Current, null));
 
                             foreach (MySqlParameter ms in mcmdUPrice.Parameters)
                             {
