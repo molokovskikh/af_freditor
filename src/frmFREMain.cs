@@ -87,7 +87,10 @@ namespace FREditor
         string listName = String.Empty;
         string delimiter = String.Empty;
         string fmt = String.Empty;
-        string delimiter0 = String.Empty;
+		//Текущий клиент, с которым происходит работа и текущий прайс
+		long currentPriceCode = 0;
+		long currentClientCode = 0;
+		string delimiter0 = String.Empty;
         string fmt0 = String.Empty;
         long startLine = 0;
         string[] FFieldNames;
@@ -1686,7 +1689,9 @@ and pd.CostType = 1
                 bsFormRules.SuspendBinding();
 
 				RefreshDataBind();
-                tsbApply.Enabled = false;
+				currentClientCode = 0;
+				currentPriceCode = 0;
+				tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
                 tmrUpdateApply.Stop();
             }
@@ -1699,6 +1704,10 @@ and pd.CostType = 1
 
                     DataRow drP = drv.Row;
                     openedPriceDR = drP;
+
+					currentClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
+					currentPriceCode = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceCode.ColumnName]);
+
                     DoOpenPrice(drP);
                     tmrUpdateApply.Start();
                     bsCostsFormRules.Filter = "CFRfr_if = " + drP[PPriceCode.ColumnName].ToString();
@@ -1710,22 +1719,20 @@ and pd.CostType = 1
 
 		private void RefreshDataBind()
 		{
-			long ClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
-			long PriceCode = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceCode.ColumnName]);
 			FillTables(shortNameFilter, regionCodeFilter, segmentFilter);
 
 			this.Text = "Редактор Правил Формализации";
 			if (fcs == dgFocus.Firm)
 			{
 				indgvFirm.Focus();
-				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, ClientCode);
+				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentClientCode);
 			}
 			else
 				if (fcs == dgFocus.Price)
 				{
 					indgvPrice.Select();
-					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, ClientCode);
-					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceCode.ColumnName, PriceCode);
+					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentClientCode);
+					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceCode.ColumnName, currentPriceCode);
 				}
 		}
 
