@@ -44,8 +44,8 @@
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <PublisherName>Inforoom</PublisherName>
-    <MinimumRequiredVersion>1.1.23.39</MinimumRequiredVersion>
-    <ApplicationVersion>1.1.23.39</ApplicationVersion>
+    <MinimumRequiredVersion>1.1.26.42</MinimumRequiredVersion>
+    <ApplicationVersion>1.1.26.42</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
