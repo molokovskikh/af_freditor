@@ -2189,7 +2189,12 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
 
             if (col != String.Empty)
             {
-                DataRow dr = dtPrice.Rows[indgvPriceData.CurrentRow.Index];
+				DataRow dr = null;
+				if (tcInnerSheets.SelectedIndex > 0)
+					dr = ((DataTable)dtables[tcInnerSheets.SelectedIndex - 1]).Rows[((INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]).CurrentRow.Index];
+				else
+					dr = dtPrice.Rows[indgvPriceData.CurrentRow.Index];
+
                 if (dr[col].ToString() != String.Empty)
                 {
                     nameR = dr[col].ToString();
