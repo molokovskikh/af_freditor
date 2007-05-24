@@ -49,7 +49,9 @@ namespace FREditor
         VitallyImportant,
         RequestRatio,
         RegistryCost,
-        MaxBoundCost
+        MaxBoundCost,
+		OrderCost,
+		MinOrderCount
     }
 
     public partial class frmFREMain : System.Windows.Forms.Form
@@ -222,6 +224,8 @@ namespace FREditor
   TxtMaxBoundCostEnd = ?FRTxtMaxBoundCostEnd,
   TxtOrderCostBegin = ?FRTxtOrderCostBegin,
   TxtOrderCostEnd = ?FRTxtOrderCostEnd,
+  TxtMinOrderCountBegin = ?FRTxtMinOrderCountBegin,
+  TxtMinOrderCountEnd = ?FRTxtMinOrderCountEnd,
 
   FCode = ?FRFCode,
   FCodeCr = ?FRFCodeCr,
@@ -245,6 +249,8 @@ namespace FREditor
   FVitallyImportant = ?FRFVitallyImportant,
   FMaxBoundCost = ?FRFMaxBoundCost,
   FOrderCost = ?FRFOrderCost,
+  FMinOrderCount = ?FRFMinOrderCount,
+
 
   Memo = ?FRMemo
 where
@@ -296,7 +302,9 @@ where
             this.mcmdUFormRules.Parameters.Add("?FRTxtMaxBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUFormRules.Parameters.Add("?FRTxtMaxBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
 			this.mcmdUFormRules.Parameters.Add("?FRTxtOrderCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUFormRules.Parameters.Add("?FRTxtOrderCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);			
+			this.mcmdUFormRules.Parameters.Add("?FRTxtOrderCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUFormRules.Parameters.Add("?FRTxtMinOrderCountBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);			
 
             this.mcmdUFormRules.Parameters.Add("?FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString);
@@ -330,7 +338,8 @@ where
             this.mcmdUFormRules.Parameters.Add("?FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFMaxBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUFormRules.Parameters.Add("?FRFOrderCost", MySql.Data.MySqlClient.MySqlDbType.VarString);			
+			this.mcmdUFormRules.Parameters.Add("?FRFOrderCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+			this.mcmdUFormRules.Parameters.Add("?FRFMinOrderCount", MySql.Data.MySqlClient.MySqlDbType.VarString);			
             this.mcmdUFormRules.Parameters.Add("?FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString);
 
             foreach (MySqlParameter ms in this.mcmdUFormRules.Parameters)
@@ -787,6 +796,9 @@ order by 2";
 	PFR.TxtOrderCostBegin as FRTxtOrderCostBegin,
 	PFR.TxtOrderCostEnd as FRTxtOrderCostEnd,
 
+	PFR.TxtMinOrderCountBegin as FRTxtMinOrderCountBegin,
+	PFR.TxtMinOrderCountEnd as FRTxtMinOrderCountEnd,
+
 
 	PFR.FCode as FRFCode,
 	PFR.FCodeCr as FRFCodeCr,
@@ -810,6 +822,7 @@ order by 2";
 	PFR.FVitallyImportant as FRFVitallyImportant,
 	PFR.FMaxBoundCost as FRFMaxBoundCost,
 	PFR.FOrderCost as FRFOrderCost,
+	PFR.FMinOrderCount as FRFMinOrderCount,
 
     -- PFR.*,
     CD.FirmStatus,
@@ -1348,6 +1361,18 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
                     catch { }
                 }
             }
+
+			//Добавляем в список цены, если у них выставленны границы
+			foreach (DataRowView drv in bsCostsFormRules)
+			{
+				if (!(drv[CFRTextBegin.ColumnName] is DBNull) && !(drv[CFRTextEnd.ColumnName] is DBNull))
+					fds.Add(new TxtFieldDef(
+						"Cost" + drv[CFRCost_Code.ColumnName].ToString(),
+						Convert.ToInt32(drv[CFRTextBegin.ColumnName]),
+						Convert.ToInt32(drv[CFRTextEnd.ColumnName])));
+			}
+			
+
             fds.Sort(new TxtFieldDef());
 
             DataRow mdr;
@@ -1531,7 +1556,9 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
                     fds.Add(new TxtFieldDef(TmpName, TxtBegin, TxtEnd));
                 }
 
-                using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(TxtFilePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
+				fds.Sort(new TxtFieldDef());
+
+				using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(TxtFilePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
                 {
                     w.WriteLine("[" + Path.GetFileName(TxtFilePath) + "]");
                     w.WriteLine(("WIN" == fmt.ToUpper()) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
