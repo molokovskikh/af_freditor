@@ -80,7 +80,6 @@ namespace FREditor
 			this.FRDelimiter = new System.Data.DataColumn();
 			this.FRRules = new System.Data.DataColumn();
 			this.FRSynonyms = new System.Data.DataColumn();
-			this.FRManager = new System.Data.DataColumn();
 			this.FRPriceCode = new System.Data.DataColumn();
 			this.FRListName = new System.Data.DataColumn();
 			this.FRStartLine = new System.Data.DataColumn();
@@ -725,7 +724,6 @@ namespace FREditor
             this.FRDelimiter,
             this.FRRules,
             this.FRSynonyms,
-            this.FRManager,
             this.FRPriceCode,
             this.FRListName,
             this.FRStartLine,
@@ -840,10 +838,6 @@ namespace FREditor
 			// 
 			this.FRSynonyms.ColumnName = "FRSynonyms";
 			this.FRSynonyms.DataType = typeof(int);
-			// 
-			// FRManager
-			// 
-			this.FRManager.ColumnName = "FRManager";
 			// 
 			// FRPriceCode
 			// 
@@ -1466,11 +1460,13 @@ namespace FREditor
 			// 
 			// lLblMaster
 			// 
-			this.lLblMaster.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRManager", true));
 			this.lLblMaster.Location = new System.Drawing.Point(6, 39);
 			this.lLblMaster.Name = "lLblMaster";
 			this.lLblMaster.Size = new System.Drawing.Size(168, 16);
 			this.lLblMaster.TabIndex = 27;
+			this.lLblMaster.TabStop = true;
+			this.lLblMaster.Text = "Создать письмо";
+			this.ttMain.SetToolTip(this.lLblMaster, "Создать письмо ответственным за прайс-лист");
 			this.lLblMaster.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lLblMaster_LinkClicked);
 			// 
 			// lblMaster
@@ -3630,8 +3626,7 @@ namespace FREditor
         private System.Data.DataColumn FRFormat;
         private System.Data.DataColumn FRPosNum;
         private System.Data.DataColumn FRRules;
-        private System.Data.DataColumn FRSynonyms;
-        private System.Data.DataColumn FRManager;
+		private System.Data.DataColumn FRSynonyms;
         private System.Data.DataColumn FRPriceCode;
         private System.Data.DataColumn FRDelimiter;
         private System.Data.DataTable dtPriceFMTs;

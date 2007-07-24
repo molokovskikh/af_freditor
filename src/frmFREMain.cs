@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Data;
@@ -827,8 +828,7 @@ order by 2";
     -- PFR.*,
     CD.FirmStatus,
     CD.BillingStatus,
-    CD.FirmSegment,
-	CD.OrderManagerMail as FRManager
+    CD.FirmSegment
 FROM UserSettings.PricesData AS PD
 INNER JOIN
     UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0
@@ -1965,8 +1965,61 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
 
         private void lLblMaster_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(String.Format("mailto:{0}", lLblMaster.Text));
+			if (MyCn.State == ConnectionState.Closed)
+				MyCn.Open();
+			try
+			{
+				long FirmCode = Convert.ToInt64(MySqlHelper.ExecuteScalar(MyCn, "select FirmCode from usersettings.pricesdata where PriceCode = ?PriceCode", new MySqlParameter("?PriceCode", ((DataRowView)bsFormRules.Current)[FRPriceCode.ColumnName])));
+				System.Diagnostics.Process.Start(String.Format("mailto:{0}", GetContactText(FirmCode, 2, 0)));
+			}
+			finally
+			{
+				MyCn.Close();
+			}
         }
+
+		/// <summary>
+		/// Получить текст контактов из базы
+		/// </summary>
+		/// <param name="FirmCode">Код поставщика</param>
+		/// <param name="ContactGroupType">Тип контактной группы: 0 - General, 1 - ClientManager, 2 - OrderManager, 3 - Accountant</param>
+		/// <param name="ContactType">Тип контакта: 0 - Email, 1 - Phone</param>
+		/// <returns>Текст контактов, разделенный ";"</returns>
+		private string GetContactText(long FirmCode, byte ContactGroupType, byte ContactType)
+		{
+			DataSet dsContacts = MySqlHelper.ExecuteDataset(MyCn, @"
+select distinct c.contactText
+from usersettings.clientsdata cd
+  join contacts.contact_groups cg on cd.ContactGroupOwnerId = cg.ContactGroupOwnerId
+    join contacts.contacts c on cg.Id = c.ContactOwnerId
+where
+    firmcode = ?FirmCode
+and cg.Type = ?ContactGroupType
+and c.Type = ?ContactType
+
+union
+
+select distinct c.contactText
+from usersettings.clientsdata cd
+  join contacts.contact_groups cg on cd.ContactGroupOwnerId = cg.ContactGroupOwnerId
+    join contacts.persons p on cg.id = p.ContactGroupId
+      join contacts.contacts c on p.Id = c.ContactOwnerId
+where
+    firmcode = ?FirmCode
+and cg.Type = ?ContactGroupType
+and c.Type = ?ContactType;",
+				new MySqlParameter("?FirmCode", FirmCode),
+				new MySqlParameter("?ContactGroupType", ContactGroupType),
+				new MySqlParameter("?ContactType", ContactType));
+			List<string> contacts = new List<string>();
+			foreach (DataRow drContact in dsContacts.Tables[0].Rows)
+			{
+				if (!contacts.Contains(drContact["contactText"].ToString()))
+					contacts.Add(drContact["contactText"].ToString());
+			}
+
+			return String.Join(";", contacts.ToArray());
+		}
 
         private void CheckOnePrice(CurrencyManager currencyManager)
         {
