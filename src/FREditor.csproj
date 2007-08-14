@@ -43,7 +43,9 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
+    <SupportUrl>http://www.analit.net</SupportUrl>
     <TargetCulture>ru-RU</TargetCulture>
+    <ProductName>Редактор правил формализации</ProductName>
     <PublisherName>Inforoom</PublisherName>
     <MinimumRequiredVersion>1.1.27.43</MinimumRequiredVersion>
     <ApplicationVersion>1.1.27.43</ApplicationVersion>
