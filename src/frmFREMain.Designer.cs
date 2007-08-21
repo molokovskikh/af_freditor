@@ -3507,7 +3507,7 @@ namespace FREditor
 			// 
 			// mcmdUFormRules
 			// 
-			this.mcmdUFormRules.CommandText = null;
+			this.mcmdUFormRules.CommandText = string.Empty;
 			this.mcmdUFormRules.CommandTimeout = 0;
 			this.mcmdUFormRules.CommandType = System.Data.CommandType.Text;
 			this.mcmdUFormRules.Connection = null;

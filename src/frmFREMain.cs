@@ -474,11 +474,11 @@ where
                 MyCmd.Parameters.Clear();
 
                 if (shname != String.Empty)
-                    MyCmd.Parameters.Add("?ShortName", "%" + shname + "%");
+                    MyCmd.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
                 if (regcode != 0)
-                    MyCmd.Parameters.Add("?RegionCode", regcode);
+                    MyCmd.Parameters.AddWithValue("?RegionCode", regcode);
                 if (seg != -1)
-                    MyCmd.Parameters.Add("?Segment", seg);
+                    MyCmd.Parameters.AddWithValue("?Segment", seg);
 
                 FilterParams = AddParams(shname, regcode, seg);
 
@@ -2443,8 +2443,8 @@ and c.Type = ?ContactType;",
                         try
                         {
                             MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
-                            SetCMD.Parameters.Add("?INHost", Environment.MachineName);
-                            SetCMD.Parameters.Add("?INUser", Environment.UserName);
+                            SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
+                            SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
 
                             mcmdUCostRules.Connection = MyCn;
@@ -2483,8 +2483,8 @@ and c.Type = ?ContactType;",
                         try
                         {
                             MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
-                            SetCMD.Parameters.Add("?INHost", Environment.MachineName);
-                            SetCMD.Parameters.Add("?INUser", Environment.UserName);
+                            SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
+                            SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
 
                             MySqlCommand mcmdUPrice = new MySqlCommand();
