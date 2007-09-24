@@ -47,8 +47,8 @@
     <TargetCulture>ru-RU</TargetCulture>
     <ProductName>Редактор правил формализации</ProductName>
     <PublisherName>Inforoom</PublisherName>
-    <MinimumRequiredVersion>1.1.28.44</MinimumRequiredVersion>
-    <ApplicationVersion>1.1.28.44</ApplicationVersion>
+    <MinimumRequiredVersion>1.1.29.45</MinimumRequiredVersion>
+    <ApplicationVersion>1.1.29.45</ApplicationVersion>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
