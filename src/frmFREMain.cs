@@ -174,7 +174,6 @@ namespace FREditor
 
   Currency = ?FRCurrency,
   `Delimiter` = ?FRDelimiter,
-  PosNum = ?FRPosNum,
   JunkPos = ?FRSelfJunkPos,
   AwaitPos = ?FRSelfAwaitPos,
   PriceFMT = ?FRFormat,
@@ -255,7 +254,14 @@ namespace FREditor
 
   Memo = ?FRMemo
 where
-  FirmCode = ?FRPriceCode;";
+  FirmCode = ?FRPriceCode;
+
+update
+  usersettings.price_update_info
+set
+  RowCount = if(RowCount <> ?FRPosNum, 0, RowCount)
+where
+  PriceCode = ?FRPriceCode";
             this.mcmdUFormRules.Parameters.Add("?FRPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
             this.mcmdUFormRules.Parameters.Add("?FRSynonyms", MySql.Data.MySqlClient.MySqlDbType.Int64);
             this.mcmdUFormRules.Parameters.Add("?FRRules", MySql.Data.MySqlClient.MySqlDbType.Int64);
@@ -518,9 +524,9 @@ where
   pd.FirmCode AS PFirmCode,
   pd.PriceName AS PFirmName,
   pd.PriceCode as PPriceCode,
-  fr.DatePrevPrice as PDatePrevPrice,
-  fr.DateCurPrice as PDateCurPrice,
-  fr.DateLastForm as PDateLastForm,
+  pui.DatePrevPrice as PDatePrevPrice,
+  pui.DateCurPrice as PDateCurPrice,
+  pui.DateLastForm as PDateLastForm,
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
   pd.CostType as PCostType,
@@ -529,6 +535,7 @@ where
 FROM
   usersettings.pricesdata pd
 inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
+inner join usersettings.price_update_info pui on  pui.pricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
 inner join farm.formrules fr on fr.FirmCode=pd.pricecode
 inner join farm.regions r on r.regioncode=cd.regioncode
@@ -544,9 +551,9 @@ SELECT
   pd.FirmCode AS PFirmCode,
   if((parentpd.PriceCode = pc.pricecode), pd.PriceName, concat('[Колонка] ', pc.CostName)) AS PFirmName,
   pc.CostCode as PPriceCode,
-  fr.DatePrevPrice as PDatePrevPrice,
-  fr.DateCurPrice as PDateCurPrice,
-  fr.DateLastForm as PDateLastForm,
+  pui.DatePrevPrice as PDatePrevPrice,
+  pui.DateCurPrice as PDateCurPrice,
+  pui.DateLastForm as PDateLastForm,
   fr.MaxOld as PMaxOld,
   parentpd.PriceType as PPriceType,
   parentpd.CostType as PCostType,
@@ -556,6 +563,7 @@ FROM
   usersettings.pricesdata pd
 inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+inner join usersettings.price_update_info pui on  pui.pricecode = pc.CostCode
 inner join farm.formrules fr on fr.FirmCode=pc.CostCode
 inner join farm.regions r on r.regioncode=cd.regioncode
 inner join usersettings.pricesdata parentpd on parentpd.PriceCode = pc.showpricecode
@@ -571,9 +579,9 @@ SELECT
   pd.FirmCode AS PFirmCode,
   pd.PriceName AS PFirmName,
   pd.PriceCode as PPriceCode,
-  fr.DatePrevPrice as PDatePrevPrice,
-  fr.DateCurPrice as PDateCurPrice,
-  fr.DateLastForm as PDateLastForm,
+  pui.DatePrevPrice as PDatePrevPrice,
+  pui.DateCurPrice as PDateCurPrice,
+  pui.DateLastForm as PDateLastForm,
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
   pd.CostType as PCostType,
@@ -583,6 +591,7 @@ FROM
   usersettings.pricesdata pd
 inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
 inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+inner join usersettings.price_update_info pui on  pui.pricecode = pd.pricecode
 inner join farm.formrules fr on fr.FirmCode=pd.pricecode
 inner join farm.regions r on r.regioncode=cd.regioncode
 where
@@ -725,7 +734,7 @@ order by 2";
     FR.Flag AS SelfFlag,
     FR.JunkPos AS FRSelfJunkPos,
     FR.AwaitPos AS FRSelfAwaitPos,
-    FR.PosNum AS FRPosNum,
+    pui.RowCount AS FRPosNum,
 	PFR.StartLine AS FRStartLine,
     PFR.PriceFMT as FRFormat,
     pfmt.FileExtention as FRExt,
@@ -834,6 +843,8 @@ INNER JOIN
     UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0
 INNER JOIN
     farm.regions r on r.regioncode=cd.regioncode
+INNER JOIN
+    usersettings.price_update_info pui on pui.PriceCode = PD.PriceCode
 INNER JOIN
     Farm.formrules AS FR
     ON FR.FirmCode=PD.PriceCode
@@ -2433,8 +2444,6 @@ and c.Type = ?ContactType;",
             {
                 if (tbControl.SelectedTab == tpPrice)
                 {
-                    ((CurrencyManager)BindingContext[indgvPriceData.DataSource, indgvPriceData.DataMember]).EndCurrentEdit();
-
                     if (MyCn.State == ConnectionState.Closed)
                         MyCn.Open();
                     try
