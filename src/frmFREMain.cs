@@ -726,7 +726,6 @@ order by 2";
 	FR.Currency AS FRCurrency,
 	PFR.Delimiter As FRDelimiter,
 	FR.ParentFormRules AS FRRules,
-	FR.PriceFile AS FRPriceFile,
 	FR.Memo As FRMemo,
     CD.ShortName AS ClientShortName,
     CD.FirmCode AS ClientCode,
@@ -834,7 +833,6 @@ order by 2";
 	PFR.FOrderCost as FRFOrderCost,
 	PFR.FMinOrderCount as FRFMinOrderCount,
 
-    -- PFR.*,
     CD.FirmStatus,
     CD.BillingStatus,
     CD.FirmSegment

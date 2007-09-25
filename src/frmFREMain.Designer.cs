@@ -136,7 +136,6 @@ namespace FREditor
 			this.FRFAwait = new System.Data.DataColumn();
 			this.FRFFirmCr = new System.Data.DataColumn();
 			this.FRFMinBoundCost = new System.Data.DataColumn();
-			this.FRPriceFile = new System.Data.DataColumn();
 			this.FRMemo = new System.Data.DataColumn();
 			this.FRTxtRequestRatioBegin = new System.Data.DataColumn();
 			this.FRTxtRequestRatioEnd = new System.Data.DataColumn();
@@ -780,7 +779,6 @@ namespace FREditor
             this.FRFAwait,
             this.FRFFirmCr,
             this.FRFMinBoundCost,
-            this.FRPriceFile,
             this.FRMemo,
             this.FRTxtRequestRatioBegin,
             this.FRTxtRequestRatioEnd,
@@ -1063,10 +1061,6 @@ namespace FREditor
 			// FRFMinBoundCost
 			// 
 			this.FRFMinBoundCost.ColumnName = "FRFMinBoundCost";
-			// 
-			// FRPriceFile
-			// 
-			this.FRPriceFile.ColumnName = "FRPriceFile";
 			// 
 			// FRMemo
 			// 
@@ -3491,10 +3485,8 @@ namespace FREditor
 			this.mcmdUCostRules.CommandText = "UPDATE farm.costformrules c SET\r\nFieldName = ?FieldName,\r\nTxtBegin = ?TxtBegin,\r\n" +
 				"TxtEnd = ?TxtEnd\r\nWHERE c.PC_CostCode = ?CostCode";
 			this.mcmdUCostRules.CommandTimeout = 0;
-			this.mcmdUCostRules.CommandType = System.Data.CommandType.Text;
 			this.mcmdUCostRules.Connection = null;
 			this.mcmdUCostRules.Transaction = null;
-			this.mcmdUCostRules.UpdatedRowSource = System.Data.UpdateRowSource.Both;
 			// 
 			// daCostRules
 			// 
@@ -3507,12 +3499,9 @@ namespace FREditor
 			// 
 			// mcmdUFormRules
 			// 
-			this.mcmdUFormRules.CommandText = string.Empty;
 			this.mcmdUFormRules.CommandTimeout = 0;
-			this.mcmdUFormRules.CommandType = System.Data.CommandType.Text;
 			this.mcmdUFormRules.Connection = null;
 			this.mcmdUFormRules.Transaction = null;
-			this.mcmdUFormRules.UpdatedRowSource = System.Data.UpdateRowSource.Both;
 			// 
 			// daFormRules
 			// 
@@ -3817,8 +3806,7 @@ namespace FREditor
         private System.Windows.Forms.Label lblMoney;
         private System.Windows.Forms.ComboBox cmbMoney;
         private System.Windows.Forms.Label lblPriceName;
-        private System.Windows.Forms.Label lblNameFirm;
-        private System.Data.DataColumn FRPriceFile;
+		private System.Windows.Forms.Label lblNameFirm;
         private System.Data.DataColumn FRMemo;
         private System.Windows.Forms.Button btnAwaitCheck;
         private System.Windows.Forms.Button btnJunkCheck;
