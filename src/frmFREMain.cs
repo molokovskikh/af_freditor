@@ -353,16 +353,6 @@ where
             {
                 ms.SourceColumn = ms.ParameterName.Substring(1);
             }
-
-            MyCn.Open();
-            MyCmd.Connection = MyCn;
-            MyDA = new MySqlDataAdapter(MyCmd);
-
-            dtCatalogCurrencyFill();
-            dtPriceFMTsFill();
-            cbRegionsFill();
-
-            MyCn.Close();
         }
 
         /// <summary>
@@ -371,11 +361,26 @@ where
         [STAThread]
         static void Main()
         {
+			FREditorExceptionHandler feh = new FREditorExceptionHandler();
+
+			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(feh.OnThreadException);
+
             Application.Run(new frmFREMain());
         }
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
+
+			MyCn.Open();
+			MyCmd.Connection = MyCn;
+			MyDA = new MySqlDataAdapter(MyCmd);
+
+			dtCatalogCurrencyFill();
+			dtPriceFMTsFill();
+			cbRegionsFill();
+
+			MyCn.Close();
+
             bsCostsFormRules.SuspendBinding();
             bsFormRules.SuspendBinding();
 
@@ -3058,4 +3063,27 @@ WHERE fr.FirmCode = ?PPriceCode;";
             SheetName = sheetName;
         }
     }
+
+	internal class FREditorExceptionHandler
+	{
+
+		// Handles the exception event.
+		public void OnThreadException(object sender, System.Threading.ThreadExceptionEventArgs t)
+		{
+			try
+			{
+				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
+					"service@analit.net",
+					"service@analit.net",
+					"Необработанная ошибка в FREditor",
+					String.Format("Sender = {0}\r\nException = = {1}", sender, t.Exception));
+				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("box.analit.net");
+				sm.Send(m);
+			}
+			catch
+			{ }
+			MessageBox.Show("В приложении возникла необработанная ошибка.\r\nИнформация об ошибке была отправлена разработчику.");
+		}
+
+	}
 }
