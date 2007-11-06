@@ -927,7 +927,7 @@ and pd.CostType = 1
             existParentRules = drFR[0]["FRRules"].ToString();
 
             DataRow drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
-            frmCaption = String.Format("{0}; {1}; ", drC["CShortName"], drC["CRegion"]);
+            frmCaption = String.Format("{0}; {1}", drC["CShortName"], drC["CRegion"]);
 
             string f = drFR[0]["FRPriceCode"].ToString();
 
@@ -990,7 +990,7 @@ and pd.CostType = 1
                 Application.DoEvents();
                 ShowTab(fmt);
                 Application.DoEvents();
-                this.Text = String.Format("Редактор Правил Формализации ({0}{1})", frmCaption, f);
+                this.Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
                 Application.DoEvents();
             }
         }
@@ -2964,6 +2964,74 @@ WHERE fr.FirmCode = ?PPriceCode;";
 			{
 				FillParentComboBoxBySearch((ComboBox)sender);
 			}
+		}
+
+		private string GetPriceFileExtention(long PriceCode)
+		{
+			MyCn.Open();
+			try
+			{
+				return (string)MySqlHelper.ExecuteScalar(
+					MyCn,
+					@"
+SELECT p.FileExtention 
+FROM 
+  farm.formrules f, farm.pricefmts p
+where
+f.FirmCode = ?PriceCode
+and f.PriceFMT = p.Format",
+					new MySqlParameter("?PriceCode", PriceCode));
+			}
+			finally			
+			{
+				MyCn.Close();
+			}
+		}
+
+		private void btnRetrancePrice_Click(object sender, EventArgs e)
+		{
+			if (indgvPrice.CurrentRow != null)
+			{
+				DataRow selectedPrice = ((DataRowView)indgvPrice.CurrentRow.DataBoundItem).Row;
+
+				string BaseFolder = @"\\FMS\Prices\Base\";
+				string InboundFolder = @"\\FMS\Prices\Inbound0\";
+
+				string PriceExtention = GetPriceFileExtention(Convert.ToInt64(selectedPrice[PPriceCode]));
+				string sourceFile = Path.GetFullPath(BaseFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceCode].ToString() + PriceExtention;
+				string destinationFile = Path.GetFullPath(InboundFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceCode].ToString() + PriceExtention;
+
+				if (File.Exists(sourceFile))
+				{
+					if (!File.Exists(destinationFile))
+					{
+						File.Copy(sourceFile, destinationFile);
+						MyCn.Open();
+						try
+						{
+							MySqlHelper.ExecuteNonQuery(
+								MyCn,
+								"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceCode) values (now(), ?UserName, ?UserHost, ?PriceCode)",
+								new MySqlParameter("?UserName", Environment.UserName),
+								new MySqlParameter("?UserHost", Environment.MachineName),
+								new MySqlParameter("?PriceCode", Convert.ToInt64(selectedPrice[PPriceCode])));
+						}
+						finally
+						{
+							MyCn.Close();
+						}
+						MessageBox.Show("Прайс-лист успешно переподложен.");
+					}
+					else
+						MessageBox.Show(String.Format("Данный прайс-лист находится в очереди на формализацию в папке {0}!", InboundFolder), "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
+				else
+					MessageBox.Show(String.Format("Данный прайс-лист отсутствует в папке {0}!", BaseFolder), "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+				indgvPrice.Focus();
+			}
+			else
+				indgvFirm.Focus();
 		}
 
     }

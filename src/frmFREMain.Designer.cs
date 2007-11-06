@@ -31,11 +31,11 @@ namespace FREditor
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmFREMain));
 			this.tbControl = new System.Windows.Forms.TabControl();
 			this.tpFirms = new System.Windows.Forms.TabPage();
@@ -369,6 +369,7 @@ namespace FREditor
 			this.ttMain = new System.Windows.Forms.ToolTip(this.components);
 			this.tmrUpdateApply = new System.Windows.Forms.Timer(this.components);
 			this.tmrSearch = new System.Windows.Forms.Timer(this.components);
+			this.btnRetrancePrice = new System.Windows.Forms.Button();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -466,14 +467,14 @@ namespace FREditor
             this.pCostTypeDataGridViewComboBoxColumn});
 			this.indgvPrice.DataMember = "Поставщики.Поставщики-Прайсы";
 			this.indgvPrice.DataSource = this.dtSet;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle2;
 			this.indgvPrice.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvPrice.Location = new System.Drawing.Point(0, 0);
 			this.indgvPrice.Name = "indgvPrice";
@@ -1270,14 +1271,14 @@ namespace FREditor
             this.cSegmentDataGridViewTextBoxColumn});
 			this.indgvFirm.DataMember = "Поставщики";
 			this.indgvFirm.DataSource = this.dtSet;
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle6;
 			this.indgvFirm.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvFirm.Location = new System.Drawing.Point(0, 30);
 			this.indgvFirm.Name = "indgvFirm";
@@ -1314,6 +1315,7 @@ namespace FREditor
 			// 
 			// panel3
 			// 
+			this.panel3.Controls.Add(this.btnRetrancePrice);
 			this.panel3.Controls.Add(this.cbSegment);
 			this.panel3.Controls.Add(this.label28);
 			this.panel3.Controls.Add(this.cbRegions);
@@ -1684,14 +1686,14 @@ namespace FREditor
 			// indgvPriceData
 			// 
 			this.indgvPriceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle1;
 			this.indgvPriceData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvPriceData.Location = new System.Drawing.Point(0, 0);
 			this.indgvPriceData.Name = "indgvPriceData";
@@ -1721,14 +1723,14 @@ namespace FREditor
             this.MNameFieldINDataGridViewTextBoxColumn,
             this.MBeginFieldINDataGridViewTextBoxColumn,
             this.MEndFieldINDataGridViewTextBoxColumn});
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle3;
 			this.indgvMarking.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvMarking.HideEmptyColumns = false;
 			this.indgvMarking.Location = new System.Drawing.Point(0, 0);
@@ -1790,14 +1792,14 @@ namespace FREditor
             this.cFRTextBeginDataGridViewTextBoxColumn,
             this.cFRTextEndDataGridViewTextBoxColumn});
 			this.indgvCosts.DataSource = this.bsCostsFormRules;
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle4;
 			this.indgvCosts.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvCosts.HideEmptyColumns = false;
 			this.indgvCosts.Location = new System.Drawing.Point(766, 0);
@@ -3520,6 +3522,17 @@ namespace FREditor
 			this.tmrSearch.Interval = 1000;
 			this.tmrSearch.Tick += new System.EventHandler(this.tmrSearch_Tick);
 			// 
+			// btnRetrancePrice
+			// 
+			this.btnRetrancePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnRetrancePrice.Location = new System.Drawing.Point(690, 5);
+			this.btnRetrancePrice.Name = "btnRetrancePrice";
+			this.btnRetrancePrice.Size = new System.Drawing.Size(158, 23);
+			this.btnRetrancePrice.TabIndex = 6;
+			this.btnRetrancePrice.Text = "Переподложить прайс";
+			this.btnRetrancePrice.UseVisualStyleBackColor = true;
+			this.btnRetrancePrice.Click += new System.EventHandler(this.btnRetrancePrice_Click);
+			// 
 			// frmFREMain
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -3922,5 +3935,6 @@ namespace FREditor
 		private System.Windows.Forms.TextBox txtBoxMinOrderCountEnd;
 		private System.Windows.Forms.TextBox txtBoxMinOrderCountBegin;
 		private System.Windows.Forms.Label label51;
+		private System.Windows.Forms.Button btnRetrancePrice;
     }
 }
