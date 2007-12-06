@@ -31,10 +31,10 @@ namespace FREditor
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmFREMain));
 			this.tbControl = new System.Windows.Forms.TabControl();
@@ -180,6 +180,7 @@ namespace FREditor
 			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cSegmentDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.btnRetrancePrice = new System.Windows.Forms.Button();
 			this.cbSegment = new System.Windows.Forms.ComboBox();
 			this.label28 = new System.Windows.Forms.Label();
 			this.cbRegions = new System.Windows.Forms.ComboBox();
@@ -369,7 +370,6 @@ namespace FREditor
 			this.ttMain = new System.Windows.Forms.ToolTip(this.components);
 			this.tmrUpdateApply = new System.Windows.Forms.Timer(this.components);
 			this.tmrSearch = new System.Windows.Forms.Timer(this.components);
-			this.btnRetrancePrice = new System.Windows.Forms.Button();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -467,14 +467,14 @@ namespace FREditor
             this.pCostTypeDataGridViewComboBoxColumn});
 			this.indgvPrice.DataMember = "Поставщики.Поставщики-Прайсы";
 			this.indgvPrice.DataSource = this.dtSet;
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle6;
 			this.indgvPrice.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvPrice.Location = new System.Drawing.Point(0, 0);
 			this.indgvPrice.Name = "indgvPrice";
@@ -1271,14 +1271,14 @@ namespace FREditor
             this.cSegmentDataGridViewTextBoxColumn});
 			this.indgvFirm.DataMember = "Поставщики";
 			this.indgvFirm.DataSource = this.dtSet;
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle5;
 			this.indgvFirm.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvFirm.Location = new System.Drawing.Point(0, 30);
 			this.indgvFirm.Name = "indgvFirm";
@@ -1327,6 +1327,17 @@ namespace FREditor
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(856, 30);
 			this.panel3.TabIndex = 4;
+			// 
+			// btnRetrancePrice
+			// 
+			this.btnRetrancePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnRetrancePrice.Location = new System.Drawing.Point(690, 5);
+			this.btnRetrancePrice.Name = "btnRetrancePrice";
+			this.btnRetrancePrice.Size = new System.Drawing.Size(158, 23);
+			this.btnRetrancePrice.TabIndex = 6;
+			this.btnRetrancePrice.Text = "Переподложить прайс";
+			this.btnRetrancePrice.UseVisualStyleBackColor = true;
+			this.btnRetrancePrice.Click += new System.EventHandler(this.btnRetrancePrice_Click);
 			// 
 			// cbSegment
 			// 
@@ -1723,14 +1734,14 @@ namespace FREditor
             this.MNameFieldINDataGridViewTextBoxColumn,
             this.MBeginFieldINDataGridViewTextBoxColumn,
             this.MEndFieldINDataGridViewTextBoxColumn});
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle2;
 			this.indgvMarking.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvMarking.HideEmptyColumns = false;
 			this.indgvMarking.Location = new System.Drawing.Point(0, 0);
@@ -2211,8 +2222,8 @@ namespace FREditor
 			this.txtBoxMinBoundCostEnd.Size = new System.Drawing.Size(27, 20);
 			this.txtBoxMinBoundCostEnd.TabIndex = 93;
 			this.txtBoxMinBoundCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxMinBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxMinBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			this.txtBoxMinBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxMinBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			// 
 			// txtBoxMinBoundCostBegin
 			// 
@@ -2225,7 +2236,8 @@ namespace FREditor
 			this.txtBoxMinBoundCostBegin.Size = new System.Drawing.Size(27, 20);
 			this.txtBoxMinBoundCostBegin.TabIndex = 92;
 			this.txtBoxMinBoundCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			this.txtBoxMinBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.CostsDataGrid_DragEnter);
+			this.txtBoxMinBoundCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.txtBoxMinBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			// 
 			// txtBoxCurrencyEnd
 			// 
@@ -3521,17 +3533,6 @@ namespace FREditor
 			// 
 			this.tmrSearch.Interval = 1000;
 			this.tmrSearch.Tick += new System.EventHandler(this.tmrSearch_Tick);
-			// 
-			// btnRetrancePrice
-			// 
-			this.btnRetrancePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnRetrancePrice.Location = new System.Drawing.Point(690, 5);
-			this.btnRetrancePrice.Name = "btnRetrancePrice";
-			this.btnRetrancePrice.Size = new System.Drawing.Size(158, 23);
-			this.btnRetrancePrice.TabIndex = 6;
-			this.btnRetrancePrice.Text = "Переподложить прайс";
-			this.btnRetrancePrice.UseVisualStyleBackColor = true;
-			this.btnRetrancePrice.Click += new System.EventHandler(this.btnRetrancePrice_Click);
 			// 
 			// frmFREMain
 			// 
