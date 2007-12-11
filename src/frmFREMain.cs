@@ -1273,7 +1273,20 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
                 w.WriteLine("MaxScanRows=300");
             }
 
-            int MaxColCount = 0;
+			string replaceFile;
+			using (StreamReader r = new StreamReader(filePath, Encoding.GetEncoding(1251)))
+			{
+				replaceFile = r.ReadToEnd();
+			}
+
+			replaceFile = replaceFile.Replace("\"", "");
+
+			using (StreamWriter rw = new StreamWriter(filePath, false, Encoding.GetEncoding(1251)))
+			{
+				rw.Write(replaceFile);
+			}
+
+			int MaxColCount = 0;
             string TableName = System.IO.Path.GetFileName(filePath).Replace(".", "#");
             dbcMain.ConnectionString = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Text\"", System.IO.Path.GetDirectoryName(filePath));
 
@@ -1299,19 +1312,6 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
                 {
                     w.WriteLine("Col{0}=F{0} Text", i);
                 }
-            }
-
-            string replaceFile;
-            using (StreamReader r = new StreamReader(filePath, Encoding.GetEncoding(1251)))
-            {
-                replaceFile = r.ReadToEnd();
-            }
-
-            replaceFile = replaceFile.Replace("\"", "");
-
-            using (StreamWriter rw = new StreamWriter(filePath, false, Encoding.GetEncoding(1251)))
-            {
-                rw.Write(replaceFile);
             }
 
             Application.DoEvents();
