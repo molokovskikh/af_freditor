@@ -2502,15 +2502,52 @@ and c.Type = ?ContactType;",
                             MySqlCommand mcmdUPrice = new MySqlCommand();
                             MySqlDataAdapter daPrice = new MySqlDataAdapter();
                             mcmdUPrice.CommandText = @"
-UPDATE usersettings.PricesData pd SET
-    PriceType = if(?PIsParent = 1, ?PPriceType, PriceType),
-    CostType = if(?PIsParent = 1, ?PCostType, CostType), 
-    WaitingDownloadInterval = ?PWaitingDownloadInterval
+insert into usersettings.price_update_info (PriceCode)
+select
+  pc.PriceCode
+from
+  usersettings.PricesData pd,
+  usersettings.PricesCosts pc
+where
+    (?PIsParent = 1)
+and pd.PriceCode = ?PPriceCode
+and (?PCostType = 1)
+and pc.ShowPriceCode = pd.PriceCode
+and pc.PriceCode <> pd.PriceCode
+and not exists(select * from usersettings.price_update_info pui where pui.PriceCode = pc.PriceCode);
+
+delete from
+  usersettings.price_update_info
+where
+    PriceCode in 
+(
+select
+  pc.PriceCode
+from
+  usersettings.PricesData pd,
+  usersettings.PricesCosts pc
+where
+    (?PIsParent = 1)
+and pd.PriceCode = ?PPriceCode
+and (?PCostType = 0)
+and pc.ShowPriceCode = pd.PriceCode
+and pc.PriceCode <> pd.PriceCode
+);
+
+UPDATE 
+  usersettings.PricesData pd 
+SET
+  PriceType = if(?PIsParent = 1, ?PPriceType, PriceType),
+  CostType = if(?PIsParent = 1, ?PCostType, CostType), 
+  WaitingDownloadInterval = ?PWaitingDownloadInterval
 WHERE 
     pd.PriceCode = ?PPriceCode;
-UPDATE farm.FormRules fr SET
+UPDATE 
+  farm.FormRules fr 
+SET
     MaxOld = ?PMaxOld
-WHERE fr.FirmCode = ?PPriceCode;";
+WHERE 
+    fr.FirmCode = ?PPriceCode;";
 
                             mcmdUPrice.Parameters.Clear();
                             mcmdUPrice.Parameters.Add("?PPriceType", MySql.Data.MySqlClient.MySqlDbType.Int32);
@@ -2944,13 +2981,22 @@ WHERE fr.FirmCode = ?PPriceCode;";
 		{
 			//Если отображается ComboBox, то привязываемся на его событие: изменение текущего элемента
 			if (e.Control is ComboBox)
-				((ComboBox)e.Control).SelectionChangeCommitted += new EventHandler(frmFREMain_SelectionChangeCommitted);
+			{
+				indgvPrice.CurrentCell.ReadOnly = !Convert.ToBoolean(((DataRowView)indgvPrice.CurrentCell.OwningRow.DataBoundItem)["PIsParent"]);
+				((ComboBox)e.Control).Enabled = !indgvPrice.CurrentCell.ReadOnly;
+				if (((ComboBox)e.Control).Enabled)
+					((ComboBox)e.Control).SelectionChangeCommitted += new EventHandler(frmFREMain_SelectionChangeCommitted);
+			}
 		}
 
 		void frmFREMain_SelectionChangeCommitted(object sender, EventArgs e)
 		{
 			//После изменения элемента сразу сохраняем его в ячейке, чтобы возникло событие CellValueChanged
-			indgvPrice.CurrentCell.Value = ((ComboBox)sender).SelectedValue;
+			//Позволяем изменять на одно из корректных значений, а не на DBNull
+			if (!(((ComboBox)sender).SelectedValue is DBNull))
+				indgvPrice.CurrentCell.Value = ((ComboBox)sender).SelectedValue;
+			else
+				indgvPrice.CancelEdit();
 		}
 
         private void btnVitallyImportantCheck_Click(object sender, EventArgs e)
@@ -3032,6 +3078,17 @@ and f.PriceFMT = p.Format",
 			}
 			else
 				indgvFirm.Focus();
+		}
+
+		private void indgvPrice_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+		{
+			//Если рассматриваются колонки с ComboBox и строки с данными
+			if ((e.ColumnIndex >= 6) && (e.RowIndex >= 0))
+			{
+				//Если это не родительский прайс-лист, то это ценовая колонка многофайлового прайс-листа и изменять ее нельзя
+				if (!Convert.ToBoolean( ((DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem)[PIsParent.ColumnName]))				
+					e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
+			}
 		}
 
     }
