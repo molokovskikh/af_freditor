@@ -3202,7 +3202,7 @@ and f.PriceFMT = p.Format",
 					"service@analit.net",
 					"Необработанная ошибка в FREditor",
 					String.Format("Sender = {0}\r\nException = = {1}", sender, t.Exception));
-				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("box.analit.net");
+				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("mail.adc.analit.net");
 				sm.Send(m);
 			}
 			catch
