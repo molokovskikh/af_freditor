@@ -55,6 +55,17 @@ namespace FREditor
 		MinOrderCount
     }
 
+	public enum PriceFormat
+	{ 
+		DelimWIN = 1,
+		DelimDOS,
+		XLS,
+		DBF,
+		XML,
+		FixedWIN,
+		FixedDOS
+	}
+
     public partial class frmFREMain : System.Windows.Forms.Form
     {
         ArrayList gds = new ArrayList();
@@ -63,8 +74,9 @@ namespace FREditor
         DataTable dtPrice = new DataTable();
 
 #if DEBUG
-		//private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;");
+		//private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;");
+		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;");
 #endif
@@ -76,8 +88,8 @@ namespace FREditor
         private OleDbConnection dbcMain = new OleDbConnection();
 
 #if DEBUG
-		//string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-		string StartPath = "C:\\TEMP\\Base\\";
+		string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+		//string StartPath = "C:\\TEMP\\Base\\";
 #else
 		string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
 #endif
@@ -89,9 +101,9 @@ namespace FREditor
         DataRow openedPriceDR;
         string listName = String.Empty;
         string delimiter = String.Empty;
-        string fmt = String.Empty;
+		PriceFormat? fmt = null;
 		//“екущий клиент, с которым происходит работа и текущий прайс
-		long currentPriceCode = 0;
+		long currentPriceItemId = 0;
 		long currentClientCode = 0;
         long startLine = 0;
         string[] FFieldNames;
@@ -167,20 +179,20 @@ namespace FREditor
 
             this.mcmdUFormRules.CommandText =
 @"UPDATE formrules SET
-  ParentSynonym = ?FRSynonyms,
   ParentFormRules = ?FRRules,
-  Flag = ?SelfFlag,
-  StartLine = ?FRStartLine,
 
-  Currency = ?FRCurrency,
-  `Delimiter` = ?FRDelimiter,
   JunkPos = ?FRSelfJunkPos,
   AwaitPos = ?FRSelfAwaitPos,
-  PriceFMT = ?FRFormat,
+  VitallyImportantMask = ?FRSelfVitallyImportantMask,
+
+  PriceFormatId = ?FRPriceFormatId,
+
+  StartLine = ?FRStartLine,
+  Currency = ?FRCurrency,
+  `Delimiter` = ?FRDelimiter,
   ListName = ?FRListName,
   NameMask = ?FRNameMask,
   ForbWords = ?FRForbWords,
-  VitallyImportantMask = ?FRVitallyImportantMask,
 
   TxtCodeBegin = ?FRTxtCodeBegin,
   TxtCodeEnd = ?FRTxtCodeEnd,
@@ -254,18 +266,26 @@ namespace FREditor
 
   Memo = ?FRMemo
 where
-  FirmCode = ?FRPriceCode;
+  id = ?FRFormID;
 
 update
-  usersettings.price_update_info
+  usersettings.pricesdata
+set
+  ParentSynonym = ?FRSynonyms
+where
+  PriceCode = ?FRSelfPriceCode;
+
+update
+  usersettings.priceitems
 set
   RowCount = if(RowCount <> ?FRPosNum, 0, RowCount)
 where
-  PriceCode = ?FRPriceCode";
-            this.mcmdUFormRules.Parameters.Add("?FRPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUFormRules.Parameters.Add("?FRSynonyms", MySql.Data.MySqlClient.MySqlDbType.Int64);
+  Id = ?FRPriceItemId";
+			this.mcmdUFormRules.Parameters.Add("?FRFormID", MySql.Data.MySqlClient.MySqlDbType.Int64);
+			this.mcmdUFormRules.Parameters.Add("?FRSelfPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
+			this.mcmdUFormRules.Parameters.Add("?FRPriceItemId", MySql.Data.MySqlClient.MySqlDbType.Int64);
+			this.mcmdUFormRules.Parameters.Add("?FRSynonyms", MySql.Data.MySqlClient.MySqlDbType.Int64);
             this.mcmdUFormRules.Parameters.Add("?FRRules", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUFormRules.Parameters.Add("?SelfFlag", MySql.Data.MySqlClient.MySqlDbType.Int16);
             this.mcmdUFormRules.Parameters.Add("?FRStartLine", MySql.Data.MySqlClient.MySqlDbType.Int32);
 
             this.mcmdUFormRules.Parameters.Add("?FRTxtCodeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
@@ -318,11 +338,11 @@ where
             this.mcmdUFormRules.Parameters.Add("?FRPosNum", MySql.Data.MySqlClient.MySqlDbType.Int64);
             this.mcmdUFormRules.Parameters.Add("?FRSelfJunkPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRSelfAwaitPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFormat", MySql.Data.MySqlClient.MySqlDbType.VarString);
+			this.mcmdUFormRules.Parameters.Add("?FRPriceFormatId", MySql.Data.MySqlClient.MySqlDbType.Int64);
             this.mcmdUFormRules.Parameters.Add("?FRListName", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRNameMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRForbWords", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRVitallyImportantMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
+			this.mcmdUFormRules.Parameters.Add("?FRSelfVitallyImportantMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
 
             this.mcmdUFormRules.Parameters.Add("?FRFCode", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFCodeCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
@@ -426,28 +446,16 @@ where
         {
             dtPriceFMTs.Clear();
 
-            MyCmd.CommandText =
-                @"SELECT 
-					Format AS FMTFormat,
-                    FileExtention  as FMTExt
-				FROM 
-					farm.PriceFmts order by Format";
+            MyCmd.CommandText = @"
+SELECT 
+  id as FMTId,
+  Format as FMTFormat,
+  FileExtention  as FMTExt
+FROM 
+  farm.PriceFmts 
+order by Format";
 
             MyDA.Fill(dtPriceFMTs);
-        }
-
-        private void FillFormatCmb()
-        {
-            for (int i = 0; i < dtPriceFMTs.Rows.Count; i++)
-            {
-                DataRow dr = dtPriceFMTs.Rows[i];
-                string item = dr["FMTFormat"].ToString();
-                if (-1 == cmbFormat.Items.IndexOf(item))
-                {
-                    cmbFormat.Items.Add(item);
-                }
-            }
-            cmbFormat.SelectedIndex = 0;
         }
 
         private string AddParams(string shname, int regcode, int seg)
@@ -524,87 +532,33 @@ where
         {
 			//¬ыбираем прайс-листы с мультиколоночными ценами
             MyCmd.CommandText =
-@"SELECT
-  distinct
-  pd.FirmCode AS PFirmCode,
-  pd.PriceName AS PFirmName,
-  pd.PriceCode as PPriceCode,
-  pui.DatePrevPrice as PDatePrevPrice,
-  pui.DateCurPrice as PDateCurPrice,
-  pui.DateLastForm as PDateLastForm,
-  fr.MaxOld as PMaxOld,
-  pd.PriceType as PPriceType,
-  pd.CostType as PCostType,
-  pd.WaitingDownloadInterval as PWaitingDownloadInterval,
-  1 as PIsParent
-FROM
-  usersettings.pricesdata pd
-inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
-inner join usersettings.price_update_info pui on  pui.pricecode = pd.pricecode
-inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
-inner join farm.formrules fr on fr.FirmCode=pd.pricecode
-inner join farm.regions r on r.regioncode=cd.regioncode
-where
-  cd.FirmType = 0
-and pd.CostType = 0 ";
-            MyCmd.CommandText += param;
-			//¬ыбираем прайс-листы с многофайловыми ценами и сами многофайловые цены как прайс-листы
-            MyCmd.CommandText += @" 
-union all
-SELECT 
-  distinct
-  pd.FirmCode AS PFirmCode,
-  if((parentpd.PriceCode = pc.pricecode), pd.PriceName, concat('[ олонка] ', pc.CostName)) AS PFirmName,
-  pc.CostCode as PPriceCode,
-  pui.DatePrevPrice as PDatePrevPrice,
-  pui.DateCurPrice as PDateCurPrice,
-  pui.DateLastForm as PDateLastForm,
-  fr.MaxOld as PMaxOld,
-  parentpd.PriceType as PPriceType,
-  parentpd.CostType as PCostType,
-  pd.WaitingDownloadInterval as PWaitingDownloadInterval,
-  (parentpd.PriceCode = pc.pricecode) as PIsParent
-FROM
-  usersettings.pricesdata pd
-inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
-inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
-inner join usersettings.price_update_info pui on  pui.pricecode = pc.CostCode
-inner join farm.formrules fr on fr.FirmCode=pc.CostCode
-inner join farm.regions r on r.regioncode=cd.regioncode
-inner join usersettings.pricesdata parentpd on parentpd.PriceCode = pc.showpricecode
-where
-  cd.FirmType = 0
-and parentpd.CostType = 1 ";
-            MyCmd.CommandText += param;
-			//¬ыбираем прайс-листы, у которых еще не выставлен тип ценовых колонок
-            MyCmd.CommandText += @" 
-union all
+@"
 SELECT
-  distinct
-  pd.FirmCode AS PFirmCode,
-  pd.PriceName AS PFirmName,
+  pd.FirmCode as PFirmCode,
+  pim.Id as PPriceItemId,
   pd.PriceCode as PPriceCode,
-  pui.DatePrevPrice as PDatePrevPrice,
-  pui.DateCurPrice as PDateCurPrice,
-  pui.DateLastForm as PDateLastForm,
+  if(pd.CostType = 1, concat('[ олонка] ', pc.CostName), pd.PriceName) as PPriceName,
+  pim.PriceDate as PPriceDate,
+  pim.LastFormalization as PDateLastForm,
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
   pd.CostType as PCostType,
-  pd.WaitingDownloadInterval as PWaitingDownloadInterval,
-  1 as PIsParent
+  pim.WaitingDownloadInterval as PWaitingDownloadInterval,
+  -- редактировать тип ценовой колонки и тип прайс-листа можно только относительно базовой ценовой колонки
+  if(pc.BaseCost = 1, 1, 0) PIsParent
 FROM
   usersettings.pricesdata pd
-inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
-inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
-inner join usersettings.price_update_info pui on  pui.pricecode = pd.pricecode
-inner join farm.formrules fr on fr.FirmCode=pd.pricecode
-inner join farm.regions r on r.regioncode=cd.regioncode
+  inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
+  inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
+  inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+  inner join farm.formrules fr on fr.Id = pim.FormRuleId
+  inner join farm.regions r on r.regioncode=cd.regioncode
 where
-  cd.FirmType = 0
-and pd.CostType is null ";
+    cd.FirmType = 0 
+and ((pd.CostType = 1) or (pc.BaseCost = 1))";
             MyCmd.CommandText += param;
             MyCmd.CommandText += @" 
-order by 2";
+order by PPriceName";
 
             MyDA.Fill(dtPrices);
         }
@@ -636,40 +590,24 @@ Order By Region
         private void dtPricesCostFill(string param)
         {
             MyCmd.CommandText =
-@"SELECT 
-  distinct
-	pc.ShowPriceCode AS PCPriceCode,
-	pc.CostCode AS PCCostCode,
-	pc.BaseCost as PCBaseCost,
-	pc.CostName as PCCostName
-FROM
-	usersettings.pricescosts pc
-inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
-inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
-inner join farm.regions r on r.regioncode=cd.regioncode
-where 
-    cd.firmtype = 0
-and pd.CostType = 0 ";
-            MyCmd.CommandText += param;
-            MyCmd.CommandText += @"  
-union all
-SELECT 
-  distinct
-	pc.PriceCode AS PCPriceCode,
-	pc.CostCode AS PCCostCode,
-	pc.BaseCost as PCBaseCost,
-	pc.CostName as PCCostName
-FROM
+@"
+select
+  pc.PriceItemId as PCPriceItemId,
+  pc.PriceCode as PCPriceCode,
+  pc.CostCode as PCCostCode,
+  pc.BaseCost as PCBaseCost,
+  pc.CostName as PCCostName
+from
   usersettings.pricescosts pc
-inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
-inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
-inner join farm.regions r on r.regioncode=cd.regioncode
-where 
-    cd.firmtype = 0
-and pd.CostType = 1 ";
+  inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
+  inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
+  inner join farm.regions r on r.regioncode=cd.regioncode
+where
+      cd.firmtype = 0
+";
             MyCmd.CommandText += param;
             MyCmd.CommandText += @"  
-order by 4";
+order by PCCostName";
 
 			MyDA.Fill(dtPricesCost);
         }
@@ -677,46 +615,27 @@ order by 4";
         private void dtCostsFormRulesFill(string param)
         {
             MyCmd.CommandText =
-@"SELECT 
-  distinct
-  pc.showpricecode AS CFRfr_if,
+@"
+select
+  pc.PriceItemId as CFRPriceItemId,
   pc.CostName as CFRCostName,
-  cfr.PC_CostCode AS CFRCost_Code,
+  cfr.CostCode AS CFRCost_Code,
   cfr.FieldName AS CFRFieldName,
   cfr.TxtBegin as CFRTextBegin,
   cfr.TxtEnd as CFRTextEnd
 FROM 
   farm.costformrules cfr
-inner join usersettings.pricescosts pc on pc.CostCode = cfr.pc_costcode
-inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
-inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
-inner join farm.regions r on r.regioncode=cd.regioncode
+  inner join usersettings.pricescosts pc on pc.CostCode = cfr.costcode
+  inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
+  inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
+  inner join farm.regions r on r.regioncode=cd.regioncode
 where 
      cd.firmtype = 0 
-and pd.CostType = 0 ";
+and pd.CostType is not null
+";
             MyCmd.CommandText += param;
             MyCmd.CommandText += @"   
-union all
-SELECT 
-  distinct
-  pc.pricecode AS CFRfr_if,
-  pc.CostName as CFRCostName,
-  cfr.PC_CostCode AS CFRCost_Code,
-  cfr.FieldName AS CFRFieldName,
-  cfr.TxtBegin as CFRTextBegin,
-  cfr.TxtEnd as CFRTextEnd
-FROM 
-  farm.costformrules cfr
-inner join usersettings.pricescosts pc on pc.CostCode = cfr.pc_costcode
-inner join usersettings.pricesdata pd on pd.pricecode = pc.showpricecode
-inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
-inner join farm.regions r on r.regioncode=cd.regioncode
-where 
-    cd.firmtype = 0 
-and pd.CostType = 1 ";
-            MyCmd.CommandText += param;
-            MyCmd.CommandText += @"   
-order by 2";
+order by CFRCostName";
 
             MyDA.Fill(dtCostsFormRules);
         }
@@ -724,28 +643,36 @@ order by 2";
         private void dtFormRulesFill(string param)
         {
             MyCmd.CommandText =
-				@"SELECT
-    IF(FR.ParentFormRules,FR.ParentFormRules,FR.FirmCode) AS FormID,
-    FR.ParentSynonym AS FRSynonyms,
-    FR.FirmCode AS FRPriceCode,
-	FR.Currency AS FRCurrency,
-	PFR.Delimiter As FRDelimiter,
+				@"
+SELECT
+    fr.Id as FRFormID,
+
+    pim.Id As FRPriceItemId,
+    
+    pd.PriceCode as FRSelfPriceCode,
+    pd.ParentSynonym AS FRSynonyms,
+
 	FR.ParentFormRules AS FRRules,
+
+    PFR.PriceFormatId as FRPriceFormatId,
+
+    FR.Currency AS FRCurrency,
 	FR.Memo As FRMemo,
-    CD.ShortName AS ClientShortName,
-    CD.FirmCode AS ClientCode,
-    PD.PriceName AS FRName,
-    FR.Flag AS SelfFlag,
+    if(pd.CostType = 1, concat('[ олонка] ', pc.CostName), PD.PriceName) AS FRName,
     FR.JunkPos AS FRSelfJunkPos,
     FR.AwaitPos AS FRSelfAwaitPos,
-    pui.RowCount AS FRPosNum,
-	PFR.StartLine AS FRStartLine,
-    PFR.PriceFMT as FRFormat,
+    FR.VitallyImportantMask as FRSelfVitallyImportantMask,
+
+    pim.RowCount AS FRPosNum,
+
     pfmt.FileExtention as FRExt,
+
+	PFR.Delimiter As FRDelimiter,
+	PFR.StartLine AS FRStartLine,
 	PFR.ListName as FRListName,
 	PFR.NameMask as FRNameMask,
 	PFR.ForbWords as FRForbWords,
-    FR.VitallyImportantMask as FRVitallyImportantMask,
+
 
 	PFR.TxtCodeBegin as FRTxtCodeBegin,
 	PFR.TxtCodeEnd as FRTxtCodeEnd,
@@ -836,50 +763,19 @@ order by 2";
 	PFR.FVitallyImportant as FRFVitallyImportant,
 	PFR.FMaxBoundCost as FRFMaxBoundCost,
 	PFR.FOrderCost as FRFOrderCost,
-	PFR.FMinOrderCount as FRFMinOrderCount,
-
-    CD.FirmStatus,
-    CD.BillingStatus,
-    CD.FirmSegment
-FROM UserSettings.PricesData AS PD
-INNER JOIN
-    UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0
-INNER JOIN
-    farm.regions r on r.regioncode=cd.regioncode
-INNER JOIN
-    usersettings.price_update_info pui on pui.PriceCode = PD.PriceCode
-INNER JOIN
-    Farm.formrules AS FR
-    ON FR.FirmCode=PD.PriceCode
-LEFT JOIN
-    Farm.FormRules AS PFR
-    ON PFR.FirmCode=IF(FR.ParentFormRules,FR.ParentFormRules,FR.FirmCode)
-left join Farm.PriceFMTs as pfmt on PFR.PriceFMT = pfmt.Format
+	PFR.FMinOrderCount as FRFMinOrderCount
+FROM 
+  UserSettings.PricesData AS PD
+  INNER JOIN UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0
+  INNER JOIN farm.regions r on r.regioncode=cd.regioncode
+  inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode
+  inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId
+  inner join Farm.formrules AS FR ON FR.Id = pim.FormRuleId
+  left join Farm.FormRules AS PFR ON PFR.id = ifnull(fr.ParentFormRules, FR.Id)
+  left join Farm.PriceFMTs as pfmt on pfmt.id = PFR.PriceFormatId
 where
-pd.PriceCode in
-(
-SELECT 
-  distinct
-  pd.PriceCode as PPriceCode
-FROM
-  usersettings.pricesdata pd
-inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
-inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
-where
-  cd.FirmType = 0
-and pd.CostType = 0
-union all
-SELECT 
-  distinct
-  pc.CostCode as PPriceCode
-FROM
-  usersettings.pricesdata pd
-inner join usersettings.pricescosts pc on pc.showpricecode = pd.pricecode
-inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
-where
-  cd.FirmType = 0
-and pd.CostType = 1
-)";
+  ((pd.CostType = 1) or (pc.BaseCost = 1))
+";
             MyCmd.CommandText += param;
             MyDA.Fill(dtFormRules);
         }
@@ -923,18 +819,59 @@ and pd.CostType = 1
 
             Application.DoEvents();
             DataRow[] drFR;
-            drFR = dtFormRules.Select("FRPriceCode = " + drP["PPriceCode"].ToString());
+            drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
             existParentRules = drFR[0]["FRRules"].ToString();
 
             DataRow drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
             frmCaption = String.Format("{0}; {1}", drC["CShortName"], drC["CRegion"]);
 
-            string f = drFR[0]["FRPriceCode"].ToString();
+			string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
 
-            fmt = drFR[0]["FRFormat"].ToString();
+            fmt = (drFR[0]["FRPriceFormatId"] is DBNull) ? null : (PriceFormat?)Convert.ToInt32(drFR[0]["FRPriceFormatId"]);
 
-			FillParentComboBox(cmbParentRules, drFR[0]["FRRules"]);
-			FillParentComboBox(cmbParentSynonyms, drFR[0]["FRSynonyms"]);
+			FillParentComboBox(cmbParentRules,
+				@"
+select
+  pim.FormRuleID,
+  concat(cd.ShortName, ' (', if(pd.CostType = 1, concat('[ олонка] ', pc.CostName), pd.PriceName), ') - ', r.Region) PriceName
+from
+  usersettings.clientsdata cd,
+  usersettings.pricesdata pd,
+  usersettings.pricescosts pc,
+  usersettings.priceitems pim,
+  farm.regions r
+where
+  pd.FirmCode = cd.FirmCode
+and pd.CostType is not null
+and r.RegionCode = cd.RegionCode
+and pc.PriceCode = pd.PriceCode
+and ((pd.CostType = 1) or (pc.BaseCost = 1))
+and pim.id = pc.PriceItemId
+and pim.FormRuleID = ?ParentValue
+order by PriceName",
+				drFR[0]["FRRules"],
+				"FormRuleId",
+				"PriceName");
+			FillParentComboBox(
+				cmbParentSynonyms, 
+				@"
+select
+  pd.PriceCode,
+  concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
+from
+  usersettings.clientsdata cd,
+  usersettings.pricesdata pd,
+  farm.regions r
+where
+  pd.FirmCode = cd.FirmCode
+and pd.CostType is not null
+and r.RegionCode = cd.RegionCode
+and pd.PriceCode = ?ParentValue
+order by PriceName
+",
+				drFR[0]["FRSynonyms"],
+				"PriceCode",
+				"PriceName");
 
             string r = ".err";
             DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + fmt + "'");
@@ -943,7 +880,7 @@ and pd.CostType = 1
 
             delimiter = drFR[0]["FRDelimiter"].ToString();
 
-            string takeFile = f + r;
+            string takeFile = shortFileNameByPriceItemId + r;
             if (!(File.Exists(StartPath + takeFile)))
             {
                 fileExist = false;
@@ -952,41 +889,41 @@ and pd.CostType = 1
             else
             {
                 fileExist = true;
-                Directory.CreateDirectory(EndPath + f);
+                Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
 
-                File.Copy(StartPath + takeFile, EndPath + f + "\\" + takeFile, true);
-                string filePath = EndPath + f + "\\" + takeFile;
+                File.Copy(StartPath + takeFile, EndPath + shortFileNameByPriceItemId + "\\" + takeFile, true);
+                string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
 
                 Application.DoEvents();
 
-                if ((fmt == "DB") || (fmt == "DBF"))
+                if ((fmt == PriceFormat.DBF))
                 {
                     OpenDBFFile(filePath);
                 }
                 else
-                    if (fmt == "XLS")
+					if (fmt == PriceFormat.XLS)
                     {
                         listName = drFR[0]["FRListName"].ToString();
                         OpenEXLFile(filePath);
                     }
                     else
-                        if ((fmt == "DOS") || (fmt == "WIN"))
-                        {
-                            dbcMain.Close();
-                            dbcMain.Dispose();
-                            if (delimiter == String.Empty)
-                            {
-                                startLine = drFR[0]["FRStartLine"] is DBNull ? -1 : Convert.ToInt64(drFR[0]["FRStartLine"]);
+						if ((fmt == PriceFormat.DelimDOS) || (fmt == PriceFormat.DelimWIN))
+						{
+							dbcMain.Close();
+							dbcMain.Dispose();
+							OpenTXTDFile(filePath, fmt);
+						}
+				else
+							if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+							{
+								dbcMain.Close();
+								dbcMain.Dispose();
+								startLine = drFR[0]["FRStartLine"] is DBNull ? -1 : Convert.ToInt64(drFR[0]["FRStartLine"]);
 
-                                TxtFilePath = EndPath + f + "\\" + takeFile;
-                                dtMarking.Clear();
-                                OpenTXTFFile(filePath, drFR[0]);
-                            }
-                            else
-                            {
-                                OpenTXTDFile(filePath, fmt);
-                            }
-                        }
+								TxtFilePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
+								dtMarking.Clear();
+								OpenTXTFFile(filePath, drFR[0]);
+							}
                 Application.DoEvents();
                 ShowTab(fmt);
                 Application.DoEvents();
@@ -995,48 +932,25 @@ and pd.CostType = 1
             }
         }
 
-		private void FillParentComboBox(ComboBox cmbParent, object ParentValue)
+		private void FillParentComboBox(ComboBox cmbParent, string FillSQL, object ParentValue, string IdField, string NameField)
 		{
-			DataSet ParentDS = MySqlHelper.ExecuteDataset(MyCn, @"
-select
-  pd.PriceCode,
-  concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
-from
-  usersettings.clientsdata cd,
-  usersettings.pricesdata pd,
-  farm.regions r
-where
-  pd.FirmCode = cd.FirmCode
-and pd.CostType is not null
-and r.RegionCode = cd.RegionCode
-and pd.PriceCode = ?PriceCode
-order by 2", new MySqlParameter("?PriceCode", ParentValue));
-			FillParentComboBoxFromTable(cmbParent, ParentDS.Tables[0]);
+			DataSet ParentDS = MySqlHelper.ExecuteDataset(MyCn, FillSQL, new MySqlParameter("?ParentValue", ParentValue));
+			FillParentComboBoxFromTable(cmbParent, ParentDS.Tables[0], IdField, NameField);
 		}
 
-		private void FillParentComboBoxBySearch(ComboBox cmbParent)
+		private void FillParentComboBoxBySearch(ComboBox cmbParent, string FillSQL, string IdField, string NameField)
 		{
 			//¬озможно есть способ более проще получить значение биндинга
 			object SelectedValue = ((DataRowView)bsFormRules.Current).Row[cmbParent.DataBindings["SelectedValue"].BindingMemberInfo.BindingField];
-			DataSet ParentDS = MySqlHelper.ExecuteDataset(MyCn, @"
-select
-  distinct
-  pd.PriceCode,
-  concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
-from
-  usersettings.clientsdata cd,
-  usersettings.pricesdata pd,
-  farm.regions r
-where
-  pd.FirmCode = cd.FirmCode
-and pd.CostType is not null
-and r.RegionCode = cd.RegionCode
-and ((pd.PriceCode = ?PrevPriceCode) or (pd.PriceName like ?SearchText) or (cd.ShortName like ?SearchText))
-order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParameter("?SearchText", "%" + cmbParent.Text + "%"));
-			FillParentComboBoxFromTable(cmbParent, ParentDS.Tables[0]);
+			DataSet ParentDS = MySqlHelper.ExecuteDataset(
+				MyCn, 
+				FillSQL, 
+				new MySqlParameter("?PrevParentValue", SelectedValue), 
+				new MySqlParameter("?SearchText", "%" + cmbParent.Text + "%"));
+			FillParentComboBoxFromTable(cmbParent, ParentDS.Tables[0], IdField, NameField);
 		}
 
-		private void FillParentComboBoxFromTable(ComboBox cmbParent, DataTable dtParent)
+		private void FillParentComboBoxFromTable(ComboBox cmbParent, DataTable dtParent, string IdField, string NameField)
 		{
 			bsFormRules.SuspendBinding();
 			try
@@ -1044,13 +958,13 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
 				cmbParent.DataSource = null;
 				cmbParent.Items.Clear();
 				DataRow drNull = dtParent.NewRow();
-				drNull["PriceCode"] = DBNull.Value;
-				drNull["PriceName"] = "<не установлены>";
+				drNull[IdField] = DBNull.Value;
+				drNull[NameField] = "<не установлены>";
 				dtParent.Rows.InsertAt(drNull, 0);
 				cmbParent.Items.Add(drNull);
 				cmbParent.DataSource = dtParent;
-				cmbParent.DisplayMember = "PriceName";
-				cmbParent.ValueMember = "PriceCode";
+				cmbParent.DisplayMember = NameField;
+				cmbParent.ValueMember = IdField;
 			}
 			finally
 			{
@@ -1058,81 +972,84 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
 			}
 		}
 
-        private void ShowTab(string fmt)
+        private void ShowTab(PriceFormat? fmt)
         {
             tcInnerTable.Visible = true;
             
             indgvPriceData.DataSource = dtPrice;
+			switch (fmt)
+			{
+				case PriceFormat.DelimDOS:
+				case PriceFormat.DelimWIN:
+					tcInnerTable.SizeMode = TabSizeMode.Fixed;
+					tcInnerTable.ItemSize = new Size(0, 1);
+					tcInnerTable.Appearance = TabAppearance.Buttons;
 
-            if ((fmt == "WIN") || (fmt == "DOS"))
-            {
-                if (delimiter == String.Empty)
-                {
-                    tcInnerTable.SizeMode = TabSizeMode.Normal;
-                    tcInnerTable.ItemSize = new Size(58, 18);
-                    tcInnerTable.Appearance = TabAppearance.Normal;
+					label23.Visible = false;
+					txtBoxSheetName.Visible = false;
+					pnlGeneralFields.Visible = true;
+					pnlTxtFields.Visible = false;
 
-                    label23.Visible = false;
-                    txtBoxSheetName.Visible = false;
-                    pnlGeneralFields.Visible = false;
-                    pnlTxtFields.Visible = true;
+					indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
 
-                    indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
-                    indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
-                }
-                else
-                {
-                    tcInnerTable.SizeMode = TabSizeMode.Fixed;
-                    tcInnerTable.ItemSize = new Size(0, 1);
-                    tcInnerTable.Appearance = TabAppearance.Buttons;
+					tcInnerSheets.SizeMode = TabSizeMode.Fixed;
+					tcInnerSheets.ItemSize = new Size(0, 1);
+					tcInnerSheets.Appearance = TabAppearance.FlatButtons;
 
-                    label23.Visible = false;
-                    txtBoxSheetName.Visible = false;
-                    pnlGeneralFields.Visible = true;
-                    pnlTxtFields.Visible = false;
+					break;
 
-                    indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
-                }
-                tcInnerSheets.SizeMode = TabSizeMode.Fixed;
-                tcInnerSheets.ItemSize = new Size(0, 1);
-                tcInnerSheets.Appearance = TabAppearance.FlatButtons;
-            }
-            else
-            {
-                if (fmt == "XLS")
-                {
-                    tcInnerTable.SizeMode = TabSizeMode.Fixed;
-                    tcInnerTable.ItemSize = new Size(0, 1);
-                    tcInnerTable.Appearance = TabAppearance.Buttons;
+				case PriceFormat.FixedDOS:
+				case PriceFormat.FixedWIN:
+					tcInnerTable.SizeMode = TabSizeMode.Normal;
+					tcInnerTable.ItemSize = new Size(58, 18);
+					tcInnerTable.Appearance = TabAppearance.Normal;
 
-                    tcInnerSheets.SizeMode = TabSizeMode.Normal;
-                    tcInnerSheets.ItemSize = new Size(58, 18);
-                    tcInnerSheets.Appearance = TabAppearance.Normal;
+					label23.Visible = false;
+					txtBoxSheetName.Visible = false;
+					pnlGeneralFields.Visible = false;
+					pnlTxtFields.Visible = true;
 
-                    label23.Visible = true;
-                    txtBoxSheetName.Visible = true;
-                    pnlGeneralFields.Visible = true;
-                    pnlTxtFields.Visible = false;
-                }
-                else
-                    if ((fmt == "DB") || (fmt == "DBF"))
-                    {
-                        tcInnerTable.SizeMode = TabSizeMode.Fixed;
-                        tcInnerTable.ItemSize = new Size(0, 1);
-                        tcInnerTable.Appearance = TabAppearance.Buttons;
+					indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
+					indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
 
-                        tcInnerSheets.SizeMode = TabSizeMode.Fixed;
-                        tcInnerSheets.ItemSize = new Size(0, 1);
-                        tcInnerSheets.Appearance = TabAppearance.Buttons;
+					tcInnerSheets.SizeMode = TabSizeMode.Fixed;
+					tcInnerSheets.ItemSize = new Size(0, 1);
+					tcInnerSheets.Appearance = TabAppearance.FlatButtons;
 
-                        label23.Visible = false;
-                        txtBoxSheetName.Visible = false;
-                        pnlGeneralFields.Visible = true;
-                        pnlTxtFields.Visible = false;
-                    }
+					break;
 
-                indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
-            }
+				case PriceFormat.XLS:
+					tcInnerTable.SizeMode = TabSizeMode.Fixed;
+					tcInnerTable.ItemSize = new Size(0, 1);
+					tcInnerTable.Appearance = TabAppearance.Buttons;
+
+					tcInnerSheets.SizeMode = TabSizeMode.Normal;
+					tcInnerSheets.ItemSize = new Size(58, 18);
+					tcInnerSheets.Appearance = TabAppearance.Normal;
+
+					label23.Visible = true;
+					txtBoxSheetName.Visible = true;
+					pnlGeneralFields.Visible = true;
+					pnlTxtFields.Visible = false;
+
+					break;
+
+				case PriceFormat.DBF:
+					tcInnerTable.SizeMode = TabSizeMode.Fixed;
+					tcInnerTable.ItemSize = new Size(0, 1);
+					tcInnerTable.Appearance = TabAppearance.Buttons;
+
+					tcInnerSheets.SizeMode = TabSizeMode.Fixed;
+					tcInnerSheets.ItemSize = new Size(0, 1);
+					tcInnerSheets.Appearance = TabAppearance.Buttons;
+
+					label23.Visible = false;
+					txtBoxSheetName.Visible = false;
+					pnlGeneralFields.Visible = true;
+					pnlTxtFields.Visible = false;
+
+					break;
+			}
 
             if (existParentRules == String.Empty)
             {
@@ -1262,12 +1179,12 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
             } while (!res);
         }
 
-        private void OpenTXTDFile(string filePath, string fmt)
+        private void OpenTXTDFile(string filePath, PriceFormat? fmt)
         {
             using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
             {
                 w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-                w.WriteLine(("WIN" == fmt.ToUpper()) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
+                w.WriteLine((fmt == PriceFormat.DelimWIN) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
                 w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
                 w.WriteLine("ColNameHeader=False");
                 w.WriteLine("MaxScanRows=300");
@@ -1304,7 +1221,7 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
             using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
             {
                 w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-                w.WriteLine(("WIN" == fmt.ToUpper()) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
+				w.WriteLine((fmt == PriceFormat.DelimWIN) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
                 w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
                 w.WriteLine("ColNameHeader=False");
                 w.WriteLine("MaxScanRows=300");
@@ -1552,7 +1469,7 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
             return flag;
         }
 
-        private void OpenTable(string fmt)
+        private void OpenTable(PriceFormat? fmt)
         {
             if (dtMarking.Rows.Count > 1)
             {
@@ -1575,7 +1492,7 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
 				using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(TxtFilePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
                 {
                     w.WriteLine("[" + Path.GetFileName(TxtFilePath) + "]");
-                    w.WriteLine(("WIN" == fmt.ToUpper()) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
+                    w.WriteLine((fmt == PriceFormat.FixedWIN) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
                     w.WriteLine("Format=FixedLength");
                     w.WriteLine("ColNameHeader=False");
                     w.WriteLine("MaxScanRows=300");
@@ -1806,7 +1723,7 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
 
 				RefreshDataBind();
 				currentClientCode = 0;
-				currentPriceCode = 0;
+				currentPriceItemId = 0;
 				tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
                 tmrUpdateApply.Stop();
@@ -1822,10 +1739,10 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
                     openedPriceDR = drP;
 
 					currentClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
-					currentPriceCode = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceCode.ColumnName]);
+					currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
 
-					bsCostsFormRules.Filter = "CFRfr_if = " + drP[PPriceCode.ColumnName].ToString();
-					bsFormRules.Filter = "FRPriceCode = " + drP[PPriceCode.ColumnName].ToString();
+					bsCostsFormRules.Filter = "CFRPriceItemId = " + currentPriceItemId.ToString();
+					bsFormRules.Filter = "FRPriceItemId = " + currentPriceItemId.ToString();
 					bsCostsFormRules.ResumeBinding();
 					bsFormRules.ResumeBinding();
 
@@ -1849,7 +1766,7 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
 				{
 					indgvPrice.Select();
 					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentClientCode);
-					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceCode.ColumnName, currentPriceCode);
+					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceItemId.ColumnName, currentPriceItemId);
 				}
 		}
 
@@ -1983,7 +1900,10 @@ order by 2", new MySqlParameter("?PrevPriceCode", SelectedValue), new MySqlParam
 				MyCn.Open();
 			try
 			{
-				long FirmCode = Convert.ToInt64(MySqlHelper.ExecuteScalar(MyCn, "select FirmCode from usersettings.pricesdata where PriceCode = ?PriceCode", new MySqlParameter("?PriceCode", ((DataRowView)bsFormRules.Current)[FRPriceCode.ColumnName])));
+				long FirmCode = Convert.ToInt64(
+					MySqlHelper.ExecuteScalar(MyCn, 
+					"select FirmCode from usersettings.pricesdata where PriceCode = ?SelfPriceCode",
+					new MySqlParameter("?SelfPriceCode", ((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName])));
 				System.Diagnostics.Process.Start(String.Format("mailto:{0}", GetContactText(FirmCode, 2, 0)));
 			}
 			finally
@@ -2114,7 +2034,7 @@ and c.Type = ?ContactType;",
             if (pnlFloat.Visible)
             {
                 pnlFloat.Visible = false;
-                if (!(fmt.Equals(cmbFormat.Text)) || !(delimiter.Equals(tbDevider.Text)))
+                if (!(fmt.Equals((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue))) || !(delimiter.Equals(tbDevider.Text)))
                         DoOpenPrice(openedPriceDR);
                 
                 foreach (INDataGridView indg in gds)
@@ -2155,7 +2075,7 @@ and c.Type = ?ContactType;",
                 {
                     erP.Dispose();
                     r = new Regex(txtMask.Text);
-                    if ((fmt.ToUpper() == "WIN") && (delimiter == String.Empty))
+                    if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
                     {
                         if ((txtExistBegin.Text != String.Empty) && (txtExistEnd.Text != String.Empty))
                         {
@@ -2499,55 +2419,35 @@ and c.Type = ?ContactType;",
                             SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
 
+							//todo: здесь надо переписать
                             MySqlCommand mcmdUPrice = new MySqlCommand();
                             MySqlDataAdapter daPrice = new MySqlDataAdapter();
                             mcmdUPrice.CommandText = @"
-insert into usersettings.price_update_info (PriceCode)
-select
-  pc.PriceCode
-from
-  usersettings.PricesData pd,
-  usersettings.PricesCosts pc
-where
-    (?PIsParent = 1)
-and pd.PriceCode = ?PPriceCode
-and (?PCostType = 1)
-and pc.ShowPriceCode = pd.PriceCode
-and pc.PriceCode <> pd.PriceCode
-and not exists(select * from usersettings.price_update_info pui where pui.PriceCode = pc.PriceCode);
-
-delete from
-  usersettings.price_update_info
-where
-    PriceCode in 
-(
-select
-  pc.PriceCode
-from
-  usersettings.PricesData pd,
-  usersettings.PricesCosts pc
-where
-    (?PIsParent = 1)
-and pd.PriceCode = ?PPriceCode
-and (?PCostType = 0)
-and pc.ShowPriceCode = pd.PriceCode
-and pc.PriceCode <> pd.PriceCode
-);
+call usersettings.UpdateCostType(?PPriceCode, ?PCostType);
 
 UPDATE 
   usersettings.PricesData pd 
 SET
-  PriceType = if(?PIsParent = 1, ?PPriceType, PriceType),
-  CostType = if(?PIsParent = 1, ?PCostType, CostType), 
-  WaitingDownloadInterval = ?PWaitingDownloadInterval
+  PriceType = if(?PIsParent = 1, ?PPriceType, PriceType)
 WHERE 
     pd.PriceCode = ?PPriceCode;
+
 UPDATE 
+  usersettings.priceitems pim
+SET
+  pim.WaitingDownloadInterval = ?PWaitingDownloadInterval
+WHERE 
+    pim.Id = ?PPriceItemId;
+
+UPDATE 
+  usersettings.priceitems pim,
   farm.FormRules fr 
 SET
-    MaxOld = ?PMaxOld
+  fr.MaxOld = ?PMaxOld
 WHERE 
-    fr.FirmCode = ?PPriceCode;";
+    pim.Id = ?PPriceItemId
+and fr.Id = pim.FormRuleId;
+";
 
                             mcmdUPrice.Parameters.Clear();
                             mcmdUPrice.Parameters.Add("?PPriceType", MySql.Data.MySqlClient.MySqlDbType.Int32);
@@ -2555,6 +2455,7 @@ WHERE
                             mcmdUPrice.Parameters.Add("?PWaitingDownloadInterval", MySql.Data.MySqlClient.MySqlDbType.Int32);
                             mcmdUPrice.Parameters.Add("?PMaxOld", MySql.Data.MySqlClient.MySqlDbType.Int32);
                             mcmdUPrice.Parameters.Add("?PPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
+							mcmdUPrice.Parameters.Add("?PPriceItemId", MySql.Data.MySqlClient.MySqlDbType.Int64);
 							mcmdUPrice.Parameters.Add("?PIsParent", MySql.Data.MySqlClient.MySqlDbType.Int32);
 
                             foreach (MySqlParameter ms in mcmdUPrice.Parameters)
@@ -2701,7 +2602,7 @@ WHERE
         {
             if (fileExist)
             {
-                if (((fmt == "WIN") || (fmt == "DOS")) && (delimiter == String.Empty))
+				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
                 {
                     CregKey = BaseRegKey + "\\CostsDataGridFixed";
                 }
@@ -2715,7 +2616,7 @@ WHERE
 
         private void LoadCostsSettings()
         {
-            if (((fmt == "WIN") || (fmt == "DOS")) && (delimiter == String.Empty))
+			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
             {
                 CregKey = BaseRegKey + "\\CostsDataGridFixed";
             }
@@ -2724,7 +2625,19 @@ WHERE
                 CregKey = BaseRegKey + "\\CostsDataGrid";
             }
             indgvCosts.LoadSettings(CregKey);
-        }
+
+			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+			{
+				indgvCosts.Columns[cFRCostNameDataGridViewTextBoxColumn.Name].Visible = true;
+				indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
+				indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
+			}
+			else
+			{
+				indgvCosts.Columns[cFRCostNameDataGridViewTextBoxColumn.Name].Visible = true;
+				indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
+			}
+		}
 
         private void LoadMarkingSettings()
         {
@@ -2788,11 +2701,6 @@ WHERE
         private void txtBoxCode_DoubleClick(object sender, EventArgs e)
         {
             ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
-
-			//TODO: ¬озможно этот код не нужен, а был вставлен дл€ отладки
-            DataTable dt = new DataTable();
-            if(dtSet.HasChanges())
-                dt = dtFormRules.GetChanges();
         }
 
         private void txtBoxCodeBegin_DoubleClick(object sender, EventArgs e)
@@ -3004,15 +2912,7 @@ WHERE
             FindErrors(txtBoxVitallyImportantMask, txtBoxVitalyImportant, txtBoxVitalyImportantBegin, txtBoxVitalyImportantEnd);
         }
 
-		private void cmbParentComboBox_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Enter)
-			{
-				FillParentComboBoxBySearch((ComboBox)sender);
-			}
-		}
-
-		private string GetPriceFileExtention(long PriceCode)
+		private string GetPriceFileExtention(long PriceItemtId)
 		{
 			MyCn.Open();
 			try
@@ -3020,13 +2920,17 @@ WHERE
 				return (string)MySqlHelper.ExecuteScalar(
 					MyCn,
 					@"
-SELECT p.FileExtention 
+SELECT 
+  p.FileExtention 
 FROM 
-  farm.formrules f, farm.pricefmts p
+  usersettings.priceitems,
+  farm.formrules f, 
+  farm.pricefmts p
 where
-f.FirmCode = ?PriceCode
-and f.PriceFMT = p.Format",
-					new MySqlParameter("?PriceCode", PriceCode));
+    priceitems.id = ?PriceItemtId
+and f.Id = priceitems.FormRuleID
+and p.Id = f.PriceFormatID",
+					new MySqlParameter("?PriceItemtId", PriceItemtId));
 			}
 			finally			
 			{
@@ -3043,24 +2947,24 @@ and f.PriceFMT = p.Format",
 				string BaseFolder = @"\\FMS\Prices\Base\";
 				string InboundFolder = @"\\FMS\Prices\Inbound0\";
 
-				string PriceExtention = GetPriceFileExtention(Convert.ToInt64(selectedPrice[PPriceCode]));
-				string sourceFile = Path.GetFullPath(BaseFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceCode].ToString() + PriceExtention;
-				string destinationFile = Path.GetFullPath(InboundFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceCode].ToString() + PriceExtention;
+				string PriceExtention = GetPriceFileExtention(Convert.ToInt64(selectedPrice[PPriceItemId]));
+				string sourceFile = Path.GetFullPath(BaseFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceItemId].ToString() + PriceExtention;
+				string destinationFile = Path.GetFullPath(InboundFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceItemId].ToString() + PriceExtention;
 
 				if (File.Exists(sourceFile))
 				{
 					if (!File.Exists(destinationFile))
 					{
-						File.Copy(sourceFile, destinationFile);
+						File.Move(sourceFile, destinationFile);
 						MyCn.Open();
 						try
 						{
 							MySqlHelper.ExecuteNonQuery(
 								MyCn,
-								"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceCode) values (now(), ?UserName, ?UserHost, ?PriceCode)",
+								"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
 								new MySqlParameter("?UserName", Environment.UserName),
 								new MySqlParameter("?UserHost", Environment.MachineName),
-								new MySqlParameter("?PriceCode", Convert.ToInt64(selectedPrice[PPriceCode])));
+								new MySqlParameter("?PriceItemId", Convert.ToInt64(selectedPrice[PPriceItemId])));
 						}
 						finally
 						{
@@ -3083,11 +2987,64 @@ and f.PriceFMT = p.Format",
 		private void indgvPrice_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
 			//≈сли рассматриваютс€ колонки с ComboBox и строки с данными
-			if ((e.ColumnIndex >= 6) && (e.RowIndex >= 0))
+			if ((e.RowIndex >= 0) && ( ((INDataGridView)sender).Columns[e.ColumnIndex].CellTemplate is DataGridViewComboBoxCell))
 			{
 				//≈сли это не родительский прайс-лист, то это ценова€ колонка многофайлового прайс-листа и измен€ть ее нельз€
 				if (!Convert.ToBoolean( ((DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem)[PIsParent.ColumnName]))				
 					e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
+			}
+		}
+
+		private void cmbParentRules_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				FillParentComboBoxBySearch((ComboBox)sender, @"
+select
+  pim.FormRuleID,
+  concat(cd.ShortName, ' (', if(pd.CostType = 1, concat('[ олонка] ', pc.CostName), pd.PriceName), ') - ', r.Region) PriceName
+from
+  usersettings.clientsdata cd,
+  usersettings.pricesdata pd,
+  usersettings.pricescosts pc,
+  usersettings.priceitems pim,
+  farm.regions r
+where
+  pd.FirmCode = cd.FirmCode
+and pd.CostType is not null
+and r.RegionCode = cd.RegionCode
+and pc.PriceCode = pd.PriceCode
+and ((pd.CostType = 1) or (pc.BaseCost = 1))
+and pim.id = pc.PriceItemId
+and ((pim.FormRuleID = ?PrevParentValue) or (pd.PriceName like ?SearchText) or (cd.ShortName like ?SearchText))
+order by PriceName
+", 
+				"FormRuleId", "PriceName");
+			}
+		}
+
+		private void cmbParentSynonyms_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				FillParentComboBoxBySearch(
+					(ComboBox)sender, 
+@"select
+  pd.PriceCode,
+  concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
+from
+  usersettings.clientsdata cd,
+  usersettings.pricesdata pd,
+  farm.regions r
+where
+  pd.FirmCode = cd.FirmCode
+and pd.CostType is not null
+and r.RegionCode = cd.RegionCode
+and ((pd.PriceCode = ?PrevParentValue) or (pd.PriceName like ?SearchText) or (cd.ShortName like ?SearchText))
+order by PriceName
+", 
+	"PriceCode", 
+	"PriceName");
 			}
 		}
 

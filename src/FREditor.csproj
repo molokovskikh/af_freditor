@@ -48,9 +48,9 @@
     <TargetCulture>ru-RU</TargetCulture>
     <ProductName>Редактор правил формализации</ProductName>
     <PublisherName>Inforoom</PublisherName>
-    <MinimumRequiredVersion>1.1.37.57</MinimumRequiredVersion>
-    <ApplicationRevision>57</ApplicationRevision>
-    <ApplicationVersion>1.1.37.57</ApplicationVersion>
+    <MinimumRequiredVersion>1.2.0.70</MinimumRequiredVersion>
+    <ApplicationRevision>70</ApplicationRevision>
+    <ApplicationVersion>1.2.0.70</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
