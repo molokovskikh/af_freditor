@@ -34,14 +34,12 @@ namespace FREditor
         Name2,
         Name3,
         FirmCr,
-        CountryCr,
         Unit,
         Volume,
         Quantity,
         Note,
         Period,
         Doc,
-        BaseCost,
         Currency,
         MinBoundCost,
         Junk,
@@ -202,10 +200,6 @@ namespace FREditor
   TxtNameEnd = ?FRTxtNameEnd,
   TxtFirmCrBegin = ?FRTxtFirmCrBegin,
   TxtFirmCrEnd = ?FRTxtFirmCrEnd,
-  TxtCountryCrBegin = ?FRTxtCountryCrBegin,
-  TxtCountryCrEnd = ?FRTxtCountryCrEnd,
-  TxtBaseCostBegin = ?FRTxtBaseCostBegin,
-  TxtBaseCostEnd = ?FRTxtBaseCostEnd,
   TxtMinBoundCostBegin = ?FRTxtMinBoundCostBegin,
   TxtMinBoundCostEnd = ?FRTxtMinBoundCostEnd,
   TxtCurrencyBegin = ?FRTxtCurrencyBegin,
@@ -245,7 +239,6 @@ namespace FREditor
   FName2 = ?FRFName2,
   FName3 = ?FRFName3,
   FFirmCr = ?FRFFirmCr,
-  FBaseCost = ?FRFBaseCost,
   FMinBoundCost = ?FRFMinBoundCost,
   FCurrency = ?FRFCurrency,
   FUnit = ?FRFUnit,
@@ -296,10 +289,6 @@ where
             this.mcmdUFormRules.Parameters.Add("?FRTxtNameEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUFormRules.Parameters.Add("?FRTxtFirmCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUFormRules.Parameters.Add("?FRTxtFirmCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtCountryCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtCountryCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtBaseCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtBaseCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUFormRules.Parameters.Add("?FRTxtMinBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUFormRules.Parameters.Add("?FRTxtMinBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUFormRules.Parameters.Add("?FRTxtCurrencyBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
@@ -350,7 +339,6 @@ where
             this.mcmdUFormRules.Parameters.Add("?FRFName2", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFName3", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFFirmCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFBaseCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFMinBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUFormRules.Parameters.Add("?FRFUnit", MySql.Data.MySqlClient.MySqlDbType.VarString);
@@ -686,12 +674,6 @@ SELECT
 	PFR.TxtFirmCrBegin as FRTxtFirmCrBegin,
 	PFR.TxtFirmCrEnd as FRTxtFirmCrEnd,
 
-	PFR.TxtCountryCrBegin as FRTxtCountryCrBegin,
-	PFR.TxtCountryCrEnd as FRTxtCountryCrEnd,
-
-	PFR.TxtBaseCostBegin as FRTxtBaseCostBegin,
-	PFR.TxtBaseCostEnd as FRTxtBaseCostEnd,
-
 	PFR.TxtMinBoundCostBegin as FRTxtMinBoundCostBegin,
 	PFR.TxtMinBoundCostEnd as FRTxtMinBoundCostEnd,
 
@@ -747,7 +729,6 @@ SELECT
 	PFR.FName2 as FRFName2,
 	PFR.FName3 as FRFName3,
 	PFR.FFirmCr as FRFFirmCr,
-	PFR.FBaseCost as FRFBaseCost,
 	PFR.FMinBoundCost as FRFMinBoundCost,
 	PFR.FCurrency as FRFCurrency,
 	PFR.FUnit as FRFUnit,
@@ -1281,7 +1262,7 @@ order by PriceName
             foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields)))
             {
                 TmpName = GetFieldName(pf);
-                if (PriceFields.OriginalName != pf && PriceFields.BaseCost != pf && String.Empty != TmpName)
+				if ((PriceFields.OriginalName != pf) && (String.Empty != TmpName))
                 {
                     try
                     {
