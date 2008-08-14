@@ -525,7 +525,7 @@ SELECT
   pd.FirmCode as PFirmCode,
   pim.Id as PPriceItemId,
   pd.PriceCode as PPriceCode,
-  if(pd.CostType = 1, concat('[Колонка] ', pc.CostName), pd.PriceName) as PPriceName,
+  if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName) as PPriceName,
   pim.PriceDate as PPriceDate,
   pim.LastFormalization as PDateLastForm,
   fr.MaxOld as PMaxOld,
@@ -646,7 +646,7 @@ SELECT
 
     FR.Currency AS FRCurrency,
 	FR.Memo As FRMemo,
-    if(pd.CostType = 1, concat('[Колонка] ', pc.CostName), PD.PriceName) AS FRName,
+    if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), PD.PriceName) AS FRName,
     FR.JunkPos AS FRSelfJunkPos,
     FR.AwaitPos AS FRSelfAwaitPos,
     FR.VitallyImportantMask as FRSelfVitallyImportantMask,
@@ -814,7 +814,7 @@ where
 				@"
 select
   pim.FormRuleID,
-  concat(cd.ShortName, ' (', if(pd.CostType = 1, concat('[Колонка] ', pc.CostName), pd.PriceName), ') - ', r.Region) PriceName
+  concat(cd.ShortName, ' (', if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName), ') - ', r.Region) PriceName
 from
   usersettings.clientsdata cd,
   usersettings.pricesdata pd,
@@ -2983,7 +2983,7 @@ and p.Id = f.PriceFormatID",
 				FillParentComboBoxBySearch((ComboBox)sender, @"
 select
   pim.FormRuleID,
-  concat(cd.ShortName, ' (', if(pd.CostType = 1, concat('[Колонка] ', pc.CostName), pd.PriceName), ') - ', r.Region) PriceName
+  concat(cd.ShortName, ' (', if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName), ') - ', r.Region) PriceName
 from
   usersettings.clientsdata cd,
   usersettings.pricesdata pd,
