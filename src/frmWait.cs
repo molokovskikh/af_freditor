@@ -80,7 +80,6 @@ namespace FREditor
 			this.Name = "frmWait";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Load += new System.EventHandler(this.frmWait_Load);
-			this.Closed += new System.EventHandler(this.frmWait_Closed);
 			this.ResumeLayout(false);
 
 		}
@@ -90,13 +89,17 @@ namespace FREditor
 		{
 			tmrWait.Enabled = false;
 			if ((openPrice != null) && (drP != null))
-				openPrice(drP);
-			Close();
-		}
+				try
+				{
+					openPrice(drP);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show("Не удалось открыть прайс-лист. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при открытии прайс-листа.", ex));
+				}
 
-		private void frmWait_Closed(object sender, System.EventArgs e)
-		{
-			System.Diagnostics.Debug.WriteLine("frmWait_Closed");
+			Close();
 		}
 
 		private void frmWait_Load(object sender, System.EventArgs e)

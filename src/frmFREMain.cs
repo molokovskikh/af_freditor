@@ -86,8 +86,8 @@ namespace FREditor
         private OleDbConnection dbcMain = new OleDbConnection();
 
 #if DEBUG
-		string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-		//string StartPath = "C:\\TEMP\\Base\\";
+		//string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+		string StartPath = "C:\\TEMP\\Base\\";
 #else
 		string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
 #endif
@@ -815,26 +815,20 @@ where
         {
             fW = new frmWait();
 
-            try
-            {
-                Debug.WriteLine("DoOpenPrice begin");
+			try
+			{
 
-                fW.openPrice += new OpenPriceDelegate(OpenPrice);
-                fW.drP = drP;
+				fW.openPrice += new OpenPriceDelegate(OpenPrice);
+				fW.drP = drP;
 
-                fW.ShowDialog();
+				fW.ShowDialog();			
 
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("DoOpenPrice error : " + e.ToString());
-            }
-            finally
-            {
-                Debug.WriteLine("DoOpenPrice end");
-            }
+			}
+			finally
+			{
+				fW = null;
+			}
 
-            fW = null;
         }
 
         public delegate void OpenPriceDelegate(DataRow drP);
@@ -1602,26 +1596,19 @@ order by PriceName
                     {
                         fW = new frmWait();
 
-                        try
-                        {
-                            Debug.WriteLine("DoOpenTable begin");
+						try
+						{
+							fW.openPrice += new OpenPriceDelegate(DoOpenTable);
+							fW.drP = dtTemp.Rows[0];// new DataRow();
 
-                            fW.openPrice += new OpenPriceDelegate(DoOpenTable);
-                            fW.drP = dtTemp.Rows[0];// new DataRow();
+							fW.ShowDialog();
+						}
+						finally
+						{
+							fW = null;
+						}
 
-                            fW.ShowDialog();
 
-                        }
-                        catch
-                        {
-                            Debug.WriteLine("DoOpenTable error");
-                        }
-                        finally
-                        {
-                            Debug.WriteLine("DoOpenTable end");
-                        }
-
-                        fW = null;
                     }
                 }
             }
@@ -2011,19 +1998,7 @@ and c.Type = ?ContactType;",
 
         void TestD(OleDbDataAdapter da, DataTable dt)
         {
-            try
-            {
-                Debug.WriteLine("TestD begin");
-                da.Fill(dt);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(String.Format("TestD error {0}", e));
-            }
-            finally
-            {
-                Debug.WriteLine("TestD end");
-            }
+			da.Fill(dt);
         }
 
         public delegate void CloseDelegate();
@@ -2038,25 +2013,11 @@ and c.Type = ?ContactType;",
             TestAsync ta = new TestAsync(TestD);
             Object state = new Object();
 
-            try
-            {
-                Debug.WriteLine("CreateThread begin");
+			DataTable temp = new DataTable();
 
-                DataTable temp = new DataTable();
-
-                System.IAsyncResult ar = ta.BeginInvoke(da, dt, null, state);
-                while (!ar.IsCompleted)
-                    Application.DoEvents();
-
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine("CreateThread error : " + e.ToString());
-            }
-            finally
-            {
-                Debug.WriteLine("CreateThread end");
-            }
+			System.IAsyncResult ar = ta.BeginInvoke(da, dt, null, state);
+			while (!ar.IsCompleted)
+				Application.DoEvents();
         }
 
         private void btnFloatPanel_Click(object sender, System.EventArgs e)
@@ -2448,8 +2409,9 @@ and c.Type = ?ContactType;",
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.ToString());
-                            tr.Rollback();
+							MessageBox.Show("Не удалось применить изменения в правилах формализации прайс-листа. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при применении изменений в правилах формализации.", ex));
+							tr.Rollback();
                         }
                     }
                     finally
@@ -2529,8 +2491,9 @@ and fr.Id = pim.FormRuleId;
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show(ex.ToString());
-                            tr.Rollback();
+							MessageBox.Show("Не удалось применить изменения в настройках прайс-листов. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при применении изменений в настройках прайс-листов.", ex));
+							tr.Rollback();
                         }
                     }
                     finally
@@ -2597,7 +2560,7 @@ WHERE
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show("Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.");
+				MessageBox.Show("Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
 			}
 		}
@@ -3338,7 +3301,7 @@ order by PriceName
 		public static void OnThreadException(object sender, System.Threading.ThreadExceptionEventArgs t)
 		{
 			SendMessageOnException(sender, t.Exception);
-			MessageBox.Show("В приложении возникла необработанная ошибка.\r\nИнформация об ошибке была отправлена разработчику.");
+			MessageBox.Show("В приложении возникла необработанная ошибка.\r\nИнформация об ошибке была отправлена разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 
 	}
