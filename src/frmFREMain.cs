@@ -72,8 +72,8 @@ namespace FREditor
         DataTable dtPrice = new DataTable();
 
 #if DEBUG
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;");
-		//private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;");
+		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;");
 		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;");
@@ -170,12 +170,26 @@ namespace FREditor
             cbSegment.DisplayMember = "Segment";
             cbSegment.ValueMember = "ID";
 
-            this.mcmdUCostRules.Parameters.Add("?CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRCost_Code");
-            this.mcmdUCostRules.Parameters.Add("?FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRFieldName");
-			this.mcmdUCostRules.Parameters.Add("?TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextBegin");
-			this.mcmdUCostRules.Parameters.Add("?TxtEnd", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextEnd");
+			this.mcmdInsertCostRules.CommandText = @"
+INSERT INTO usersettings.PricesCosts (PriceCode, BaseCost, PriceItemId, CostName) values (?PriceCode, 0, ?PriceItemId, ?CostName);
+SET @NewPriceCostId:=Last_Insert_ID();
+INSERT INTO farm.costformrules (CostCode, FieldName, TxtBegin, TxtEnd) values (@NewPriceCostId, ?FieldName, ?TxtBegin, ?TxtEnd);
+";
+			this.mcmdInsertCostRules.Parameters.Add("?PriceItemId", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRPriceItemId");
+			this.mcmdInsertCostRules.Parameters.Add("?PriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0);
+			this.mcmdInsertCostRules.Parameters.Add("?CostName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRCostName");
+			this.mcmdInsertCostRules.Parameters.Add("?FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRFieldName");
+			this.mcmdInsertCostRules.Parameters.Add("?TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextBegin");
+			this.mcmdInsertCostRules.Parameters.Add("?TxtEnd", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextEnd");
 
-            this.mcmdUFormRules.CommandText =
+
+            this.mcmdUpdateCostRules.Parameters.Add("?CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRCost_Code");
+			this.mcmdUpdateCostRules.Parameters.Add("?CostName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRCostName");
+			this.mcmdUpdateCostRules.Parameters.Add("?FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRFieldName");
+			this.mcmdUpdateCostRules.Parameters.Add("?TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextBegin");
+			this.mcmdUpdateCostRules.Parameters.Add("?TxtEnd", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextEnd");
+
+            this.mcmdUpdateFormRules.CommandText =
 @"UPDATE formrules SET
   ParentFormRules = ?FRRules,
 
@@ -274,90 +288,90 @@ set
   RowCount = if(RowCount <> ?FRPosNum, 0, RowCount)
 where
   Id = ?FRPriceItemId";
-			this.mcmdUFormRules.Parameters.Add("?FRFormID", MySql.Data.MySqlClient.MySqlDbType.Int64);
-			this.mcmdUFormRules.Parameters.Add("?FRSelfPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
-			this.mcmdUFormRules.Parameters.Add("?FRPriceItemId", MySql.Data.MySqlClient.MySqlDbType.Int64);
-			this.mcmdUFormRules.Parameters.Add("?FRSynonyms", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUFormRules.Parameters.Add("?FRRules", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUFormRules.Parameters.Add("?FRStartLine", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRFormID", MySql.Data.MySqlClient.MySqlDbType.Int64);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRSelfPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRPriceItemId", MySql.Data.MySqlClient.MySqlDbType.Int64);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRSynonyms", MySql.Data.MySqlClient.MySqlDbType.Int64);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRRules", MySql.Data.MySqlClient.MySqlDbType.Int64);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRStartLine", MySql.Data.MySqlClient.MySqlDbType.Int32);
 
-            this.mcmdUFormRules.Parameters.Add("?FRTxtCodeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtCodeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtCodeCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtCodeCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtNameBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtNameEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtFirmCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtFirmCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtMinBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtMinBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtCurrencyBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtCurrencyEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtUnitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtUnitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtVolumeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtVolumeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtQuantityBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtQuantityEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtNoteBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtNoteEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtPeriodBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtPeriodEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtDocBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtDocEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtJunkBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtJunkEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtAwaitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtAwaitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtRequestRatioBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtRequestRatioEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtRegistryCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtRegistryCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtVitallyImportantBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtVitallyImportantEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtMaxBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUFormRules.Parameters.Add("?FRTxtMaxBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUFormRules.Parameters.Add("?FRTxtOrderCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUFormRules.Parameters.Add("?FRTxtOrderCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUFormRules.Parameters.Add("?FRTxtMinOrderCountBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);			
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNameBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNameEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtFirmCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtFirmCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCurrencyBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCurrencyEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtUnitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtUnitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVolumeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVolumeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtQuantityBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtQuantityEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNoteBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNoteEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtPeriodBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtPeriodEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtDocBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtDocEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtJunkBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtJunkEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtAwaitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtAwaitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRequestRatioBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRequestRatioEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRegistryCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRegistryCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVitallyImportantBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVitallyImportantEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMaxBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMaxBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtOrderCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtOrderCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);			
 
-            this.mcmdUFormRules.Parameters.Add("?FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRPosNum", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUFormRules.Parameters.Add("?FRSelfJunkPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRSelfAwaitPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUFormRules.Parameters.Add("?FRPriceFormatId", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUFormRules.Parameters.Add("?FRListName", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRNameMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRForbWords", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUFormRules.Parameters.Add("?FRSelfVitallyImportantMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRPosNum", MySql.Data.MySqlClient.MySqlDbType.Int64);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRSelfJunkPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRSelfAwaitPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRPriceFormatId", MySql.Data.MySqlClient.MySqlDbType.Int64);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRListName", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRNameMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRForbWords", MySql.Data.MySqlClient.MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRSelfVitallyImportantMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
 
-            this.mcmdUFormRules.Parameters.Add("?FRFCode", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFCodeCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFName1", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFName2", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFName3", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFFirmCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFMinBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFUnit", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFVolume", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFQuantity", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFNote", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFPeriod", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFDoc", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFJunk", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFAwait", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFRequestRatio", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUFormRules.Parameters.Add("?FRFMaxBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUFormRules.Parameters.Add("?FRFOrderCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUFormRules.Parameters.Add("?FRFMinOrderCount", MySql.Data.MySqlClient.MySqlDbType.VarString);			
-            this.mcmdUFormRules.Parameters.Add("?FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFCode", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFCodeCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFName1", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFName2", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFName3", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFFirmCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFMinBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFUnit", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFVolume", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFQuantity", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFNote", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFPeriod", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFDoc", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFJunk", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFAwait", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFRequestRatio", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFMaxBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRFOrderCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRFMinOrderCount", MySql.Data.MySqlClient.MySqlDbType.VarString);			
+            this.mcmdUpdateFormRules.Parameters.Add("?FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString);
 
-            foreach (MySqlParameter ms in this.mcmdUFormRules.Parameters)
+            foreach (MySqlParameter ms in this.mcmdUpdateFormRules.Parameters)
             {
                 ms.SourceColumn = ms.ParameterName.Substring(1);
             }
@@ -369,9 +383,7 @@ where
         [STAThread]
         static void Main()
         {
-			FREditorExceptionHandler feh = new FREditorExceptionHandler();
-
-			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(feh.OnThreadException);
+			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(FREditorExceptionHandler.OnThreadException);
 
             Application.Run(new frmFREMain());
         }
@@ -496,6 +508,39 @@ order by Format";
                 dtCostsFormRulesFill(FilterParams);
             }
         }
+
+		private void FillCosts(string shname, int regcode, int seg)
+		{
+			dtSet.EnforceConstraints = false;
+			try
+			{
+				dtCostsFormRules.Clear();
+				dtPricesCost.Clear();
+			}
+			finally
+			{
+				dtSet.EnforceConstraints = true;
+			}
+			dtSet.AcceptChanges();
+
+			if (shname != String.Empty)
+			{
+
+				MyCmd.Parameters.Clear();
+
+				if (shname != String.Empty)
+					MyCmd.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
+				if (regcode != 0)
+					MyCmd.Parameters.AddWithValue("?RegionCode", regcode);
+				if (seg != -1)
+					MyCmd.Parameters.AddWithValue("?Segment", seg);
+
+				FilterParams = AddParams(shname, regcode, seg);
+
+				dtPricesCostFill(FilterParams);
+				dtCostsFormRulesFill(FilterParams);
+			}
+		}
 
         private void dtClientsFill(string param)
         {
@@ -1727,6 +1772,10 @@ order by PriceName
 					bsCostsFormRules.ResumeBinding();
 					bsFormRules.ResumeBinding();
 
+					//Разрешено добавлять и редактировать ценовые колонки только в том случае, если это мультиколоночный прайс-лист
+					indgvCosts.AllowUserToAddRows = Convert.ToByte(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName]) == 0;
+					indgvCosts.ReadOnly = !indgvCosts.AllowUserToAddRows;
+
 					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
 				}
@@ -2281,25 +2330,20 @@ and c.Type = ?ContactType;",
 
         private void CommitAllEdit()
         {
-            CurrencyManager cm;
             if (tbControl.SelectedTab == tpFirms)
-            {
-                cm = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-                cm.EndCurrentEdit();
-            }
+				//Завершаем редактирование общих настроек прайс-листов
+				((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember]).EndCurrentEdit();
             else
             {
-                cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
-                cm.EndCurrentEdit();
-                //TODO: Здесь надо правильно биндить
-                //cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, "Поставщики.Поставщики-Прайсы.Прайсы-правила"];
-                //cm.EndCurrentEdit();
-                cm = (CurrencyManager)BindingContext[bsCostsFormRules.DataSource, bsCostsFormRules.DataMember];
-                cm.EndCurrentEdit();
+				//Завершаем редактирование правил формализации цен
+				if (((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
+					//Если создалась пустая строка в правилах формализации цен, то при сохранении отменяем ее
+					bsCostsFormRules.CancelEdit();
+				else
+					//иначе просто применяем изменения
+					bsCostsFormRules.EndEdit();
+				//Завершаем редактирование правил формализации
                 bsFormRules.EndEdit();
-                //bsFormRules.CurrencyManager.EndCurrentEdit();
-                //cm = (CurrencyManager)BindingContext[bsFormRules.DataSource, bsFormRules.DataMember];
-                //cm.EndCurrentEdit();
             }
         }
 
@@ -2317,6 +2361,13 @@ and c.Type = ?ContactType;",
             {
 				TrySaveData();
             }
+			if (e.TabPage == tpFirms)
+			{
+				//Если мы пытаемся перейти на вкладку "Прайс", а у нас нет в списке прайсов, то делать это не нужно
+				CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+				if (currencyManager.Count == 0)
+					e.Cancel = true;
+			}
         }
 
 		private void TrySaveData()
@@ -2360,18 +2411,40 @@ and c.Type = ?ContactType;",
                             SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
 
-                            mcmdUCostRules.Connection = MyCn;
+                            mcmdUpdateCostRules.Connection = MyCn;
+							mcmdInsertCostRules.Connection = MyCn;
+							mcmdInsertCostRules.Parameters["?PriceCode"].Value = ((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName];
                             daCostRules.TableMappings.Clear();
                             daCostRules.TableMappings.Add("Table", dtCostsFormRules.TableName);
-                            daCostRules.Update(chg.Tables[dtCostsFormRules.TableName]);
+							//Делается Copy для того, чтобы созданные записи (Added) при применении не помечались как неизмененные Unchanged
+                            daCostRules.Update(chg.Tables[dtCostsFormRules.TableName].Copy());
 
-                            mcmdUFormRules.Connection = MyCn;
-                            daFormRules.TableMappings.Clear();
+							//Формируем тело письма с изменениями в колонках
+							StringBuilder body = new StringBuilder();
+							foreach (DataRow changeRow in chg.Tables[dtCostsFormRules.TableName].Rows)
+							{
+								if (changeRow.RowState == DataRowState.Added)
+									body.AppendFormat("Добавлена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
+								else
+									if (!changeRow[CFRCostName.ColumnName, DataRowVersion.Original].Equals(changeRow[CFRCostName.ColumnName, DataRowVersion.Current]))
+										body.AppendFormat("Наименование ценовой колонки изменено с \"{0}\" на \"{1}\".\n", 
+											changeRow[CFRCostName.ColumnName, DataRowVersion.Original],
+											changeRow[CFRCostName.ColumnName, DataRowVersion.Current]);
+							}
+
+                            mcmdUpdateFormRules.Connection = MyCn;
+							daFormRules.TableMappings.Clear();
                             daFormRules.TableMappings.Add("Table", dtFormRules.TableName);
-                            daFormRules.Update(chg.Tables[dtFormRules.TableName]);
+                            daFormRules.Update(chg.Tables[dtFormRules.TableName].Copy());
 
-                            tr.Commit();
+							if (body.Length > 0)
+								SendNotificationLetter(body.ToString());
+
+							tr.Commit();
                             dtSet.AcceptChanges();
+							//Обновляе цены и правила формализации цен для того, чтобы загрузить корректные ID новых цен
+							FillCosts(shortNameFilter, regionCodeFilter, segmentFilter);
+
                         }
                         catch (Exception ex)
                         {
@@ -2470,6 +2543,65 @@ and fr.Id = pim.FormRuleId;
             tsbCancel.Enabled = false;
         }
 
+		private void SendNotificationLetter(string body)
+		{
+			try
+			{
+				//Получаем e-mail оператора
+				string operatorMail = (string)MySqlHelper.ExecuteScalar(
+					MyCn,
+@"SELECT 
+  regionaladmins.email 
+FROM 
+  accessright.regionaladmins
+WHERE  
+  username = ?UserName", new MySqlParameter("?UserName", Environment.UserName));
+
+				//Получаем информацию о поставщике, регионе и прайс-листе
+				DataRowView drv = (DataRowView)((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember]).Current;
+				string providerName = (string)drv[CShortName.ColumnName];
+				string regionName = (string)drv[CRegion.ColumnName];
+				drv = (DataRowView)((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember]).Current;
+				string priceName = (string)drv[PPriceName.ColumnName];
+
+				//Формируем сообщение
+				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
+					"register@analit.net",
+#if DEBUG
+					"morozov@analit.net",
+#else
+					"RegisterList@subscribe.analit.net",
+#endif
+ String.Format("\"{0}\" - изменения в списке ценовых колонок", providerName),
+					String.Format(@"
+Оператор   : {0} 
+Поставщик  : {1}
+Регион     : {2}
+Прайс-лист : {3}
+
+{4}
+
+С уважением,
+  АК Инфорум.",
+						Environment.UserName,
+						providerName,
+						regionName,
+						priceName,
+						body));
+				if (!String.IsNullOrEmpty(operatorMail))
+					m.Bcc.Add(operatorMail);
+				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("mail.adc.analit.net");
+				sm.Send(m);
+
+
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.");
+				FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
+			}
+		}
+
         private void frmFREMain_KeyDown(object sender, KeyEventArgs e)
         {
             if ((e.KeyCode == Keys.Escape) && (tbControl.SelectedTab == tpPrice))
@@ -2481,7 +2613,17 @@ and fr.Id = pim.FormRuleId;
             tmrUpdateApply.Stop();
             int ss = rtbArticle.SelectionStart;
 
-            CommitAllEdit();
+			if (tbControl.SelectedTab == tpFirms)
+				//Завершаем редактирование общих настроек прайс-листов
+				BindingContext[indgvPrice.DataSource, indgvPrice.DataMember].EndCurrentEdit();
+			else
+			{
+				//Раньше завершали редактирование bsCostsFormRules, но теперь в этом нет необходимости, 
+				//т.к. редактирование завершается гридом или после DragAndDrop
+
+				//Завершаем редактирование правил формализации
+				bsFormRules.EndEdit();
+			}
 
             if (dtSet.HasChanges())
             {
@@ -2523,6 +2665,8 @@ and fr.Id = pim.FormRuleId;
                         indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
                         indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
                     }
+					//Завершаем явно редактирование этой строчки, чтобы появились изменения в DataSet.GetChanges()
+					drv.EndEdit();
                 }
             }
         }
@@ -2707,29 +2851,6 @@ and fr.Id = pim.FormRuleId;
                         ((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[pairtb.DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
                     }
                 }
-        }
-
-        private void indgvCosts_DoubleClick(object sender, EventArgs e)
-        {
-            Point p = indgvCosts.PointToClient(Control.MousePosition);
-            DataGridView.HitTestInfo costsHitTestInfo = indgvCosts.HitTest(p.X, p.Y);
-            if (costsHitTestInfo.Type == DataGridViewHitTestType.Cell)
-            {
-                if (costsHitTestInfo.RowIndex > -1)
-                {
-                    CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
-                    DataRowView drv = (DataRowView)cm.Current;
-                    if (pnlGeneralFields.Visible)
-                    {
-                        indgvCosts[cFRFieldNameDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = String.Empty;
-                    }
-                    else
-                    {
-                        indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = String.Empty;
-                        indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = String.Empty;
-                    }
-                }
-            }
         }
 
         private void tbRules_TextChanged(object sender, EventArgs e)
@@ -3029,6 +3150,64 @@ order by PriceName
 			}
 		}
 
+		private void indgvCosts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			//По двойному клику на ячейках FieldName, TextBegin, TextEnd в таблице настройки правил формализации цен
+			//очищаем данные поля
+			if ((indgvCosts.Columns[e.ColumnIndex] == cFRFieldNameDataGridViewTextBoxColumn)
+				|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextBeginDataGridViewTextBoxColumn)
+				|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextEndDataGridViewTextBoxColumn))
+			{
+				DataGridViewRow row = indgvCosts.Rows[e.RowIndex];
+				DataRowView drv = (DataRowView)row.DataBoundItem;
+				drv.BeginEdit();
+				if (pnlGeneralFields.Visible)
+				{
+					drv[cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+				}
+				else
+				{
+					drv[cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+					drv[cFRTextEndDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+				}
+				drv.EndEdit();
+			}
+		}
+
+		private void indgvCosts_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+		{
+			DataGridViewRow r = indgvCosts.Rows[e.RowIndex];
+			if (r.DataBoundItem != null)
+			{
+				DataRowView drv = (DataRowView)r.DataBoundItem;
+				//Если это новая запись и мы еще не установили поля PriceItemId и CostCode
+				if (drv.IsNew && Convert.IsDBNull(drv["CFRPriceItemId"]) && Convert.IsDBNull(drv["CFRCost_Code"]))
+				{
+					long PriceItemId = (long)((DataRowView)bsFormRules.Current)["FRPriceItemId"];
+					drv["CFRPriceItemId"] = PriceItemId;
+					long NewCostCode = (long)dtSet.Tables["Правила формализации цен"].Compute("Max(CFRCost_Code)", null);
+					drv["CFRCost_Code"] = NewCostCode + 1;
+				}
+			}
+		}
+
+		private void indgvCosts_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+		{
+			indgvCosts.Rows[e.RowIndex].ErrorText = "";
+
+			// Don't try to validate the 'new row' until finished 
+			// editing since there
+			// is not any point in validating its initial value.
+			if (indgvCosts.Rows[e.RowIndex].IsNewRow) { return; }
+
+			//Если мы редактировали или ввели название ценовой колонки пустым, то выдать соответствующее предупреждение
+			if ((indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) && String.IsNullOrEmpty(e.FormattedValue.ToString()))
+			{
+				e.Cancel = true;
+				indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки не может быть пустой строкой";
+			}
+		}
+
     }
 
     public class WaitWindowThread
@@ -3130,8 +3309,7 @@ order by PriceName
 	internal class FREditorExceptionHandler
 	{
 
-		// Handles the exception event.
-		public void OnThreadException(object sender, System.Threading.ThreadExceptionEventArgs t)
+		public static void SendMessageOnException(object sender, Exception ex)
 		{
 			try
 			{
@@ -3139,12 +3317,27 @@ order by PriceName
 					"service@analit.net",
 					"service@analit.net",
 					"Необработанная ошибка в FREditor",
-					String.Format("Sender = {0}\r\nException = = {1}", sender, t.Exception));
+					String.Format(@"
+Источник     = {0}
+Пользователь = {1}
+Компьютер    = {2}
+Ошибка       =
+{3}", 
+						sender,
+						Environment.UserName,
+						Environment.MachineName,
+						ex));
 				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("mail.adc.analit.net");
 				sm.Send(m);
 			}
 			catch
 			{ }
+		}
+
+		// Handles the exception event.
+		public static void OnThreadException(object sender, System.Threading.ThreadExceptionEventArgs t)
+		{
+			SendMessageOnException(sender, t.Exception);
 			MessageBox.Show("В приложении возникла необработанная ошибка.\r\nИнформация об ошибке была отправлена разработчику.");
 		}
 

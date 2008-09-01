@@ -364,9 +364,10 @@ namespace FREditor
 			this.tsApply = new System.Windows.Forms.ToolStrip();
 			this.tsbApply = new System.Windows.Forms.ToolStripButton();
 			this.tsbCancel = new System.Windows.Forms.ToolStripButton();
-			this.mcmdUCostRules = new MySql.Data.MySqlClient.MySqlCommand();
+			this.mcmdUpdateCostRules = new MySql.Data.MySqlClient.MySqlCommand();
 			this.daCostRules = new MySql.Data.MySqlClient.MySqlDataAdapter();
-			this.mcmdUFormRules = new MySql.Data.MySqlClient.MySqlCommand();
+			this.mcmdInsertCostRules = new MySql.Data.MySqlClient.MySqlCommand();
+			this.mcmdUpdateFormRules = new MySql.Data.MySqlClient.MySqlCommand();
 			this.daFormRules = new MySql.Data.MySqlClient.MySqlDataAdapter();
 			this.ttMain = new System.Windows.Forms.ToolTip(this.components);
 			this.tmrUpdateApply = new System.Windows.Forms.Timer(this.components);
@@ -1231,7 +1232,9 @@ namespace FREditor
 			// 
 			// CFRFieldName
 			// 
+			this.CFRFieldName.AllowDBNull = false;
 			this.CFRFieldName.ColumnName = "CFRFieldName";
+			this.CFRFieldName.DefaultValue = "";
 			// 
 			// CFRTextBegin
 			// 
@@ -1243,6 +1246,7 @@ namespace FREditor
 			// 
 			// CFRCostName
 			// 
+			this.CFRCostName.AllowDBNull = false;
 			this.CFRCostName.ColumnName = "CFRCostName";
 			// 
 			// CFRPriceItemId
@@ -1807,7 +1811,7 @@ namespace FREditor
 			// indgvCosts
 			// 
 			this.indgvCosts.AllowDrop = true;
-			this.indgvCosts.AllowUserToAddRows = false;
+			this.indgvCosts.AllowUserToDeleteRows = false;
 			this.indgvCosts.AutoGenerateColumns = false;
 			this.indgvCosts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.indgvCosts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -1829,13 +1833,13 @@ namespace FREditor
 			this.indgvCosts.HideEmptyColumns = false;
 			this.indgvCosts.Location = new System.Drawing.Point(766, 0);
 			this.indgvCosts.Name = "indgvCosts";
-			this.indgvCosts.ReadOnly = true;
-			this.indgvCosts.RowHeadersVisible = false;
-			this.indgvCosts.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+			this.indgvCosts.RowHeadersWidth = 30;
 			this.indgvCosts.Size = new System.Drawing.Size(90, 195);
 			this.indgvCosts.TabIndex = 6;
-			this.indgvCosts.DoubleClick += new System.EventHandler(this.indgvCosts_DoubleClick);
+			this.indgvCosts.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.indgvCosts_CellDoubleClick);
 			this.indgvCosts.DragOver += new System.Windows.Forms.DragEventHandler(this.indgvCosts_DragOver);
+			this.indgvCosts.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.indgvCosts_CellValidating);
+			this.indgvCosts.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.indgvCosts_CellEndEdit);
 			this.indgvCosts.DragEnter += new System.Windows.Forms.DragEventHandler(this.indgvCosts_DragEnter);
 			this.indgvCosts.DragDrop += new System.Windows.Forms.DragEventHandler(this.indgvCosts_DragDrop);
 			// 
@@ -1844,7 +1848,6 @@ namespace FREditor
 			this.cFRCostNameDataGridViewTextBoxColumn.DataPropertyName = "CFRCostName";
 			this.cFRCostNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
 			this.cFRCostNameDataGridViewTextBoxColumn.Name = "cFRCostNameDataGridViewTextBoxColumn";
-			this.cFRCostNameDataGridViewTextBoxColumn.ReadOnly = true;
 			this.cFRCostNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
 			// 
 			// cFRFieldNameDataGridViewTextBoxColumn
@@ -3508,35 +3511,40 @@ namespace FREditor
 			this.tsbCancel.Text = "Отменить";
 			this.tsbCancel.Click += new System.EventHandler(this.tsbCancel_Click);
 			// 
-			// mcmdUCostRules
+			// mcmdUpdateCostRules
 			// 
-			this.mcmdUCostRules.CommandText = "UPDATE farm.costformrules c SET\r\nFieldName = ?FieldName,\r\nTxtBegin = ?TxtBegin,\r\n" +
+			this.mcmdUpdateCostRules.CommandText = "UPDATE farm.costformrules c SET\r\nFieldName = ?FieldName,\r\nTxtBegin = ?TxtBegin,\r\n" +
 				"TxtEnd = ?TxtEnd\r\nWHERE c.CostCode = ?CostCode";
-			this.mcmdUCostRules.CommandTimeout = 0;
-			this.mcmdUCostRules.Connection = null;
-			this.mcmdUCostRules.Transaction = null;
+			this.mcmdUpdateCostRules.Connection = null;
+			this.mcmdUpdateCostRules.Transaction = null;
 			// 
 			// daCostRules
 			// 
 			this.daCostRules.DeleteCommand = null;
-			this.daCostRules.InsertCommand = null;
+			this.daCostRules.InsertCommand = this.mcmdInsertCostRules;
 			this.daCostRules.SelectCommand = null;
 			this.daCostRules.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
             new System.Data.Common.DataTableMapping("Table", "Table", new System.Data.Common.DataColumnMapping[0])});
-			this.daCostRules.UpdateCommand = this.mcmdUCostRules;
+			this.daCostRules.UpdateCommand = this.mcmdUpdateCostRules;
 			// 
-			// mcmdUFormRules
+			// mcmdInsertCostRules
 			// 
-			this.mcmdUFormRules.CommandTimeout = 0;
-			this.mcmdUFormRules.Connection = null;
-			this.mcmdUFormRules.Transaction = null;
+			this.mcmdInsertCostRules.CommandText = "UPDATE farm.costformrules c SET\r\nFieldName = ?FieldName,\r\nTxtBegin = ?TxtBegin,\r\n" +
+				"TxtEnd = ?TxtEnd\r\nWHERE c.CostCode = ?CostCode";
+			this.mcmdInsertCostRules.Connection = null;
+			this.mcmdInsertCostRules.Transaction = null;
+			// 
+			// mcmdUpdateFormRules
+			// 
+			this.mcmdUpdateFormRules.Connection = null;
+			this.mcmdUpdateFormRules.Transaction = null;
 			// 
 			// daFormRules
 			// 
 			this.daFormRules.DeleteCommand = null;
 			this.daFormRules.InsertCommand = null;
 			this.daFormRules.SelectCommand = null;
-			this.daFormRules.UpdateCommand = this.mcmdUFormRules;
+			this.daFormRules.UpdateCommand = this.mcmdUpdateFormRules;
 			// 
 			// tmrUpdateApply
 			// 
@@ -3838,9 +3846,9 @@ namespace FREditor
         private System.Windows.Forms.ToolStrip tsApply;
         private System.Windows.Forms.ToolStripButton tsbApply;
         private System.Windows.Forms.ToolStripButton tsbCancel;
-        private MySql.Data.MySqlClient.MySqlCommand mcmdUCostRules;
+        private MySql.Data.MySqlClient.MySqlCommand mcmdUpdateCostRules;
         private MySql.Data.MySqlClient.MySqlDataAdapter daCostRules;
-        private MySql.Data.MySqlClient.MySqlCommand mcmdUFormRules;
+        private MySql.Data.MySqlClient.MySqlCommand mcmdUpdateFormRules;
         private MySql.Data.MySqlClient.MySqlDataAdapter daFormRules;
         private System.Windows.Forms.ToolTip ttMain;
 		private System.Windows.Forms.Timer tmrUpdateApply;
@@ -3869,11 +3877,7 @@ namespace FREditor
         private System.Windows.Forms.Timer tmrSearch;
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.BindingSource bsFormRules;
-        private System.Windows.Forms.BindingSource bsCostsFormRules;
-        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
-        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
-        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
-        private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
+		private System.Windows.Forms.BindingSource bsCostsFormRules;
         private System.Windows.Forms.DataGridViewTextBoxColumn cShortNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cRegionDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cSegmentDataGridViewTextBoxColumn;
@@ -3952,5 +3956,10 @@ namespace FREditor
 		private System.Data.DataColumn FRSelfPriceCode;
 		private System.Data.DataColumn FRPriceFormatId;
 		private System.Data.DataColumn FMTId;
+		private MySql.Data.MySqlClient.MySqlCommand mcmdInsertCostRules;
+		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
+		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
+		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
+		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
     }
 }
