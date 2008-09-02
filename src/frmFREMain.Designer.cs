@@ -41,13 +41,6 @@ namespace FREditor
 			this.tpFirms = new System.Windows.Forms.TabPage();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.indgvPrice = new Inforoom.WinForms.INDataGridView();
-			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pDateCurPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pDateLastFormDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pMaxOldDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pPriceTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.pCostTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
 			this.dtSet = new System.Data.DataSet();
 			this.dtClients = new System.Data.DataTable();
 			this.CCode = new System.Data.DataColumn();
@@ -372,6 +365,13 @@ namespace FREditor
 			this.ttMain = new System.Windows.Forms.ToolTip(this.components);
 			this.tmrUpdateApply = new System.Windows.Forms.Timer(this.components);
 			this.tmrSearch = new System.Windows.Forms.Timer(this.components);
+			this.pPriceNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pDateCurPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pDateLastFormDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pMaxOldDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pPriceTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.pCostTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -459,7 +459,7 @@ namespace FREditor
 			this.indgvPrice.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.indgvPrice.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvPrice.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dataGridViewTextBoxColumn1,
+            this.pPriceNameDataGridViewTextBoxColumn,
             this.pDateCurPriceDataGridViewTextBoxColumn,
             this.pDateLastFormDataGridViewTextBoxColumn,
             this.pMaxOldDataGridViewTextBoxColumn,
@@ -489,50 +489,6 @@ namespace FREditor
 			this.indgvPrice.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.indgvPrice_CellFormatting);
 			this.indgvPrice.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.indgvPrice_EditingControlShowing);
 			this.indgvPrice.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvPrice_KeyDown);
-			// 
-			// dataGridViewTextBoxColumn1
-			// 
-			this.dataGridViewTextBoxColumn1.DataPropertyName = "PPriceName";
-			this.dataGridViewTextBoxColumn1.HeaderText = "Название прайс-листа";
-			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-			// 
-			// pDateCurPriceDataGridViewTextBoxColumn
-			// 
-			this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PPriceDate";
-			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата текущего прайс-листа";
-			this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
-			this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// pDateLastFormDataGridViewTextBoxColumn
-			// 
-			this.pDateLastFormDataGridViewTextBoxColumn.DataPropertyName = "PDateLastForm";
-			this.pDateLastFormDataGridViewTextBoxColumn.HeaderText = "Дата последней формализации";
-			this.pDateLastFormDataGridViewTextBoxColumn.Name = "pDateLastFormDataGridViewTextBoxColumn";
-			this.pDateLastFormDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// pMaxOldDataGridViewTextBoxColumn
-			// 
-			this.pMaxOldDataGridViewTextBoxColumn.DataPropertyName = "PMaxOld";
-			this.pMaxOldDataGridViewTextBoxColumn.HeaderText = "Актуальность";
-			this.pMaxOldDataGridViewTextBoxColumn.Name = "pMaxOldDataGridViewTextBoxColumn";
-			// 
-			// dataGridViewTextBoxColumn2
-			// 
-			this.dataGridViewTextBoxColumn2.DataPropertyName = "PWaitingDownloadInterval";
-			this.dataGridViewTextBoxColumn2.HeaderText = "Время ожидания (в часах)";
-			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-			// 
-			// pPriceTypeDataGridViewComboBoxColumn
-			// 
-			this.pPriceTypeDataGridViewComboBoxColumn.DataPropertyName = "PPriceType";
-			this.pPriceTypeDataGridViewComboBoxColumn.HeaderText = "Тип прайс-листа";
-			this.pPriceTypeDataGridViewComboBoxColumn.Name = "pPriceTypeDataGridViewComboBoxColumn";
-			// 
-			// pCostTypeDataGridViewComboBoxColumn
-			// 
-			this.pCostTypeDataGridViewComboBoxColumn.DataPropertyName = "PCostType";
-			this.pCostTypeDataGridViewComboBoxColumn.HeaderText = "Тип цены";
-			this.pCostTypeDataGridViewComboBoxColumn.Name = "pCostTypeDataGridViewComboBoxColumn";
 			// 
 			// dtSet
 			// 
@@ -3556,6 +3512,51 @@ namespace FREditor
 			this.tmrSearch.Interval = 1000;
 			this.tmrSearch.Tick += new System.EventHandler(this.tmrSearch_Tick);
 			// 
+			// pPriceNameDataGridViewTextBoxColumn
+			// 
+			this.pPriceNameDataGridViewTextBoxColumn.DataPropertyName = "PPriceName";
+			this.pPriceNameDataGridViewTextBoxColumn.HeaderText = "Название прайс-листа";
+			this.pPriceNameDataGridViewTextBoxColumn.Name = "pPriceNameDataGridViewTextBoxColumn";
+			this.pPriceNameDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// pDateCurPriceDataGridViewTextBoxColumn
+			// 
+			this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PPriceDate";
+			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата текущего прайс-листа";
+			this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
+			this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// pDateLastFormDataGridViewTextBoxColumn
+			// 
+			this.pDateLastFormDataGridViewTextBoxColumn.DataPropertyName = "PDateLastForm";
+			this.pDateLastFormDataGridViewTextBoxColumn.HeaderText = "Дата последней формализации";
+			this.pDateLastFormDataGridViewTextBoxColumn.Name = "pDateLastFormDataGridViewTextBoxColumn";
+			this.pDateLastFormDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// pMaxOldDataGridViewTextBoxColumn
+			// 
+			this.pMaxOldDataGridViewTextBoxColumn.DataPropertyName = "PMaxOld";
+			this.pMaxOldDataGridViewTextBoxColumn.HeaderText = "Актуальность";
+			this.pMaxOldDataGridViewTextBoxColumn.Name = "pMaxOldDataGridViewTextBoxColumn";
+			// 
+			// dataGridViewTextBoxColumn2
+			// 
+			this.dataGridViewTextBoxColumn2.DataPropertyName = "PWaitingDownloadInterval";
+			this.dataGridViewTextBoxColumn2.HeaderText = "Время ожидания (в часах)";
+			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+			// 
+			// pPriceTypeDataGridViewComboBoxColumn
+			// 
+			this.pPriceTypeDataGridViewComboBoxColumn.DataPropertyName = "PPriceType";
+			this.pPriceTypeDataGridViewComboBoxColumn.HeaderText = "Тип прайс-листа";
+			this.pPriceTypeDataGridViewComboBoxColumn.Name = "pPriceTypeDataGridViewComboBoxColumn";
+			// 
+			// pCostTypeDataGridViewComboBoxColumn
+			// 
+			this.pCostTypeDataGridViewComboBoxColumn.DataPropertyName = "PCostType";
+			this.pCostTypeDataGridViewComboBoxColumn.HeaderText = "Тип цены";
+			this.pCostTypeDataGridViewComboBoxColumn.Name = "pCostTypeDataGridViewComboBoxColumn";
+			// 
 			// frmFREMain
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -3942,13 +3943,6 @@ namespace FREditor
 		private System.Data.DataColumn PIsParent;
 		private System.Data.DataColumn PPriceDate;
 		private System.Data.DataColumn PPriceItemId;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn pDateCurPriceDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn pDateLastFormDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn pMaxOldDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-		private System.Windows.Forms.DataGridViewComboBoxColumn pPriceTypeDataGridViewComboBoxColumn;
-		private System.Windows.Forms.DataGridViewComboBoxColumn pCostTypeDataGridViewComboBoxColumn;
 		private System.Data.DataColumn PCPriceItemId;
 		private System.Data.DataColumn CFRPriceItemId;
 		private System.Data.DataColumn FRFormID;
@@ -3961,5 +3955,12 @@ namespace FREditor
 		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
 		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
 		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn pPriceNameDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn pDateCurPriceDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn pDateLastFormDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn pMaxOldDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+		private System.Windows.Forms.DataGridViewComboBoxColumn pPriceTypeDataGridViewComboBoxColumn;
+		private System.Windows.Forms.DataGridViewComboBoxColumn pCostTypeDataGridViewComboBoxColumn;
     }
 }
