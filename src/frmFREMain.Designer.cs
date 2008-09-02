@@ -41,6 +41,13 @@ namespace FREditor
 			this.tpFirms = new System.Windows.Forms.TabPage();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.indgvPrice = new Inforoom.WinForms.INDataGridView();
+			this.pPriceNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pDateCurPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pDateLastFormDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pMaxOldDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.pPriceTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.pCostTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
 			this.dtSet = new System.Data.DataSet();
 			this.dtClients = new System.Data.DataTable();
 			this.CCode = new System.Data.DataColumn();
@@ -339,7 +346,7 @@ namespace FREditor
 			this.btnCheckAll = new System.Windows.Forms.Button();
 			this.btnJunkCheck = new System.Windows.Forms.Button();
 			this.btnAwaitCheck = new System.Windows.Forms.Button();
-			this.label23 = new System.Windows.Forms.Label();
+			this.lBoxSheetName = new System.Windows.Forms.Label();
 			this.txtBoxSheetName = new System.Windows.Forms.TextBox();
 			this.txtBoxStartLine = new System.Windows.Forms.TextBox();
 			this.txtBoxSelfJunkPos = new System.Windows.Forms.TextBox();
@@ -365,13 +372,6 @@ namespace FREditor
 			this.ttMain = new System.Windows.Forms.ToolTip(this.components);
 			this.tmrUpdateApply = new System.Windows.Forms.Timer(this.components);
 			this.tmrSearch = new System.Windows.Forms.Timer(this.components);
-			this.pPriceNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pDateCurPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pDateLastFormDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pMaxOldDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pPriceTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.pCostTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -489,6 +489,51 @@ namespace FREditor
 			this.indgvPrice.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.indgvPrice_CellFormatting);
 			this.indgvPrice.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.indgvPrice_EditingControlShowing);
 			this.indgvPrice.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvPrice_KeyDown);
+			// 
+			// pPriceNameDataGridViewTextBoxColumn
+			// 
+			this.pPriceNameDataGridViewTextBoxColumn.DataPropertyName = "PPriceName";
+			this.pPriceNameDataGridViewTextBoxColumn.HeaderText = "Название прайс-листа";
+			this.pPriceNameDataGridViewTextBoxColumn.Name = "pPriceNameDataGridViewTextBoxColumn";
+			this.pPriceNameDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// pDateCurPriceDataGridViewTextBoxColumn
+			// 
+			this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PPriceDate";
+			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата текущего прайс-листа";
+			this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
+			this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// pDateLastFormDataGridViewTextBoxColumn
+			// 
+			this.pDateLastFormDataGridViewTextBoxColumn.DataPropertyName = "PDateLastForm";
+			this.pDateLastFormDataGridViewTextBoxColumn.HeaderText = "Дата последней формализации";
+			this.pDateLastFormDataGridViewTextBoxColumn.Name = "pDateLastFormDataGridViewTextBoxColumn";
+			this.pDateLastFormDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// pMaxOldDataGridViewTextBoxColumn
+			// 
+			this.pMaxOldDataGridViewTextBoxColumn.DataPropertyName = "PMaxOld";
+			this.pMaxOldDataGridViewTextBoxColumn.HeaderText = "Актуальность";
+			this.pMaxOldDataGridViewTextBoxColumn.Name = "pMaxOldDataGridViewTextBoxColumn";
+			// 
+			// dataGridViewTextBoxColumn2
+			// 
+			this.dataGridViewTextBoxColumn2.DataPropertyName = "PWaitingDownloadInterval";
+			this.dataGridViewTextBoxColumn2.HeaderText = "Время ожидания (в часах)";
+			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+			// 
+			// pPriceTypeDataGridViewComboBoxColumn
+			// 
+			this.pPriceTypeDataGridViewComboBoxColumn.DataPropertyName = "PPriceType";
+			this.pPriceTypeDataGridViewComboBoxColumn.HeaderText = "Тип прайс-листа";
+			this.pPriceTypeDataGridViewComboBoxColumn.Name = "pPriceTypeDataGridViewComboBoxColumn";
+			// 
+			// pCostTypeDataGridViewComboBoxColumn
+			// 
+			this.pCostTypeDataGridViewComboBoxColumn.DataPropertyName = "PCostType";
+			this.pCostTypeDataGridViewComboBoxColumn.HeaderText = "Тип цены";
+			this.pCostTypeDataGridViewComboBoxColumn.Name = "pCostTypeDataGridViewComboBoxColumn";
 			// 
 			// dtSet
 			// 
@@ -1837,8 +1882,8 @@ namespace FREditor
 			// 
 			// grpbFields
 			// 
-			this.grpbFields.Controls.Add(this.pnlTxtFields);
 			this.grpbFields.Controls.Add(this.pnlGeneralFields);
+			this.grpbFields.Controls.Add(this.pnlTxtFields);
 			this.grpbFields.Dock = System.Windows.Forms.DockStyle.Left;
 			this.grpbFields.Location = new System.Drawing.Point(264, 0);
 			this.grpbFields.Name = "grpbFields";
@@ -2764,7 +2809,7 @@ namespace FREditor
 			// 
 			this.txtBoxMaxBoundCost.AllowDrop = true;
 			this.txtBoxMaxBoundCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMaxBoundCost", true));
-			this.txtBoxMaxBoundCost.Location = new System.Drawing.Point(436, 67);
+			this.txtBoxMaxBoundCost.Location = new System.Drawing.Point(437, 67);
 			this.txtBoxMaxBoundCost.Name = "txtBoxMaxBoundCost";
 			this.txtBoxMaxBoundCost.ReadOnly = true;
 			this.txtBoxMaxBoundCost.Size = new System.Drawing.Size(40, 20);
@@ -3210,7 +3255,7 @@ namespace FREditor
 			this.pnlSettings.Controls.Add(this.btnCheckAll);
 			this.pnlSettings.Controls.Add(this.btnJunkCheck);
 			this.pnlSettings.Controls.Add(this.btnAwaitCheck);
-			this.pnlSettings.Controls.Add(this.label23);
+			this.pnlSettings.Controls.Add(this.lBoxSheetName);
 			this.pnlSettings.Controls.Add(this.txtBoxSheetName);
 			this.pnlSettings.Controls.Add(this.txtBoxStartLine);
 			this.pnlSettings.Controls.Add(this.txtBoxSelfJunkPos);
@@ -3292,13 +3337,13 @@ namespace FREditor
 			this.ttMain.SetToolTip(this.btnAwaitCheck, "Проверка маски ожидаемых");
 			this.btnAwaitCheck.Click += new System.EventHandler(this.btnAwaitCheck_Click);
 			// 
-			// label23
+			// lBoxSheetName
 			// 
-			this.label23.Location = new System.Drawing.Point(49, 155);
-			this.label23.Name = "label23";
-			this.label23.Size = new System.Drawing.Size(96, 23);
-			this.label23.TabIndex = 19;
-			this.label23.Text = "Название листа :";
+			this.lBoxSheetName.Location = new System.Drawing.Point(49, 155);
+			this.lBoxSheetName.Name = "lBoxSheetName";
+			this.lBoxSheetName.Size = new System.Drawing.Size(96, 23);
+			this.lBoxSheetName.TabIndex = 19;
+			this.lBoxSheetName.Text = "Название листа :";
 			// 
 			// txtBoxSheetName
 			// 
@@ -3512,51 +3557,6 @@ namespace FREditor
 			this.tmrSearch.Interval = 1000;
 			this.tmrSearch.Tick += new System.EventHandler(this.tmrSearch_Tick);
 			// 
-			// pPriceNameDataGridViewTextBoxColumn
-			// 
-			this.pPriceNameDataGridViewTextBoxColumn.DataPropertyName = "PPriceName";
-			this.pPriceNameDataGridViewTextBoxColumn.HeaderText = "Название прайс-листа";
-			this.pPriceNameDataGridViewTextBoxColumn.Name = "pPriceNameDataGridViewTextBoxColumn";
-			this.pPriceNameDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// pDateCurPriceDataGridViewTextBoxColumn
-			// 
-			this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PPriceDate";
-			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата текущего прайс-листа";
-			this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
-			this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// pDateLastFormDataGridViewTextBoxColumn
-			// 
-			this.pDateLastFormDataGridViewTextBoxColumn.DataPropertyName = "PDateLastForm";
-			this.pDateLastFormDataGridViewTextBoxColumn.HeaderText = "Дата последней формализации";
-			this.pDateLastFormDataGridViewTextBoxColumn.Name = "pDateLastFormDataGridViewTextBoxColumn";
-			this.pDateLastFormDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// pMaxOldDataGridViewTextBoxColumn
-			// 
-			this.pMaxOldDataGridViewTextBoxColumn.DataPropertyName = "PMaxOld";
-			this.pMaxOldDataGridViewTextBoxColumn.HeaderText = "Актуальность";
-			this.pMaxOldDataGridViewTextBoxColumn.Name = "pMaxOldDataGridViewTextBoxColumn";
-			// 
-			// dataGridViewTextBoxColumn2
-			// 
-			this.dataGridViewTextBoxColumn2.DataPropertyName = "PWaitingDownloadInterval";
-			this.dataGridViewTextBoxColumn2.HeaderText = "Время ожидания (в часах)";
-			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-			// 
-			// pPriceTypeDataGridViewComboBoxColumn
-			// 
-			this.pPriceTypeDataGridViewComboBoxColumn.DataPropertyName = "PPriceType";
-			this.pPriceTypeDataGridViewComboBoxColumn.HeaderText = "Тип прайс-листа";
-			this.pPriceTypeDataGridViewComboBoxColumn.Name = "pPriceTypeDataGridViewComboBoxColumn";
-			// 
-			// pCostTypeDataGridViewComboBoxColumn
-			// 
-			this.pCostTypeDataGridViewComboBoxColumn.DataPropertyName = "PCostType";
-			this.pCostTypeDataGridViewComboBoxColumn.HeaderText = "Тип цены";
-			this.pCostTypeDataGridViewComboBoxColumn.Name = "pCostTypeDataGridViewComboBoxColumn";
-			// 
 			// frmFREMain
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -3670,7 +3670,7 @@ namespace FREditor
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.Label lStartLine;
-        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label lBoxSheetName;
         private System.Windows.Forms.GroupBox grpbSettings;
         private System.Windows.Forms.Panel pnlSettings;
         private System.Data.DataColumn FRSelfAwaitPos;

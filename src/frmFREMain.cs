@@ -901,6 +901,9 @@ order by PriceName
             delimiter = drFR[0]["FRDelimiter"].ToString();
 
             string takeFile = shortFileNameByPriceItemId + r;
+
+			PrepareShowTab(fmt);
+
             if (!(File.Exists(StartPath + takeFile)))
             {
                 fileExist = false;
@@ -951,6 +954,65 @@ order by PriceName
                 Application.DoEvents();
             }
         }
+
+		private void PrepareShowTab(PriceFormat? fmt)
+		{
+			switch (fmt)
+			{
+				case PriceFormat.DelimDOS:
+				case PriceFormat.DelimWIN:
+					
+					lBoxSheetName.Visible = false;
+					txtBoxSheetName.Visible = false;
+					pnlGeneralFields.Visible = true;
+					pnlTxtFields.Visible = false;
+
+					break;
+
+				case PriceFormat.FixedDOS:
+				case PriceFormat.FixedWIN:
+
+					lBoxSheetName.Visible = false;
+					txtBoxSheetName.Visible = false;
+					pnlGeneralFields.Visible = false;
+					pnlTxtFields.Visible = true;
+
+					break;
+
+				case PriceFormat.XLS:
+
+					lBoxSheetName.Visible = true;
+					txtBoxSheetName.Visible = true;
+					pnlGeneralFields.Visible = true;
+					pnlTxtFields.Visible = false;
+
+					break;
+
+				case PriceFormat.DBF:
+
+					lBoxSheetName.Visible = false;
+					txtBoxSheetName.Visible = false;
+					pnlGeneralFields.Visible = true;
+					pnlTxtFields.Visible = false;
+
+					break;
+			}
+
+			if (existParentRules == String.Empty)
+			{
+				txtBoxSelfAwaitPos.ReadOnly = false;
+				txtBoxSelfJunkPos.ReadOnly = false;
+				txtBoxNameMask.ReadOnly = false;
+				txtBoxForbWords.ReadOnly = false;
+			}
+			else
+			{
+				txtBoxSelfAwaitPos.ReadOnly = true;
+				txtBoxSelfJunkPos.ReadOnly = true;
+				txtBoxNameMask.ReadOnly = true;
+				txtBoxForbWords.ReadOnly = true;
+			}
+		}
 
 		private void FillParentComboBox(ComboBox cmbParent, string FillSQL, object ParentValue, string IdField, string NameField)
 		{
@@ -1005,11 +1067,6 @@ order by PriceName
 					tcInnerTable.ItemSize = new Size(0, 1);
 					tcInnerTable.Appearance = TabAppearance.Buttons;
 
-					label23.Visible = false;
-					txtBoxSheetName.Visible = false;
-					pnlGeneralFields.Visible = true;
-					pnlTxtFields.Visible = false;
-
 					indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
 
 					tcInnerSheets.SizeMode = TabSizeMode.Fixed;
@@ -1023,11 +1080,6 @@ order by PriceName
 					tcInnerTable.SizeMode = TabSizeMode.Normal;
 					tcInnerTable.ItemSize = new Size(58, 18);
 					tcInnerTable.Appearance = TabAppearance.Normal;
-
-					label23.Visible = false;
-					txtBoxSheetName.Visible = false;
-					pnlGeneralFields.Visible = false;
-					pnlTxtFields.Visible = true;
 
 					indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
 					indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
@@ -1047,11 +1099,6 @@ order by PriceName
 					tcInnerSheets.ItemSize = new Size(58, 18);
 					tcInnerSheets.Appearance = TabAppearance.Normal;
 
-					label23.Visible = true;
-					txtBoxSheetName.Visible = true;
-					pnlGeneralFields.Visible = true;
-					pnlTxtFields.Visible = false;
-
 					break;
 
 				case PriceFormat.DBF:
@@ -1063,28 +1110,8 @@ order by PriceName
 					tcInnerSheets.ItemSize = new Size(0, 1);
 					tcInnerSheets.Appearance = TabAppearance.Buttons;
 
-					label23.Visible = false;
-					txtBoxSheetName.Visible = false;
-					pnlGeneralFields.Visible = true;
-					pnlTxtFields.Visible = false;
-
 					break;
 			}
-
-            if (existParentRules == String.Empty)
-            {
-                txtBoxSelfAwaitPos.ReadOnly = false;
-                txtBoxSelfJunkPos.ReadOnly = false;
-                txtBoxNameMask.ReadOnly = false;
-                txtBoxForbWords.ReadOnly = false;
-            }
-            else
-            {
-                txtBoxSelfAwaitPos.ReadOnly = true;
-                txtBoxSelfJunkPos.ReadOnly = true;
-                txtBoxNameMask.ReadOnly = true;
-                txtBoxForbWords.ReadOnly = true;
-            }
 
             LoadCostsSettings();
             indgvPriceData.Focus();
@@ -1669,7 +1696,7 @@ order by PriceName
 
             DelCostsColumns();
 
-            label23.Visible = false;
+            lBoxSheetName.Visible = false;
             txtBoxSheetName.Visible = false;
 
             txtBoxSelfAwaitPos.ReadOnly = true;
