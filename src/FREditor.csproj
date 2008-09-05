@@ -29,11 +29,12 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <SignManifests>true</SignManifests>
-    <ManifestCertificateThumbprint>B9E15F664C1FAAEA55EFC57672E6FB43F5836618</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>7A62A5AE17C1C79F529466067F45F6A10223630D</ManifestCertificateThumbprint>
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <GenerateManifests>true</GenerateManifests>
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <ManifestKeyFile>lib\InforoomCodeSign.pfx</ManifestKeyFile>
     <PublishUrl>http://publish.analit.net/FREditor/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -48,10 +49,11 @@
     <TargetCulture>ru-RU</TargetCulture>
     <ProductName>Редактор правил формализации</ProductName>
     <PublisherName>Inforoom</PublisherName>
-    <MinimumRequiredVersion>1.2.1.71</MinimumRequiredVersion>
-    <ApplicationRevision>71</ApplicationRevision>
-    <ApplicationVersion>1.2.1.71</ApplicationVersion>
+    <MinimumRequiredVersion>1.2.7.78</MinimumRequiredVersion>
+    <ApplicationRevision>78</ApplicationRevision>
+    <ApplicationVersion>1.2.7.78</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
