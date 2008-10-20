@@ -72,9 +72,11 @@ namespace FREditor
         DataTable dtPrice = new DataTable();
 
 #if DEBUG
-		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;");
+#if WorkDB
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;");
+#else
 		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;");
-		//private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=system; password=123; database=farm;convert Zero Datetime=True;");
+#endif
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;");
 #endif
@@ -86,13 +88,16 @@ namespace FREditor
         private OleDbConnection dbcMain = new OleDbConnection();
 
 #if DEBUG
-		//string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
-		string StartPath = "C:\\TEMP\\Base\\";
+#if WorkDir
+		string StartPath = @"\\FMS\Prices\Base\";
 #else
-		string StartPath = "\\"+"\\"+"FMS" + "\\" + "Prices" + "\\" + "Base" + "\\";
+		string StartPath = @"C:\TEMP\Base\";
+#endif
+#else
+		string StartPath = @"\\FMS\Prices\Base\";
 #endif
 
-        string EndPath = Path.GetTempPath();
+		string EndPath = Path.GetTempPath();
         string TxtFilePath = String.Empty;
         string frmCaption = String.Empty;
 
