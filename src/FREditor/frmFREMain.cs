@@ -1795,6 +1795,15 @@ order by PriceName
 					indgvCosts.AllowUserToAddRows = Convert.ToByte(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName]) == 0;
 					indgvCosts.ReadOnly = !indgvCosts.AllowUserToAddRows;
 
+					if (indgvCosts.AllowUserToAddRows)
+					{
+						(bsCostsFormRules.List as DataView).Table.Columns[CFRPriceItemId.ColumnName].DefaultValue = ((DataRowView)bsFormRules.Current)["FRPriceItemId"];
+					}
+					else
+					{
+						(bsCostsFormRules.List as DataView).Table.Columns[CFRPriceItemId.ColumnName].DefaultValue = DBNull.Value;
+					}
+
 					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
 				}
@@ -3172,14 +3181,24 @@ order by PriceName
 		private void indgvCosts_CellEndEdit(object sender, DataGridViewCellEventArgs e)
 		{
 			DataGridViewRow r = indgvCosts.Rows[e.RowIndex];
-			if (r.DataBoundItem != null)
+
+			DataRowView drv = null;
+			//≈сли при вводе новой ценовой колонке отменить создание, то при попытке получить доступ
+			//к DataBoundItem будет происходить IndexOutOfRangeException
+			try
 			{
-				DataRowView drv = (DataRowView)r.DataBoundItem;
+				if (r.DataBoundItem != null)
+					drv = (DataRowView)r.DataBoundItem;
+			}
+			catch (IndexOutOfRangeException)
+			{
+			}
+
+			if (drv != null)
+			{
 				//≈сли это нова€ запись и мы еще не установили пол€ PriceItemId и CostCode
-				if (drv.IsNew && Convert.IsDBNull(drv["CFRPriceItemId"]) && Convert.IsDBNull(drv["CFRCost_Code"]))
+				if (drv.IsNew && Convert.IsDBNull(drv["CFRCost_Code"]))
 				{
-					long PriceItemId = (long)((DataRowView)bsFormRules.Current)["FRPriceItemId"];
-					drv["CFRPriceItemId"] = PriceItemId;
 					long NewCostCode = (long)dtSet.Tables["ѕравила формализации цен"].Compute("Max(CFRCost_Code)", null);
 					drv["CFRCost_Code"] = NewCostCode + 1;
 				}
