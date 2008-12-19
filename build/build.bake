@@ -3,14 +3,23 @@ import Bake.IO.Extensions
 import Bake.Compiler.Extensions
 import System.IO
 import System.Security.Cryptography.X509Certificates
+import Microsoft.Win32
+import Microsoft.Build.Tasks.Deployment.ManifestUtilities
 
 def Copy(fileSet as FileSet, destination as string):
 	for file in fileSet.Files:
 		dir = Path.GetDirectoryName(file).Replace(fileSet.BaseDirectory, destination)
 		MkDir(dir) if not Exist(dir)
-		print "Copying file from ${file} to ${file.Replace(fileSet.BaseDirectory, destination)})"
+		print "Copying file from ${file} to ${file.Replace(fileSet.BaseDirectory, destination)}"
 		Cp(file, file.Replace(fileSet.BaseDirectory, destination))
 		
+def CopyWithDeploy(fileSet as FileSet, destination as string):
+	for file in fileSet.Files:
+		dir = Path.GetDirectoryName(file).Replace(fileSet.BaseDirectory, destination)
+		MkDir(dir) if not Exist(dir)
+		print "Copying file from ${file} to ${file.Replace(fileSet.BaseDirectory, destination)}"
+		Cp(file, file.Replace(fileSet.BaseDirectory, destination) + ".deploy")
+
 def GeneratePublishPage(file as string, version as string, productName as string):
 	template = System.IO.File.ReadAllText("publish.htm.template")
 	result = template.Replace("{version}", version)
@@ -18,12 +27,29 @@ def GeneratePublishPage(file as string, version as string, productName as string
 	System.IO.File.AppendAllText(file, result)
 
 def SdkPath() as string:
-	return "C:\\Program Files\\Microsoft SDKs\\Windows\\v6.0A\\bin\\"
+	sdkPath = null
+	regKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Microsoft SDKs\\Windows\\")
+	if regKey:
+		sdkPath = regKey.GetValue("CurrentInstallFolder", "").ToString()
+		regKey.Close()
+	if String.IsNullOrEmpty(sdkPath):
+		regKey = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Microsoft SDKs\\Windows\\")
+		if regKey:
+			sdkPath = regKey.GetValue("CurrentInstallFolder", "").ToString()
+			regKey.Close()
+	return sdkPath
+
 
 def GetAssemblyVersion(assemblyFile as string) as string:
 	return System.Reflection.Assembly.LoadFile(assemblyFile).GetName().Version.ToString()
 
-	
+def ClearDir(dirname as string):
+	for delDirName in Directory.GetDirectories(dirname):
+		Directory.Delete(delDirName, true)
+	for fname in Directory.GetFiles(dirname):
+		System.IO.File.Delete(fname)
+
+
 projectName = "FREditor"
 productName = "Редактор правил формализации"
 configuration = "release"
@@ -42,7 +68,8 @@ Task "build", ["clean"]:
 			Parameters : { "OutDir" : buildTo,
 						   "Configuration" : "release" },
 			FrameworkVersion : "3.5").Execute()
-	#Cp("${projectPath}App.${configuration}.config", "${buildTo}${projectName}.exe.config", true)
+	if Exist("${projectPath}App.${configuration}.config"):
+		Cp("${projectPath}App.${configuration}.config", "${buildTo}${projectName}.exe.config", true)
 	Rm(FileSet("*.*", 
 			   BaseDirectory : buildTo,
 			   Excludes : ["*.dll", "*.exe", "*.config"]))
@@ -67,13 +94,13 @@ Task "build publish package", ["build", "clean publish package"]:
 							"ClickOnceAppTitle" : productName,
 							"SolutionName" : projectName,
 							"PublishDir" : buildTo, 
-							"SigningCert" : certPath,
-							"Password" : password },
+							"SigningCert" : certPath,                                                        
+							"Password" : password, 
+							"SdkPath" : SdkPath() },
 			FrameworkVersion : "3.5").Execute()
-	for file in FileSet("*.*", BaseDirectory : buildTo).Files:
-		Cp(file, Path.Combine(buildPublishTo, Path.ChangeExtension(Path.GetFileName(file), Path.GetExtension(file) + ".deploy")))
+	CopyWithDeploy(FileSet("**\\*.*", BaseDirectory : buildTo), buildPublishTo)
 	cert = X509Certificate2(System.IO.File.ReadAllBytes(certPath), password)
-	Exec("\"${SdkPath()}signtool.exe\"",
+	Exec("\"${SdkPath()}bin\\signtool.exe\"",
 		 "sign /sha1 ${cert.Thumbprint} ${buildPublishTo}setup.exe").Execute()
 	Rm("${buildPublishTo}publish.build")
 	GeneratePublishPage("${buildPublishTo}publish.htm", publishVersion, productName)
@@ -86,5 +113,4 @@ Task "publish", ["build publish package", "clean publish dir"]:
 	Copy(FileSet("**\\*.*", BaseDirectory : buildPublishTo), publishTo)
 
 Task "clean publish dir":
-	RmDir(publishTo, true) if Exist(publishTo)
-	MkDir(publishTo)
+	ClearDir(publishTo)
