@@ -3258,6 +3258,41 @@ order by PriceName
 				e.Cancel = true;
 				indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки не может быть пустой строкой";
 			}
+			else
+				//Если мы ввели новое название ценовой колонки, то проверяем на несовпадение с существующими ценовыми колонками
+				if ((indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) && !String.IsNullOrEmpty(e.FormattedValue.ToString()))
+				{
+					DataRowView _checkedRow = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
+					if (_checkedRow.IsEdit)
+					{
+						if (_checkedRow.IsNew)
+						{
+							DataRow[] drs = dtCostsFormRules.Select(
+								String.Format("CFRCost_Code is not NULL and CFRPriceItemId = {0} and CFRCostName = '{1}'",
+									_checkedRow[CFRPriceItemId.ColumnName],
+									e.FormattedValue));
+							if (drs.Length > 0)
+							{
+								e.Cancel = true;
+								indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки совпадает с существующей ценовой колонкой";
+							}
+						}
+						else
+						{
+							DataRow[] drs = dtCostsFormRules.Select(
+								String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRCostName = '{2}'",
+									_checkedRow[CFRCost_Code.ColumnName],
+									_checkedRow[CFRPriceItemId.ColumnName],
+									e.FormattedValue));
+							if (drs.Length > 0)
+							{
+								e.Cancel = true;
+								indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки совпадает с существующей ценовой колонкой";
+							}
+						}
+					}
+				}
+
 		}
 
     }

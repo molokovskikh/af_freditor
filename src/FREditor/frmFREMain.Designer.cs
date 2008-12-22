@@ -1834,7 +1834,7 @@ namespace FREditor
 			this.indgvCosts.HideEmptyColumns = false;
 			this.indgvCosts.Location = new System.Drawing.Point(766, 0);
 			this.indgvCosts.Name = "indgvCosts";
-			this.indgvCosts.RowHeadersWidth = 30;
+			this.indgvCosts.RowHeadersWidth = 40;
 			this.indgvCosts.Size = new System.Drawing.Size(90, 195);
 			this.indgvCosts.TabIndex = 6;
 			this.indgvCosts.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.indgvCosts_CellDoubleClick);
