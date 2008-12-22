@@ -2105,7 +2105,7 @@ and c.Type = ?ContactType;",
             {
                 try
                 {
-                    erP.Dispose();
+                    erP.Clear();
                     r = new Regex(txtMask.Text);
                     if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
                     {
@@ -2161,10 +2161,10 @@ and c.Type = ?ContactType;",
                     dr.RowError = String.Empty;
                     dr.ClearErrors();
                     Match m = r.Match(dr[FieldNameToSearch].ToString());
-                    if (!(m.Success))
+                    if (m.Success)
                     {
                         indgv.RowHeadersVisible = true;
-                        dr.RowError = "Несоответствие маски";
+                        dr.RowError = "Маска совпала";
                     }
                 }
             }
@@ -2308,22 +2308,24 @@ and c.Type = ?ContactType;",
                     Match m = r.Match(dr[ColumnNameToSearchIn].ToString());
                     if (m.Success)
                     {
+						bool _groupNotExists = false;
                         for (int i = 0; i < GroupsToFind.Length; i++)
                         {
                             if (GroupsToFind[i] != null)
                             {
-                                if (m.Groups[GroupsToFind[i]].Success == false)
+                                if (!m.Groups[GroupsToFind[i]].Success)
                                 {
-                                    indgv.RowHeadersVisible = true;
-                                    dr.RowError = "Несоответствие маски";
+									_groupNotExists = true;
+									break;
                                 }
                             }
                         }
-                    }
-                    else
-                    {
-                        indgv.RowHeadersVisible = true;
-                        dr.RowError = "Несоответствие поля";
+
+						if (!_groupNotExists)
+						{
+							indgv.RowHeadersVisible = true;
+							dr.RowError = "Маска совпала";
+						}
                     }
                 }
             }
