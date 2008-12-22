@@ -2667,17 +2667,48 @@ WHERE
                 {
                     CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
                     DataRowView drv = (DataRowView)cm.Current;
+
+					string _concurentCostName = String.Empty;
+
                     if (pnlGeneralFields.Visible)
                     {
-                        indgvCosts[cFRFieldNameDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
+						DataRow[] drs = dtCostsFormRules.Select(
+							String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRFieldName = '{2}'",
+								drv[CFRCost_Code.ColumnName], 
+								drv[CFRPriceItemId.ColumnName],
+								((DropField)e.Data.GetData(typeof(DropField))).FieldName));
+						if (drs.Length == 0)
+							indgvCosts[cFRFieldNameDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
+						else
+							_concurentCostName = drs[0][CFRCostName.ColumnName].ToString();
                     }
                     else
                     {
-                        indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
-                        indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
+						DataRow[] drs = dtCostsFormRules.Select(
+							String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRTextBegin = '{2}' and CFRTextEnd = '{3}'",
+								drv[CFRCost_Code.ColumnName],
+								drv[CFRPriceItemId.ColumnName],
+								((DropField)e.Data.GetData(typeof(DropField))).FieldBegin,
+								((DropField)e.Data.GetData(typeof(DropField))).FieldEnd));
+						if (drs.Length == 0)
+						{
+							indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
+							indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
+						}
+						else
+							_concurentCostName = drs[0][CFRCostName.ColumnName].ToString();
                     }
-					//Завершаем явно редактирование этой строчки, чтобы появились изменения в DataSet.GetChanges()
-					drv.EndEdit();
+
+					if (String.IsNullOrEmpty(_concurentCostName))
+						//Завершаем явно редактирование этой строчки, чтобы появились изменения в DataSet.GetChanges()
+						drv.EndEdit();
+					else
+						MessageBox.Show(
+							String.Format("Назначение не возможно, т.к. данное поле уже используется в ценовой колонке '{0}'.",
+								_concurentCostName),
+							"Предупреждение",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Warning);
                 }
             }
         }

@@ -130,10 +130,10 @@
     <value>245, 17</value>
   </metadata>
   <metadata name="bsFormRules.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 54</value>
+    <value>643, 17</value>
   </metadata>
   <metadata name="ttMain.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>302, 54</value>
+    <value>187, 54</value>
   </metadata>
   <metadata name="MNameFieldINDataGridViewTextBoxColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -145,7 +145,7 @@
     <value>True</value>
   </metadata>
   <metadata name="bsCostsFormRules.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 91</value>
+    <value>503, 54</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnVitallyImportantCheck.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -206,15 +206,15 @@
     <value>477, 17</value>
   </metadata>
   <metadata name="mcmdInsertCostRules.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>159, 91</value>
+    <value>645, 54</value>
   </metadata>
   <metadata name="mcmdUpdateFormRules.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>132, 54</value>
+    <value>17, 54</value>
   </metadata>
   <metadata name="tmrUpdateApply.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>384, 54</value>
+    <value>269, 54</value>
   </metadata>
   <metadata name="tmrSearch.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>516, 54</value>
+    <value>401, 54</value>
   </metadata>
 </root>
