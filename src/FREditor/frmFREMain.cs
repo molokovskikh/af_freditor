@@ -2442,7 +2442,19 @@ and c.Type = ?ContactType;",
                             daFormRules.Update(chg.Tables[dtFormRules.TableName].Copy());
 
 							if (body.Length > 0)
-								SendNotificationLetter(body.ToString());
+							{
+								//Получаем информацию о поставщике, регионе и прайс-листе
+								long _selfPriceCode = (long)(((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
+								DataRow drPrice = dtPrices.Select("PPriceCode = " + _selfPriceCode)[0];
+								string _priceName = drPrice[PPriceName.ColumnName].ToString();
+
+								long _firmCode = (long)drPrice[PFirmCode.ColumnName];
+								DataRow drClient = dtClients.Select("CCode = " + _firmCode)[0];
+								string _firmName = drClient[CShortName.ColumnName].ToString();
+								string _regionName = drClient[CRegion.ColumnName].ToString();
+
+								SendNotificationLetter(body.ToString(), _priceName, _firmName, _regionName);
+							}
 
 							tr.Commit();
                             dtSet.AcceptChanges();
@@ -2549,7 +2561,7 @@ and fr.Id = pim.FormRuleId;
             tsbCancel.Enabled = false;
         }
 
-		private void SendNotificationLetter(string body)
+		private void SendNotificationLetter(string body, string priceName, string providerName, string regionName)
 		{
 			try
 			{
@@ -2562,13 +2574,6 @@ FROM
   accessright.regionaladmins
 WHERE  
   username = ?UserName", new MySqlParameter("?UserName", Environment.UserName));
-
-				//Получаем информацию о поставщике, регионе и прайс-листе
-				DataRowView drv = (DataRowView)((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember]).Current;
-				string providerName = (string)drv[CShortName.ColumnName];
-				string regionName = (string)drv[CRegion.ColumnName];
-				drv = (DataRowView)((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember]).Current;
-				string priceName = (string)drv[PPriceName.ColumnName];
 
 				//Формируем сообщение
 				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
