@@ -13,6 +13,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Inforoom.WinForms;
+using FREditor.Properties;
 
 namespace FREditor
 {
@@ -73,12 +74,12 @@ namespace FREditor
 
 #if DEBUG
 #if WorkDB
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0;");
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0;");
 #endif
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;");
+		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;default command timeout=0;");
 #endif
 		private MySqlCommand MyCmd = new MySqlCommand();
         private MySqlDataAdapter MyDA = new MySqlDataAdapter();
@@ -187,6 +188,25 @@ INSERT INTO farm.costformrules (CostCode, FieldName, TxtBegin, TxtEnd) values (@
 			this.mcmdInsertCostRules.Parameters.Add("?TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextBegin");
 			this.mcmdInsertCostRules.Parameters.Add("?TxtEnd", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextEnd");
 
+			this.mcmdDeleteCostRules.CommandText = "usersettings.DeleteCost";
+			this.mcmdDeleteCostRules.CommandType = CommandType.StoredProcedure;
+			this.mcmdDeleteCostRules.Parameters.Clear();
+			this.mcmdDeleteCostRules.Parameters.Add("?inCostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRCost_Code");
+			this.mcmdDeleteCostRules.Parameters["?inCostCode"].Direction = ParameterDirection.Input;
+
+
+			this.mcmdUpdateCostRules.CommandText = @"
+update usersettings.pricescosts pc
+set
+  CostName = ?CostName
+where
+    pc.CostCode = ?CostCode
+and CostName <> ?CostName;
+UPDATE farm.costformrules c SET
+  FieldName = ?FieldName,
+  TxtBegin = ?TxtBegin,
+  TxtEnd = ?TxtEnd
+WHERE c.CostCode = ?CostCode;";
 
             this.mcmdUpdateCostRules.Parameters.Add("?CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRCost_Code");
 			this.mcmdUpdateCostRules.Parameters.Add("?CostName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRCostName");
@@ -389,9 +409,15 @@ where
         static void Main()
         {
 			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(FREditorExceptionHandler.OnThreadException);
+			Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
 
             Application.Run(new frmFREMain());
         }
+
+		static void Application_ApplicationExit(object sender, EventArgs e)
+		{
+			Settings.Default.Save();
+		}
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
@@ -660,7 +686,8 @@ select
   cfr.CostCode AS CFRCost_Code,
   cfr.FieldName AS CFRFieldName,
   cfr.TxtBegin as CFRTextBegin,
-  cfr.TxtEnd as CFRTextEnd
+  cfr.TxtEnd as CFRTextEnd,
+  pc.BaseCost as CFRBaseCost
 FROM 
   farm.costformrules cfr
   inner join usersettings.pricescosts pc on pc.CostCode = cfr.costcode
@@ -2417,11 +2444,10 @@ and c.Type = ?ContactType;",
 
                             mcmdUpdateCostRules.Connection = MyCn;
 							mcmdInsertCostRules.Connection = MyCn;
+							mcmdDeleteCostRules.Connection = MyCn;
 							mcmdInsertCostRules.Parameters["?PriceCode"].Value = ((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName];
                             daCostRules.TableMappings.Clear();
                             daCostRules.TableMappings.Add("Table", dtCostsFormRules.TableName);
-							//Делается Copy для того, чтобы созданные записи (Added) при применении не помечались как неизмененные Unchanged
-                            daCostRules.Update(chg.Tables[dtCostsFormRules.TableName].Copy());
 
 							//Формируем тело письма с изменениями в колонках
 							StringBuilder body = new StringBuilder();
@@ -2430,11 +2456,21 @@ and c.Type = ?ContactType;",
 								if (changeRow.RowState == DataRowState.Added)
 									body.AppendFormat("Добавлена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
 								else
-									if (!changeRow[CFRCostName.ColumnName, DataRowVersion.Original].Equals(changeRow[CFRCostName.ColumnName, DataRowVersion.Current]))
-										body.AppendFormat("Наименование ценовой колонки изменено с \"{0}\" на \"{1}\".\n", 
-											changeRow[CFRCostName.ColumnName, DataRowVersion.Original],
-											changeRow[CFRCostName.ColumnName, DataRowVersion.Current]);
+									if ((bool)changeRow[CFRDeleted.ColumnName])
+									{
+										body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
+										changeRow.Delete();
+									}
+									else
+										if (!changeRow[CFRCostName.ColumnName, DataRowVersion.Original].Equals(changeRow[CFRCostName.ColumnName, DataRowVersion.Current]))
+											body.AppendFormat("Наименование ценовой колонки изменено с \"{0}\" на \"{1}\".\n",
+												changeRow[CFRCostName.ColumnName, DataRowVersion.Original],
+												changeRow[CFRCostName.ColumnName, DataRowVersion.Current]);
 							}
+
+							//Делается Copy для того, чтобы созданные записи (Added) при применении не помечались как неизмененные Unchanged
+                            daCostRules.Update(chg.Tables[dtCostsFormRules.TableName].Copy());
+
 
                             mcmdUpdateFormRules.Connection = MyCn;
 							daFormRules.TableMappings.Clear();
@@ -2668,47 +2704,51 @@ WHERE
                     CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
                     DataRowView drv = (DataRowView)cm.Current;
 
-					string _concurentCostName = String.Empty;
+					//Если запись не является помеченной на удаление, то позволяем назначать поля
+					if (!(bool)drv[CFRDeleted.ColumnName])
+					{
+						string _concurentCostName = String.Empty;
 
-                    if (pnlGeneralFields.Visible)
-                    {
-						DataRow[] drs = dtCostsFormRules.Select(
-							String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRFieldName = '{2}'",
-								drv[CFRCost_Code.ColumnName], 
-								drv[CFRPriceItemId.ColumnName],
-								((DropField)e.Data.GetData(typeof(DropField))).FieldName));
-						if (drs.Length == 0)
-							indgvCosts[cFRFieldNameDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
-						else
-							_concurentCostName = drs[0][CFRCostName.ColumnName].ToString();
-                    }
-                    else
-                    {
-						DataRow[] drs = dtCostsFormRules.Select(
-							String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRTextBegin = '{2}' and CFRTextEnd = '{3}'",
-								drv[CFRCost_Code.ColumnName],
-								drv[CFRPriceItemId.ColumnName],
-								((DropField)e.Data.GetData(typeof(DropField))).FieldBegin,
-								((DropField)e.Data.GetData(typeof(DropField))).FieldEnd));
-						if (drs.Length == 0)
+						if (pnlGeneralFields.Visible)
 						{
-							indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
-							indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
+							DataRow[] drs = dtCostsFormRules.Select(
+								String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRFieldName = '{2}'",
+									drv[CFRCost_Code.ColumnName],
+									drv[CFRPriceItemId.ColumnName],
+									((DropField)e.Data.GetData(typeof(DropField))).FieldName));
+							if (drs.Length == 0)
+								indgvCosts[cFRFieldNameDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldName;
+							else
+								_concurentCostName = drs[0][CFRCostName.ColumnName].ToString();
 						}
 						else
-							_concurentCostName = drs[0][CFRCostName.ColumnName].ToString();
-                    }
+						{
+							DataRow[] drs = dtCostsFormRules.Select(
+								String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRTextBegin = '{2}' and CFRTextEnd = '{3}'",
+									drv[CFRCost_Code.ColumnName],
+									drv[CFRPriceItemId.ColumnName],
+									((DropField)e.Data.GetData(typeof(DropField))).FieldBegin,
+									((DropField)e.Data.GetData(typeof(DropField))).FieldEnd));
+							if (drs.Length == 0)
+							{
+								indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
+								indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
+							}
+							else
+								_concurentCostName = drs[0][CFRCostName.ColumnName].ToString();
+						}
 
-					if (String.IsNullOrEmpty(_concurentCostName))
-						//Завершаем явно редактирование этой строчки, чтобы появились изменения в DataSet.GetChanges()
-						drv.EndEdit();
-					else
-						MessageBox.Show(
-							String.Format("Назначение не возможно, т.к. данное поле уже используется в ценовой колонке '{0}'.",
-								_concurentCostName),
-							"Предупреждение",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Warning);
+						if (String.IsNullOrEmpty(_concurentCostName))
+							//Завершаем явно редактирование этой строчки, чтобы появились изменения в DataSet.GetChanges()
+							drv.EndEdit();
+						else
+							MessageBox.Show(
+								String.Format("Назначение не возможно, т.к. данное поле уже используется в ценовой колонке '{0}'.",
+									_concurentCostName),
+								"Предупреждение",
+								MessageBoxButtons.OK,
+								MessageBoxIcon.Warning);
+					}
                 }
             }
         }
@@ -3202,17 +3242,22 @@ order by PriceName
 			{
 				DataGridViewRow row = indgvCosts.Rows[e.RowIndex];
 				DataRowView drv = (DataRowView)row.DataBoundItem;
-				drv.BeginEdit();
-				if (pnlGeneralFields.Visible)
+
+				//Если запись не является помеченной на удаление, то позволяем редактировать
+				if (!(bool)drv[CFRDeleted.ColumnName])
 				{
-					drv[cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+					drv.BeginEdit();
+					if (pnlGeneralFields.Visible)
+					{
+						drv[cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+					}
+					else
+					{
+						drv[cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+						drv[cFRTextEndDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+					}
+					drv.EndEdit();
 				}
-				else
-				{
-					drv[cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
-					drv[cFRTextEndDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
-				}
-				drv.EndEdit();
 			}
 		}
 
@@ -3293,6 +3338,66 @@ order by PriceName
 					}
 				}
 
+		}
+
+		private void indgvCosts_KeyDown(object sender, KeyEventArgs e)
+		{
+			if ((e.KeyCode == Keys.Delete) && bsCostsFormRules.AllowNew && !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName])
+				if (((DataRowView)bsCostsFormRules.Current).IsNew)
+					((DataRowView)bsCostsFormRules.Current).Delete();
+				else
+					((DataRowView)bsCostsFormRules.Current)[CFRDeleted.ColumnName] = true;
+		}
+
+		private void indgvCosts_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+		{
+			DataGridViewRow r = indgvCosts.Rows[e.RowIndex];
+			if (r.IsNewRow) return;
+
+			//Если мы пытаемся отредактировать название ценовой колонки, помечанной на удаление, то не позволяем это сделать
+			if (indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn)
+			{
+				DataRowView drv = (DataRowView)r.DataBoundItem;
+				if ((bool)drv[CFRDeleted.ColumnName])
+					e.Cancel = true;
+			}
+		}
+
+		private void indgvCosts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+		{
+			// && (indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn)
+			if ((e.ColumnIndex > -1) && (e.RowIndex > -1))
+			{
+				if (!indgvCosts.Rows[e.RowIndex].IsNewRow)
+				{
+					DataRowView drv = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
+
+					if (drv != null)
+					{
+						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && (bool)drv[CFRBaseCost.ColumnName])
+							e.CellStyle.BackColor = btnBaseCostColor.BackColor;
+
+						if (drv.Row.RowState == DataRowState.Added)
+							e.CellStyle.BackColor = btnNewCostColor.BackColor;
+						else
+							if (!drv.Row[CFRCostName.ColumnName, DataRowVersion.Original].Equals(drv.Row[CFRCostName.ColumnName, DataRowVersion.Current]))
+								e.CellStyle.BackColor = btnChangedCostColor.BackColor;
+
+						if ((bool)drv[CFRDeleted.ColumnName])
+							e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
+					}
+				}
+			}
+		}
+
+		private void ColorChange(object sender, EventArgs e)
+		{
+			cdLegend.Color = ((Button)sender).BackColor;
+			if (cdLegend.ShowDialog((Button)sender) == DialogResult.OK)
+			{
+				((Button)sender).BackColor = cdLegend.Color;
+				indgvCosts.Refresh();
+			}
 		}
 
     }
