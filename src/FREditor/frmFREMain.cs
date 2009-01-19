@@ -3383,7 +3383,7 @@ order by PriceName
 						if (drv.Row.RowState == DataRowState.Added)
 							e.CellStyle.BackColor = btnNewCostColor.BackColor;
 						else
-							if (!drv.Row[CFRCostName.ColumnName, DataRowVersion.Original].Equals(drv.Row[CFRCostName.ColumnName, DataRowVersion.Current]))
+							if ((drv.Row.RowState == DataRowState.Modified) && !drv.Row[CFRCostName.ColumnName, DataRowVersion.Original].Equals(drv.Row[CFRCostName.ColumnName, DataRowVersion.Current]))
 								e.CellStyle.BackColor = btnChangedCostColor.BackColor;
 
 						if ((bool)drv[CFRDeleted.ColumnName])
