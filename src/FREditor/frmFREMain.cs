@@ -3344,10 +3344,11 @@ order by PriceName
 		{
 			if ((e.KeyCode == Keys.Delete) && bsCostsFormRules.AllowNew && !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName])
 			{
-				if (((DataRowView)bsCostsFormRules.Current).IsNew)
+				if (((DataRowView)bsCostsFormRules.Current).Row.RowState == DataRowState.Added)
 					((DataRowView)bsCostsFormRules.Current).Delete();
 				else
 					((DataRowView)bsCostsFormRules.Current)[CFRDeleted.ColumnName] = true;
+				((DataRowView)bsCostsFormRules.Current).EndEdit();
 				indgvCosts.Refresh();
 			}
 		}
