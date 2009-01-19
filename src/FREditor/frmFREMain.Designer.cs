@@ -1304,8 +1304,10 @@ namespace FREditor
 			// 
 			// CFRBaseCost
 			// 
+			this.CFRBaseCost.AllowDBNull = false;
 			this.CFRBaseCost.ColumnName = "CFRBaseCost";
 			this.CFRBaseCost.DataType = typeof(bool);
+			this.CFRBaseCost.DefaultValue = false;
 			// 
 			// splitter1
 			// 

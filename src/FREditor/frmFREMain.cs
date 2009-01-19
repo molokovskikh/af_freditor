@@ -3343,10 +3343,13 @@ order by PriceName
 		private void indgvCosts_KeyDown(object sender, KeyEventArgs e)
 		{
 			if ((e.KeyCode == Keys.Delete) && bsCostsFormRules.AllowNew && !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName])
+			{
 				if (((DataRowView)bsCostsFormRules.Current).IsNew)
 					((DataRowView)bsCostsFormRules.Current).Delete();
 				else
 					((DataRowView)bsCostsFormRules.Current)[CFRDeleted.ColumnName] = true;
+				indgvCosts.Refresh();
+			}
 		}
 
 		private void indgvCosts_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
