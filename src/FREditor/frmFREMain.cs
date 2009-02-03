@@ -90,12 +90,12 @@ namespace FREditor
 
 #if DEBUG
 #if WorkDir
-		string StartPath = @"\\FMS\Prices\Base\";
+		string StartPath = Settings.Default.BasePath;
 #else
 		string StartPath = @"C:\TEMP\Base\";
 #endif
 #else
-		string StartPath = @"\\FMS\Prices\Base\";
+		string StartPath = Settings.Default.BasePath;
 #endif
 
 		string EndPath = Path.GetTempPath();
@@ -3128,8 +3128,8 @@ and p.Id = f.PriceFormatID",
 			{
 				DataRow selectedPrice = ((DataRowView)indgvPrice.CurrentRow.DataBoundItem).Row;
 
-				string BaseFolder = @"\\FMS\Prices\Base\";
-				string InboundFolder = @"\\FMS\Prices\Inbound0\";
+				string BaseFolder = Settings.Default.BasePath;
+				string InboundFolder = Settings.Default.InboundPath;
 
 				string PriceExtention = GetPriceFileExtention(Convert.ToInt64(selectedPrice[PPriceItemId]));
 				string sourceFile = Path.GetFullPath(BaseFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceItemId].ToString() + PriceExtention;

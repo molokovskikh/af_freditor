@@ -70,5 +70,23 @@ namespace FREditor.Properties {
                 this["DeletedCostColor"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\FMSOLD\\Prices\\Base\\")]
+        public string BasePath {
+            get {
+                return ((string)(this["BasePath"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\FMSOLD\\Prices\\Inbound0\\")]
+        public string InboundPath {
+            get {
+                return ((string)(this["InboundPath"]));
+            }
+        }
     }
 }
