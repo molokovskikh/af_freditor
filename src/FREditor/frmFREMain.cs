@@ -3404,6 +3404,31 @@ order by PriceName
 			}
 		}
 
+		private void bsCostsFormRules_ListChanged(object sender, ListChangedEventArgs e)
+		{
+			if ((bsCostsFormRules.List != null) && (bsCostsFormRules.List is DataView))
+			{
+				string selectFieldName;
+
+				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+					selectFieldName = "CFRTextBegin";
+				else
+					selectFieldName = "CFRFieldName";
+
+				object count = ((DataView)bsCostsFormRules.List).ToTable().Compute(
+					String.Format("count({0})", selectFieldName),
+					String.Format("({0} is not null) and ({0} <> '')", selectFieldName));
+				lCostCount.Text = String.Format("Общее кол-во цен: {0}   Кол-во настроенных цен: {1}", bsCostsFormRules.Count, count);
+			}
+			else
+				lCostCount.Text = String.Format("Общее кол-во цен: {0}", bsCostsFormRules.Count);
+		}
+
+		private void lCostCount_TextChanged(object sender, EventArgs e)
+		{
+			ttMain.SetToolTip(lCostCount, lCostCount.Text);
+		}
+
     }
 
     public class WaitWindowThread
