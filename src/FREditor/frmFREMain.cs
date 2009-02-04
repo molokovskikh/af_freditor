@@ -1815,6 +1815,7 @@ order by PriceName
 
 					bsCostsFormRules.Filter = "CFRPriceItemId = " + currentPriceItemId.ToString();
 					bsFormRules.Filter = "FRPriceItemId = " + currentPriceItemId.ToString();
+					tbCostFind.Text = String.Empty;
 					bsCostsFormRules.ResumeBinding();
 					bsFormRules.ResumeBinding();
 
@@ -2367,7 +2368,7 @@ and c.Type = ?ContactType;",
             else
             {
 				//«авершаем редактирование правил формализации цен
-				if (((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
+				if ((bsCostsFormRules.Current != null) && ((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
 					//≈сли создалась пуста€ строка в правилах формализации цен, то при сохранении отмен€ем ее
 					bsCostsFormRules.CancelEdit();
 				else
@@ -3284,6 +3285,12 @@ order by PriceName
 				{
 					long NewCostCode = (long)dtSet.Tables["ѕравила формализации цен"].Compute("Max(CFRCost_Code)", null);
 					drv["CFRCost_Code"] = NewCostCode + 1;
+					//≈сли мы добавили новую ценовую колонку и есть фильтр, то сбрасываем фильтр
+					if (!String.IsNullOrEmpty(tbCostFind.Text))
+					{
+						tbCostFind.Text = String.Empty;
+						tmrSetNewCost.Start();
+					}
 				}
 			}
 		}
@@ -3429,6 +3436,58 @@ order by PriceName
 			ttMain.SetToolTip(lCostCount, lCostCount.Text);
 		}
 
+		private void tmrCostSearch_Tick(object sender, EventArgs e)
+		{
+			tmrCostSearch.Stop();
+
+			//«авершаем редактирование правил формализации цен
+			if ((bsCostsFormRules.Current != null) && ((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
+				//≈сли создалась пуста€ строка в правилах формализации цен, то при сохранении отмен€ем ее
+				bsCostsFormRules.CancelEdit();
+			else
+				//иначе просто примен€ем изменени€
+				bsCostsFormRules.EndEdit();
+
+			bsCostsFormRules.Filter = 
+				String.Format("CFRPriceItemId = {0} and CFRCostName like '*{1}*'", currentPriceItemId, tbCostFind.Text);
+
+			indgvCosts.Refresh();
+			indgvCosts.Focus();
+		}
+
+		private void tbCostFind_TextChanged(object sender, EventArgs e)
+		{
+			tmrCostSearch.Stop();
+			if (!String.IsNullOrEmpty(tbCostFind.Text))
+				tmrCostSearch.Start();
+			else
+			{
+				//«авершаем редактирование правил формализации цен
+				if ((bsCostsFormRules.Current != null) && ((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
+					//≈сли создалась пуста€ строка в правилах формализации цен, то при сохранении отмен€ем ее
+					bsCostsFormRules.CancelEdit();
+				else
+					//иначе просто примен€ем изменени€
+					bsCostsFormRules.EndEdit();
+
+				//—бросили фильтр
+				bsCostsFormRules.Filter =
+					String.Format("CFRPriceItemId = {0}", currentPriceItemId);
+			}
+		}
+
+
+		private void tbCostFind_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+				tmrCostSearch_Tick(null, null);
+		}
+
+		private void tmrSetNewCost_Tick(object sender, EventArgs e)
+		{
+			tmrSetNewCost.Stop();
+			bsCostsFormRules.Position = bsCostsFormRules.Count - 1;
+		}
     }
 
     public class WaitWindowThread
