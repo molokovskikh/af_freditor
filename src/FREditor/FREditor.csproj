@@ -18,8 +18,7 @@
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>FREditor</AssemblyName>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\lib\InforoomCodeSign.pfx</AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -39,7 +38,7 @@
     <GenerateManifests>true</GenerateManifests>
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>2.0</OldToolsVersion>
-    <ManifestKeyFile>lib\InforoomCodeSign.pfx</ManifestKeyFile>
+    <ManifestKeyFile>InforoomCodeSign.pfx</ManifestKeyFile>
     <PublishUrl>http://publish.analit.net/FREditor/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -200,9 +199,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\lib\InforoomCodeSign.pfx">
+      <Link>InforoomCodeSign.pfx</Link>
+    </None>
     <None Include="app.config" />
     <None Include="App.Release.config" />
-    <None Include="InforoomCodeSign.pfx" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
