@@ -74,12 +74,12 @@ namespace FREditor
 
 #if DEBUG
 #if WorkDB
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0;");
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;");
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0;");
+		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;");
 #endif
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;default command timeout=0;");
+		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;");
 #endif
 		private MySqlCommand MyCmd = new MySqlCommand();
         private MySqlDataAdapter MyDA = new MySqlDataAdapter();
