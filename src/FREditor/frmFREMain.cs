@@ -74,12 +74,12 @@ namespace FREditor
 
 #if DEBUG
 #if WorkDB
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=false;");
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0;");
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=false;");
+		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0;");
 #endif
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=false;");
+		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;default command timeout=0;");
 #endif
 		private MySqlCommand MyCmd = new MySqlCommand();
         private MySqlDataAdapter MyDA = new MySqlDataAdapter();
@@ -2862,10 +2862,18 @@ WHERE
             }
         }
 
-         private void indgvPriceData_KeyDown(object sender, KeyEventArgs e)
+        private void indgvPriceData_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Escape)
-                tbControl.SelectedTab = tpFirms;
+			if (e.KeyCode == Keys.Escape)
+				tbControl.SelectedTab = tpFirms;
+			//else
+			//    if (e.Control && (e.KeyCode == Keys.F))
+			//    {
+			//        using (frmPriceDataSearch frm = new frmPriceDataSearch((INDataGridView)sender))
+			//        {
+			//            frm.ShowDialog();
+			//        }
+			//    }			 
         }
 
         private void indgvPriceData_MouseDown(object sender, MouseEventArgs e)
