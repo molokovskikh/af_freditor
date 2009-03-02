@@ -135,6 +135,8 @@ namespace FREditor
         public DataTable dtFirmSegment;
         protected dgFocus fcs;
 
+		RemotePricePricessor.IRemotePriceProcessor remotePriceProcessor;
+
         public frmFREMain()
         {
             //
@@ -421,6 +423,9 @@ where
 
         private void Form1_Load(object sender, System.EventArgs e)
         {
+
+			remotePriceProcessor = (RemotePricePricessor.IRemotePriceProcessor)Activator.GetObject(
+				typeof(RemotePricePricessor.IRemotePriceProcessor), Settings.Default.PriceProcessorURL);
 
 			MyCn.Open();
 			MyCmd.Connection = MyCn;
@@ -935,6 +940,8 @@ order by PriceName
             string takeFile = shortFileNameByPriceItemId + r;
 
 			PrepareShowTab(fmt);
+
+			//remotePriceProcessor.BaseFile()
 
             if (!(File.Exists(StartPath + takeFile)))
             {
@@ -3137,39 +3144,31 @@ and p.Id = f.PriceFormatID",
 			{
 				DataRow selectedPrice = ((DataRowView)indgvPrice.CurrentRow.DataBoundItem).Row;
 
-				string BaseFolder = Settings.Default.BasePath;
-				string InboundFolder = Settings.Default.InboundPath;
-
-				string PriceExtention = GetPriceFileExtention(Convert.ToInt64(selectedPrice[PPriceItemId]));
-				string sourceFile = Path.GetFullPath(BaseFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceItemId].ToString() + PriceExtention;
-				string destinationFile = Path.GetFullPath(InboundFolder) + Path.DirectorySeparatorChar + selectedPrice[PPriceItemId].ToString() + PriceExtention;
-
-				if (File.Exists(sourceFile))
+				try
 				{
-					if (!File.Exists(destinationFile))
+					remotePriceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId]));
+
+					MyCn.Open();
+					try
 					{
-						File.Move(sourceFile, destinationFile);
-						MyCn.Open();
-						try
-						{
-							MySqlHelper.ExecuteNonQuery(
-								MyCn,
-								"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
-								new MySqlParameter("?UserName", Environment.UserName),
-								new MySqlParameter("?UserHost", Environment.MachineName),
-								new MySqlParameter("?PriceItemId", Convert.ToInt64(selectedPrice[PPriceItemId])));
-						}
-						finally
-						{
-							MyCn.Close();
-						}
-						MessageBox.Show("Прайс-лист успешно переподложен.");
+						MySqlHelper.ExecuteNonQuery(
+							MyCn,
+							"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
+							new MySqlParameter("?UserName", Environment.UserName),
+							new MySqlParameter("?UserHost", Environment.MachineName),
+							new MySqlParameter("?PriceItemId", Convert.ToInt64(selectedPrice[PPriceItemId])));
 					}
-					else
-						MessageBox.Show(String.Format("Данный прайс-лист находится в очереди на формализацию в папке {0}!", InboundFolder), "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					finally
+					{
+						MyCn.Close();
+					}
+
+					MessageBox.Show("Прайс-лист успешно переподложен.");
 				}
-				else
-					MessageBox.Show(String.Format("Данный прайс-лист отсутствует в папке {0}!", BaseFolder), "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+				{
+					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
 
 				indgvPrice.Focus();
 			}
