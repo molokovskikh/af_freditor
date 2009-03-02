@@ -14,9 +14,6 @@
     <Setting Name="DeletedCostColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">IndianRed</Value>
     </Setting>
-    <Setting Name="BasePath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">\\FMSOLD\Prices\Base\</Value>
-    </Setting>
     <Setting Name="PriceProcessorURL" Type="System.String" Scope="Application">
       <Value Profile="(Default)">http://fms.adc.analit.net:888/RemotePriceProcessor</Value>
     </Setting>

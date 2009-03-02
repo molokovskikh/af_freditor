@@ -73,15 +73,6 @@ namespace FREditor.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\\\\FMSOLD\\Prices\\Base\\")]
-        public string BasePath {
-            get {
-                return ((string)(this["BasePath"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("http://fms.adc.analit.net:888/RemotePriceProcessor")]
         public string PriceProcessorURL {
             get {

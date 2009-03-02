@@ -62,7 +62,8 @@ namespace FREditor
 		DBF,
 		XML,
 		FixedWIN,
-		FixedDOS
+		FixedDOS,
+		NativeDbf
 	}
 
     public partial class frmFREMain : System.Windows.Forms.Form
@@ -73,7 +74,7 @@ namespace FREditor
         DataTable dtPrice = new DataTable();
 
 #if DEBUG
-#if WorkDB
+#if WorkDBf
 		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;");
 #else
 		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;");
@@ -87,16 +88,6 @@ namespace FREditor
         private string CregKey;
 
         private OleDbConnection dbcMain = new OleDbConnection();
-
-#if DEBUG
-#if WorkDir
-		string StartPath = Settings.Default.BasePath;
-#else
-		string StartPath = @"C:\TEMP\Base\";
-#endif
-#else
-		string StartPath = Settings.Default.BasePath;
-#endif
 
 		string EndPath = Path.GetTempPath();
         string TxtFilePath = String.Empty;
@@ -941,41 +932,51 @@ order by PriceName
 
 			PrepareShowTab(fmt);
 
-			//remotePriceProcessor.BaseFile()
+			byte[] _openFile = null;
+			fileExist = false;
 
-            if (!(File.Exists(StartPath + takeFile)))
-            {
-                fileExist = false;
-                MessageBox.Show(String.Format("Файл {0} выбранного Прайс-листа отсутствует в директории по умолчанию ({1})", takeFile, StartPath), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-            else
-            {
-                fileExist = true;
-                Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
+			try
+			{
+				_openFile = remotePriceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId));
+			}
+			catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+			{
+				MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
 
-                File.Copy(StartPath + takeFile, EndPath + shortFileNameByPriceItemId + "\\" + takeFile, true);
-                string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
+			if (_openFile != null)
+			{
+				fileExist = true;
+				string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
 
-                Application.DoEvents();
+				Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
 
-                if ((fmt == PriceFormat.DBF))
-                {
-                    OpenDBFFile(filePath);
-                }
-                else
+				if (File.Exists(filePath))
+					File.Delete(filePath);
+
+				using (FileStream _fileStream = File.Create(filePath))
+					_fileStream.Write(_openFile, 0, _openFile.Length);
+
+				Application.DoEvents();
+
+				if ((fmt == PriceFormat.DBF) || (fmt == PriceFormat.NativeDbf))
+				{
+					OpenDBFFile(filePath);
+				}
+				else
 					if (fmt == PriceFormat.XLS)
-                    {
-                        listName = drFR[0]["FRListName"].ToString();
-                        OpenEXLFile(filePath);
-                    }
-                    else
+					{
+						listName = drFR[0]["FRListName"].ToString();
+						OpenEXLFile(filePath);
+					}
+					else
 						if ((fmt == PriceFormat.DelimDOS) || (fmt == PriceFormat.DelimWIN))
 						{
 							dbcMain.Close();
 							dbcMain.Dispose();
 							OpenTXTDFile(filePath, fmt);
 						}
-				else
+						else
 							if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
 							{
 								dbcMain.Close();
@@ -986,12 +987,12 @@ order by PriceName
 								dtMarking.Clear();
 								OpenTXTFFile(filePath, drFR[0]);
 							}
-                Application.DoEvents();
-                ShowTab(fmt);
-                Application.DoEvents();
-                this.Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
-                Application.DoEvents();
-            }
+				Application.DoEvents();
+				ShowTab(fmt);
+				Application.DoEvents();
+				this.Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
+				Application.DoEvents();
+			}
         }
 
 		private void PrepareShowTab(PriceFormat? fmt)
@@ -1028,6 +1029,7 @@ order by PriceName
 					break;
 
 				case PriceFormat.DBF:
+				case PriceFormat.NativeDbf:					
 
 					lBoxSheetName.Visible = false;
 					txtBoxSheetName.Visible = false;
@@ -1141,6 +1143,7 @@ order by PriceName
 					break;
 
 				case PriceFormat.DBF:
+				case PriceFormat.NativeDbf:
 					tcInnerTable.SizeMode = TabSizeMode.Fixed;
 					tcInnerTable.ItemSize = new Size(0, 1);
 					tcInnerTable.Appearance = TabAppearance.Buttons;
