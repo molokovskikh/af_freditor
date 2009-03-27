@@ -935,63 +935,66 @@ order by PriceName
 			byte[] _openFile = null;
 			fileExist = false;
 
-			try
+			if (fmt != null)
 			{
-				_openFile = remotePriceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId));
-			}
-			catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
-			{
-				MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}
-
-			if (_openFile != null)
-			{
-				fileExist = true;
-				string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
-
-				Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
-
-				if (File.Exists(filePath))
-					File.Delete(filePath);
-
-				using (FileStream _fileStream = File.Create(filePath))
-					_fileStream.Write(_openFile, 0, _openFile.Length);
-
-				Application.DoEvents();
-
-				if ((fmt == PriceFormat.DBF) || (fmt == PriceFormat.NativeDbf))
+				try
 				{
-					OpenDBFFile(filePath);
+					_openFile = remotePriceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId));
 				}
-				else
-					if (fmt == PriceFormat.XLS)
+				catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+				{
+					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
+
+				if (_openFile != null)
+				{
+					fileExist = true;
+					string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
+
+					Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
+
+					if (File.Exists(filePath))
+						File.Delete(filePath);
+
+					using (FileStream _fileStream = File.Create(filePath))
+						_fileStream.Write(_openFile, 0, _openFile.Length);
+
+					Application.DoEvents();
+
+					if ((fmt == PriceFormat.DBF) || (fmt == PriceFormat.NativeDbf))
 					{
-						listName = drFR[0]["FRListName"].ToString();
-						OpenEXLFile(filePath);
+						OpenDBFFile(filePath);
 					}
 					else
-						if ((fmt == PriceFormat.DelimDOS) || (fmt == PriceFormat.DelimWIN))
+						if (fmt == PriceFormat.XLS)
 						{
-							dbcMain.Close();
-							dbcMain.Dispose();
-							OpenTXTDFile(filePath, fmt);
+							listName = drFR[0]["FRListName"].ToString();
+							OpenEXLFile(filePath);
 						}
 						else
-							if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+							if ((fmt == PriceFormat.DelimDOS) || (fmt == PriceFormat.DelimWIN))
 							{
 								dbcMain.Close();
 								dbcMain.Dispose();
-								startLine = drFR[0]["FRStartLine"] is DBNull ? -1 : Convert.ToInt64(drFR[0]["FRStartLine"]);
-
-								TxtFilePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
-								dtMarking.Clear();
-								OpenTXTFFile(filePath, drFR[0]);
+								OpenTXTDFile(filePath, fmt);
 							}
-				Application.DoEvents();
-				ShowTab(fmt);
-				Application.DoEvents();
-				this.Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
-				Application.DoEvents();
+							else
+								if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+								{
+									dbcMain.Close();
+									dbcMain.Dispose();
+									startLine = drFR[0]["FRStartLine"] is DBNull ? -1 : Convert.ToInt64(drFR[0]["FRStartLine"]);
+
+									TxtFilePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
+									dtMarking.Clear();
+									OpenTXTFFile(filePath, drFR[0]);
+								}
+					Application.DoEvents();
+					ShowTab(fmt);
+					Application.DoEvents();
+					this.Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
+					Application.DoEvents();
+				}
 			}
         }
 
