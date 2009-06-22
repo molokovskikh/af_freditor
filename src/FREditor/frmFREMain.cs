@@ -861,6 +861,17 @@ where
 
         public delegate void OpenPriceDelegate(DataRow drP);
 
+		private void CopyStreams(Stream input, Stream output)
+		{
+			int _bufferSize = 4096;
+			var bytes = new byte[_bufferSize];
+			int numBytes;
+			while ((numBytes = input.Read(bytes, 0, _bufferSize)) > 0)
+			{
+				output.Write(bytes, 0, numBytes);
+			}
+		}
+
         private void OpenPrice(DataRow drP)
         {
             ClearPrice();
@@ -940,7 +951,7 @@ order by PriceName
 
 			PrepareShowTab(fmt);
 
-			byte[] _openFile = null;
+			Stream _openFile = null;
 			fileExist = false;
 
 			if (fmt != null)
@@ -965,7 +976,9 @@ order by PriceName
 						File.Delete(filePath);
 
 					using (FileStream _fileStream = File.Create(filePath))
-						_fileStream.Write(_openFile, 0, _openFile.Length);
+					{
+						CopyStreams(_openFile, _fileStream);
+					}
 
 					Application.DoEvents();
 
