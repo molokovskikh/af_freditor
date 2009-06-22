@@ -73,7 +73,7 @@ namespace FREditor.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://fms.adc.analit.net:888/RemotePriceProcessor")]
+        [global::System.Configuration.DefaultSettingValueAttribute("tcp://fms.adc.analit.net:889/RemotePriceProcessor")]
         public string PriceProcessorURL {
             get {
                 return ((string)(this["PriceProcessorURL"]));

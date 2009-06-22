@@ -412,9 +412,8 @@ where
 			Settings.Default.Save();
 		}
 
-        private void Form1_Load(object sender, System.EventArgs e)
+		private void Form1_Load(object sender, System.EventArgs e)
         {
-
 			remotePriceProcessor = (RemotePricePricessor.IRemotePriceProcessor)Activator.GetObject(
 				typeof(RemotePricePricessor.IRemotePriceProcessor), Settings.Default.PriceProcessorURL);
 
@@ -863,7 +862,7 @@ where
 
 		private void CopyStreams(Stream input, Stream output)
 		{
-			int _bufferSize = 4096;
+			int _bufferSize = 102400;
 			var bytes = new byte[_bufferSize];
 			int numBytes;
 			while ((numBytes = input.Read(bytes, 0, _bufferSize)) > 0)
@@ -951,21 +950,11 @@ order by PriceName
 
 			PrepareShowTab(fmt);
 
-			Stream _openFile = null;
 			fileExist = false;
 
 			if (fmt != null)
 			{
 				try
-				{
-					_openFile = remotePriceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId));
-				}
-				catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
-				{
-					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				}
-
-				if (_openFile != null)
 				{
 					fileExist = true;
 					string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
@@ -975,9 +964,12 @@ order by PriceName
 					if (File.Exists(filePath))
 						File.Delete(filePath);
 
-					using (FileStream _fileStream = File.Create(filePath))
+					using (Stream _openFile = remotePriceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
 					{
-						CopyStreams(_openFile, _fileStream);
+						using (FileStream _fileStream = File.Create(filePath))
+						{
+							CopyStreams(_openFile, _fileStream);
+						}
 					}
 
 					Application.DoEvents();
@@ -1015,6 +1007,11 @@ order by PriceName
 					Application.DoEvents();
 					this.Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
 					Application.DoEvents();
+
+				}
+				catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+				{
+					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
         }
