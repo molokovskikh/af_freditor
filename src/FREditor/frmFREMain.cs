@@ -41,7 +41,6 @@ namespace FREditor
         Note,
         Period,
         Doc,
-        Currency,
         MinBoundCost,
         Junk,
         Await,
@@ -220,7 +219,6 @@ WHERE c.CostCode = ?CostCode;";
   PriceFormatId = ?FRPriceFormatId,
 
   StartLine = ?FRStartLine,
-  Currency = ?FRCurrency,
   `Delimiter` = ?FRDelimiter,
   ListName = ?FRListName,
   NameMask = ?FRNameMask,
@@ -236,8 +234,6 @@ WHERE c.CostCode = ?CostCode;";
   TxtFirmCrEnd = ?FRTxtFirmCrEnd,
   TxtMinBoundCostBegin = ?FRTxtMinBoundCostBegin,
   TxtMinBoundCostEnd = ?FRTxtMinBoundCostEnd,
-  TxtCurrencyBegin = ?FRTxtCurrencyBegin,
-  TxtCurrencyEnd = ?FRTxtCurrencyEnd,
   TxtUnitBegin = ?FRTxtUnitBegin,
   TxtUnitEnd = ?FRTxtUnitEnd,
   TxtVolumeBegin = ?FRTxtVolumeBegin,
@@ -274,7 +270,6 @@ WHERE c.CostCode = ?CostCode;";
   FName3 = ?FRFName3,
   FFirmCr = ?FRFFirmCr,
   FMinBoundCost = ?FRFMinBoundCost,
-  FCurrency = ?FRFCurrency,
   FUnit = ?FRFUnit,
   FVolume = ?FRFVolume,
   FQuantity = ?FRFQuantity,
@@ -325,8 +320,6 @@ where
             this.mcmdUpdateFormRules.Parameters.Add("?FRTxtFirmCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCurrencyBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCurrencyEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUpdateFormRules.Parameters.Add("?FRTxtUnitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUpdateFormRules.Parameters.Add("?FRTxtUnitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
             this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVolumeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
@@ -356,7 +349,6 @@ where
 			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
 			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);			
 
-            this.mcmdUpdateFormRules.Parameters.Add("?FRCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRPosNum", MySql.Data.MySqlClient.MySqlDbType.Int64);
             this.mcmdUpdateFormRules.Parameters.Add("?FRSelfJunkPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
@@ -374,7 +366,6 @@ where
             this.mcmdUpdateFormRules.Parameters.Add("?FRFName3", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRFFirmCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRFMinBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFCurrency", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRFUnit", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRFVolume", MySql.Data.MySqlClient.MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRFQuantity", MySql.Data.MySqlClient.MySqlDbType.VarString);
@@ -423,7 +414,6 @@ where
 			MyCmd.Connection = MyCn;
 			MyDA = new MySqlDataAdapter(MyCmd);
 
-			dtCatalogCurrencyFill();
 			dtPriceFMTsFill();
 			cbRegionsFill();
 
@@ -440,34 +430,6 @@ where
             sf.LineAlignment = StringAlignment.Center;
 
             LoadFirmAndPriceSettings();
-        }
-
-        private void dtCatalogCurrencyFill()
-        {
-            dtCatalogCurrency.Clear();
-
-            MyCmd.CommandText =
-                @"SELECT 
-					Currency AS CCCurrency
-				FROM 
-					farm.catalogcurrency Order By Currency";
-
-            MyDA.Fill(dtCatalogCurrency);
-        }
-
-        private void FillCurrencyCmb()
-        {
-            ArrayList currency = new ArrayList();
-            for (int i = 0; i < dtCatalogCurrency.Rows.Count; i++)
-            {
-                DataRow dr = dtCatalogCurrency.Rows[i];
-                string item = dr["CCCurrency"].ToString();
-                if (-1 == cmbMoney.Items.IndexOf(item))
-                {
-                    cmbMoney.Items.Add(item);
-                }
-            }
-            cmbMoney.SelectedIndex = 0;
         }
 
         private void dtPriceFMTsFill()
@@ -718,7 +680,6 @@ SELECT
 
     PFR.PriceFormatId as FRPriceFormatId,
 
-    FR.Currency AS FRCurrency,
 	FR.Memo As FRMemo,
     if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), PD.PriceName) AS FRName,
     FR.JunkPos AS FRSelfJunkPos,
@@ -750,9 +711,6 @@ SELECT
 
 	PFR.TxtMinBoundCostBegin as FRTxtMinBoundCostBegin,
 	PFR.TxtMinBoundCostEnd as FRTxtMinBoundCostEnd,
-
-	PFR.TxtCurrencyBegin as FRTxtCurrencyBegin,
-	PFR.TxtCurrencyEnd as FRTxtCurrencyEnd,
 
 	PFR.TxtUnitBegin as FRTxtUnitBegin,
 	PFR.TxtUnitEnd as FRTxtUnitEnd,
@@ -804,7 +762,6 @@ SELECT
 	PFR.FName3 as FRFName3,
 	PFR.FFirmCr as FRFFirmCr,
 	PFR.FMinBoundCost as FRFMinBoundCost,
-	PFR.FCurrency as FRFCurrency,
 	PFR.FUnit as FRFUnit,
 	PFR.FVolume as FRFVolume,
 	PFR.FQuantity as FRFQuantity,
@@ -1789,7 +1746,6 @@ order by PriceName
             dtPricesFill(String.Empty);
             dtPricesCostFill(String.Empty);
             dtFormRulesFill(String.Empty);
-            dtCatalogCurrencyFill();
             dtPriceFMTsFill();
             dtCostsFormRulesFill(String.Empty);
             cbRegionsFill();
