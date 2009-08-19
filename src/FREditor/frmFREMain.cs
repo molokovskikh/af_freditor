@@ -63,7 +63,9 @@ namespace FREditor
 		XML,
 		FixedWIN,
 		FixedDOS,
-		NativeDbf
+		NativeDbf,
+		Sudakov,
+		NativeXLS
 	}
 
     public partial class frmFREMain : System.Windows.Forms.Form
@@ -979,7 +981,7 @@ order by PriceName
 						OpenDBFFile(filePath);
 					}
 					else
-						if (fmt == PriceFormat.XLS)
+						if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXLS))
 						{
 							listName = drFR[0]["FRListName"].ToString();
 							OpenEXLFile(filePath);
@@ -1041,6 +1043,7 @@ order by PriceName
 					break;
 
 				case PriceFormat.XLS:
+				case PriceFormat.NativeXLS:
 
 					lBoxSheetName.Visible = true;
 					txtBoxSheetName.Visible = true;
@@ -1153,6 +1156,7 @@ order by PriceName
 					break;
 
 				case PriceFormat.XLS:
+				case PriceFormat.NativeXLS:
 					tcInnerTable.SizeMode = TabSizeMode.Fixed;
 					tcInnerTable.ItemSize = new Size(0, 1);
 					tcInnerTable.Appearance = TabAppearance.Buttons;

@@ -66,7 +66,7 @@ Task "default", ["build"]
 Task "build", ["clean"]:
 	MsBuild(projectFile,
 			Parameters : { "OutDir" : buildTo,
-						   "Configuration" : "release" },
+						"Configuration" : "release"},
 			FrameworkVersion : "3.5").Execute()
 	if Exist("${projectPath}App.${configuration}.config"):
 		Cp("${projectPath}App.${configuration}.config", "${buildTo}${projectName}.exe.config", true)
