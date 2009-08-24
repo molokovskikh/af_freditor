@@ -109,7 +109,7 @@ namespace FREditor
         string FilterParams = String.Empty;
 
         private string shortNameFilter = String.Empty;
-        private int regionCodeFilter = -1;
+        private ulong regionCodeFilter = 0;
         private int segmentFilter = -1;
 
         bool fileExist = false;
@@ -448,7 +448,7 @@ order by Format";
             MyDA.Fill(dtPriceFMTs);
         }
 
-        private string AddParams(string shname, int regcode, int seg)
+        private string AddParams(string shname, ulong regcode, int seg)
         {
             string cmnd = String.Empty;
             if (shname != String.Empty)
@@ -460,7 +460,7 @@ order by Format";
             return cmnd;
         }
 
-        private void FillTables(string shname, int regcode, int seg)
+        private void FillTables(string shname, ulong regcode, int seg)
         {
             dtSet.EnforceConstraints = false;
             try
@@ -499,7 +499,7 @@ order by Format";
             }
         }
 
-		private void FillCosts(string shname, int regcode, int seg)
+		private void FillCosts(string shname, ulong regcode, int seg)
 		{
 			dtSet.EnforceConstraints = false;
 			try
@@ -589,10 +589,10 @@ order by PPriceName";
         private void cbRegionsFill()
         {
             DataTable dtRegions = new DataTable("Region ");
-            dtRegions.Columns.Add("RegionCode", typeof(int));
+            dtRegions.Columns.Add("RegionCode", typeof(ulong));
             dtRegions.Columns.Add("Region", typeof(string));
             dtRegions.Clear();
-            dtRegions.Rows.Add(new object[] { -1, "Все" });
+            dtRegions.Rows.Add(new object[] { 0, "Все" });
             MyCmd.CommandText = @"
 SELECT
     RegionCode,
@@ -2978,9 +2978,9 @@ WHERE
             {
                 tmrSearch.Stop();
 
-                int regcode = 0;
-                if ((cbRegions.SelectedItem != null) && (Convert.ToInt32(cbRegions.SelectedValue) != -1))
-                    regcode = Convert.ToInt32(cbRegions.SelectedValue);
+                ulong regcode = 0;
+				if ((cbRegions.SelectedItem != null) && (Convert.ToUInt64(cbRegions.SelectedValue) != 0))
+                    regcode = Convert.ToUInt64(cbRegions.SelectedValue);
                 int seg = -1;
                 if ((cbSegment.SelectedItem != null) && (Convert.ToInt32(cbSegment.SelectedValue) != -1))
                     seg = Convert.ToInt32(cbSegment.SelectedValue);
