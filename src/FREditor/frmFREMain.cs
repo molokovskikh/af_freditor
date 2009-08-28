@@ -64,7 +64,11 @@ namespace FREditor
 		FixedDOS,
 		NativeDbf,
 		Sudakov,
-		NativeXLS
+		NativeXLS,
+		NativeDelimWIN,
+		NativeDelimDOS,
+		NativeFixedWIN,
+		NativeFixedDOS
 	}
 
     public partial class frmFREMain : System.Windows.Forms.Form
@@ -944,14 +948,16 @@ order by PriceName
 							OpenEXLFile(filePath);
 						}
 						else
-							if ((fmt == PriceFormat.DelimDOS) || (fmt == PriceFormat.DelimWIN))
+							if ((fmt == PriceFormat.DelimDOS) || (fmt == PriceFormat.DelimWIN) ||
+								(fmt == PriceFormat.NativeDelimWIN) || (fmt == PriceFormat.NativeDelimDOS) )
 							{
 								dbcMain.Close();
 								dbcMain.Dispose();
 								OpenTXTDFile(filePath, fmt);
 							}
 							else
-								if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+								if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
+									(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
 								{
 									dbcMain.Close();
 									dbcMain.Dispose();
@@ -981,6 +987,8 @@ order by PriceName
 			{
 				case PriceFormat.DelimDOS:
 				case PriceFormat.DelimWIN:
+				case PriceFormat.NativeDelimWIN:
+				case PriceFormat.NativeDelimDOS:
 					
 					lBoxSheetName.Visible = false;
 					txtBoxSheetName.Visible = false;
@@ -991,6 +999,8 @@ order by PriceName
 
 				case PriceFormat.FixedDOS:
 				case PriceFormat.FixedWIN:
+				case PriceFormat.NativeFixedWIN:
+				case PriceFormat.NativeFixedDOS:
 
 					lBoxSheetName.Visible = false;
 					txtBoxSheetName.Visible = false;
@@ -1085,6 +1095,8 @@ order by PriceName
 			{
 				case PriceFormat.DelimDOS:
 				case PriceFormat.DelimWIN:
+				case PriceFormat.NativeDelimWIN:
+				case PriceFormat.NativeDelimDOS:
 					tcInnerTable.SizeMode = TabSizeMode.Fixed;
 					tcInnerTable.ItemSize = new Size(0, 1);
 					tcInnerTable.Appearance = TabAppearance.Buttons;
@@ -1099,6 +1111,8 @@ order by PriceName
 
 				case PriceFormat.FixedDOS:
 				case PriceFormat.FixedWIN:
+				case PriceFormat.NativeFixedWIN:
+				case PriceFormat.NativeFixedDOS:
 					tcInnerTable.SizeMode = TabSizeMode.Normal;
 					tcInnerTable.ItemSize = new Size(58, 18);
 					tcInnerTable.Appearance = TabAppearance.Normal;
@@ -1255,7 +1269,7 @@ order by PriceName
             using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
             {
                 w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-                w.WriteLine((fmt == PriceFormat.DelimWIN) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
+				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN))) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
                 w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
                 w.WriteLine("ColNameHeader=False");
                 w.WriteLine("MaxScanRows=300");
@@ -1292,7 +1306,7 @@ order by PriceName
             using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
             {
                 w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-				w.WriteLine((fmt == PriceFormat.DelimWIN) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
+				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN))) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
                 w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
                 w.WriteLine("ColNameHeader=False");
                 w.WriteLine("MaxScanRows=300");
@@ -1563,7 +1577,7 @@ order by PriceName
 				using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(TxtFilePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
                 {
                     w.WriteLine("[" + Path.GetFileName(TxtFilePath) + "]");
-                    w.WriteLine((fmt == PriceFormat.FixedWIN) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
+					w.WriteLine(((fmt == PriceFormat.FixedWIN) || (fmt == PriceFormat.NativeFixedWIN)) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
                     w.WriteLine("Format=FixedLength");
                     w.WriteLine("ColNameHeader=False");
                     w.WriteLine("MaxScanRows=300");
@@ -2126,7 +2140,8 @@ and c.Type = ?ContactType;",
                 {
                     erP.Clear();
                     r = new Regex(txtMask.Text);
-                    if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+                    if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
+						(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
                     {
                         if ((txtExistBegin.Text != String.Empty) && (txtExistEnd.Text != String.Empty))
                         {
@@ -2811,7 +2826,8 @@ WHERE
         {
             if (fileExist)
             {
-				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
+					(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
                 {
                     CregKey = BaseRegKey + "\\CostsDataGridFixed";
                 }
@@ -2825,7 +2841,8 @@ WHERE
 
         private void LoadCostsSettings()
         {
-			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
+				(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
             {
                 CregKey = BaseRegKey + "\\CostsDataGridFixed";
             }
@@ -2835,7 +2852,8 @@ WHERE
             }
             indgvCosts.LoadSettings(CregKey);
 
-			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
+				(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
 			{
 				indgvCosts.Columns[cFRCostNameDataGridViewTextBoxColumn.Name].Visible = true;
 				indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
@@ -3418,7 +3436,8 @@ order by PriceName
 			{
 				string selectFieldName;
 
-				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN))
+				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
+					(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
 					selectFieldName = "CFRTextBegin";
 				else
 					selectFieldName = "CFRFieldName";
