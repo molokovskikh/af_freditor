@@ -31,9 +31,6 @@ namespace FREditor
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -46,6 +43,9 @@ namespace FREditor
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmFREMain));
 			this.tbControl = new System.Windows.Forms.TabControl();
 			this.tpFirms = new System.Windows.Forms.TabPage();
@@ -245,49 +245,6 @@ namespace FREditor
 			this.btnNewCostColor = new System.Windows.Forms.Button();
 			this.btnBaseCostColor = new System.Windows.Forms.Button();
 			this.grpbFields = new System.Windows.Forms.GroupBox();
-			this.pnlGeneralFields = new System.Windows.Forms.Panel();
-			this.label50 = new System.Windows.Forms.Label();
-			this.txtBoxMinOrderCount = new System.Windows.Forms.TextBox();
-			this.label48 = new System.Windows.Forms.Label();
-			this.txtBoxOrderCost = new System.Windows.Forms.TextBox();
-			this.label44 = new System.Windows.Forms.Label();
-			this.txtBoxMaxBoundCost = new System.Windows.Forms.TextBox();
-			this.txtBoxVitalyImportant = new System.Windows.Forms.TextBox();
-			this.label43 = new System.Windows.Forms.Label();
-			this.label37 = new System.Windows.Forms.Label();
-			this.label36 = new System.Windows.Forms.Label();
-			this.txtBoxRegistryCost = new System.Windows.Forms.TextBox();
-			this.txtBoxRequestRatio = new System.Windows.Forms.TextBox();
-			this.txtBoxAwait = new System.Windows.Forms.TextBox();
-			this.txtBoxJunk = new System.Windows.Forms.TextBox();
-			this.txtBoxMinBoundCost = new System.Windows.Forms.TextBox();
-			this.label17 = new System.Windows.Forms.Label();
-			this.label16 = new System.Windows.Forms.Label();
-			this.label15 = new System.Windows.Forms.Label();
-			this.txtBoxDoc = new System.Windows.Forms.TextBox();
-			this.txtBoxPeriod = new System.Windows.Forms.TextBox();
-			this.txtBoxNote = new System.Windows.Forms.TextBox();
-			this.txtBoxQuantity = new System.Windows.Forms.TextBox();
-			this.txtBoxUnit = new System.Windows.Forms.TextBox();
-			this.txtBoxVolume = new System.Windows.Forms.TextBox();
-			this.label12 = new System.Windows.Forms.Label();
-			this.label11 = new System.Windows.Forms.Label();
-			this.label10 = new System.Windows.Forms.Label();
-			this.label9 = new System.Windows.Forms.Label();
-			this.label8 = new System.Windows.Forms.Label();
-			this.label7 = new System.Windows.Forms.Label();
-			this.txtBoxFirmCr = new System.Windows.Forms.TextBox();
-			this.txtBoxName3 = new System.Windows.Forms.TextBox();
-			this.txtBoxName2 = new System.Windows.Forms.TextBox();
-			this.txtBoxName1 = new System.Windows.Forms.TextBox();
-			this.txtBoxCodeCr = new System.Windows.Forms.TextBox();
-			this.txtBoxCode = new System.Windows.Forms.TextBox();
-			this.label6 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
 			this.pnlTxtFields = new System.Windows.Forms.Panel();
 			this.txtBoxMinOrderCountEnd = new System.Windows.Forms.TextBox();
 			this.txtBoxMinOrderCountBegin = new System.Windows.Forms.TextBox();
@@ -346,6 +303,49 @@ namespace FREditor
 			this.label39 = new System.Windows.Forms.Label();
 			this.label40 = new System.Windows.Forms.Label();
 			this.label46 = new System.Windows.Forms.Label();
+			this.pnlGeneralFields = new System.Windows.Forms.Panel();
+			this.label50 = new System.Windows.Forms.Label();
+			this.txtBoxMinOrderCount = new System.Windows.Forms.TextBox();
+			this.label48 = new System.Windows.Forms.Label();
+			this.txtBoxOrderCost = new System.Windows.Forms.TextBox();
+			this.label44 = new System.Windows.Forms.Label();
+			this.txtBoxMaxBoundCost = new System.Windows.Forms.TextBox();
+			this.txtBoxVitalyImportant = new System.Windows.Forms.TextBox();
+			this.label43 = new System.Windows.Forms.Label();
+			this.label37 = new System.Windows.Forms.Label();
+			this.label36 = new System.Windows.Forms.Label();
+			this.txtBoxRegistryCost = new System.Windows.Forms.TextBox();
+			this.txtBoxRequestRatio = new System.Windows.Forms.TextBox();
+			this.txtBoxAwait = new System.Windows.Forms.TextBox();
+			this.txtBoxJunk = new System.Windows.Forms.TextBox();
+			this.txtBoxMinBoundCost = new System.Windows.Forms.TextBox();
+			this.label17 = new System.Windows.Forms.Label();
+			this.label16 = new System.Windows.Forms.Label();
+			this.label15 = new System.Windows.Forms.Label();
+			this.txtBoxDoc = new System.Windows.Forms.TextBox();
+			this.txtBoxPeriod = new System.Windows.Forms.TextBox();
+			this.txtBoxNote = new System.Windows.Forms.TextBox();
+			this.txtBoxQuantity = new System.Windows.Forms.TextBox();
+			this.txtBoxUnit = new System.Windows.Forms.TextBox();
+			this.txtBoxVolume = new System.Windows.Forms.TextBox();
+			this.label12 = new System.Windows.Forms.Label();
+			this.label11 = new System.Windows.Forms.Label();
+			this.label10 = new System.Windows.Forms.Label();
+			this.label9 = new System.Windows.Forms.Label();
+			this.label8 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.txtBoxFirmCr = new System.Windows.Forms.TextBox();
+			this.txtBoxName3 = new System.Windows.Forms.TextBox();
+			this.txtBoxName2 = new System.Windows.Forms.TextBox();
+			this.txtBoxName1 = new System.Windows.Forms.TextBox();
+			this.txtBoxCodeCr = new System.Windows.Forms.TextBox();
+			this.txtBoxCode = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label5 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.grpbSettings = new System.Windows.Forms.GroupBox();
 			this.pnlSettings = new System.Windows.Forms.Panel();
 			this.btnVitallyImportantCheck = new System.Windows.Forms.Button();
@@ -420,8 +420,8 @@ namespace FREditor
 			this.pCostFind.SuspendLayout();
 			this.gbCostLegends.SuspendLayout();
 			this.grpbFields.SuspendLayout();
-			this.pnlGeneralFields.SuspendLayout();
 			this.pnlTxtFields.SuspendLayout();
+			this.pnlGeneralFields.SuspendLayout();
 			this.grpbSettings.SuspendLayout();
 			this.pnlSettings.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.erP)).BeginInit();
@@ -471,14 +471,14 @@ namespace FREditor
 			this.indgvPrice.AllowUserToResizeRows = false;
 			this.indgvPrice.AutoGenerateColumns = false;
 			this.indgvPrice.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle16.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle16.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle16.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle16.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle16.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvPrice.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle16;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvPrice.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.indgvPrice.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvPrice.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.pPriceNameDataGridViewTextBoxColumn,
@@ -490,26 +490,26 @@ namespace FREditor
             this.pCostTypeDataGridViewComboBoxColumn});
 			this.indgvPrice.DataMember = "Поставщики.Поставщики-Прайсы";
 			this.indgvPrice.DataSource = this.dtSet;
-			dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle17.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle17.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle17.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle17.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle17.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle17;
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvPrice.DefaultCellStyle = dataGridViewCellStyle2;
 			this.indgvPrice.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvPrice.HideEmptyColumns = false;
 			this.indgvPrice.Location = new System.Drawing.Point(0, 0);
 			this.indgvPrice.Name = "indgvPrice";
-			dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle18.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle18.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle18.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle18.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle18.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvPrice.RowHeadersDefaultCellStyle = dataGridViewCellStyle18;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvPrice.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			this.indgvPrice.RowHeadersVisible = false;
 			this.indgvPrice.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
 			this.indgvPrice.Size = new System.Drawing.Size(984, 278);
@@ -1296,14 +1296,14 @@ namespace FREditor
 			this.indgvFirm.AllowUserToResizeRows = false;
 			this.indgvFirm.AutoGenerateColumns = false;
 			this.indgvFirm.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvFirm.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvFirm.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
 			this.indgvFirm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvFirm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cShortNameDataGridViewTextBoxColumn,
@@ -1311,27 +1311,27 @@ namespace FREditor
             this.cSegmentDataGridViewTextBoxColumn});
 			this.indgvFirm.DataMember = "Поставщики";
 			this.indgvFirm.DataSource = this.dtSet;
-			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle5;
 			this.indgvFirm.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvFirm.HideEmptyColumns = false;
 			this.indgvFirm.Location = new System.Drawing.Point(0, 30);
 			this.indgvFirm.Name = "indgvFirm";
 			this.indgvFirm.ReadOnly = true;
-			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvFirm.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvFirm.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this.indgvFirm.RowHeadersVisible = false;
 			this.indgvFirm.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.indgvFirm.Size = new System.Drawing.Size(984, 389);
@@ -1600,7 +1600,7 @@ namespace FREditor
 			// 
 			// lblDevider
 			// 
-			this.lblDevider.Location = new System.Drawing.Point(32, 80);
+			this.lblDevider.Location = new System.Drawing.Point(6, 80);
 			this.lblDevider.Name = "lblDevider";
 			this.lblDevider.Size = new System.Drawing.Size(80, 20);
 			this.lblDevider.TabIndex = 16;
@@ -1610,15 +1610,15 @@ namespace FREditor
 			// tbDevider
 			// 
 			this.tbDevider.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRDelimiter", true));
-			this.tbDevider.Location = new System.Drawing.Point(120, 80);
+			this.tbDevider.Location = new System.Drawing.Point(92, 80);
 			this.tbDevider.Name = "tbDevider";
-			this.tbDevider.Size = new System.Drawing.Size(64, 20);
+			this.tbDevider.Size = new System.Drawing.Size(92, 20);
 			this.tbDevider.TabIndex = 15;
 			this.tbDevider.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
 			// 
 			// lblPosition
 			// 
-			this.lblPosition.Location = new System.Drawing.Point(56, 48);
+			this.lblPosition.Location = new System.Drawing.Point(30, 48);
 			this.lblPosition.Name = "lblPosition";
 			this.lblPosition.Size = new System.Drawing.Size(56, 20);
 			this.lblPosition.TabIndex = 14;
@@ -1628,15 +1628,15 @@ namespace FREditor
 			// tbPosition
 			// 
 			this.tbPosition.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRPosNum", true));
-			this.tbPosition.Location = new System.Drawing.Point(120, 48);
+			this.tbPosition.Location = new System.Drawing.Point(92, 48);
 			this.tbPosition.Name = "tbPosition";
-			this.tbPosition.Size = new System.Drawing.Size(64, 20);
+			this.tbPosition.Size = new System.Drawing.Size(92, 20);
 			this.tbPosition.TabIndex = 13;
 			this.tbPosition.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
 			// 
 			// lblFormat
 			// 
-			this.lblFormat.Location = new System.Drawing.Point(56, 16);
+			this.lblFormat.Location = new System.Drawing.Point(30, 16);
 			this.lblFormat.Name = "lblFormat";
 			this.lblFormat.Size = new System.Drawing.Size(56, 21);
 			this.lblFormat.TabIndex = 9;
@@ -1649,9 +1649,9 @@ namespace FREditor
 			this.cmbFormat.DataSource = this.dtSet;
 			this.cmbFormat.DisplayMember = "Форматы прайса.FMTFormat";
 			this.cmbFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cmbFormat.Location = new System.Drawing.Point(120, 16);
+			this.cmbFormat.Location = new System.Drawing.Point(92, 16);
 			this.cmbFormat.Name = "cmbFormat";
-			this.cmbFormat.Size = new System.Drawing.Size(64, 21);
+			this.cmbFormat.Size = new System.Drawing.Size(92, 21);
 			this.cmbFormat.TabIndex = 8;
 			this.cmbFormat.ValueMember = "Форматы прайса.FMTId";
 			// 
@@ -1722,35 +1722,35 @@ namespace FREditor
 			// 
 			// indgvPriceData
 			// 
-			dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvPriceData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvPriceData.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
 			this.indgvPriceData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle5;
+			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle8;
 			this.indgvPriceData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvPriceData.HideEmptyColumns = false;
 			this.indgvPriceData.Location = new System.Drawing.Point(0, 0);
 			this.indgvPriceData.Name = "indgvPriceData";
-			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvPriceData.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
+			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvPriceData.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
 			this.indgvPriceData.RowHeadersVisible = false;
 			this.indgvPriceData.Size = new System.Drawing.Size(944, 489);
 			this.indgvPriceData.TabIndex = 2;
@@ -1772,39 +1772,39 @@ namespace FREditor
 			this.indgvMarking.AllowDrop = true;
 			this.indgvMarking.AllowUserToResizeRows = false;
 			this.indgvMarking.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvMarking.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvMarking.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
 			this.indgvMarking.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvMarking.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.MNameFieldINDataGridViewTextBoxColumn,
             this.MBeginFieldINDataGridViewTextBoxColumn,
             this.MEndFieldINDataGridViewTextBoxColumn});
-			dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle8;
+			dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvMarking.DefaultCellStyle = dataGridViewCellStyle11;
 			this.indgvMarking.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvMarking.HideEmptyColumns = false;
 			this.indgvMarking.Location = new System.Drawing.Point(0, 0);
 			this.indgvMarking.Name = "indgvMarking";
-			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvMarking.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvMarking.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
 			this.indgvMarking.Size = new System.Drawing.Size(952, 498);
 			this.indgvMarking.TabIndex = 7;
 			// 
@@ -1867,14 +1867,14 @@ namespace FREditor
 			this.indgvCosts.AllowUserToDeleteRows = false;
 			this.indgvCosts.AutoGenerateColumns = false;
 			this.indgvCosts.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-			dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvCosts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
+			dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvCosts.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
 			this.indgvCosts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvCosts.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cFRCostNameDataGridViewTextBoxColumn,
@@ -1882,26 +1882,26 @@ namespace FREditor
             this.cFRTextBeginDataGridViewTextBoxColumn,
             this.cFRTextEndDataGridViewTextBoxColumn});
 			this.indgvCosts.DataSource = this.bsCostsFormRules;
-			dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Window;
-			dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.ControlText;
-			dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.GrayText;
-			dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-			this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle11;
+			dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+			dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
+			dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.GrayText;
+			dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.indgvCosts.DefaultCellStyle = dataGridViewCellStyle14;
 			this.indgvCosts.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvCosts.HideEmptyColumns = false;
 			this.indgvCosts.Location = new System.Drawing.Point(0, 31);
 			this.indgvCosts.Name = "indgvCosts";
-			dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-			dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Control;
-			dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.WindowText;
-			dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-			dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.indgvCosts.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
+			dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+			dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+			dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+			dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+			dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.indgvCosts.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
 			this.indgvCosts.RowHeadersWidth = 40;
 			this.indgvCosts.Size = new System.Drawing.Size(125, 147);
 			this.indgvCosts.TabIndex = 6;
@@ -2057,518 +2057,6 @@ namespace FREditor
 			this.grpbFields.TabIndex = 4;
 			this.grpbFields.TabStop = false;
 			this.grpbFields.Text = "Поля";
-			// 
-			// pnlGeneralFields
-			// 
-			this.pnlGeneralFields.Controls.Add(this.label50);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxMinOrderCount);
-			this.pnlGeneralFields.Controls.Add(this.label48);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxOrderCost);
-			this.pnlGeneralFields.Controls.Add(this.label44);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxMaxBoundCost);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxVitalyImportant);
-			this.pnlGeneralFields.Controls.Add(this.label43);
-			this.pnlGeneralFields.Controls.Add(this.label37);
-			this.pnlGeneralFields.Controls.Add(this.label36);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxRegistryCost);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxRequestRatio);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxAwait);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxJunk);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxMinBoundCost);
-			this.pnlGeneralFields.Controls.Add(this.label17);
-			this.pnlGeneralFields.Controls.Add(this.label16);
-			this.pnlGeneralFields.Controls.Add(this.label15);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxDoc);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxPeriod);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxNote);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxQuantity);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxUnit);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxVolume);
-			this.pnlGeneralFields.Controls.Add(this.label12);
-			this.pnlGeneralFields.Controls.Add(this.label11);
-			this.pnlGeneralFields.Controls.Add(this.label10);
-			this.pnlGeneralFields.Controls.Add(this.label9);
-			this.pnlGeneralFields.Controls.Add(this.label8);
-			this.pnlGeneralFields.Controls.Add(this.label7);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxFirmCr);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxName3);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxName2);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxName1);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxCodeCr);
-			this.pnlGeneralFields.Controls.Add(this.txtBoxCode);
-			this.pnlGeneralFields.Controls.Add(this.label6);
-			this.pnlGeneralFields.Controls.Add(this.label5);
-			this.pnlGeneralFields.Controls.Add(this.label4);
-			this.pnlGeneralFields.Controls.Add(this.label3);
-			this.pnlGeneralFields.Controls.Add(this.label2);
-			this.pnlGeneralFields.Controls.Add(this.label1);
-			this.pnlGeneralFields.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.pnlGeneralFields.Location = new System.Drawing.Point(3, 16);
-			this.pnlGeneralFields.Name = "pnlGeneralFields";
-			this.pnlGeneralFields.Size = new System.Drawing.Size(496, 176);
-			this.pnlGeneralFields.TabIndex = 0;
-			// 
-			// label50
-			// 
-			this.label50.Location = new System.Drawing.Point(321, 89);
-			this.label50.Name = "label50";
-			this.label50.Size = new System.Drawing.Size(110, 20);
-			this.label50.TabIndex = 81;
-			this.label50.Text = "Мин. количество :";
-			this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxMinOrderCount
-			// 
-			this.txtBoxMinOrderCount.AllowDrop = true;
-			this.txtBoxMinOrderCount.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMinOrderCount", true));
-			this.txtBoxMinOrderCount.Location = new System.Drawing.Point(437, 89);
-			this.txtBoxMinOrderCount.Name = "txtBoxMinOrderCount";
-			this.txtBoxMinOrderCount.ReadOnly = true;
-			this.txtBoxMinOrderCount.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxMinOrderCount.TabIndex = 80;
-			this.txtBoxMinOrderCount.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxMinOrderCount.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxMinOrderCount.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// label48
-			// 
-			this.label48.Location = new System.Drawing.Point(321, 68);
-			this.label48.Name = "label48";
-			this.label48.Size = new System.Drawing.Size(110, 20);
-			this.label48.TabIndex = 79;
-			this.label48.Text = "Мин. сумма :";
-			this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxOrderCost
-			// 
-			this.txtBoxOrderCost.AllowDrop = true;
-			this.txtBoxOrderCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFOrderCost", true));
-			this.txtBoxOrderCost.Location = new System.Drawing.Point(437, 68);
-			this.txtBoxOrderCost.Name = "txtBoxOrderCost";
-			this.txtBoxOrderCost.ReadOnly = true;
-			this.txtBoxOrderCost.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxOrderCost.TabIndex = 78;
-			this.txtBoxOrderCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxOrderCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxOrderCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// label44
-			// 
-			this.label44.Location = new System.Drawing.Point(321, 47);
-			this.label44.Name = "label44";
-			this.label44.Size = new System.Drawing.Size(110, 20);
-			this.label44.TabIndex = 77;
-			this.label44.Text = "Цена макс. :";
-			this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxMaxBoundCost
-			// 
-			this.txtBoxMaxBoundCost.AllowDrop = true;
-			this.txtBoxMaxBoundCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMaxBoundCost", true));
-			this.txtBoxMaxBoundCost.Location = new System.Drawing.Point(437, 47);
-			this.txtBoxMaxBoundCost.Name = "txtBoxMaxBoundCost";
-			this.txtBoxMaxBoundCost.ReadOnly = true;
-			this.txtBoxMaxBoundCost.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxMaxBoundCost.TabIndex = 76;
-			this.txtBoxMaxBoundCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxMaxBoundCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxMaxBoundCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxVitalyImportant
-			// 
-			this.txtBoxVitalyImportant.AllowDrop = true;
-			this.txtBoxVitalyImportant.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFVitallyImportant", true));
-			this.txtBoxVitalyImportant.Location = new System.Drawing.Point(437, 26);
-			this.txtBoxVitalyImportant.Name = "txtBoxVitalyImportant";
-			this.txtBoxVitalyImportant.ReadOnly = true;
-			this.txtBoxVitalyImportant.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxVitalyImportant.TabIndex = 75;
-			this.txtBoxVitalyImportant.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxVitalyImportant.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxVitalyImportant.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// label43
-			// 
-			this.label43.Location = new System.Drawing.Point(321, 26);
-			this.label43.Name = "label43";
-			this.label43.Size = new System.Drawing.Size(110, 20);
-			this.label43.TabIndex = 73;
-			this.label43.Text = "Жизненно важный :";
-			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label37
-			// 
-			this.label37.Location = new System.Drawing.Point(321, 5);
-			this.label37.Name = "label37";
-			this.label37.Size = new System.Drawing.Size(110, 20);
-			this.label37.TabIndex = 72;
-			this.label37.Text = "Реестр. цена :";
-			this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label36
-			// 
-			this.label36.Location = new System.Drawing.Point(166, 152);
-			this.label36.Name = "label36";
-			this.label36.Size = new System.Drawing.Size(100, 20);
-			this.label36.TabIndex = 71;
-			this.label36.Text = "Кратность :";
-			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxRegistryCost
-			// 
-			this.txtBoxRegistryCost.AllowDrop = true;
-			this.txtBoxRegistryCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFRegistryCost", true));
-			this.txtBoxRegistryCost.Location = new System.Drawing.Point(437, 5);
-			this.txtBoxRegistryCost.Name = "txtBoxRegistryCost";
-			this.txtBoxRegistryCost.ReadOnly = true;
-			this.txtBoxRegistryCost.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxRegistryCost.TabIndex = 70;
-			this.txtBoxRegistryCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxRegistryCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxRegistryCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxRequestRatio
-			// 
-			this.txtBoxRequestRatio.AllowDrop = true;
-			this.txtBoxRequestRatio.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFRequestRatio", true));
-			this.txtBoxRequestRatio.Location = new System.Drawing.Point(270, 152);
-			this.txtBoxRequestRatio.Name = "txtBoxRequestRatio";
-			this.txtBoxRequestRatio.ReadOnly = true;
-			this.txtBoxRequestRatio.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxRequestRatio.TabIndex = 69;
-			this.txtBoxRequestRatio.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxRequestRatio.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxRequestRatio.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxAwait
-			// 
-			this.txtBoxAwait.AllowDrop = true;
-			this.txtBoxAwait.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFAwait", true));
-			this.txtBoxAwait.Location = new System.Drawing.Point(270, 130);
-			this.txtBoxAwait.Name = "txtBoxAwait";
-			this.txtBoxAwait.ReadOnly = true;
-			this.txtBoxAwait.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxAwait.TabIndex = 68;
-			this.txtBoxAwait.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxAwait.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxAwait.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxJunk
-			// 
-			this.txtBoxJunk.AllowDrop = true;
-			this.txtBoxJunk.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFJunk", true));
-			this.txtBoxJunk.Location = new System.Drawing.Point(270, 109);
-			this.txtBoxJunk.Name = "txtBoxJunk";
-			this.txtBoxJunk.ReadOnly = true;
-			this.txtBoxJunk.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxJunk.TabIndex = 67;
-			this.txtBoxJunk.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxJunk.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxJunk.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxMinBoundCost
-			// 
-			this.txtBoxMinBoundCost.AllowDrop = true;
-			this.txtBoxMinBoundCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMinBoundCost", true));
-			this.txtBoxMinBoundCost.Location = new System.Drawing.Point(270, 88);
-			this.txtBoxMinBoundCost.Name = "txtBoxMinBoundCost";
-			this.txtBoxMinBoundCost.ReadOnly = true;
-			this.txtBoxMinBoundCost.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxMinBoundCost.TabIndex = 66;
-			this.txtBoxMinBoundCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxMinBoundCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxMinBoundCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// label17
-			// 
-			this.label17.Location = new System.Drawing.Point(166, 130);
-			this.label17.Name = "label17";
-			this.label17.Size = new System.Drawing.Size(100, 20);
-			this.label17.TabIndex = 63;
-			this.label17.Text = "Ожидается :";
-			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label16
-			// 
-			this.label16.Location = new System.Drawing.Point(166, 110);
-			this.label16.Name = "label16";
-			this.label16.Size = new System.Drawing.Size(100, 20);
-			this.label16.TabIndex = 62;
-			this.label16.Text = "Срок :";
-			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label15
-			// 
-			this.label15.Location = new System.Drawing.Point(166, 88);
-			this.label15.Name = "label15";
-			this.label15.Size = new System.Drawing.Size(100, 20);
-			this.label15.TabIndex = 61;
-			this.label15.Text = "Цена мин. :";
-			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxDoc
-			// 
-			this.txtBoxDoc.AllowDrop = true;
-			this.txtBoxDoc.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFDoc", true));
-			this.txtBoxDoc.Location = new System.Drawing.Point(270, 67);
-			this.txtBoxDoc.Name = "txtBoxDoc";
-			this.txtBoxDoc.ReadOnly = true;
-			this.txtBoxDoc.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxDoc.TabIndex = 58;
-			this.txtBoxDoc.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxDoc.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxDoc.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxPeriod
-			// 
-			this.txtBoxPeriod.AllowDrop = true;
-			this.txtBoxPeriod.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFPeriod", true));
-			this.txtBoxPeriod.Location = new System.Drawing.Point(270, 46);
-			this.txtBoxPeriod.Name = "txtBoxPeriod";
-			this.txtBoxPeriod.ReadOnly = true;
-			this.txtBoxPeriod.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxPeriod.TabIndex = 57;
-			this.txtBoxPeriod.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxPeriod.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxPeriod.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxNote
-			// 
-			this.txtBoxNote.AllowDrop = true;
-			this.txtBoxNote.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFNote", true));
-			this.txtBoxNote.Location = new System.Drawing.Point(270, 25);
-			this.txtBoxNote.Name = "txtBoxNote";
-			this.txtBoxNote.ReadOnly = true;
-			this.txtBoxNote.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxNote.TabIndex = 56;
-			this.txtBoxNote.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxNote.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxNote.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxQuantity
-			// 
-			this.txtBoxQuantity.AllowDrop = true;
-			this.txtBoxQuantity.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFQuantity", true));
-			this.txtBoxQuantity.Location = new System.Drawing.Point(270, 4);
-			this.txtBoxQuantity.Name = "txtBoxQuantity";
-			this.txtBoxQuantity.ReadOnly = true;
-			this.txtBoxQuantity.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxQuantity.TabIndex = 55;
-			this.txtBoxQuantity.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxQuantity.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxQuantity.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxUnit
-			// 
-			this.txtBoxUnit.AllowDrop = true;
-			this.txtBoxUnit.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFUnit", true));
-			this.txtBoxUnit.Location = new System.Drawing.Point(112, 130);
-			this.txtBoxUnit.Name = "txtBoxUnit";
-			this.txtBoxUnit.ReadOnly = true;
-			this.txtBoxUnit.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxUnit.TabIndex = 54;
-			this.txtBoxUnit.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxUnit.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxUnit.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxVolume
-			// 
-			this.txtBoxVolume.AllowDrop = true;
-			this.txtBoxVolume.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFVolume", true));
-			this.txtBoxVolume.Location = new System.Drawing.Point(112, 151);
-			this.txtBoxVolume.Name = "txtBoxVolume";
-			this.txtBoxVolume.ReadOnly = true;
-			this.txtBoxVolume.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxVolume.TabIndex = 53;
-			this.txtBoxVolume.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxVolume.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxVolume.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(166, 67);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(100, 20);
-			this.label12.TabIndex = 52;
-			this.label12.Text = "Документ :";
-			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label11
-			// 
-			this.label11.Location = new System.Drawing.Point(166, 46);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(100, 20);
-			this.label11.TabIndex = 51;
-			this.label11.Text = "Срок годности :";
-			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label10
-			// 
-			this.label10.Location = new System.Drawing.Point(166, 25);
-			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(100, 20);
-			this.label10.TabIndex = 50;
-			this.label10.Text = "Примечание :";
-			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label9
-			// 
-			this.label9.Location = new System.Drawing.Point(166, 4);
-			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(100, 20);
-			this.label9.TabIndex = 49;
-			this.label9.Text = "Количество :";
-			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(8, 151);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(100, 20);
-			this.label8.TabIndex = 48;
-			this.label8.Text = "Цех. уп. :";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(8, 130);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(100, 20);
-			this.label7.TabIndex = 47;
-			this.label7.Text = "Ед. измерения :";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// txtBoxFirmCr
-			// 
-			this.txtBoxFirmCr.AllowDrop = true;
-			this.txtBoxFirmCr.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFFirmCr", true));
-			this.txtBoxFirmCr.Location = new System.Drawing.Point(112, 109);
-			this.txtBoxFirmCr.Name = "txtBoxFirmCr";
-			this.txtBoxFirmCr.ReadOnly = true;
-			this.txtBoxFirmCr.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxFirmCr.TabIndex = 46;
-			this.txtBoxFirmCr.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxFirmCr.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxFirmCr.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxName3
-			// 
-			this.txtBoxName3.AllowDrop = true;
-			this.txtBoxName3.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName3", true));
-			this.txtBoxName3.Location = new System.Drawing.Point(112, 88);
-			this.txtBoxName3.Name = "txtBoxName3";
-			this.txtBoxName3.ReadOnly = true;
-			this.txtBoxName3.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxName3.TabIndex = 45;
-			this.txtBoxName3.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxName3.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxName3.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxName2
-			// 
-			this.txtBoxName2.AllowDrop = true;
-			this.txtBoxName2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName2", true));
-			this.txtBoxName2.Location = new System.Drawing.Point(112, 67);
-			this.txtBoxName2.Name = "txtBoxName2";
-			this.txtBoxName2.ReadOnly = true;
-			this.txtBoxName2.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxName2.TabIndex = 44;
-			this.txtBoxName2.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxName2.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxName2.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxName1
-			// 
-			this.txtBoxName1.AllowDrop = true;
-			this.txtBoxName1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName1", true));
-			this.txtBoxName1.Location = new System.Drawing.Point(112, 46);
-			this.txtBoxName1.Name = "txtBoxName1";
-			this.txtBoxName1.ReadOnly = true;
-			this.txtBoxName1.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxName1.TabIndex = 43;
-			this.txtBoxName1.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxName1.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxName1.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxCodeCr
-			// 
-			this.txtBoxCodeCr.AllowDrop = true;
-			this.txtBoxCodeCr.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFCodeCr", true));
-			this.txtBoxCodeCr.Location = new System.Drawing.Point(112, 25);
-			this.txtBoxCodeCr.Name = "txtBoxCodeCr";
-			this.txtBoxCodeCr.ReadOnly = true;
-			this.txtBoxCodeCr.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxCodeCr.TabIndex = 42;
-			this.txtBoxCodeCr.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxCodeCr.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxCodeCr.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// txtBoxCode
-			// 
-			this.txtBoxCode.AllowDrop = true;
-			this.txtBoxCode.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFCode", true));
-			this.txtBoxCode.Location = new System.Drawing.Point(112, 4);
-			this.txtBoxCode.Name = "txtBoxCode";
-			this.txtBoxCode.ReadOnly = true;
-			this.txtBoxCode.Size = new System.Drawing.Size(40, 20);
-			this.txtBoxCode.TabIndex = 41;
-			this.txtBoxCode.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			this.txtBoxCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
-			this.txtBoxCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(8, 109);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(100, 20);
-			this.label6.TabIndex = 40;
-			this.label6.Text = "Производитель :";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(8, 88);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(100, 20);
-			this.label5.TabIndex = 39;
-			this.label5.Text = "Наименование 3 :";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(8, 67);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(100, 20);
-			this.label4.TabIndex = 38;
-			this.label4.Text = "Наименование 2 :";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(8, 46);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(100, 20);
-			this.label3.TabIndex = 37;
-			this.label3.Text = "Наименование 1 :";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(8, 25);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(100, 20);
-			this.label2.TabIndex = 36;
-			this.label2.Text = "Код производ. :";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(8, 4);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100, 20);
-			this.label1.TabIndex = 35;
-			this.label1.Text = "Код :";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// pnlTxtFields
 			// 
@@ -3338,6 +2826,518 @@ namespace FREditor
 			this.label46.Text = "Жизненно важный :";
 			this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
+			// pnlGeneralFields
+			// 
+			this.pnlGeneralFields.Controls.Add(this.label50);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxMinOrderCount);
+			this.pnlGeneralFields.Controls.Add(this.label48);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxOrderCost);
+			this.pnlGeneralFields.Controls.Add(this.label44);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxMaxBoundCost);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxVitalyImportant);
+			this.pnlGeneralFields.Controls.Add(this.label43);
+			this.pnlGeneralFields.Controls.Add(this.label37);
+			this.pnlGeneralFields.Controls.Add(this.label36);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxRegistryCost);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxRequestRatio);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxAwait);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxJunk);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxMinBoundCost);
+			this.pnlGeneralFields.Controls.Add(this.label17);
+			this.pnlGeneralFields.Controls.Add(this.label16);
+			this.pnlGeneralFields.Controls.Add(this.label15);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxDoc);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxPeriod);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxNote);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxQuantity);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxUnit);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxVolume);
+			this.pnlGeneralFields.Controls.Add(this.label12);
+			this.pnlGeneralFields.Controls.Add(this.label11);
+			this.pnlGeneralFields.Controls.Add(this.label10);
+			this.pnlGeneralFields.Controls.Add(this.label9);
+			this.pnlGeneralFields.Controls.Add(this.label8);
+			this.pnlGeneralFields.Controls.Add(this.label7);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxFirmCr);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxName3);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxName2);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxName1);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxCodeCr);
+			this.pnlGeneralFields.Controls.Add(this.txtBoxCode);
+			this.pnlGeneralFields.Controls.Add(this.label6);
+			this.pnlGeneralFields.Controls.Add(this.label5);
+			this.pnlGeneralFields.Controls.Add(this.label4);
+			this.pnlGeneralFields.Controls.Add(this.label3);
+			this.pnlGeneralFields.Controls.Add(this.label2);
+			this.pnlGeneralFields.Controls.Add(this.label1);
+			this.pnlGeneralFields.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pnlGeneralFields.Location = new System.Drawing.Point(3, 16);
+			this.pnlGeneralFields.Name = "pnlGeneralFields";
+			this.pnlGeneralFields.Size = new System.Drawing.Size(496, 176);
+			this.pnlGeneralFields.TabIndex = 0;
+			// 
+			// label50
+			// 
+			this.label50.Location = new System.Drawing.Point(321, 89);
+			this.label50.Name = "label50";
+			this.label50.Size = new System.Drawing.Size(110, 20);
+			this.label50.TabIndex = 81;
+			this.label50.Text = "Мин. количество :";
+			this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxMinOrderCount
+			// 
+			this.txtBoxMinOrderCount.AllowDrop = true;
+			this.txtBoxMinOrderCount.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMinOrderCount", true));
+			this.txtBoxMinOrderCount.Location = new System.Drawing.Point(437, 89);
+			this.txtBoxMinOrderCount.Name = "txtBoxMinOrderCount";
+			this.txtBoxMinOrderCount.ReadOnly = true;
+			this.txtBoxMinOrderCount.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxMinOrderCount.TabIndex = 80;
+			this.txtBoxMinOrderCount.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxMinOrderCount.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxMinOrderCount.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// label48
+			// 
+			this.label48.Location = new System.Drawing.Point(321, 68);
+			this.label48.Name = "label48";
+			this.label48.Size = new System.Drawing.Size(110, 20);
+			this.label48.TabIndex = 79;
+			this.label48.Text = "Мин. сумма :";
+			this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxOrderCost
+			// 
+			this.txtBoxOrderCost.AllowDrop = true;
+			this.txtBoxOrderCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFOrderCost", true));
+			this.txtBoxOrderCost.Location = new System.Drawing.Point(437, 68);
+			this.txtBoxOrderCost.Name = "txtBoxOrderCost";
+			this.txtBoxOrderCost.ReadOnly = true;
+			this.txtBoxOrderCost.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxOrderCost.TabIndex = 78;
+			this.txtBoxOrderCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxOrderCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxOrderCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// label44
+			// 
+			this.label44.Location = new System.Drawing.Point(321, 47);
+			this.label44.Name = "label44";
+			this.label44.Size = new System.Drawing.Size(110, 20);
+			this.label44.TabIndex = 77;
+			this.label44.Text = "Цена макс. :";
+			this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxMaxBoundCost
+			// 
+			this.txtBoxMaxBoundCost.AllowDrop = true;
+			this.txtBoxMaxBoundCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMaxBoundCost", true));
+			this.txtBoxMaxBoundCost.Location = new System.Drawing.Point(437, 47);
+			this.txtBoxMaxBoundCost.Name = "txtBoxMaxBoundCost";
+			this.txtBoxMaxBoundCost.ReadOnly = true;
+			this.txtBoxMaxBoundCost.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxMaxBoundCost.TabIndex = 76;
+			this.txtBoxMaxBoundCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxMaxBoundCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxMaxBoundCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxVitalyImportant
+			// 
+			this.txtBoxVitalyImportant.AllowDrop = true;
+			this.txtBoxVitalyImportant.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFVitallyImportant", true));
+			this.txtBoxVitalyImportant.Location = new System.Drawing.Point(437, 26);
+			this.txtBoxVitalyImportant.Name = "txtBoxVitalyImportant";
+			this.txtBoxVitalyImportant.ReadOnly = true;
+			this.txtBoxVitalyImportant.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxVitalyImportant.TabIndex = 75;
+			this.txtBoxVitalyImportant.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxVitalyImportant.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxVitalyImportant.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// label43
+			// 
+			this.label43.Location = new System.Drawing.Point(321, 26);
+			this.label43.Name = "label43";
+			this.label43.Size = new System.Drawing.Size(110, 20);
+			this.label43.TabIndex = 73;
+			this.label43.Text = "Жизненно важный :";
+			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label37
+			// 
+			this.label37.Location = new System.Drawing.Point(321, 5);
+			this.label37.Name = "label37";
+			this.label37.Size = new System.Drawing.Size(110, 20);
+			this.label37.TabIndex = 72;
+			this.label37.Text = "Реестр. цена :";
+			this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label36
+			// 
+			this.label36.Location = new System.Drawing.Point(166, 152);
+			this.label36.Name = "label36";
+			this.label36.Size = new System.Drawing.Size(100, 20);
+			this.label36.TabIndex = 71;
+			this.label36.Text = "Кратность :";
+			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxRegistryCost
+			// 
+			this.txtBoxRegistryCost.AllowDrop = true;
+			this.txtBoxRegistryCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFRegistryCost", true));
+			this.txtBoxRegistryCost.Location = new System.Drawing.Point(437, 5);
+			this.txtBoxRegistryCost.Name = "txtBoxRegistryCost";
+			this.txtBoxRegistryCost.ReadOnly = true;
+			this.txtBoxRegistryCost.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxRegistryCost.TabIndex = 70;
+			this.txtBoxRegistryCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxRegistryCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxRegistryCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxRequestRatio
+			// 
+			this.txtBoxRequestRatio.AllowDrop = true;
+			this.txtBoxRequestRatio.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFRequestRatio", true));
+			this.txtBoxRequestRatio.Location = new System.Drawing.Point(270, 152);
+			this.txtBoxRequestRatio.Name = "txtBoxRequestRatio";
+			this.txtBoxRequestRatio.ReadOnly = true;
+			this.txtBoxRequestRatio.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxRequestRatio.TabIndex = 69;
+			this.txtBoxRequestRatio.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxRequestRatio.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxRequestRatio.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxAwait
+			// 
+			this.txtBoxAwait.AllowDrop = true;
+			this.txtBoxAwait.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFAwait", true));
+			this.txtBoxAwait.Location = new System.Drawing.Point(270, 130);
+			this.txtBoxAwait.Name = "txtBoxAwait";
+			this.txtBoxAwait.ReadOnly = true;
+			this.txtBoxAwait.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxAwait.TabIndex = 68;
+			this.txtBoxAwait.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxAwait.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxAwait.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxJunk
+			// 
+			this.txtBoxJunk.AllowDrop = true;
+			this.txtBoxJunk.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFJunk", true));
+			this.txtBoxJunk.Location = new System.Drawing.Point(270, 109);
+			this.txtBoxJunk.Name = "txtBoxJunk";
+			this.txtBoxJunk.ReadOnly = true;
+			this.txtBoxJunk.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxJunk.TabIndex = 67;
+			this.txtBoxJunk.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxJunk.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxJunk.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxMinBoundCost
+			// 
+			this.txtBoxMinBoundCost.AllowDrop = true;
+			this.txtBoxMinBoundCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMinBoundCost", true));
+			this.txtBoxMinBoundCost.Location = new System.Drawing.Point(270, 88);
+			this.txtBoxMinBoundCost.Name = "txtBoxMinBoundCost";
+			this.txtBoxMinBoundCost.ReadOnly = true;
+			this.txtBoxMinBoundCost.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxMinBoundCost.TabIndex = 66;
+			this.txtBoxMinBoundCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxMinBoundCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxMinBoundCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// label17
+			// 
+			this.label17.Location = new System.Drawing.Point(166, 130);
+			this.label17.Name = "label17";
+			this.label17.Size = new System.Drawing.Size(100, 20);
+			this.label17.TabIndex = 63;
+			this.label17.Text = "Ожидается :";
+			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label16
+			// 
+			this.label16.Location = new System.Drawing.Point(166, 110);
+			this.label16.Name = "label16";
+			this.label16.Size = new System.Drawing.Size(100, 20);
+			this.label16.TabIndex = 62;
+			this.label16.Text = "Срок :";
+			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label15
+			// 
+			this.label15.Location = new System.Drawing.Point(166, 88);
+			this.label15.Name = "label15";
+			this.label15.Size = new System.Drawing.Size(100, 20);
+			this.label15.TabIndex = 61;
+			this.label15.Text = "Цена мин. :";
+			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxDoc
+			// 
+			this.txtBoxDoc.AllowDrop = true;
+			this.txtBoxDoc.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFDoc", true));
+			this.txtBoxDoc.Location = new System.Drawing.Point(270, 67);
+			this.txtBoxDoc.Name = "txtBoxDoc";
+			this.txtBoxDoc.ReadOnly = true;
+			this.txtBoxDoc.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxDoc.TabIndex = 58;
+			this.txtBoxDoc.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxDoc.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxDoc.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxPeriod
+			// 
+			this.txtBoxPeriod.AllowDrop = true;
+			this.txtBoxPeriod.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFPeriod", true));
+			this.txtBoxPeriod.Location = new System.Drawing.Point(270, 46);
+			this.txtBoxPeriod.Name = "txtBoxPeriod";
+			this.txtBoxPeriod.ReadOnly = true;
+			this.txtBoxPeriod.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxPeriod.TabIndex = 57;
+			this.txtBoxPeriod.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxPeriod.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxPeriod.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxNote
+			// 
+			this.txtBoxNote.AllowDrop = true;
+			this.txtBoxNote.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFNote", true));
+			this.txtBoxNote.Location = new System.Drawing.Point(270, 25);
+			this.txtBoxNote.Name = "txtBoxNote";
+			this.txtBoxNote.ReadOnly = true;
+			this.txtBoxNote.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxNote.TabIndex = 56;
+			this.txtBoxNote.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxNote.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxNote.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxQuantity
+			// 
+			this.txtBoxQuantity.AllowDrop = true;
+			this.txtBoxQuantity.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFQuantity", true));
+			this.txtBoxQuantity.Location = new System.Drawing.Point(270, 4);
+			this.txtBoxQuantity.Name = "txtBoxQuantity";
+			this.txtBoxQuantity.ReadOnly = true;
+			this.txtBoxQuantity.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxQuantity.TabIndex = 55;
+			this.txtBoxQuantity.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxQuantity.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxQuantity.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxUnit
+			// 
+			this.txtBoxUnit.AllowDrop = true;
+			this.txtBoxUnit.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFUnit", true));
+			this.txtBoxUnit.Location = new System.Drawing.Point(112, 130);
+			this.txtBoxUnit.Name = "txtBoxUnit";
+			this.txtBoxUnit.ReadOnly = true;
+			this.txtBoxUnit.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxUnit.TabIndex = 54;
+			this.txtBoxUnit.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxUnit.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxUnit.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxVolume
+			// 
+			this.txtBoxVolume.AllowDrop = true;
+			this.txtBoxVolume.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFVolume", true));
+			this.txtBoxVolume.Location = new System.Drawing.Point(112, 151);
+			this.txtBoxVolume.Name = "txtBoxVolume";
+			this.txtBoxVolume.ReadOnly = true;
+			this.txtBoxVolume.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxVolume.TabIndex = 53;
+			this.txtBoxVolume.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxVolume.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxVolume.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// label12
+			// 
+			this.label12.Location = new System.Drawing.Point(166, 67);
+			this.label12.Name = "label12";
+			this.label12.Size = new System.Drawing.Size(100, 20);
+			this.label12.TabIndex = 52;
+			this.label12.Text = "Документ :";
+			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label11
+			// 
+			this.label11.Location = new System.Drawing.Point(166, 46);
+			this.label11.Name = "label11";
+			this.label11.Size = new System.Drawing.Size(100, 20);
+			this.label11.TabIndex = 51;
+			this.label11.Text = "Срок годности :";
+			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label10
+			// 
+			this.label10.Location = new System.Drawing.Point(166, 25);
+			this.label10.Name = "label10";
+			this.label10.Size = new System.Drawing.Size(100, 20);
+			this.label10.TabIndex = 50;
+			this.label10.Text = "Примечание :";
+			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(166, 4);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(100, 20);
+			this.label9.TabIndex = 49;
+			this.label9.Text = "Количество :";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(8, 151);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(100, 20);
+			this.label8.TabIndex = 48;
+			this.label8.Text = "Цех. уп. :";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(8, 130);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(100, 20);
+			this.label7.TabIndex = 47;
+			this.label7.Text = "Ед. измерения :";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// txtBoxFirmCr
+			// 
+			this.txtBoxFirmCr.AllowDrop = true;
+			this.txtBoxFirmCr.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFFirmCr", true));
+			this.txtBoxFirmCr.Location = new System.Drawing.Point(112, 109);
+			this.txtBoxFirmCr.Name = "txtBoxFirmCr";
+			this.txtBoxFirmCr.ReadOnly = true;
+			this.txtBoxFirmCr.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxFirmCr.TabIndex = 46;
+			this.txtBoxFirmCr.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxFirmCr.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxFirmCr.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxName3
+			// 
+			this.txtBoxName3.AllowDrop = true;
+			this.txtBoxName3.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName3", true));
+			this.txtBoxName3.Location = new System.Drawing.Point(112, 88);
+			this.txtBoxName3.Name = "txtBoxName3";
+			this.txtBoxName3.ReadOnly = true;
+			this.txtBoxName3.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxName3.TabIndex = 45;
+			this.txtBoxName3.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxName3.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxName3.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxName2
+			// 
+			this.txtBoxName2.AllowDrop = true;
+			this.txtBoxName2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName2", true));
+			this.txtBoxName2.Location = new System.Drawing.Point(112, 67);
+			this.txtBoxName2.Name = "txtBoxName2";
+			this.txtBoxName2.ReadOnly = true;
+			this.txtBoxName2.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxName2.TabIndex = 44;
+			this.txtBoxName2.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxName2.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxName2.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxName1
+			// 
+			this.txtBoxName1.AllowDrop = true;
+			this.txtBoxName1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName1", true));
+			this.txtBoxName1.Location = new System.Drawing.Point(112, 46);
+			this.txtBoxName1.Name = "txtBoxName1";
+			this.txtBoxName1.ReadOnly = true;
+			this.txtBoxName1.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxName1.TabIndex = 43;
+			this.txtBoxName1.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxName1.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxName1.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxCodeCr
+			// 
+			this.txtBoxCodeCr.AllowDrop = true;
+			this.txtBoxCodeCr.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFCodeCr", true));
+			this.txtBoxCodeCr.Location = new System.Drawing.Point(112, 25);
+			this.txtBoxCodeCr.Name = "txtBoxCodeCr";
+			this.txtBoxCodeCr.ReadOnly = true;
+			this.txtBoxCodeCr.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxCodeCr.TabIndex = 42;
+			this.txtBoxCodeCr.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxCodeCr.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxCodeCr.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// txtBoxCode
+			// 
+			this.txtBoxCode.AllowDrop = true;
+			this.txtBoxCode.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFCode", true));
+			this.txtBoxCode.Location = new System.Drawing.Point(112, 4);
+			this.txtBoxCode.Name = "txtBoxCode";
+			this.txtBoxCode.ReadOnly = true;
+			this.txtBoxCode.Size = new System.Drawing.Size(40, 20);
+			this.txtBoxCode.TabIndex = 41;
+			this.txtBoxCode.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.txtBoxCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
+			this.txtBoxCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
+			// 
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(8, 109);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(100, 20);
+			this.label6.TabIndex = 40;
+			this.label6.Text = "Производитель :";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(8, 88);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(100, 20);
+			this.label5.TabIndex = 39;
+			this.label5.Text = "Наименование 3 :";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(8, 67);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(100, 20);
+			this.label4.TabIndex = 38;
+			this.label4.Text = "Наименование 2 :";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(8, 46);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(100, 20);
+			this.label3.TabIndex = 37;
+			this.label3.Text = "Наименование 1 :";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(8, 25);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(100, 20);
+			this.label2.TabIndex = 36;
+			this.label2.Text = "Код производ. :";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// label1
+			// 
+			this.label1.Location = new System.Drawing.Point(8, 4);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(100, 20);
+			this.label1.TabIndex = 35;
+			this.label1.Text = "Код :";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// grpbSettings
 			// 
 			this.grpbSettings.Controls.Add(this.pnlSettings);
@@ -3728,10 +3728,10 @@ namespace FREditor
 			this.pCostFind.PerformLayout();
 			this.gbCostLegends.ResumeLayout(false);
 			this.grpbFields.ResumeLayout(false);
-			this.pnlGeneralFields.ResumeLayout(false);
-			this.pnlGeneralFields.PerformLayout();
 			this.pnlTxtFields.ResumeLayout(false);
 			this.pnlTxtFields.PerformLayout();
+			this.pnlGeneralFields.ResumeLayout(false);
+			this.pnlGeneralFields.PerformLayout();
 			this.grpbSettings.ResumeLayout(false);
 			this.pnlSettings.ResumeLayout(false);
 			this.pnlSettings.PerformLayout();
