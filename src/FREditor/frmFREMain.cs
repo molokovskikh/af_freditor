@@ -2505,17 +2505,6 @@ and c.Type = ?ContactType;",
 							//Делается Copy для того, чтобы созданные записи (Added) при применении не помечались как неизмененные Unchanged
                             daCostRules.Update(chg.Tables[dtCostsFormRules.TableName].Copy());
 
-							//Проверяем: нужно ли сбосить флаг IsForSlave
-							DataRow currentFormRule = ((DataRowView)bsFormRules.Current).Row;
-							if (!currentFormRule[FRPriceFormatId.ColumnName, DataRowVersion.Original].Equals(currentFormRule[FRPriceFormatId.ColumnName, DataRowVersion.Current])
-								&& (Convert.ToInt32(currentFormRule[FRPriceFormatId.ColumnName, DataRowVersion.Current]) == 8))
-							{
-								SetCMD.Parameters.Clear();
-								SetCMD.CommandText = "update usersettings.priceitems set IsForSlave = 0 where Id = ?PriceItemId";
-								SetCMD.Parameters.AddWithValue("?PriceItemId", currentFormRule[FRPriceItemId]);
-								SetCMD.ExecuteNonQuery();
-							}
-
                             mcmdUpdateFormRules.Connection = MyCn;
 							daFormRules.TableMappings.Clear();
                             daFormRules.TableMappings.Add("Table", dtFormRules.TableName);
