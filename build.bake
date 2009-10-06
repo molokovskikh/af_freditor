@@ -72,7 +72,7 @@ Task "build", ["clean"]:
 		Cp("${projectPath}App.${configuration}.config", "${buildTo}${projectName}.exe.config", true)
 	Rm(FileSet("*.*", 
 			   BaseDirectory : buildTo,
-			   Excludes : ["*.dll", "*.exe", "*.config"]))
+			   Excludes : ["*.dll", "*.exe", "*.config", "*.pdb"]))
 	publishVersion = GetAssemblyVersion("${buildTo}${projectName}.exe")
 				
 Task "clean":
