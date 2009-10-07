@@ -79,13 +79,13 @@ namespace FREditor
         DataTable dtPrice = new DataTable();
 
 #if DEBUG
-#if WorkDBf
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;");
+#if WorkDB
+		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;Allow user variables=true;");
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;");
+		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;Allow user variables=true;");
 #endif
 #else
-		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;");
+		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;Allow user variables=true;");
 #endif
 		private MySqlCommand MyCmd = new MySqlCommand();
         private MySqlDataAdapter MyDA = new MySqlDataAdapter();
