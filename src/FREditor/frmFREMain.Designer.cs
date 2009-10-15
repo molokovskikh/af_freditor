@@ -384,6 +384,7 @@ namespace FREditor
 			this.cdLegend = new System.Windows.Forms.ColorDialog();
 			this.tmrCostSearch = new System.Windows.Forms.Timer(this.components);
 			this.tmrSetNewCost = new System.Windows.Forms.Timer(this.components);
+			this.button1 = new System.Windows.Forms.Button();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -1466,6 +1467,7 @@ namespace FREditor
 			// 
 			// grpbGeneral
 			// 
+			this.grpbGeneral.Controls.Add(this.button1);
 			this.grpbGeneral.Controls.Add(this.groupBox1);
 			this.grpbGeneral.Controls.Add(this.grpbParent);
 			this.grpbGeneral.Controls.Add(this.groupBox2);
@@ -3676,6 +3678,16 @@ namespace FREditor
 			this.tmrSetNewCost.Interval = 200;
 			this.tmrSetNewCost.Tick += new System.EventHandler(this.tmrSetNewCost_Tick);
 			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(20, 41);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(75, 23);
+			this.button1.TabIndex = 33;
+			this.button1.Text = "button1";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
+			// 
 			// frmFREMain
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -4086,5 +4098,6 @@ namespace FREditor
 		private System.Windows.Forms.TextBox tbCostFind;
 		private System.Windows.Forms.Timer tmrCostSearch;
 		private System.Windows.Forms.Timer tmrSetNewCost;
+		private System.Windows.Forms.Button button1;
     }
 }

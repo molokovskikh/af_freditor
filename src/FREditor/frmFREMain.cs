@@ -14,6 +14,9 @@ using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Inforoom.WinForms;
 using FREditor.Properties;
+using System.Runtime.Remoting.Channels;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.Remoting.Channels.Tcp;
 
 namespace FREditor
 {
@@ -411,6 +414,24 @@ where
 
 		private void Form1_Load(object sender, System.EventArgs e)
         {
+			//Создаем провайдер, чтобы не было нарушения безопасности
+			var provider = new BinaryServerFormatterSinkProvider();
+			//Без установки этого свойства тоже работает, но в примерах оно тоже установлено
+			//Опытным путем выяснено, что для клиента достаточно указать провайдера,
+			//это свойство устанавливать необязательно
+			//надо указать одинаковый провайдер BinaryServerFormatterSinkProvider для клиента и для сервера,
+			//и на сервере выставить provider.TypeFilterLevel = TypeFilterLevel.Full
+			//Мы это сделаем сразу, чтобы не напороться на другие возможные проблемы безопасности
+			provider.TypeFilterLevel = TypeFilterLevel.Full;
+			//Устанавливаем свойства провайдера
+			IDictionary props = new Hashtable();
+			props["port"] = 0;
+			//Без установки этого свойства тоже работает, но в примерах оно тоже установлено
+			props["typeFilterLevel"] = "Full";
+
+			var tcpChannel = new TcpChannel(props, null, provider);
+			ChannelServices.RegisterChannel(tcpChannel, false);
+
 			remotePriceProcessor = (RemotePricePricessor.IRemotePriceProcessor)Activator.GetObject(
 				typeof(RemotePricePricessor.IRemotePriceProcessor), Settings.Default.PriceProcessorURL);
 
@@ -3524,6 +3545,21 @@ order by PriceName
 			tmrSetNewCost.Stop();
 			bsCostsFormRules.Position = bsCostsFormRules.Count - 1;
 		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			var dialog = new OpenFileDialog();
+			dialog.RestoreDirectory = true;
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				var fileName = dialog.FileName;
+				using(var stream = File.OpenRead(fileName))
+				{
+					remotePriceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), stream);
+					MessageBox.Show("Прайс-лист успешно положен в Base.");
+				}				
+			}
+		}
     }
 
     public class WaitWindowThread
@@ -3631,7 +3667,7 @@ order by PriceName
 			{
 				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
 					"service@analit.net",
-					"service@analit.net",
+					"s.morozov@analit.net",
 					"Необработанная ошибка в FREditor",
 					String.Format(@"
 Источник     = {0}
@@ -3645,6 +3681,8 @@ order by PriceName
 						ex));
 				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("mail.adc.analit.net");
 				sm.Send(m);
+#if (!DEBUG)
+#endif
 			}
 			catch
 			{ }
