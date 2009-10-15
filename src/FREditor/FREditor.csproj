@@ -24,7 +24,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>FREditor</RootNamespace>
+    <RootNamespace>Inforoom.FREditor</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -67,7 +67,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;WorkDB</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -134,6 +134,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\INDataGridView 1.0\INDataGridView.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MySqlData6\MySql.Data.dll</HintPath>
@@ -145,6 +149,7 @@
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
@@ -185,6 +190,8 @@
     <Compile Include="frmWait.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Helpers\InputLanguageHelper.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

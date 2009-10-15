@@ -13,12 +13,13 @@ using System.Threading;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Inforoom.WinForms;
-using FREditor.Properties;
+using Inforoom.FREditor.Properties;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.Configuration;
 
-namespace FREditor
+namespace Inforoom.FREditor
 {
     /// <summary>
     /// Summary description for Form1.
@@ -81,17 +82,10 @@ namespace FREditor
         ArrayList tblstyles = new ArrayList();
         DataTable dtPrice = new DataTable();
 
-#if DEBUG
-#if WorkDB
-		private MySqlConnection MyCn = new MySqlConnection("server=SQL.analit.net; user id=Morozov; password=Srt38123; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;Allow user variables=true;");
-#else
-		private MySqlConnection MyCn = new MySqlConnection("server=testSQL.analit.net; user id=system; password=newpass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;Allow user variables=true;");
-#endif
-#else
-		private MySqlConnection MyCn = new MySqlConnection("server=sql.analit.net; user id=AppFREditor; password=samepass; database=farm;convert Zero Datetime=True;default command timeout=0; pooling=true;Allow user variables=true;");
-#endif
-		private MySqlCommand MyCmd = new MySqlCommand();
-        private MySqlDataAdapter MyDA = new MySqlDataAdapter();
+		private MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
+
+		private MySqlCommand command = new MySqlCommand();
+        private MySqlDataAdapter dataAdapter = new MySqlDataAdapter();
         private string BaseRegKey = "Software\\Inforoom\\FREditor";
         private string CregKey;
 
@@ -395,23 +389,6 @@ where
             }
         }
 
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(FREditorExceptionHandler.OnThreadException);
-			Application.ApplicationExit += new EventHandler(Application_ApplicationExit);
-
-            Application.Run(new frmFREMain());
-        }
-
-		static void Application_ApplicationExit(object sender, EventArgs e)
-		{
-			Settings.Default.Save();
-		}
-
 		private void Form1_Load(object sender, System.EventArgs e)
         {
 			//Создаем провайдер, чтобы не было нарушения безопасности
@@ -435,14 +412,14 @@ where
 			remotePriceProcessor = (RemotePricePricessor.IRemotePriceProcessor)Activator.GetObject(
 				typeof(RemotePricePricessor.IRemotePriceProcessor), Settings.Default.PriceProcessorURL);
 
-			MyCn.Open();
-			MyCmd.Connection = MyCn;
-			MyDA = new MySqlDataAdapter(MyCmd);
+			connection.Open();
+			command.Connection = connection;
+			dataAdapter = new MySqlDataAdapter(command);
 
 			dtPriceFMTsFill();
 			cbRegionsFill();
 
-			MyCn.Close();
+			connection.Close();
 
             bsCostsFormRules.SuspendBinding();
             bsFormRules.SuspendBinding();
@@ -461,7 +438,7 @@ where
         {
             dtPriceFMTs.Clear();
 
-            MyCmd.CommandText = @"
+            command.CommandText = @"
 SELECT 
   id as FMTId,
   Format as FMTFormat,
@@ -470,7 +447,7 @@ FROM
   farm.PriceFmts 
 order by Format";
 
-            MyDA.Fill(dtPriceFMTs);
+            dataAdapter.Fill(dtPriceFMTs);
         }
 
         private string AddParams(string shname, ulong regcode, int seg)
@@ -505,14 +482,14 @@ order by Format";
             if (shname != String.Empty)
             {
 
-                MyCmd.Parameters.Clear();
+                command.Parameters.Clear();
 
                 if (shname != String.Empty)
-                    MyCmd.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
+                    command.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
                 if (regcode != 0)
-                    MyCmd.Parameters.AddWithValue("?RegionCode", regcode);
+                    command.Parameters.AddWithValue("?RegionCode", regcode);
                 if (seg != -1)
-                    MyCmd.Parameters.AddWithValue("?Segment", seg);
+                    command.Parameters.AddWithValue("?Segment", seg);
 
                 FilterParams = AddParams(shname, regcode, seg);
 
@@ -541,14 +518,14 @@ order by Format";
 			if (shname != String.Empty)
 			{
 
-				MyCmd.Parameters.Clear();
+				command.Parameters.Clear();
 
 				if (shname != String.Empty)
-					MyCmd.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
+					command.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
 				if (regcode != 0)
-					MyCmd.Parameters.AddWithValue("?RegionCode", regcode);
+					command.Parameters.AddWithValue("?RegionCode", regcode);
 				if (seg != -1)
-					MyCmd.Parameters.AddWithValue("?Segment", seg);
+					command.Parameters.AddWithValue("?Segment", seg);
 
 				FilterParams = AddParams(shname, regcode, seg);
 
@@ -559,7 +536,7 @@ order by Format";
 
         private void dtClientsFill(string param)
         {
-            MyCmd.CommandText =
+            command.CommandText =
                 @"SELECT 
 					cd.FirmCode AS CCode,
 					cd.ShortName AS CShortName,
@@ -570,16 +547,16 @@ order by Format";
 					usersettings.clientsdata cd
                     inner join farm.regions r on r.RegionCode = cd.RegionCode
 				WHERE cd.firmtype = 0 ";
-            MyCmd.CommandText += param;
-            MyCmd.CommandText += " ORDER BY cd.ShortName";
+            command.CommandText += param;
+            command.CommandText += " ORDER BY cd.ShortName";
 
-            MyDA.Fill(dtClients);
+            dataAdapter.Fill(dtClients);
         }
 
         private void dtPricesFill(string param)
         {
 			//Выбираем прайс-листы с мультиколоночными ценами
-            MyCmd.CommandText =
+            command.CommandText =
 @"
 SELECT
   pd.FirmCode as PFirmCode,
@@ -604,11 +581,11 @@ FROM
 where
     cd.FirmType = 0 
 and ((pd.CostType = 1) or (pc.BaseCost = 1))";
-            MyCmd.CommandText += param;
-            MyCmd.CommandText += @" 
+            command.CommandText += param;
+            command.CommandText += @" 
 order by PPriceName";
 
-            MyDA.Fill(dtPrices);
+            dataAdapter.Fill(dtPrices);
         }
 
         private void cbRegionsFill()
@@ -618,7 +595,7 @@ order by PPriceName";
             dtRegions.Columns.Add("Region", typeof(string));
             dtRegions.Clear();
             dtRegions.Rows.Add(new object[] { 0, "Все" });
-            MyCmd.CommandText = @"
+            command.CommandText = @"
 SELECT
     RegionCode,
     Region
@@ -627,7 +604,7 @@ FROM
 WHERE regionCode > 0
 Order By Region
 ";
-            MyDA.Fill(dtRegions);
+            dataAdapter.Fill(dtRegions);
 
 			cbRegions.DataSource = dtRegions;
             cbRegions.DisplayMember = "Region";
@@ -637,7 +614,7 @@ Order By Region
 
         private void dtPricesCostFill(string param)
         {
-            MyCmd.CommandText =
+            command.CommandText =
 @"
 select
   pc.PriceItemId as PCPriceItemId,
@@ -653,16 +630,16 @@ from
 where
       cd.firmtype = 0
 ";
-            MyCmd.CommandText += param;
-            MyCmd.CommandText += @"  
+            command.CommandText += param;
+            command.CommandText += @"  
 order by PCCostName";
 
-			MyDA.Fill(dtPricesCost);
+			dataAdapter.Fill(dtPricesCost);
         }
 
         private void dtCostsFormRulesFill(string param)
         {
-            MyCmd.CommandText =
+            command.CommandText =
 @"
 select
   pc.PriceItemId as CFRPriceItemId,
@@ -682,16 +659,16 @@ where
      cd.firmtype = 0 
 and pd.CostType is not null
 ";
-            MyCmd.CommandText += param;
-            MyCmd.CommandText += @"   
+            command.CommandText += param;
+            command.CommandText += @"   
 order by CFRCostName";
 
-            MyDA.Fill(dtCostsFormRules);
+            dataAdapter.Fill(dtCostsFormRules);
         }
 
         private void dtFormRulesFill(string param)
         {
-            MyCmd.CommandText =
+            command.CommandText =
 				@"
 SELECT
     fr.Id as FRFormID,
@@ -813,13 +790,13 @@ FROM
 where
   ((pd.CostType = 1) or (pc.BaseCost = 1))
 ";
-            MyCmd.CommandText += param;
-            MyDA.Fill(dtFormRules);
+            command.CommandText += param;
+            dataAdapter.Fill(dtFormRules);
         }
 
         private void Form1_Closed(object sender, System.EventArgs e)
         {
-            MyCn.Close();
+            connection.Close();
         }
 
         private void DoOpenPrice(DataRow drP)
@@ -1096,7 +1073,7 @@ order by PriceName
 
 		private void FillParentComboBox(ComboBox cmbParent, string FillSQL, object ParentValue, string IdField, string NameField)
 		{
-			DataSet ParentDS = MySqlHelper.ExecuteDataset(MyCn, FillSQL, new MySqlParameter("?ParentValue", ParentValue));
+			DataSet ParentDS = MySqlHelper.ExecuteDataset(connection, FillSQL, new MySqlParameter("?ParentValue", ParentValue));
 			FillParentComboBoxFromTable(cmbParent, ParentDS.Tables[0], IdField, NameField);
 		}
 
@@ -1105,7 +1082,7 @@ order by PriceName
 			//Возможно есть способ более проще получить значение биндинга
 			object SelectedValue = ((DataRowView)bsFormRules.Current).Row[cmbParent.DataBindings["SelectedValue"].BindingMemberInfo.BindingField];
 			DataSet ParentDS = MySqlHelper.ExecuteDataset(
-				MyCn, 
+				connection, 
 				FillSQL, 
 				new MySqlParameter("?PrevParentValue", SelectedValue), 
 				new MySqlParameter("?SearchText", "%" + cmbParent.Text + "%"));
@@ -2035,19 +2012,19 @@ order by PriceName
 
         private void lLblMaster_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
-			if (MyCn.State == ConnectionState.Closed)
-				MyCn.Open();
+			if (connection.State == ConnectionState.Closed)
+				connection.Open();
 			try
 			{
 				long FirmCode = Convert.ToInt64(
-					MySqlHelper.ExecuteScalar(MyCn, 
+					MySqlHelper.ExecuteScalar(connection, 
 					"select FirmCode from usersettings.pricesdata where PriceCode = ?SelfPriceCode",
 					new MySqlParameter("?SelfPriceCode", ((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName])));
 				System.Diagnostics.Process.Start(String.Format("mailto:{0}", GetContactText(FirmCode, 2, 0)));
 			}
 			finally
 			{
-				MyCn.Close();
+				connection.Close();
 			}
         }
 
@@ -2060,7 +2037,7 @@ order by PriceName
 		/// <returns>Текст контактов, разделенный ";"</returns>
 		private string GetContactText(long FirmCode, byte ContactGroupType, byte ContactType)
 		{
-			DataSet dsContacts = MySqlHelper.ExecuteDataset(MyCn, @"
+			DataSet dsContacts = MySqlHelper.ExecuteDataset(connection, @"
 select distinct c.contactText
 from usersettings.clientsdata cd
   join contacts.contact_groups cg on cd.ContactGroupOwnerId = cg.ContactGroupOwnerId
@@ -2485,21 +2462,21 @@ and c.Type = ?ContactType;",
             {
                 if (tbControl.SelectedTab == tpPrice)
                 {
-                    if (MyCn.State == ConnectionState.Closed)
-                        MyCn.Open();
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
                     try
                     {
-                        MySqlTransaction tr = MyCn.BeginTransaction();
+                        MySqlTransaction tr = connection.BeginTransaction();
                         try
                         {
-                            MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
+                            MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", connection, tr);
                             SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
                             SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
 
-                            mcmdUpdateCostRules.Connection = MyCn;
-							mcmdInsertCostRules.Connection = MyCn;
-							mcmdDeleteCostRules.Connection = MyCn;
+                            mcmdUpdateCostRules.Connection = connection;
+							mcmdInsertCostRules.Connection = connection;
+							mcmdDeleteCostRules.Connection = connection;
 							mcmdInsertCostRules.Parameters["?PriceCode"].Value = ((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName];
                             daCostRules.TableMappings.Clear();
                             daCostRules.TableMappings.Add("Table", dtCostsFormRules.TableName);
@@ -2526,7 +2503,7 @@ and c.Type = ?ContactType;",
 							//Делается Copy для того, чтобы созданные записи (Added) при применении не помечались как неизмененные Unchanged
                             daCostRules.Update(chg.Tables[dtCostsFormRules.TableName].Copy());
 
-                            mcmdUpdateFormRules.Connection = MyCn;
+                            mcmdUpdateFormRules.Connection = connection;
 							daFormRules.TableMappings.Clear();
                             daFormRules.TableMappings.Add("Table", dtFormRules.TableName);
                             daFormRules.Update(chg.Tables[dtFormRules.TableName].Copy());
@@ -2555,27 +2532,27 @@ and c.Type = ?ContactType;",
                         catch (Exception ex)
                         {
 							MessageBox.Show("Не удалось применить изменения в правилах формализации прайс-листа. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-							FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при применении изменений в правилах формализации.", ex));
+							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в правилах формализации.", ex));
 							tr.Rollback();
                         }
                     }
                     finally
                     {
-                        MyCn.Close();
+                        connection.Close();
                     }
                 }
                 else if (tbControl.SelectedTab == tpFirms)
                 {
                     ((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember]).EndCurrentEdit();
 
-                    if (MyCn.State == ConnectionState.Closed)
-                        MyCn.Open();
+                    if (connection.State == ConnectionState.Closed)
+                        connection.Open();
                     try
                     {
-                        MySqlTransaction tr = MyCn.BeginTransaction();
+                        MySqlTransaction tr = connection.BeginTransaction();
                         try
                         {
-                            MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", MyCn, tr);
+                            MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", connection, tr);
                             SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
                             SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
@@ -2624,7 +2601,7 @@ and fr.Id = pim.FormRuleId;
                                 ms.SourceColumn = ms.ParameterName.Substring(1);
                             }
 
-                            mcmdUPrice.Connection = MyCn;
+                            mcmdUPrice.Connection = connection;
                             daPrice.UpdateCommand=mcmdUPrice;
                             daPrice.TableMappings.Clear();
                             daPrice.TableMappings.Add("Table", dtPrices.TableName);
@@ -2637,13 +2614,13 @@ and fr.Id = pim.FormRuleId;
                         catch (Exception ex)
                         {
 							MessageBox.Show("Не удалось применить изменения в настройках прайс-листов. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-							FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при применении изменений в настройках прайс-листов.", ex));
+							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в настройках прайс-листов.", ex));
 							tr.Rollback();
                         }
                     }
                     finally
                     {
-                        MyCn.Close();
+                        connection.Close();
                     }
                 }
             }
@@ -2657,7 +2634,7 @@ and fr.Id = pim.FormRuleId;
 			{
 				//Получаем e-mail оператора
 				string operatorMail = (string)MySqlHelper.ExecuteScalar(
-					MyCn,
+					connection,
 @"SELECT 
   regionaladmins.email 
 FROM 
@@ -2699,7 +2676,7 @@ WHERE
 			catch (Exception ex)
 			{
 				MessageBox.Show("Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
+				Program.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
 			}
 		}
 
@@ -3163,11 +3140,11 @@ WHERE
 
 		private string GetPriceFileExtention(long PriceItemtId)
 		{
-			MyCn.Open();
+			connection.Open();
 			try
 			{
 				return (string)MySqlHelper.ExecuteScalar(
-					MyCn,
+					connection,
 					@"
 SELECT 
   p.FileExtention 
@@ -3183,7 +3160,7 @@ and p.Id = f.PriceFormatID",
 			}
 			finally			
 			{
-				MyCn.Close();
+				connection.Close();
 			}
 		}
 
@@ -3197,11 +3174,11 @@ and p.Id = f.PriceFormatID",
 				{
 					remotePriceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId]));
 
-					MyCn.Open();
+					connection.Open();
 					try
 					{
 						MySqlHelper.ExecuteNonQuery(
-							MyCn,
+							connection,
 							"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
 							new MySqlParameter("?UserName", Environment.UserName),
 							new MySqlParameter("?UserHost", Environment.MachineName),
@@ -3209,7 +3186,7 @@ and p.Id = f.PriceFormatID",
 					}
 					finally
 					{
-						MyCn.Close();
+						connection.Close();
 					}
 
 					MessageBox.Show("Прайс-лист успешно переподложен.");
@@ -3657,43 +3634,4 @@ order by PriceName
             SheetName = sheetName;
         }
     }
-
-	internal class FREditorExceptionHandler
-	{
-
-		public static void SendMessageOnException(object sender, Exception ex)
-		{
-			try
-			{
-				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
-					"service@analit.net",
-					"s.morozov@analit.net",
-					"Необработанная ошибка в FREditor",
-					String.Format(@"
-Источник     = {0}
-Пользователь = {1}
-Компьютер    = {2}
-Ошибка       =
-{3}", 
-						sender,
-						Environment.UserName,
-						Environment.MachineName,
-						ex));
-				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("mail.adc.analit.net");
-				sm.Send(m);
-#if (!DEBUG)
-#endif
-			}
-			catch
-			{ }
-		}
-
-		// Handles the exception event.
-		public static void OnThreadException(object sender, System.Threading.ThreadExceptionEventArgs t)
-		{
-			SendMessageOnException(sender, t.Exception);
-			MessageBox.Show("В приложении возникла необработанная ошибка.\r\nИнформация об ошибке была отправлена разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-		}
-
-	}
 }

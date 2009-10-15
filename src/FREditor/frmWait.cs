@@ -4,7 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace FREditor
+namespace Inforoom.FREditor
 {
 	/// <summary>
 	/// Summary description for frmWait.
@@ -96,7 +96,7 @@ namespace FREditor
 				catch (Exception ex)
 				{
 					MessageBox.Show("Не удалось открыть прайс-лист. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					FREditorExceptionHandler.SendMessageOnException(null, new Exception("Ошибка при открытии прайс-листа.", ex));
+					Program.SendMessageOnException(null, new Exception("Ошибка при открытии прайс-листа.", ex));
 				}
 
 			Close();

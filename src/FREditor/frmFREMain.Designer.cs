@@ -1,4 +1,4 @@
-namespace FREditor
+namespace Inforoom.FREditor
 {
 
     partial class frmFREMain
@@ -2002,8 +2002,8 @@ namespace FREditor
 			// 
 			// btnDeletedCostColor
 			// 
-			this.btnDeletedCostColor.BackColor = global::FREditor.Properties.Settings.Default.DeletedCostColor;
-			this.btnDeletedCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::FREditor.Properties.Settings.Default, "DeletedCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.btnDeletedCostColor.BackColor = global::Inforoom.FREditor.Properties.Settings.Default.DeletedCostColor;
+			this.btnDeletedCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::Inforoom.FREditor.Properties.Settings.Default, "DeletedCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.btnDeletedCostColor.Location = new System.Drawing.Point(6, 106);
 			this.btnDeletedCostColor.Name = "btnDeletedCostColor";
 			this.btnDeletedCostColor.Size = new System.Drawing.Size(81, 23);
@@ -2014,8 +2014,8 @@ namespace FREditor
 			// 
 			// btnChangedCostColor
 			// 
-			this.btnChangedCostColor.BackColor = global::FREditor.Properties.Settings.Default.ChangedCostColor;
-			this.btnChangedCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::FREditor.Properties.Settings.Default, "ChangedCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.btnChangedCostColor.BackColor = global::Inforoom.FREditor.Properties.Settings.Default.ChangedCostColor;
+			this.btnChangedCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::Inforoom.FREditor.Properties.Settings.Default, "ChangedCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.btnChangedCostColor.Location = new System.Drawing.Point(6, 77);
 			this.btnChangedCostColor.Name = "btnChangedCostColor";
 			this.btnChangedCostColor.Size = new System.Drawing.Size(81, 23);
@@ -2026,8 +2026,8 @@ namespace FREditor
 			// 
 			// btnNewCostColor
 			// 
-			this.btnNewCostColor.BackColor = global::FREditor.Properties.Settings.Default.NewCostColor;
-			this.btnNewCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::FREditor.Properties.Settings.Default, "NewCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.btnNewCostColor.BackColor = global::Inforoom.FREditor.Properties.Settings.Default.NewCostColor;
+			this.btnNewCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::Inforoom.FREditor.Properties.Settings.Default, "NewCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.btnNewCostColor.Location = new System.Drawing.Point(6, 48);
 			this.btnNewCostColor.Name = "btnNewCostColor";
 			this.btnNewCostColor.Size = new System.Drawing.Size(81, 23);
@@ -2038,8 +2038,8 @@ namespace FREditor
 			// 
 			// btnBaseCostColor
 			// 
-			this.btnBaseCostColor.BackColor = global::FREditor.Properties.Settings.Default.BaseCostColor;
-			this.btnBaseCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::FREditor.Properties.Settings.Default, "BaseCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+			this.btnBaseCostColor.BackColor = global::Inforoom.FREditor.Properties.Settings.Default.BaseCostColor;
+			this.btnBaseCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::Inforoom.FREditor.Properties.Settings.Default, "BaseCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.btnBaseCostColor.Location = new System.Drawing.Point(6, 19);
 			this.btnBaseCostColor.Name = "btnBaseCostColor";
 			this.btnBaseCostColor.Size = new System.Drawing.Size(81, 23);
