@@ -18,6 +18,7 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Configuration;
+using Common.Tools;
 
 namespace FREditor
 {
@@ -1184,20 +1185,31 @@ order by PriceName
         private void OpenDBFFile(string filePath)
         {
             Application.DoEvents();
-            dbcMain.ConnectionString = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"dBase 5.0\"", System.IO.Path.GetDirectoryName(filePath));
-            dbcMain.Open();
-            try
-            {
-                Application.DoEvents();
-                OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from [{0}]", System.IO.Path.GetFileNameWithoutExtension(filePath)), dbcMain);
-                CreateThread(da, dtPrice, indgvPriceData);
-            }
-            finally
-            {
-                dbcMain.Close();
-                dbcMain.Dispose();
-                Application.DoEvents();
-            }
+			try
+			{
+				dtPrice = Dbf.Load(filePath);
+			}
+			finally
+			{
+				//dbcMain.Close();
+				//dbcMain.Dispose();
+				Application.DoEvents();
+			}
+
+			//dbcMain.ConnectionString = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"dBase 5.0\"", System.IO.Path.GetDirectoryName(filePath));
+			//dbcMain.Open();
+			//try
+			//{
+			//    Application.DoEvents();
+			//    OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from [{0}]", System.IO.Path.GetFileNameWithoutExtension(filePath)), dbcMain);
+			//    CreateThread(da, dtPrice, indgvPriceData);
+			//}
+			//finally
+			//{
+			//    dbcMain.Close();
+			//    dbcMain.Dispose();
+			//    Application.DoEvents();
+			//}
         }
 
         private void OpenEXLFile(string filePath)
