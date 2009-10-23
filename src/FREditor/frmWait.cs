@@ -4,7 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace Inforoom.FREditor
+namespace FREditor
 {
 	/// <summary>
 	/// Summary description for frmWait.

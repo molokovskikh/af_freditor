@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using Inforoom.WinForms;
 
-namespace Inforoom.FREditor
+namespace FREditor
 {
 	public partial class frmPriceDataSearch : Form
 	{

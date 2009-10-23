@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Data;
 
-namespace Inforoom.FREditor
+namespace FREditor
 {
 	/// <summary>
 	/// Summary description for frmNameMask.

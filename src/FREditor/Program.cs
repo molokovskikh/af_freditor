@@ -5,9 +5,9 @@ using log4net;
 using System.Windows.Forms;
 using System.Threading;
 using Inforoom.WinForms.Helpers;
-using Inforoom.FREditor.Properties;
+using FREditor.Properties;
 
-namespace Inforoom.FREditor
+namespace FREditor
 {
 	static class Program
 	{

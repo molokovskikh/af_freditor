@@ -1,4 +1,4 @@
-﻿namespace Inforoom.FREditor
+﻿namespace FREditor
 {
 	partial class frmPriceDataSearch
 	{

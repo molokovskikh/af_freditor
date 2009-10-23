@@ -13,13 +13,13 @@ using System.Threading;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Inforoom.WinForms;
-using Inforoom.FREditor.Properties;
+using FREditor.Properties;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Configuration;
 
-namespace Inforoom.FREditor
+namespace FREditor
 {
     /// <summary>
     /// Summary description for Form1.
@@ -1853,6 +1853,8 @@ order by PriceName
 					indgvCosts.AllowUserToAddRows = Convert.ToByte(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName]) == 0;
 					indgvCosts.ReadOnly = !indgvCosts.AllowUserToAddRows;
 
+					btnPutToBase.Enabled = !Convert.IsDBNull(((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
+
 					if (indgvCosts.AllowUserToAddRows)
 					{
 						(bsCostsFormRules.List as DataView).Table.Columns[CFRPriceItemId.ColumnName].DefaultValue = ((DataRowView)bsFormRules.Current)["FRPriceItemId"];
@@ -2540,6 +2542,9 @@ and c.Type = ?ContactType;",
                     {
                         connection.Close();
                     }
+
+					btnPutToBase.Enabled = !Convert.IsDBNull(((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
+
                 }
                 else if (tbControl.SelectedTab == tpFirms)
                 {
@@ -3523,7 +3528,7 @@ order by PriceName
 			bsCostsFormRules.Position = bsCostsFormRules.Count - 1;
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void btnPutToBase_Click(object sender, EventArgs e)
 		{
 			var dialog = new OpenFileDialog();
 			dialog.RestoreDirectory = true;
@@ -3532,8 +3537,15 @@ order by PriceName
 				var fileName = dialog.FileName;
 				using(var stream = File.OpenRead(fileName))
 				{
-					remotePriceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), stream);
-					MessageBox.Show("Прайс-лист успешно положен в Base.");
+					try
+					{
+						remotePriceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), stream);
+						MessageBox.Show("Прайс-лист успешно положен в Base.");
+					}
+					catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+					{
+						MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					}
 				}				
 			}
 		}
