@@ -39,6 +39,7 @@
     <SignAssembly>true</SignAssembly>
     <OldToolsVersion>2.0</OldToolsVersion>
     <ManifestKeyFile>lib\InforoomCodeSign.pfx</ManifestKeyFile>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <PublishUrl>http://publish.analit.net/FREditor/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -59,7 +60,6 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -143,9 +143,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="RemotePriceProcessor, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b87fa865681cc1c6, processorArchitecture=MSIL">
+    <Reference Include="RemotePriceProcessor, Version=1.0.1.1, Culture=neutral, PublicKeyToken=b87fa865681cc1c6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\RemotePriceProcessor.dll</HintPath>
+      <HintPath>..\..\..\..\PriceProcessor\trunk\src\PriceProcessor\bin\Debug\RemotePriceProcessor.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -164,6 +164,9 @@
       <Name>System.Drawing</Name>
     </Reference>
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>

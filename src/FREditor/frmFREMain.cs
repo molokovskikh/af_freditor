@@ -19,6 +19,9 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Configuration;
 using Common.Tools;
+using System.ServiceModel;
+using RemotePriceProcessor;
+using System.Net.Security;
 
 namespace FREditor
 {
@@ -83,7 +86,8 @@ namespace FREditor
         ArrayList tblstyles = new ArrayList();
         DataTable dtPrice = new DataTable();
 
-		private MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
+		private MySqlConnection connection = new MySqlConnection(
+            ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
 
 		private MySqlCommand command = new MySqlCommand();
         private MySqlDataAdapter dataAdapter = new MySqlDataAdapter();
@@ -129,7 +133,8 @@ namespace FREditor
         public DataTable dtFirmSegment;
         protected dgFocus fcs;
 
-		RemotePricePricessor.IRemotePriceProcessor remotePriceProcessor;
+        // Фабрика для создания соединений с WCF сервисом
+        private ChannelFactory<IRemotePriceProcessor> _wcfChannelFactory;
 
         public frmFREMain()
         {
@@ -388,6 +393,15 @@ where
             {
                 ms.SourceColumn = ms.ParameterName.Substring(1);
             }
+
+            NetTcpBinding binding = new NetTcpBinding();
+            binding.Security.Transport.ProtectionLevel = ProtectionLevel.EncryptAndSign;
+            binding.Security.Mode = SecurityMode.None;
+            binding.TransferMode = TransferMode.Streamed;
+            binding.MaxReceivedMessageSize = Int32.MaxValue;
+            binding.MaxBufferSize = 524288; // 0.5 Мб
+            _wcfChannelFactory = new ChannelFactory<IRemotePriceProcessor>(binding,
+                Settings.Default.WCFServiceUrl);
         }
 
 		private void Form1_Load(object sender, System.EventArgs e)
@@ -409,9 +423,6 @@ where
 
 			var tcpChannel = new TcpChannel(props, null, provider);
 			ChannelServices.RegisterChannel(tcpChannel, false);
-
-			remotePriceProcessor = (RemotePricePricessor.IRemotePriceProcessor)Activator.GetObject(
-				typeof(RemotePricePricessor.IRemotePriceProcessor), Settings.Default.PriceProcessorURL);
 
 			connection.Open();
 			command.Connection = connection;
@@ -953,13 +964,33 @@ order by PriceName
 					if (File.Exists(filePath))
 						File.Delete(filePath);
 
-					using (Stream _openFile = remotePriceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
-					{
-						using (FileStream _fileStream = File.Create(filePath))
-						{
-							CopyStreams(_openFile, _fileStream);
-						}
-					}
+                    IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
+                    try
+                    {
+                        using (Stream _openFile = _clientProxy.BaseFile(
+                            Convert.ToUInt32(shortFileNameByPriceItemId)))
+                        {
+                            using (FileStream _fileStream = File.Create(filePath))
+                            {
+                                CopyStreams(_openFile, _fileStream);
+                            }
+                        }
+                        ((ICommunicationObject)_clientProxy).Close();
+                    }
+                    catch (FaultException fex)
+                    {
+                        MessageBox.Show(fex.Reason.ToString(), "Ошибка", 
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+                            ((ICommunicationObject)_clientProxy).Abort();                        
+                        return;
+                    }
+                    catch (Exception)
+                    {
+                        if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+                            ((ICommunicationObject)_clientProxy).Abort();
+                        throw;
+                    }
 
 					Application.DoEvents();
 
@@ -1000,7 +1031,7 @@ order by PriceName
 					Application.DoEvents();
 
 				}
-				catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+				catch (RemotePriceProcessor.PriceProcessorException priceProcessorException)
 				{
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
@@ -2139,7 +2170,7 @@ and c.Type = ?ContactType;",
             {
                 pnlFloat.Visible = false;
                 if (!(fmt.Equals((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue))) || !(delimiter.Equals(tbDevider.Text)))
-                        DoOpenPrice(openedPriceDR);
+                    DoOpenPrice(openedPriceDR);
                 
                 foreach (INDataGridView indg in gds)
                 {
@@ -3189,7 +3220,26 @@ and p.Id = f.PriceFormatID",
 
 				try
 				{
-					remotePriceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId]));
+                    IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
+                    try
+                    {
+                        _clientProxy.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId]));
+                        ((ICommunicationObject)_clientProxy).Close();
+                    }
+                    catch (FaultException fex)
+                    {
+                        MessageBox.Show(fex.Reason.ToString(), "Ошибка", 
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+                            ((ICommunicationObject)_clientProxy).Abort();
+                        return;
+                    }
+                    catch (Exception)
+                    {
+                        if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+                            ((ICommunicationObject)_clientProxy).Abort();
+                        throw;
+                    }
 
 					connection.Open();
 					try
@@ -3208,7 +3258,7 @@ and p.Id = f.PriceFormatID",
 
 					MessageBox.Show("Прайс-лист успешно переподложен.");
 				}
-				catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+				catch (RemotePriceProcessor.PriceProcessorException priceProcessorException)
 				{
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
@@ -3546,15 +3596,37 @@ order by PriceName
 			dialog.RestoreDirectory = true;
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
-				var fileName = dialog.FileName;
-				using(var stream = File.OpenRead(fileName))
+				var fileName = dialog.FileName;                                
+                
+				using(FilePriceInfo filePriceInfo = new FilePriceInfo())
 				{
+                    filePriceInfo.Stream = File.OpenRead(fileName);
+                    filePriceInfo.PriceItemId = Convert.ToUInt32(currentPriceItemId);
 					try
 					{
-						remotePriceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), stream);
-						MessageBox.Show("Прайс-лист успешно положен в Base.");
+                        IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
+                        try
+                        {
+                            _clientProxy.PutFileToBase(filePriceInfo);
+                            ((ICommunicationObject)_clientProxy).Close();
+                            MessageBox.Show("Прайс-лист успешно положен в Base.");
+                        }
+                        catch (FaultException fex)
+                        {
+                            MessageBox.Show(fex.Reason.ToString(), "Ошибка", MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+                            if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+                                ((ICommunicationObject)_clientProxy).Abort();
+                            return;
+                        }
+                        catch (Exception)
+                        {
+                            if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+                                ((ICommunicationObject)_clientProxy).Abort();
+                            throw;
+                        }
 					}
-					catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+					catch (RemotePriceProcessor.PriceProcessorException priceProcessorException)
 					{
 						MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					}

@@ -17,5 +17,8 @@
     <Setting Name="PriceProcessorURL" Type="System.String" Scope="Application">
       <Value Profile="(Default)">tcp://localhost:889/RemotePriceProcessor</Value>
     </Setting>
+    <Setting Name="WCFServiceUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">net.tcp://fms.adc.analit.net:900/RemotePriceProcessorService</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
