@@ -3168,7 +3168,29 @@ WHERE
 				((ComboBox)e.Control).Enabled = !indgvPrice.CurrentCell.ReadOnly;
 				if (((ComboBox)e.Control).Enabled)
 					((ComboBox)e.Control).SelectionChangeCommitted += new EventHandler(frmFREMain_SelectionChangeCommitted);
+
+				// Если была первоначальная настройка прайс-листа, тогда
+				// не позволяем редактировать тип колонок (с мультифайловых на мультиколоночные)
+				INDataGridView grid = (sender as INDataGridView);
+				bool isCostTypeColumn = (grid.CurrentCell.ColumnIndex == (grid.ColumnCount - 1));
+				if (isCostTypeColumn)
+				{
+					string priceItemId = Convert.ToString(((DataRowView)indgvPrice.CurrentCell
+						.OwningRow.DataBoundItem)["PPriceItemId"]);
+					bool priceEdited = priceWasEdited(priceItemId);
+					((ComboBox)e.Control).Enabled = !priceEdited;
+					indgvPrice.CurrentCell.ReadOnly = priceEdited;
+				}
 			}
+		}
+
+		private bool priceWasEdited(string priceItemId)
+		{
+			DataRow[] drPrice = dtPrices.Select("PPriceItemId = " + priceItemId);
+			string costType = Convert.ToString(drPrice[0]["PCostType"]);
+			DataRow[] rowsPI = drPrice[0].GetChildRows(dtPrices.ChildRelations[2]);
+			string format = Convert.ToString(rowsPI[0]["FRPriceFormatId"]);
+			return (format.Length != 0) && (costType.Length != 0);
 		}
 
 		void frmFREMain_SelectionChangeCommitted(object sender, EventArgs e)
@@ -3272,11 +3294,25 @@ and p.Id = f.PriceFormatID",
 		private void indgvPrice_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
 			//Если рассматриваются колонки с ComboBox и строки с данными
-			if ((e.RowIndex >= 0) && ( ((INDataGridView)sender).Columns[e.ColumnIndex].CellTemplate is DataGridViewComboBoxCell))
+			if ((e.RowIndex >= 0) && (((INDataGridView)sender).Columns[e.ColumnIndex].CellTemplate is DataGridViewComboBoxCell))
 			{
 				//Если это не родительский прайс-лист, то это ценовая колонка многофайлового прайс-листа и изменять ее нельзя
-				if (!Convert.ToBoolean( ((DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem)[PIsParent.ColumnName]))				
+				if (!Convert.ToBoolean(((DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem)[PIsParent.ColumnName]))
 					e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
+
+				// Проверяем, если была первоначальная настройка прайс-листа,
+				// то не выделяем колонки серым цветом (неактивные)
+				INDataGridView inGridView = (sender as INDataGridView);
+				bool isCostTypeColumn = (e.ColumnIndex == (inGridView.ColumnCount - 1));
+				if (isCostTypeColumn)
+				{
+					string priceItemId = Convert.ToString(((DataRowView)indgvPrice
+						.Rows[e.RowIndex].DataBoundItem)["PPriceItemId"]);
+					if (priceWasEdited(priceItemId))
+					{
+						e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
+					}
+				}
 			}
 		}
 
