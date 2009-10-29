@@ -19,6 +19,7 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Configuration;
 using Common.Tools;
+using RemotePriceProcessor;
 
 namespace FREditor
 {
@@ -129,7 +130,7 @@ namespace FREditor
         public DataTable dtFirmSegment;
         protected dgFocus fcs;
 
-		RemotePricePricessor.IRemotePriceProcessor remotePriceProcessor;
+		IRemotePriceProcessor remotePriceProcessor;
 
         public frmFREMain()
         {
@@ -410,8 +411,8 @@ where
 			var tcpChannel = new TcpChannel(props, null, provider);
 			ChannelServices.RegisterChannel(tcpChannel, false);
 
-			remotePriceProcessor = (RemotePricePricessor.IRemotePriceProcessor)Activator.GetObject(
-				typeof(RemotePricePricessor.IRemotePriceProcessor), Settings.Default.PriceProcessorURL);
+			remotePriceProcessor = (IRemotePriceProcessor)Activator.GetObject(
+				typeof(IRemotePriceProcessor), Settings.Default.PriceProcessorURL);
 
 			connection.Open();
 			command.Connection = connection;
@@ -1000,7 +1001,7 @@ order by PriceName
 					Application.DoEvents();
 
 				}
-				catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+				catch (PriceProcessorException priceProcessorException)
 				{
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
@@ -3208,7 +3209,7 @@ and p.Id = f.PriceFormatID",
 
 					MessageBox.Show("Прайс-лист успешно переподложен.");
 				}
-				catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
+				catch (PriceProcessorException priceProcessorException)
 				{
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
@@ -3542,24 +3543,29 @@ order by PriceName
 
 		private void btnPutToBase_Click(object sender, EventArgs e)
 		{
-			var dialog = new OpenFileDialog();
-			dialog.RestoreDirectory = true;
-			if (dialog.ShowDialog() == DialogResult.OK)
-			{
-				var fileName = dialog.FileName;
-				using(var stream = File.OpenRead(fileName))
-				{
-					try
-					{
-						remotePriceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), stream);
-						MessageBox.Show("Прайс-лист успешно положен в Base.");
-					}
-					catch (RemotePricePricessor.PriceProcessorException priceProcessorException)
-					{
-						MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					}
-				}				
-			}
+			MessageBox.Show("Данная функциональность заблокирована.", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			//var dialog = new OpenFileDialog();
+			//dialog.RestoreDirectory = true;
+			//if (dialog.ShowDialog() == DialogResult.OK)
+			//{
+			//    var fileName = dialog.FileName;
+			//    using(var stream = File.OpenRead(fileName))
+			//    {
+			//        try
+			//        {
+			//            var priceInfo = new FilePriceInfo(){
+			//                PriceItemId = Convert.ToUInt32(currentPriceItemId),
+			//                Stream = stream
+			//            };
+			//            remotePriceProcessor.PutFileToBase(priceInfo);
+			//            MessageBox.Show("Прайс-лист успешно положен в Base.");
+			//        }
+			//        catch (PriceProcessorException priceProcessorException)
+			//        {
+			//            MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			//        }
+			//    }				
+			//}
 		}
     }
 
