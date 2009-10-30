@@ -136,6 +136,15 @@ namespace FREditor
         // Фабрика для создания соединений с WCF сервисом
         private ChannelFactory<IRemotePriceProcessor> _wcfChannelFactory;
 
+		// Поле для хранения текста, который нужно найти 
+		// внутри колонок прайса (или среди заголовков колонок)
+		// (вкладка "Прайс")
+		private string _searchTextInPrice = String.Empty;
+
+		// Поле для подсчета времени бездействия пользователя 
+		// при поиске внутри колонок прайс-листа
+		private int _inactivityTime = 0;
+
         public frmFREMain()
         {
             //
@@ -474,6 +483,15 @@ order by Format";
             return cmnd;
         }
 
+		private string AddParams(string shname, ulong regcode, int seg, bool showOnlyEnabledFirm)
+		{
+			string cmnd = String.Empty;
+			cmnd += AddParams(shname, regcode, seg);
+			if (showOnlyEnabledFirm)
+				cmnd += "and cd.FirmStatus = ?FirmStatus ";
+			return cmnd;
+		}
+
         private void FillTables(string shname, ulong regcode, int seg)
         {
             dtSet.EnforceConstraints = false;
@@ -502,14 +520,26 @@ order by Format";
                     command.Parameters.AddWithValue("?RegionCode", regcode);
                 if (seg != -1)
                     command.Parameters.AddWithValue("?Segment", seg);
+				
+				if (!chbShowDisabled.Checked)
+				{
+					// Если галочка "Показывать недействующие" НЕ выделена
+					// тогда мы добавляем параметры для выборки только действующих
+					command.Parameters.AddWithValue("?AgencyEnabled", 1);
+					command.Parameters.AddWithValue("?Enabled", 1);
+					command.Parameters.AddWithValue("?FirmStatus", 1);
+				}
 
-                FilterParams = AddParams(shname, regcode, seg);
+				bool showOnlyEnabled = !chbShowDisabled.Checked;
+                FilterParams = AddParams(shname, regcode, seg, showOnlyEnabled);
 
-                dtClientsFill(FilterParams);
-                dtPricesFill(FilterParams);
-                dtPricesCostFill(FilterParams);
-                dtFormRulesFill(FilterParams);
-                dtCostsFormRulesFill(FilterParams);
+				dtClientsFill(FilterParams, showOnlyEnabled);
+				if (showOnlyEnabled)
+					FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
+                dtPricesFill(FilterParams, showOnlyEnabled);
+                dtPricesCostFill(FilterParams, showOnlyEnabled);
+				dtFormRulesFill(FilterParams, showOnlyEnabled);
+                dtCostsFormRulesFill(FilterParams, showOnlyEnabled);				
             }
         }
 
@@ -541,15 +571,34 @@ order by Format";
 
 				FilterParams = AddParams(shname, regcode, seg);
 
-				dtPricesCostFill(FilterParams);
-				dtCostsFormRulesFill(FilterParams);
+				dtPricesCostFill(FilterParams, false);
+				dtCostsFormRulesFill(FilterParams, false);
 			}
 		}
-
-        private void dtClientsFill(string param)
-        {
-            command.CommandText =
-                @"SELECT 
+		
+		private void dtClientsFill(string param, bool showOnlyEnabled)
+		{
+			if (showOnlyEnabled)
+			{
+				command.CommandText =
+					@"SELECT cd.FirmCode AS CCode,
+					cd.ShortName AS CShortName,
+					cd.FullName AS CFullName,
+					r.Region AS CRegion,
+                    cd.FirmSegment as CSegment
+				FROM usersettings.clientsdata cd
+				inner join farm.regions r on r.RegionCode = cd.RegionCode
+				WHERE firmcode in (
+					SELECT firmcode FROM usersettings.pricesdata PD where PD.pricecode in (
+						SELECT pricecode FROM usersettings.pricescosts where priceitemid in (
+							SELECT id FROM usersettings.priceitems 
+							WHERE datediff(curdate(), date(pricedate)) < 200)) and (PD.Enabled = 1) and (PD.AgencyEnabled = 1)
+				) and cd.firmtype = 0 ";
+			}
+			else
+			{
+				command.CommandText =
+				@"SELECT 
 					cd.FirmCode AS CCode,
 					cd.ShortName AS CShortName,
 					cd.FullName AS CFullName,
@@ -559,16 +608,20 @@ order by Format";
 					usersettings.clientsdata cd
                     inner join farm.regions r on r.RegionCode = cd.RegionCode
 				WHERE cd.firmtype = 0 ";
-            command.CommandText += param;
-            command.CommandText += " ORDER BY cd.ShortName";
+			}
+			command.CommandText += param;
+			command.CommandText += " ORDER BY cd.ShortName";
 
-            dataAdapter.Fill(dtClients);
-        }
-
-        private void dtPricesFill(string param)
-        {
-			//Выбираем прайс-листы с мультиколоночными ценами
-            command.CommandText =
+			dataAdapter.Fill(dtClients);
+		}
+		
+		private void dtPricesFill(string param, bool showOnlyEnabled)
+		{
+			string sqlPart = String.Empty;
+			if (showOnlyEnabled)
+				sqlPart += @"and (datediff(curdate(), date(pim.pricedate)) < 200)";
+			// Выбираем прайс-листы с мультиколоночными ценами
+			command.CommandText =
 @"
 SELECT
   pd.FirmCode as PFirmCode,
@@ -586,19 +639,22 @@ SELECT
 FROM
   usersettings.pricesdata pd
   inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
-  inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
+  inner join usersettings.PriceItems pim on (pim.Id = pc.PriceItemId) 
+"
++ sqlPart +
+@"	
   inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
   inner join farm.regions r on r.regioncode=cd.regioncode
-where
-    cd.FirmType = 0 
+where 
+    cd.FirmType = 0
 and ((pd.CostType = 1) or (pc.BaseCost = 1))";
-            command.CommandText += param;
-            command.CommandText += @" 
+			command.CommandText += param;
+			command.CommandText += @" 
 order by PPriceName";
 
-            dataAdapter.Fill(dtPrices);
-        }
+			dataAdapter.Fill(dtPrices);
+		}
 
         private void cbRegionsFill()
         {
@@ -623,10 +679,19 @@ Order By Region
             cbRegions.ValueMember = "RegionCode";
 
         }
+		
+		private void dtPricesCostFill(string param, bool showOnlyEnabled)
+		{
+			string sqlPart = String.Empty;
+			if (showOnlyEnabled)
+				sqlPart +=
+@"
+and pc.PriceItemId in (
+		SELECT Id FROM usersettings.priceitems
+		WHERE (datediff(curdate(), date(pricedate)) < 200))
+";
 
-        private void dtPricesCostFill(string param)
-        {
-            command.CommandText =
+			command.CommandText =
 @"
 select
   pc.PriceItemId as PCPriceItemId,
@@ -640,18 +705,28 @@ from
   inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
   inner join farm.regions r on r.regioncode=cd.regioncode
 where
-      cd.firmtype = 0
-";
-            command.CommandText += param;
-            command.CommandText += @"  
+      (cd.firmtype = 0) 
+" + sqlPart;
+			command.CommandText += param;
+			command.CommandText += @"  
 order by PCCostName";
 
 			dataAdapter.Fill(dtPricesCost);
-        }
+		}
+		
+		private void dtCostsFormRulesFill(string param, bool showOnlyEnabled)
+		{
+			string sqlPart = String.Empty;
+			if (showOnlyEnabled)
+				sqlPart +=
+@"
+	and pc.PriceItemId in (
+		SELECT Id 
+		FROM usersettings.PriceItems 
+		WHERE (datediff(curdate(), date(pricedate)) < 200))		
+";
 
-        private void dtCostsFormRulesFill(string param)
-        {
-            command.CommandText =
+			command.CommandText =
 @"
 select
   pc.PriceItemId as CFRPriceItemId,
@@ -663,7 +738,10 @@ select
   pc.BaseCost as CFRBaseCost
 FROM 
   farm.costformrules cfr
-  inner join usersettings.pricescosts pc on pc.CostCode = cfr.costcode
+  inner join usersettings.pricescosts pc on (pc.CostCode = cfr.costcode) 
+"
++ sqlPart +
+@"
   inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
   inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
   inner join farm.regions r on r.regioncode=cd.regioncode
@@ -671,15 +749,19 @@ where
      cd.firmtype = 0 
 and pd.CostType is not null
 ";
-            command.CommandText += param;
-            command.CommandText += @"   
+			command.CommandText += param;
+			command.CommandText += @"   
 order by CFRCostName";
 
-            dataAdapter.Fill(dtCostsFormRules);
-        }
+			dataAdapter.Fill(dtCostsFormRules);
+		}
 
-        private void dtFormRulesFill(string param)
+        private void dtFormRulesFill(string param, bool showOnlyEnabled)
         {
+			string sqlPart = String.Empty;
+			if (showOnlyEnabled)
+				sqlPart += @"and (datediff(curdate(), date(pim.pricedate)) < 200)";
+
             command.CommandText =
 				@"
 SELECT
@@ -795,12 +877,15 @@ FROM
   INNER JOIN UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0
   INNER JOIN farm.regions r on r.regioncode=cd.regioncode
   inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode
-  inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId
+  inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId 
+"
++ sqlPart +
+@"	
   inner join Farm.formrules AS FR ON FR.Id = pim.FormRuleId
   left join Farm.FormRules AS PFR ON PFR.id = ifnull(fr.ParentFormRules, FR.Id)
   left join Farm.PriceFMTs as pfmt on pfmt.id = PFR.PriceFormatId
 where
-  ((pd.CostType = 1) or (pc.BaseCost = 1))
+  ((pd.CostType = 1) or (pc.BaseCost = 1)) 
 ";
             command.CommandText += param;
             dataAdapter.Fill(dtFormRules);
@@ -1824,12 +1909,12 @@ order by PriceName
             {
                 dtSet.EnforceConstraints = true;
             }
-            dtClientsFill(String.Empty);
-            dtPricesFill(String.Empty);
-            dtPricesCostFill(String.Empty);
-            dtFormRulesFill(String.Empty);
+            dtClientsFill(String.Empty, false);
+            dtPricesFill(String.Empty, false);
+            dtPricesCostFill(String.Empty, false);
+            dtFormRulesFill(String.Empty, false);
             dtPriceFMTsFill();
-            dtCostsFormRulesFill(String.Empty);
+            dtCostsFormRulesFill(String.Empty, false);
             cbRegionsFill();
             dtSet.AcceptChanges();
         }
@@ -1856,8 +1941,7 @@ order by PriceName
         }
 
         private void tbControl_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            
+        {            
             if (tbControl.SelectedTab == tpFirms)
             {
                 SaveCostsSettings();
@@ -1909,6 +1993,9 @@ order by PriceName
 
 					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
+
+					indgvPriceData.CurrentCell = indgvPriceData.Rows[0].Cells[0];
+					indgvPriceData.Focus();
 				}
         }
 
@@ -2947,14 +3034,13 @@ WHERE
         {
 			if (e.KeyCode == Keys.Escape)
 				tbControl.SelectedTab = tpFirms;
-			//else
 			//    if (e.Control && (e.KeyCode == Keys.F))
 			//    {
 			//        using (frmPriceDataSearch frm = new frmPriceDataSearch((INDataGridView)sender))
 			//        {
 			//            frm.ShowDialog();
 			//        }
-			//    }			 
+			//    }		
         }
 
         private void indgvPriceData_MouseDown(object sender, MouseEventArgs e)
@@ -3172,24 +3258,35 @@ WHERE
 				// Если была первоначальная настройка прайс-листа, тогда
 				// не позволяем редактировать тип колонок (с мультифайловых на мультиколоночные)
 				INDataGridView grid = (sender as INDataGridView);
-				bool isCostTypeColumn = (grid.CurrentCell.ColumnIndex == (grid.ColumnCount - 1));
+				bool isCostTypeColumn = (grid.CurrentCell.ColumnIndex == 
+					pCostTypeDataGridViewComboBoxColumn.Index);
 				if (isCostTypeColumn)
 				{
 					string priceItemId = Convert.ToString(((DataRowView)indgvPrice.CurrentCell
 						.OwningRow.DataBoundItem)["PPriceItemId"]);
-					bool priceEdited = priceWasEdited(priceItemId);
+					bool priceEdited = PriceWasEdited(priceItemId);
 					((ComboBox)e.Control).Enabled = !priceEdited;
 					indgvPrice.CurrentCell.ReadOnly = priceEdited;
 				}
 			}
 		}
 
-		private bool priceWasEdited(string priceItemId)
-		{
-			DataRow[] drPrice = dtPrices.Select("PPriceItemId = " + priceItemId);
-			string costType = Convert.ToString(drPrice[0]["PCostType"]);
-			DataRow[] rowsPI = drPrice[0].GetChildRows(dtPrices.ChildRelations[2]);
-			string format = Convert.ToString(rowsPI[0]["FRPriceFormatId"]);
+		// Проверяет, была ли уже настройка прайса
+		private bool PriceWasEdited(string priceItemId)
+		{			
+			var drPrice = dtPrices.Select("PPriceItemId = " + priceItemId);
+			string format;
+			string costType;
+			try
+			{
+				costType = Convert.ToString(drPrice[0]["PCostType"]);
+				var rowPriceItems = drPrice[0].GetChildRows(dtPrices.ChildRelations[2]);
+				format = Convert.ToString(rowPriceItems[0]["FRPriceFormatId"]);
+			}
+			catch (Exception)
+			{
+				return false;
+			}
 			return (format.Length != 0) && (costType.Length != 0);
 		}
 
@@ -3303,12 +3400,12 @@ and p.Id = f.PriceFormatID",
 				// Проверяем, если была первоначальная настройка прайс-листа,
 				// то не выделяем колонки серым цветом (неактивные)
 				INDataGridView inGridView = (sender as INDataGridView);
-				bool isCostTypeColumn = (e.ColumnIndex == (inGridView.ColumnCount - 1));
+				bool isCostTypeColumn = (e.ColumnIndex == pCostTypeDataGridViewComboBoxColumn.Index);
 				if (isCostTypeColumn)
 				{
 					string priceItemId = Convert.ToString(((DataRowView)indgvPrice
 						.Rows[e.RowIndex].DataBoundItem)["PPriceItemId"]);
-					if (priceWasEdited(priceItemId))
+					if (PriceWasEdited(priceItemId))
 					{
 						e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
 					}
@@ -3373,27 +3470,30 @@ order by PriceName
 		{
 			//По двойному клику на ячейках FieldName, TextBegin, TextEnd в таблице настройки правил формализации цен
 			//очищаем данные поля
-			if ((indgvCosts.Columns[e.ColumnIndex] == cFRFieldNameDataGridViewTextBoxColumn)
-				|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextBeginDataGridViewTextBoxColumn)
-				|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextEndDataGridViewTextBoxColumn))
+			if (e.ColumnIndex > 0)
 			{
-				DataGridViewRow row = indgvCosts.Rows[e.RowIndex];
-				DataRowView drv = (DataRowView)row.DataBoundItem;
-
-				//Если запись не является помеченной на удаление, то позволяем редактировать
-				if (!(bool)drv[CFRDeleted.ColumnName])
+				if ((indgvCosts.Columns[e.ColumnIndex] == cFRFieldNameDataGridViewTextBoxColumn)
+					|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextBeginDataGridViewTextBoxColumn)
+					|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextEndDataGridViewTextBoxColumn))
 				{
-					drv.BeginEdit();
-					if (pnlGeneralFields.Visible)
+					DataGridViewRow row = indgvCosts.Rows[e.RowIndex];
+					DataRowView drv = (DataRowView)row.DataBoundItem;
+
+					//Если запись не является помеченной на удаление, то позволяем редактировать
+					if (!(bool)drv[CFRDeleted.ColumnName])
 					{
-						drv[cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+						drv.BeginEdit();
+						if (pnlGeneralFields.Visible)
+						{
+							drv[cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+						}
+						else
+						{
+							drv[cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+							drv[cFRTextEndDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
+						}
+						drv.EndEdit();
 					}
-					else
-					{
-						drv[cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
-						drv[cFRTextEndDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
-					}
-					drv.EndEdit();
 				}
 			}
 		}
@@ -3667,6 +3767,84 @@ order by PriceName
 						MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					}
 				}				
+			}
+		}
+
+		private void chbShowDisabled_CheckedChanged(object sender, EventArgs e)
+		{
+			FillTables(shortNameFilter, regionCodeFilter, segmentFilter);
+			indgvFirm.Focus();
+		}
+
+		// Обработчик для таймера, использующегося для поиска 
+		// по колонкам прайс-листа (вкладка "Прайс")
+		private void tmrSearchInPrice_Tick(object sender, EventArgs e)
+		{
+			// Если длина искомого текста совпадает с длиной текста 
+			// в предыдущем тике (это значение хранится в св-ве Tag),
+			// тогда накапливаем время бездействия
+			if (_searchTextInPrice.Length == Convert.ToInt64(tmrSearchInPrice.Tag))
+			{				
+				_inactivityTime += tmrSearchInPrice.Interval;
+				// Если время бездействия превысило 1 секунды, 
+				// очищаем строку с искомым текстом и выключаем таймер (поиск завершен)
+				if (_inactivityTime > 1000)
+				{
+					_searchTextInPrice = String.Empty;
+					tmrSearchInPrice.Enabled = false;
+					_inactivityTime = 0;
+				}
+			}
+			else
+			{
+				// Если длина текста изменилась, тогда обнуляем время бездействия
+				_inactivityTime = 0;
+				tmrSearchInPrice.Tag = Convert.ToInt64(_searchTextInPrice.Length);
+				// Ищем текст и ставим указатель в нужное место
+				SearchTextInGridView(_searchTextInPrice, indgvPriceData);
+			}
+		}
+
+		private bool SearchTextInGridView(string text, DataGridView grid)
+		{
+			// Сначала ищем по заголовкам столбцов
+			foreach (DataGridViewColumn column in grid.Columns)
+			{
+				if (column.HeaderText.ToUpper().Contains(text.ToUpper()))
+				{
+					var rowIndex = grid.CurrentRow.Index;
+					grid.CurrentCell = grid.Rows[rowIndex].Cells[column.Index];
+					return true;
+				}
+			}
+			// Потом ищем по ячейкам. Сначала по тем, которые ниже текущей
+			for (int i = grid.CurrentRow.Index; i < grid.Rows.Count; i++)
+				foreach (DataGridViewCell cell in grid.Rows[i].Cells)
+					if (cell.Value != null)
+						if (cell.Value.ToString().ToUpper().Contains(text.ToUpper()))
+						{							
+							grid.CurrentCell = grid.Rows[i].Cells[cell.ColumnIndex];
+							return true;
+						}
+			// Затем сначала и до текущей строки 
+			for (int i = 0; i < grid.CurrentRow.Index; i++)
+				foreach (DataGridViewCell cell in grid.Rows[i].Cells)
+					if (cell.Value != null)
+						if (cell.Value.ToString().ToUpper().Contains(text.ToUpper()))
+						{
+							grid.CurrentCell = grid.Rows[i].Cells[cell.ColumnIndex];
+							return true;
+						}
+			return false;
+		}
+
+		private void indgvPriceData_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			_searchTextInPrice += e.KeyChar;
+			if (!tmrSearchInPrice.Enabled)
+			{
+				tmrSearchInPrice.Enabled = true;
+				tmrSearchInPrice.Tag = Convert.ToInt32(0);
 			}
 		}
     }
