@@ -81,6 +81,8 @@ namespace FREditor
 
     public partial class frmFREMain : System.Windows.Forms.Form
     {
+		private bool _isFormatChanged = false;
+
         ArrayList gds = new ArrayList();
         ArrayList dtables = new ArrayList();
         ArrayList tblstyles = new ArrayList();
@@ -104,6 +106,13 @@ namespace FREditor
         string listName = String.Empty;
         string delimiter = String.Empty;
 		PriceFormat? fmt = null;
+
+		// Предыдущий формат (чтобы при нажатии "Применить", 
+		// можно было бы определить, менялся ли формат прайса)
+		private PriceFormat? _prevFmt = null;
+
+		private string _prevDelimiter = String.Empty;
+
 		//Текущий клиент, с которым происходит работа и текущий прайс
 		long currentPriceItemId = 0;
 		long currentClientCode = 0;
@@ -943,7 +952,10 @@ where
 
 			string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
 
-            fmt = (drFR[0]["FRPriceFormatId"] is DBNull) ? null : (PriceFormat?)Convert.ToInt32(drFR[0]["FRPriceFormatId"]);
+			// Сохраняем предыдущий формат
+			_prevFmt = fmt;
+            fmt = (drFR[0]["FRPriceFormatId"] is DBNull) ? null : 
+				(PriceFormat?)Convert.ToInt32(drFR[0]["FRPriceFormatId"]);
 
 			//Делаем фильтрацию по форматам прайс-листа
 			CurrencyManager cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);
@@ -1029,6 +1041,7 @@ order by PriceName
             if (exts.Length == 1)
                 r = exts[0]["FMTExt"].ToString();
 
+			_prevDelimiter = delimiter;
             delimiter = drFR[0]["FRDelimiter"].ToString();
 
             string takeFile = shortFileNameByPriceItemId + r;
@@ -1044,38 +1057,42 @@ order by PriceName
 					fileExist = true;
 					string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
 
-					Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
+					if (!_isFormatChanged)
+					{
 
-					if (File.Exists(filePath))
-						File.Delete(filePath);
+						Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
 
-                    IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
-                    try
-                    {
-                        using (Stream _openFile = _clientProxy.BaseFile(
-                            Convert.ToUInt32(shortFileNameByPriceItemId)))
-                        {
-                            using (FileStream _fileStream = File.Create(filePath))
-                            {
-                                CopyStreams(_openFile, _fileStream);
-                            }
-                        }
-                        ((ICommunicationObject)_clientProxy).Close();
-                    }
-                    catch (FaultException fex)
-                    {
-                        MessageBox.Show(fex.Reason.ToString(), "Ошибка", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-                            ((ICommunicationObject)_clientProxy).Abort();                        
-                        return;
-                    }
-                    catch (Exception)
-                    {
-                        if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-                            ((ICommunicationObject)_clientProxy).Abort();
-                        throw;
-                    }
+						if (File.Exists(filePath))
+							File.Delete(filePath);
+
+						IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
+						try
+						{
+							using (Stream _openFile = _clientProxy.BaseFile(
+								Convert.ToUInt32(shortFileNameByPriceItemId)))
+							{
+								using (FileStream _fileStream = File.Create(filePath))
+								{
+									CopyStreams(_openFile, _fileStream);
+								}
+							}
+							((ICommunicationObject)_clientProxy).Close();
+						}
+						catch (FaultException fex)
+						{
+							MessageBox.Show(fex.Reason.ToString(), "Ошибка",
+								MessageBoxButtons.OK, MessageBoxIcon.Error);
+							if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+								((ICommunicationObject)_clientProxy).Abort();
+							return;
+						}
+						catch (Exception)
+						{
+							if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+								((ICommunicationObject)_clientProxy).Abort();
+							throw;
+						}
+					}
 
 					Application.DoEvents();
 
@@ -1941,7 +1958,7 @@ order by PriceName
         }
 
         private void tbControl_SelectedIndexChanged(object sender, System.EventArgs e)
-        {            
+        {
             if (tbControl.SelectedTab == tpFirms)
             {
                 SaveCostsSettings();
@@ -1956,6 +1973,8 @@ order by PriceName
 				tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
                 tmrUpdateApply.Stop();
+				this.cmbFormat.SelectedIndexChanged -= 
+					new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
             }
             else
                 if (tbControl.SelectedTab == tpPrice)
@@ -1995,8 +2014,10 @@ order by PriceName
                     tmrUpdateApply.Start();
 
 					indgvPriceData.CurrentCell = indgvPriceData.Rows[0].Cells[0];
-					indgvPriceData.Focus();
-				}
+					tbSearchInPrice.Focus();
+					this.cmbFormat.SelectedIndexChanged += 
+						new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+				}			
         }
 
 		private void RefreshDataBind()
@@ -2256,14 +2277,10 @@ and c.Type = ?ContactType;",
             if (pnlFloat.Visible)
             {
                 pnlFloat.Visible = false;
-                if (!(fmt.Equals((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue))) || !(delimiter.Equals(tbDevider.Text)))
-                    DoOpenPrice(openedPriceDR);
-                
                 foreach (INDataGridView indg in gds)
                 {
                     indg.RowHeadersVisible = false;
                 }
-
             }
             else
             {
@@ -2274,7 +2291,8 @@ and c.Type = ?ContactType;",
 
         private void btnFloatPanel_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
-            e.Graphics.DrawString("Настройки", btnFloatPanel.Font, Brushes.Black, btnFloatPanel.ClientRectangle, new System.Drawing.StringFormat(sf));
+            e.Graphics.DrawString("Настройки", btnFloatPanel.Font, Brushes.Black, 
+				btnFloatPanel.ClientRectangle, new System.Drawing.StringFormat(sf));
         }
 
         private void btnAwaitCheck_Click(object sender, System.EventArgs e)
@@ -2588,6 +2606,31 @@ and c.Type = ?ContactType;",
 
         private void tsbApply_Click(object sender, EventArgs e)
         {
+			string filePath = String.Empty;
+			// Если изменился формат или разделитель
+			if ((_prevFmt != fmt) || !(_prevDelimiter != delimiter))
+			{
+				var priceFormat = (PriceFormat)Enum.Parse(typeof(PriceFormat),
+					(cmbFormat.SelectedItem as DataRowView)[0].ToString());
+				string fileExt = "";
+				// Получить расширение для нового формата
+				DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + priceFormat + "'");
+				if (exts.Length == 1)
+					fileExt = exts[0]["FMTExt"].ToString();
+
+				CurrencyManager currencyManager =
+					(CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+				var drv = (DataRowView)currencyManager.Current;
+				var drP = drv.Row;
+				var drFR = dtFormRules.Select("FRPriceItemId = " +
+					drP[PPriceItemId.ColumnName].ToString());
+				// Получить разделитель
+				delimiter = drFR[0]["FRDelimiter"].ToString();
+				string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
+				string takeFile = shortFileNameByPriceItemId + fileExt;
+				filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;			
+			}
+
             CommitAllEdit();
             DataSet chg = dtSet.GetChanges();
             if (chg != null)
@@ -2761,6 +2804,42 @@ and fr.Id = pim.FormRuleId;
             }
             tsbApply.Enabled = false;
             tsbCancel.Enabled = false;
+
+			if ((_prevFmt != fmt) || (_prevDelimiter != delimiter))
+			{
+				using (FilePriceInfo filePriceInfo = new FilePriceInfo())
+				{
+					filePriceInfo.Stream = File.OpenRead(filePath);
+					filePriceInfo.PriceItemId = Convert.ToUInt32(currentPriceItemId);
+					try
+					{
+						IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
+						try
+						{
+							_clientProxy.PutFileToBase(filePriceInfo);
+							((ICommunicationObject)_clientProxy).Close();
+						}
+						catch (FaultException fex)
+						{
+							MessageBox.Show(fex.Reason.ToString(), "Ошибка", MessageBoxButtons.OK,
+								MessageBoxIcon.Error);
+							if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+								((ICommunicationObject)_clientProxy).Abort();
+							return;
+						}
+						catch (Exception)
+						{
+							if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
+								((ICommunicationObject)_clientProxy).Abort();
+							throw;
+						}
+					}
+					catch (RemotePriceProcessor.PriceProcessorException priceProcessorException)
+					{
+						MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					}
+				}	
+			}
         }
 
 		private void SendNotificationLetter(string body, string priceName, string providerName, string regionName)
@@ -3846,6 +3925,71 @@ order by PriceName
 				tmrSearchInPrice.Enabled = true;
 				tmrSearchInPrice.Tag = Convert.ToInt32(0);
 			}
+		}
+
+		private void tbSearchInPrice_TextChanged(object sender, EventArgs e)
+		{
+			if (tbSearchInPrice.Text.Length > 0)
+			{
+				tbSearchInPrice.ForeColor = Color.White;
+				if (SearchTextInGridView(tbSearchInPrice.Text, indgvPriceData))
+					tbSearchInPrice.BackColor = Color.Green;
+				else
+					tbSearchInPrice.BackColor = Color.Red;
+			}
+			else
+			{
+				tbSearchInPrice.ForeColor = Color.Black;
+				tbSearchInPrice.BackColor = Color.White;
+			}
+		}
+
+		private void cmbFormat_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.cmbFormat.SelectedIndexChanged -= 
+				new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+
+			// Если формат прайса или разделитель был изменен
+			if (!(fmt.Equals((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue))) ||
+				!(delimiter.Equals(tbDevider.Text)))
+			{
+				var priceFormat = (PriceFormat)Enum.Parse(typeof(PriceFormat), 
+					(cmbFormat.SelectedItem as DataRowView)[0].ToString());
+				string fileExt = "";
+				// Получить расширение для нового формата
+				DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + priceFormat + "'");
+				if (exts.Length == 1)
+					fileExt = exts[0]["FMTExt"].ToString();
+				ofdNewFormat.Filter = priceFormat.ToString() + "|*" + fileExt;
+				ofdNewFormat.Title = "Выберите файл в новом формате (" + priceFormat.ToString() + ")";
+				// Если мы получили от пользователя новый файл в нужном формате
+				if (ofdNewFormat.ShowDialog() == DialogResult.OK)
+				{
+					// Получаем имя файла, хранящегося в локальном Temp
+					CurrencyManager currencyManager = 
+						(CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+					var drv = (DataRowView)currencyManager.Current;
+					var drP = drv.Row;
+					var drFR = dtFormRules.Select("FRPriceItemId = " + 
+						drP[PPriceItemId.ColumnName].ToString());
+					string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
+					string takeFile = shortFileNameByPriceItemId + fileExt;
+					string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
+					using (var readStream = File.OpenRead(ofdNewFormat.FileName))
+					{
+						using (var writeStream = File.OpenWrite(filePath))
+						{
+							writeStream.Seek(0, SeekOrigin.Begin);
+							CopyStreams(readStream, writeStream);
+						}
+					}
+					_isFormatChanged = true;
+					DoOpenPrice(drP);
+					_isFormatChanged = false;
+				}
+			}
+			this.cmbFormat.SelectedIndexChanged +=
+				new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
 		}
     }
 

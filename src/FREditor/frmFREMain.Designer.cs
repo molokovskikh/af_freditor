@@ -224,6 +224,9 @@ namespace FREditor
 			this.tcInnerSheets = new System.Windows.Forms.TabControl();
 			this.tbpSheet1 = new System.Windows.Forms.TabPage();
 			this.indgvPriceData = new Inforoom.WinForms.INDataGridView();
+			this.panel4 = new System.Windows.Forms.Panel();
+			this.tbSearchInPrice = new System.Windows.Forms.TextBox();
+			this.label23 = new System.Windows.Forms.Label();
 			this.tbpMarking = new System.Windows.Forms.TabPage();
 			this.indgvMarking = new Inforoom.WinForms.INDataGridView();
 			this.MNameFieldINDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
@@ -387,6 +390,9 @@ namespace FREditor
 			this.tmrCostSearch = new System.Windows.Forms.Timer(this.components);
 			this.tmrSetNewCost = new System.Windows.Forms.Timer(this.components);
 			this.tmrSearchInPrice = new System.Windows.Forms.Timer(this.components);
+			this.tbSearch = new System.Windows.Forms.TextBox();
+			this.label14 = new System.Windows.Forms.Label();
+			this.ofdNewFormat = new System.Windows.Forms.OpenFileDialog();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -414,6 +420,7 @@ namespace FREditor
 			this.tcInnerSheets.SuspendLayout();
 			this.tbpSheet1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.indgvPriceData)).BeginInit();
+			this.panel4.SuspendLayout();
 			this.tbpMarking.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.indgvMarking)).BeginInit();
 			this.panel1.SuspendLayout();
@@ -1744,6 +1751,7 @@ namespace FREditor
 			// tbpSheet1
 			// 
 			this.tbpSheet1.Controls.Add(this.indgvPriceData);
+			this.tbpSheet1.Controls.Add(this.panel4);
 			this.tbpSheet1.Location = new System.Drawing.Point(4, 5);
 			this.tbpSheet1.Name = "tbpSheet1";
 			this.tbpSheet1.Size = new System.Drawing.Size(944, 489);
@@ -1771,7 +1779,7 @@ namespace FREditor
 			this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle8;
 			this.indgvPriceData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvPriceData.HideEmptyColumns = false;
-			this.indgvPriceData.Location = new System.Drawing.Point(0, 0);
+			this.indgvPriceData.Location = new System.Drawing.Point(0, 29);
 			this.indgvPriceData.Name = "indgvPriceData";
 			this.indgvPriceData.ReadOnly = true;
 			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1783,11 +1791,35 @@ namespace FREditor
 			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.indgvPriceData.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
 			this.indgvPriceData.RowHeadersVisible = false;
-			this.indgvPriceData.Size = new System.Drawing.Size(944, 489);
-			this.indgvPriceData.TabIndex = 2;
-			this.indgvPriceData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.indgvPriceData_MouseDown);
-			this.indgvPriceData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvPriceData_KeyDown);
-			this.indgvPriceData.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvPriceData_KeyPress);
+			this.indgvPriceData.Size = new System.Drawing.Size(944, 460);
+			this.indgvPriceData.TabIndex = 3;
+			// 
+			// panel4
+			// 
+			this.panel4.Controls.Add(this.tbSearchInPrice);
+			this.panel4.Controls.Add(this.label23);
+			this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
+			this.panel4.Location = new System.Drawing.Point(0, 0);
+			this.panel4.Name = "panel4";
+			this.panel4.Size = new System.Drawing.Size(944, 29);
+			this.panel4.TabIndex = 0;
+			// 
+			// tbSearchInPrice
+			// 
+			this.tbSearchInPrice.Location = new System.Drawing.Point(52, 4);
+			this.tbSearchInPrice.Name = "tbSearchInPrice";
+			this.tbSearchInPrice.Size = new System.Drawing.Size(159, 20);
+			this.tbSearchInPrice.TabIndex = 1;
+			this.tbSearchInPrice.TextChanged += new System.EventHandler(this.tbSearchInPrice_TextChanged);
+			// 
+			// label23
+			// 
+			this.label23.AutoSize = true;
+			this.label23.Location = new System.Drawing.Point(5, 6);
+			this.label23.Name = "label23";
+			this.label23.Size = new System.Drawing.Size(39, 13);
+			this.label23.TabIndex = 0;
+			this.label23.Text = "Поиск";
 			// 
 			// tbpMarking
 			// 
@@ -3713,6 +3745,22 @@ namespace FREditor
 			this.tmrSearchInPrice.Interval = 200;
 			this.tmrSearchInPrice.Tick += new System.EventHandler(this.tmrSearchInPrice_Tick);
 			// 
+			// tbSearch
+			// 
+			this.tbSearch.Location = new System.Drawing.Point(54, 3);
+			this.tbSearch.Name = "tbSearch";
+			this.tbSearch.Size = new System.Drawing.Size(190, 20);
+			this.tbSearch.TabIndex = 6;
+			// 
+			// label14
+			// 
+			this.label14.AutoSize = true;
+			this.label14.Location = new System.Drawing.Point(5, 6);
+			this.label14.Name = "label14";
+			this.label14.Size = new System.Drawing.Size(39, 13);
+			this.label14.TabIndex = 5;
+			this.label14.Text = "Поиск";
+			// 
 			// frmFREMain
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -3755,6 +3803,8 @@ namespace FREditor
 			this.tcInnerSheets.ResumeLayout(false);
 			this.tbpSheet1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.indgvPriceData)).EndInit();
+			this.panel4.ResumeLayout(false);
+			this.panel4.PerformLayout();
 			this.tbpMarking.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.indgvMarking)).EndInit();
 			this.panel1.ResumeLayout(false);
@@ -3999,8 +4049,7 @@ namespace FREditor
         private MySql.Data.MySqlClient.MySqlDataAdapter daFormRules;
         private System.Windows.Forms.ToolTip ttMain;
 		private System.Windows.Forms.Timer tmrUpdateApply;
-        private Inforoom.WinForms.INDataGridView indgvCosts;
-        private Inforoom.WinForms.INDataGridView indgvPriceData;
+		private Inforoom.WinForms.INDataGridView indgvCosts;
         private Inforoom.WinForms.INDataGridView indgvMarking;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn MNameFieldINDataGridViewTextBoxColumn;
         private Inforoom.WinForms.INDataGridViewTextBoxColumn MBeginFieldINDataGridViewTextBoxColumn;
@@ -4126,5 +4175,12 @@ namespace FREditor
 		private System.Windows.Forms.Button btnPutToBase;
 		private System.Windows.Forms.CheckBox chbShowDisabled;
 		private System.Windows.Forms.Timer tmrSearchInPrice;
+		private System.Windows.Forms.TextBox tbSearch;
+		private System.Windows.Forms.Label label14;
+		private Inforoom.WinForms.INDataGridView indgvPriceData;
+		private System.Windows.Forms.Panel panel4;
+		private System.Windows.Forms.TextBox tbSearchInPrice;
+		private System.Windows.Forms.Label label23;
+		private System.Windows.Forms.OpenFileDialog ofdNewFormat;
     }
 }
