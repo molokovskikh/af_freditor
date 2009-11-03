@@ -72,7 +72,7 @@ namespace FREditor
 		FixedDOS,
 		NativeDbf,
 		Sudakov,
-		NativeXLS,
+		NativeXls,
 		NativeDelimWIN,
 		NativeDelimDOS,
 		NativeFixedWIN,
@@ -153,6 +153,8 @@ namespace FREditor
 		// ѕоле дл€ подсчета времени бездействи€ пользовател€ 
 		// при поиске внутри колонок прайс-листа
 		private int _inactivityTime = 0;
+
+		private DataGridView _searchGrid;
 
         public frmFREMain()
         {
@@ -969,7 +971,7 @@ where
 							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 6, 7, 8, 10))";
 							break;
 
-						case PriceFormat.NativeXLS:
+						case PriceFormat.NativeXls:
 							//«апрещаем устаревшие текстовые форматы, DBF и XLS
 							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 4, 6, 7))";
 							break;
@@ -1101,7 +1103,7 @@ order by PriceName
 						OpenDBFFile(filePath);
 					}
 					else
-						if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXLS))
+						if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls))
 						{
 							listName = drFR[0]["FRListName"].ToString();
 							OpenEXLFile(filePath);
@@ -1169,7 +1171,7 @@ order by PriceName
 					break;
 
 				case PriceFormat.XLS:
-				case PriceFormat.NativeXLS:
+				case PriceFormat.NativeXls:
 
 					lBoxSheetName.Visible = true;
 					txtBoxSheetName.Visible = true;
@@ -1286,7 +1288,7 @@ order by PriceName
 					break;
 
 				case PriceFormat.XLS:
-				case PriceFormat.NativeXLS:
+				case PriceFormat.NativeXls:
 					tcInnerTable.SizeMode = TabSizeMode.Fixed;
 					tcInnerTable.ItemSize = new Size(0, 1);
 					tcInnerTable.Appearance = TabAppearance.Buttons;
@@ -1359,11 +1361,11 @@ order by PriceName
                     DataTable TableNames = dbcMain.GetOleDbSchemaTable(OleDbSchemaGuid.Tables,
                         new object[] { null, null, null, "TABLE" });
                     string[] Sheet = null;
+
                     Sheet = new string[TableNames.Rows.Count];
 
                     Sheet[0] = (string)TableNames.Rows[0]["TABLE_NAME"];
                     tbpSheet1.Text = Sheet[0];
-
                     INDataGridView indgv;
                     for (int i = 1; i < TableNames.Rows.Count; i++)
                     {
@@ -1385,6 +1387,7 @@ order by PriceName
                             indgv.ReadOnly = true;
                             indgv.RowHeadersVisible = false;
                             indgv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.indgvPriceData_MouseDown);
+							indgv.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvPriceData_KeyPress);
                             foreach (DataGridViewTextBoxColumn dc in indgv.Columns)
                                 dc.Width = 300;
                             gds.Add(indgv);
@@ -1961,7 +1964,9 @@ order by PriceName
         {
             if (tbControl.SelectedTab == tpFirms)
             {
-                SaveCostsSettings();
+				this.cmbFormat.SelectedIndexChanged -=
+					new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+				SaveCostsSettings();
                 bsCostsFormRules.Filter = String.Empty;
                 bsFormRules.Filter = String.Empty;
                 bsCostsFormRules.SuspendBinding();
@@ -1973,8 +1978,6 @@ order by PriceName
 				tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
                 tmrUpdateApply.Stop();
-				this.cmbFormat.SelectedIndexChanged -= 
-					new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
             }
             else
                 if (tbControl.SelectedTab == tpPrice)
@@ -2014,7 +2017,8 @@ order by PriceName
                     tmrUpdateApply.Start();
 
 					indgvPriceData.CurrentCell = indgvPriceData.Rows[0].Cells[0];
-					tbSearchInPrice.Focus();
+					indgvPriceData.Focus();
+					tbSearchInPrice.Text = String.Empty;
 					this.cmbFormat.SelectedIndexChanged += 
 						new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
 				}			
@@ -2608,7 +2612,7 @@ and c.Type = ?ContactType;",
         {
 			string filePath = String.Empty;
 			// ≈сли изменилс€ формат или разделитель
-			if ((_prevFmt != fmt) || !(_prevDelimiter != delimiter))
+			if ((_prevFmt != fmt) || (_prevDelimiter != delimiter))
 			{
 				var priceFormat = (PriceFormat)Enum.Parse(typeof(PriceFormat),
 					(cmbFormat.SelectedItem as DataRowView)[0].ToString());
@@ -3859,33 +3863,17 @@ order by PriceName
 		// по колонкам прайс-листа (вкладка "ѕрайс")
 		private void tmrSearchInPrice_Tick(object sender, EventArgs e)
 		{
-			// ≈сли длина искомого текста совпадает с длиной текста 
-			// в предыдущем тике (это значение хранитс€ в св-ве Tag),
-			// тогда накапливаем врем€ бездействи€
-			if (_searchTextInPrice.Length == Convert.ToInt64(tmrSearchInPrice.Tag))
-			{				
-				_inactivityTime += tmrSearchInPrice.Interval;
-				// ≈сли врем€ бездействи€ превысило 1 секунды, 
-				// очищаем строку с искомым текстом и выключаем таймер (поиск завершен)
-				if (_inactivityTime > 1000)
-				{
-					_searchTextInPrice = String.Empty;
-					tmrSearchInPrice.Enabled = false;
-					_inactivityTime = 0;
-				}
-			}
-			else
+			_inactivityTime += tmrSearchInPrice.Interval;
+			if (_inactivityTime > 2000)
 			{
-				// ≈сли длина текста изменилась, тогда обнул€ем врем€ бездействи€
-				_inactivityTime = 0;
-				tmrSearchInPrice.Tag = Convert.ToInt64(_searchTextInPrice.Length);
-				// »щем текст и ставим указатель в нужное место
-				SearchTextInGridView(_searchTextInPrice, indgvPriceData);
+				tmrSearchInPrice.Enabled = false;			
 			}
 		}
 
 		private bool SearchTextInGridView(string text, DataGridView grid)
 		{
+			if (grid == null)
+				grid = indgvPriceData;
 			// —начала ищем по заголовкам столбцов
 			foreach (DataGridViewColumn column in grid.Columns)
 			{
@@ -3919,12 +3907,22 @@ order by PriceName
 
 		private void indgvPriceData_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			_searchTextInPrice += e.KeyChar;
+			_searchGrid = (sender as DataGridView);
 			if (!tmrSearchInPrice.Enabled)
 			{
 				tmrSearchInPrice.Enabled = true;
-				tmrSearchInPrice.Tag = Convert.ToInt32(0);
+				_searchTextInPrice = String.Empty;
+				tbSearchInPrice.Text = _searchTextInPrice;
 			}
+			if (e.KeyChar.Equals('\b'))
+			{
+				if (tbSearchInPrice.Text.Length > 0)
+					tbSearchInPrice.Text = tbSearchInPrice.Text.Remove(
+						tbSearchInPrice.Text.Length - 1, 1);
+			}
+			else
+				tbSearchInPrice.Text += e.KeyChar;
+			_inactivityTime = 0;
 		}
 
 		private void tbSearchInPrice_TextChanged(object sender, EventArgs e)
@@ -3932,7 +3930,7 @@ order by PriceName
 			if (tbSearchInPrice.Text.Length > 0)
 			{
 				tbSearchInPrice.ForeColor = Color.White;
-				if (SearchTextInGridView(tbSearchInPrice.Text, indgvPriceData))
+				if (SearchTextInGridView(tbSearchInPrice.Text, _searchGrid))
 					tbSearchInPrice.BackColor = Color.Green;
 				else
 					tbSearchInPrice.BackColor = Color.Red;
@@ -3990,6 +3988,14 @@ order by PriceName
 			}
 			this.cmbFormat.SelectedIndexChanged +=
 				new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+		}
+
+		private void tbDevider_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				cmbFormat_SelectedIndexChanged(sender, e);
+			}
 		}
     }
 

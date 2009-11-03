@@ -1652,6 +1652,7 @@ namespace FREditor
 			this.tbDevider.Size = new System.Drawing.Size(92, 20);
 			this.tbDevider.TabIndex = 15;
 			this.tbDevider.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
+			this.tbDevider.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDevider_KeyDown);
 			// 
 			// lblPosition
 			// 
@@ -1727,6 +1728,7 @@ namespace FREditor
 			// tbpTable
 			// 
 			this.tbpTable.Controls.Add(this.tcInnerSheets);
+			this.tbpTable.Controls.Add(this.panel4);
 			this.tbpTable.Location = new System.Drawing.Point(4, 5);
 			this.tbpTable.Name = "tbpTable";
 			this.tbpTable.Size = new System.Drawing.Size(952, 498);
@@ -1739,22 +1741,19 @@ namespace FREditor
 			this.tcInnerSheets.Controls.Add(this.tbpSheet1);
 			this.tcInnerSheets.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tcInnerSheets.ItemSize = new System.Drawing.Size(0, 1);
-			this.tcInnerSheets.Location = new System.Drawing.Point(0, 0);
+			this.tcInnerSheets.Location = new System.Drawing.Point(0, 27);
 			this.tcInnerSheets.Name = "tcInnerSheets";
 			this.tcInnerSheets.SelectedIndex = 0;
-			this.tcInnerSheets.Size = new System.Drawing.Size(952, 498);
+			this.tcInnerSheets.Size = new System.Drawing.Size(952, 471);
 			this.tcInnerSheets.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-			this.tcInnerSheets.TabIndex = 0;
-			this.tcInnerSheets.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tcInnerSheets_MouseDown);
-			this.tcInnerSheets.SelectedIndexChanged += new System.EventHandler(this.tcInnerSheets_SelectedIndexChanged);
+			this.tcInnerSheets.TabIndex = 1;
 			// 
 			// tbpSheet1
 			// 
 			this.tbpSheet1.Controls.Add(this.indgvPriceData);
-			this.tbpSheet1.Controls.Add(this.panel4);
 			this.tbpSheet1.Location = new System.Drawing.Point(4, 5);
 			this.tbpSheet1.Name = "tbpSheet1";
-			this.tbpSheet1.Size = new System.Drawing.Size(944, 489);
+			this.tbpSheet1.Size = new System.Drawing.Size(944, 462);
 			this.tbpSheet1.TabIndex = 0;
 			this.tbpSheet1.Text = "sheet1";
 			// 
@@ -1779,7 +1778,7 @@ namespace FREditor
 			this.indgvPriceData.DefaultCellStyle = dataGridViewCellStyle8;
 			this.indgvPriceData.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvPriceData.HideEmptyColumns = false;
-			this.indgvPriceData.Location = new System.Drawing.Point(0, 29);
+			this.indgvPriceData.Location = new System.Drawing.Point(0, 0);
 			this.indgvPriceData.Name = "indgvPriceData";
 			this.indgvPriceData.ReadOnly = true;
 			dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1791,8 +1790,9 @@ namespace FREditor
 			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.indgvPriceData.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
 			this.indgvPriceData.RowHeadersVisible = false;
-			this.indgvPriceData.Size = new System.Drawing.Size(944, 460);
+			this.indgvPriceData.Size = new System.Drawing.Size(944, 462);
 			this.indgvPriceData.TabIndex = 3;
+			this.indgvPriceData.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvPriceData_KeyPress);
 			// 
 			// panel4
 			// 
@@ -1801,24 +1801,24 @@ namespace FREditor
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel4.Location = new System.Drawing.Point(0, 0);
 			this.panel4.Name = "panel4";
-			this.panel4.Size = new System.Drawing.Size(944, 29);
+			this.panel4.Size = new System.Drawing.Size(952, 27);
 			this.panel4.TabIndex = 0;
 			// 
 			// tbSearchInPrice
 			// 
-			this.tbSearchInPrice.Location = new System.Drawing.Point(52, 4);
+			this.tbSearchInPrice.Location = new System.Drawing.Point(51, 3);
 			this.tbSearchInPrice.Name = "tbSearchInPrice";
 			this.tbSearchInPrice.Size = new System.Drawing.Size(159, 20);
-			this.tbSearchInPrice.TabIndex = 1;
+			this.tbSearchInPrice.TabIndex = 3;
 			this.tbSearchInPrice.TextChanged += new System.EventHandler(this.tbSearchInPrice_TextChanged);
 			// 
 			// label23
 			// 
 			this.label23.AutoSize = true;
-			this.label23.Location = new System.Drawing.Point(5, 6);
+			this.label23.Location = new System.Drawing.Point(4, 5);
 			this.label23.Name = "label23";
 			this.label23.Size = new System.Drawing.Size(39, 13);
-			this.label23.TabIndex = 0;
+			this.label23.TabIndex = 2;
 			this.label23.Text = "Поиск";
 			// 
 			// tbpMarking
@@ -3742,7 +3742,7 @@ namespace FREditor
 			// 
 			// tmrSearchInPrice
 			// 
-			this.tmrSearchInPrice.Interval = 200;
+			this.tmrSearchInPrice.Interval = 500;
 			this.tmrSearchInPrice.Tick += new System.EventHandler(this.tmrSearchInPrice_Tick);
 			// 
 			// tbSearch
@@ -4010,9 +4010,7 @@ namespace FREditor
         private System.Windows.Forms.TextBox txtBoxSelfJunkPos;
         private System.Windows.Forms.Button btnFloatPanel;
         private System.Windows.Forms.TabControl tcInnerTable;
-        private System.Windows.Forms.TabPage tbpTable;
-        private System.Windows.Forms.TabControl tcInnerSheets;
-        private System.Windows.Forms.TabPage tbpSheet1;
+		private System.Windows.Forms.TabPage tbpTable;
         private System.Windows.Forms.TabPage tbpMarking;
         private System.Windows.Forms.Panel pnlFloat;
         private System.Windows.Forms.GroupBox grpbGeneral;
@@ -4177,10 +4175,12 @@ namespace FREditor
 		private System.Windows.Forms.Timer tmrSearchInPrice;
 		private System.Windows.Forms.TextBox tbSearch;
 		private System.Windows.Forms.Label label14;
+		private System.Windows.Forms.OpenFileDialog ofdNewFormat;
+		private System.Windows.Forms.TabControl tcInnerSheets;
+		private System.Windows.Forms.TabPage tbpSheet1;
 		private Inforoom.WinForms.INDataGridView indgvPriceData;
 		private System.Windows.Forms.Panel panel4;
 		private System.Windows.Forms.TextBox tbSearchInPrice;
 		private System.Windows.Forms.Label label23;
-		private System.Windows.Forms.OpenFileDialog ofdNewFormat;
     }
 }
