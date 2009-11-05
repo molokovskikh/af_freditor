@@ -155,6 +155,7 @@ namespace FREditor
 		private int _inactivityTime = 0;
 
 		private DataGridView _searchGrid;
+		private bool cmbFormatHandlerRegistered = false;
 
         public frmFREMain()
         {
@@ -1964,8 +1965,12 @@ order by PriceName
         {
             if (tbControl.SelectedTab == tpFirms)
             {
-				this.cmbFormat.SelectedIndexChanged -=
-					new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+				if (cmbFormatHandlerRegistered)
+				{
+					this.cmbFormat.SelectedIndexChanged -=
+						new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+					cmbFormatHandlerRegistered = !cmbFormatHandlerRegistered;
+				}
 				SaveCostsSettings();
                 bsCostsFormRules.Filter = String.Empty;
                 bsFormRules.Filter = String.Empty;
@@ -2021,8 +2026,12 @@ order by PriceName
 						indgvPriceData.Focus();
 					}
 					tbSearchInPrice.Text = String.Empty;
-					this.cmbFormat.SelectedIndexChanged +=
-						new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+					if (!cmbFormatHandlerRegistered)
+					{						
+						this.cmbFormat.SelectedIndexChanged +=
+							new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+						cmbFormatHandlerRegistered = !cmbFormatHandlerRegistered;
+					}
 				}			
         }
 
@@ -2232,24 +2241,27 @@ and c.Type = ?ContactType;",
 
         private void CheckOnePrice(CurrencyManager currencyManager)
         {
-            DataRowView drv = (currencyManager.Position > -1) ? (DataRowView)currencyManager.Current : null;
-            DataView dv = (DataView)currencyManager.List;
+			if (currencyManager.Position > -1)
+			{
+				DataRowView drv = (DataRowView)currencyManager.Current;
+				DataView dv = (DataView)currencyManager.List;
 
-            if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length > 1)
-            {
-                indgvPrice.Focus();
-            }
-            else
-            {
-                if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length == 1)
-                {
-                    if (CostIsValid())
-                    {
-                        tbControl.SelectedTab = tpPrice;
-                        fcs = dgFocus.Firm;
-                    }
-                }
-            }
+				if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length > 1)
+				{
+					indgvPrice.Focus();
+				}
+				else
+				{
+					if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length == 1)
+					{
+						if (CostIsValid())
+						{
+							tbControl.SelectedTab = tpPrice;
+							fcs = dgFocus.Firm;
+						}
+					}
+				}
+			}
         }
 
         public delegate void TestAsync(OleDbDataAdapter da, DataTable dt);
@@ -3946,9 +3958,12 @@ order by PriceName
 
 		private void cmbFormat_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.cmbFormat.SelectedIndexChanged -= 
-				new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
-
+			if (cmbFormatHandlerRegistered)
+			{
+				this.cmbFormat.SelectedIndexChanged -=
+					new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+				cmbFormatHandlerRegistered = !cmbFormatHandlerRegistered;
+			}
 			// ≈сли формат прайса или разделитель был изменен
 			if (!(fmt.Equals((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue))) ||
 				!(delimiter.Equals(tbDevider.Text)))
@@ -3990,8 +4005,12 @@ order by PriceName
 					_isFormatChanged = false;
 				}
 			}
-			this.cmbFormat.SelectedIndexChanged +=
-				new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+			if (!cmbFormatHandlerRegistered)
+			{
+				this.cmbFormat.SelectedIndexChanged +=
+					new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+				cmbFormatHandlerRegistered = !cmbFormatHandlerRegistered;
+			}
 		}
 
 		private void tbDevider_KeyDown(object sender, KeyEventArgs e)
