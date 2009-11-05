@@ -2015,12 +2015,17 @@ order by PriceName
 
 					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
-
-					indgvPriceData.CurrentCell = indgvPriceData.Rows[0].Cells[0];
-					indgvPriceData.Focus();
-					tbSearchInPrice.Text = String.Empty;
-					this.cmbFormat.SelectedIndexChanged += 
-						new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+					try
+					{
+						indgvPriceData.CurrentCell = indgvPriceData.Rows[0].Cells[0];
+						indgvPriceData.Focus();
+						tbSearchInPrice.Text = String.Empty;
+						this.cmbFormat.SelectedIndexChanged +=
+							new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
+					}
+					catch (Exception)
+					{
+					}
 				}			
         }
 
@@ -4004,6 +4009,7 @@ order by PriceName
 		{
 			cmbFormat_SelectedIndexChanged(sender, e);
 		}
+
     }
 
     public class WaitWindowThread
