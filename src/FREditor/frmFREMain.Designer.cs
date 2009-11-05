@@ -1792,6 +1792,7 @@ namespace FREditor
 			this.indgvPriceData.RowHeadersVisible = false;
 			this.indgvPriceData.Size = new System.Drawing.Size(944, 462);
 			this.indgvPriceData.TabIndex = 3;
+			this.indgvPriceData.Enter += new System.EventHandler(this.indgvPriceData_Enter);
 			this.indgvPriceData.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvPriceData_KeyPress);
 			// 
 			// panel4

@@ -3959,7 +3959,9 @@ order by PriceName
 				if (exts.Length == 1)
 					fileExt = exts[0]["FMTExt"].ToString();
 				ofdNewFormat.Filter = priceFormat.ToString() + "|*" + fileExt;
-				ofdNewFormat.Title = "Выберите файл в новом формате (" + priceFormat.ToString() + ")";
+				ofdNewFormat.Title = "Выберите файл в новом формате (" + priceFormat.ToString() + ").";
+				if (tbDevider.Text.Length > 0)
+					ofdNewFormat.Title += " Разделитель: '" + tbDevider.Text + "'";
 				// Если мы получили от пользователя новый файл в нужном формате
 				if (ofdNewFormat.ShowDialog() == DialogResult.OK)
 				{
@@ -3996,6 +3998,11 @@ order by PriceName
 			{
 				cmbFormat_SelectedIndexChanged(sender, e);
 			}
+		}
+
+		private void indgvPriceData_Enter(object sender, EventArgs e)
+		{
+			cmbFormat_SelectedIndexChanged(sender, e);
 		}
     }
 
