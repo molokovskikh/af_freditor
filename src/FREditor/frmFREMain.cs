@@ -2015,17 +2015,14 @@ order by PriceName
 
 					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
-					try
+					if (indgvPriceData.RowCount > 0)
 					{
 						indgvPriceData.CurrentCell = indgvPriceData.Rows[0].Cells[0];
 						indgvPriceData.Focus();
-						tbSearchInPrice.Text = String.Empty;
-						this.cmbFormat.SelectedIndexChanged +=
-							new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
 					}
-					catch (Exception)
-					{
-					}
+					tbSearchInPrice.Text = String.Empty;
+					this.cmbFormat.SelectedIndexChanged +=
+						new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
 				}			
         }
 
