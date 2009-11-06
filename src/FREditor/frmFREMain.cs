@@ -722,8 +722,29 @@ where
 			command.CommandText += param;
 			command.CommandText += @"  
 order by PCCostName";
-
-			dataAdapter.Fill(dtPricesCost);
+			try
+			{
+				dataAdapter.Fill(dtPricesCost);
+			}
+			catch (Exception ex)
+			{
+				var constraints = "";
+				foreach (Constraint constr in dtPricesCost.Constraints)
+				{
+					constraints += String.Format("Constraint Name: {0}, Type: {1};", 
+						constr.ConstraintName, constr.GetType().ToString());
+				}
+				var parameters = "";
+				foreach (MySqlParameter sqlparam in command.Parameters)
+				{
+					parameters += String.Format("SQL ParamName: {0}, Value: {1};", 
+						sqlparam.ParameterName, sqlparam.Value); 
+				}
+				string message = String.Format(@"
+Ошибка при применении изменений в правилах формализации. dtPricesCostFill(). Параметры SQL запроса: '{0}'. Ограничения: '{1}'", 
+					parameters, constraints);
+				Program.SendMessageOnException(null, new Exception(message, ex));
+			}
 		}
 		
 		private void dtCostsFormRulesFill(string param, bool showOnlyEnabled)
@@ -2878,7 +2899,7 @@ WHERE
 				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
 					"register@analit.net",
 #if DEBUG
-					"morozov@analit.net",
+					"d.dorofeev@analit.net",
 #else
 					"RegisterList@subscribe.analit.net",
 #endif
@@ -3758,7 +3779,7 @@ order by PriceName
 
 				object count = ((DataView)bsCostsFormRules.List).ToTable().Compute(
 					String.Format("count({0})", selectFieldName),
-					String.Format("({0} is not null) and ({0} <> '')", selectFieldName));
+					String.Format("({0} is not null) and ({0} <> '')", selectFieldName));				
 				lCostCount.Text = String.Format("Общее кол-во цен: {0}   Кол-во настроенных цен: {1}", bsCostsFormRules.Count, count);
 			}
 			else
