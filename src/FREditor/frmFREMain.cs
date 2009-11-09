@@ -2883,7 +2883,8 @@ and fr.Id = pim.FormRuleId;
 					}
 					else
 					{
-						MessageBox.Show(String.Format("Невозможно положить прайс в Base. Файл {0} не найден",
+						SendWarningLetter(String.Format("При применении изменений после смена формата файла (или разделителя) файл {0} не найден", filePath));
+						MessageBox.Show(String.Format("Невозможно изменить формат файла. Файл {0} не найден",
 							filePath), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}	
@@ -2938,6 +2939,27 @@ WHERE
 			catch (Exception ex)
 			{
 				MessageBox.Show("Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Program.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
+			}
+		}
+
+		private void SendWarningLetter(string body)
+		{
+			try
+			{
+				string messageBody = String.Format("Оператор: {0}\nТекст сообщения:{1}\n",
+					Environment.UserName, body);
+                //Формируем сообщение
+				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
+					"service@analit.net", "service@analit.net", "Предупреждение в FREditor", messageBody);
+				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("mail.adc.analit.net");
+				sm.Send(m);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(
+					@"Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.",
+					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				Program.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
 			}
 		}
@@ -4046,6 +4068,7 @@ order by PriceName
 					}
 					else
 					{
+						SendWarningLetter(String.Format("При изменении формата файла (или разделителя) новый файл {0} не найден", ofdNewFormat.FileName));
 						MessageBox.Show(String.Format("Файл '{0}' не найден", ofdNewFormat.FileName),
 							"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
