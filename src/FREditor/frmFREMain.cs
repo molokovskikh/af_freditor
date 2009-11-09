@@ -731,19 +731,19 @@ order by PCCostName";
 				var constraints = "";
 				foreach (Constraint constr in dtPricesCost.Constraints)
 				{
-					constraints += String.Format("Constraint Name: {0}, Type: {1};", 
+					constraints += String.Format("Constraint Name: {0}, Type: {1};",
 						constr.ConstraintName, constr.GetType().ToString());
 				}
 				var parameters = "";
 				foreach (MySqlParameter sqlparam in command.Parameters)
 				{
-					parameters += String.Format("SQL ParamName: {0}, Value: {1};", 
-						sqlparam.ParameterName, sqlparam.Value); 
+					parameters += String.Format("SQL ParamName: {0}, Value: {1};",
+						sqlparam.ParameterName, sqlparam.Value);
 				}
 				string message = String.Format(@"
-Ошибка при применении изменений в правилах формализации. dtPricesCostFill(). Параметры SQL запроса: '{0}'. Ограничения: '{1}'", 
+Ошибка при применении изменений в правилах формализации. dtPricesCostFill(). Параметры SQL запроса: '{0}'. Ограничения: '{1}'",
 					parameters, constraints);
-				Program.SendMessageOnException(null, new Exception(message, ex));
+				throw new CustomConstraintException(message, ex);
 			}
 		}
 		
@@ -2848,34 +2848,43 @@ and fr.Id = pim.FormRuleId;
 			{
 				using (FilePriceInfo filePriceInfo = new FilePriceInfo())
 				{
-					filePriceInfo.Stream = File.OpenRead(filePath);
-					filePriceInfo.PriceItemId = Convert.ToUInt32(currentPriceItemId);
-					try
+					if (File.Exists(filePath))
 					{
-						IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
+						filePriceInfo.Stream = File.OpenRead(filePath);
+						filePriceInfo.PriceItemId = Convert.ToUInt32(currentPriceItemId);
 						try
 						{
-							_clientProxy.PutFileToBase(filePriceInfo);
-							((ICommunicationObject)_clientProxy).Close();
+							IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
+							try
+							{
+								_clientProxy.PutFileToBase(filePriceInfo);
+								((ICommunicationObject) _clientProxy).Close();
+							}
+							catch (FaultException fex)
+							{
+								MessageBox.Show(fex.Reason.ToString(), "Ошибка", MessageBoxButtons.OK,
+								                MessageBoxIcon.Error);
+								if (((ICommunicationObject) _clientProxy).State != CommunicationState.Closed)
+									((ICommunicationObject) _clientProxy).Abort();
+								return;
+							}
+							catch (Exception)
+							{
+								if (((ICommunicationObject) _clientProxy).State != CommunicationState.Closed)
+									((ICommunicationObject) _clientProxy).Abort();
+								throw;
+							}
 						}
-						catch (FaultException fex)
+						catch (PriceProcessorException priceProcessorException)
 						{
-							MessageBox.Show(fex.Reason.ToString(), "Ошибка", MessageBoxButtons.OK,
-								MessageBoxIcon.Error);
-							if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-								((ICommunicationObject)_clientProxy).Abort();
-							return;
-						}
-						catch (Exception)
-						{
-							if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-								((ICommunicationObject)_clientProxy).Abort();
-							throw;
+							MessageBox.Show(priceProcessorException.Message, 
+								"Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 						}
 					}
-					catch (RemotePriceProcessor.PriceProcessorException priceProcessorException)
+					else
 					{
-						MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						MessageBox.Show(String.Format("Невозможно положить прайс в Base. Файл {0} не найден",
+							filePath), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}	
 			}
@@ -4013,17 +4022,33 @@ order by PriceName
 					string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
 					string takeFile = shortFileNameByPriceItemId + fileExt;
 					string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
-					using (var readStream = File.OpenRead(ofdNewFormat.FileName))
+					if (File.Exists(ofdNewFormat.FileName))
 					{
-						using (var writeStream = File.OpenWrite(filePath))
+						using (var readStream = File.OpenRead(ofdNewFormat.FileName))
 						{
-							writeStream.Seek(0, SeekOrigin.Begin);
-							CopyStreams(readStream, writeStream);
-						}
+							try
+							{
+								using (var writeStream = File.OpenWrite(filePath))
+								{
+									writeStream.Seek(0, SeekOrigin.Begin);
+									CopyStreams(readStream, writeStream);
+									_isFormatChanged = true;
+								}
+							}
+							catch (Exception)
+							{
+								MessageBox.Show(String.Format("Невозможно записать файл {0}", filePath),
+                                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							}
+						}						
+						DoOpenPrice(drP);
+						_isFormatChanged = false;
 					}
-					_isFormatChanged = true;
-					DoOpenPrice(drP);
-					_isFormatChanged = false;
+					else
+					{
+						MessageBox.Show(String.Format("Файл '{0}' не найден", ofdNewFormat.FileName),
+							"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
 				}
 			}
 			if (!cmbFormatHandlerRegistered)
