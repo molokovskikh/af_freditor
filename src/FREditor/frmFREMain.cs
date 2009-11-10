@@ -9,14 +9,9 @@ using System.IO;
 using MySql.Data.MySqlClient;
 using System.Data.OleDb;
 using System.Text;
-using System.Threading;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using Inforoom.WinForms;
 using FREditor.Properties;
-using System.Runtime.Remoting.Channels;
-using System.Runtime.Serialization.Formatters;
-using System.Runtime.Remoting.Channels.Tcp;
 using System.Configuration;
 using Common.Tools;
 using System.ServiceModel;
@@ -25,63 +20,16 @@ using System.Net.Security;
 
 namespace FREditor
 {
-    /// <summary>
-    /// Summary description for Form1.
-    /// </summary>
-    /// 
-    // рабочий INDataGridView
-    public enum dgFocus : int
+	// рабочий INDataGridView
+    public enum dgFocus
     {
         Firm,
         Price
     }
-    public enum PriceFields : int
-    {
-        Code,
-        CodeCr,
-        Name1,
-        Name2,
-        Name3,
-        FirmCr,
-        Unit,
-        Volume,
-        Quantity,
-        Note,
-        Period,
-        Doc,
-        MinBoundCost,
-        Junk,
-        Await,
-        OriginalName,
-        VitallyImportant,
-        RequestRatio,
-        RegistryCost,
-        MaxBoundCost,
-		OrderCost,
-		MinOrderCount
-    }
 
-	public enum PriceFormat
-	{ 
-		DelimWIN = 1,
-		DelimDOS,
-		XLS,
-		DBF,
-		XML,
-		FixedWIN,
-		FixedDOS,
-		NativeDbf,
-		Sudakov,
-		NativeXls,
-		NativeDelimWIN,
-		NativeDelimDOS,
-		NativeFixedWIN,
-		NativeFixedDOS
-	}
-
-    public partial class frmFREMain : System.Windows.Forms.Form
+    public partial class frmFREMain : Form
     {
-		private bool _isFormatChanged = false;
+		private bool _isFormatChanged;
 
         ArrayList gds = new ArrayList();
         ArrayList dtables = new ArrayList();
@@ -152,10 +100,17 @@ namespace FREditor
 
 		// Поле для подсчета времени бездействия пользователя 
 		// при поиске внутри колонок прайс-листа
-		private int _inactivityTime = 0;
+		private int _inactivityTime;
 
 		private DataGridView _searchGrid;
-		private bool cmbFormatHandlerRegistered = false;
+
+		// Флаг, который показывает, зарегистрирован ли обработчик 
+		// для cmbFormat (выпадающий список с форматами)
+		private bool _isComboBoxFormatHandlerRegistered;
+
+		// Флаг показывает нужно выбирать только действующих поставщиков (true)
+		// или же всех подряд (false)
+    	private bool _showDisabledFirm;
 
         public frmFREMain()
         {
@@ -428,13 +383,17 @@ where
 		private void Form1_Load(object sender, System.EventArgs e)
         {
 			//Создаем провайдер, чтобы не было нарушения безопасности
-			var provider = new BinaryServerFormatterSinkProvider();
+			
+			// rem var provider = new BinaryServerFormatterSinkProvider();
+
 			//Без установки этого свойства тоже работает, но в примерах оно тоже установлено
 			//Опытным путем выяснено, что для клиента достаточно указать провайдера,
 			//это свойство устанавливать необязательно
 			//надо указать одинаковый провайдер BinaryServerFormatterSinkProvider для клиента и для сервера,
 			//и на сервере выставить provider.TypeFilterLevel = TypeFilterLevel.Full
 			//Мы это сделаем сразу, чтобы не напороться на другие возможные проблемы безопасности
+
+			/* remoting
 			provider.TypeFilterLevel = TypeFilterLevel.Full;
 			//Устанавливаем свойства провайдера
 			IDictionary props = new Hashtable();
@@ -444,7 +403,7 @@ where
 
 			var tcpChannel = new TcpChannel(props, null, provider);
 			ChannelServices.RegisterChannel(tcpChannel, false);
-
+			/**/
 			connection.Open();
 			command.Connection = connection;
 			dataAdapter = new MySqlDataAdapter(command);
@@ -533,7 +492,7 @@ order by Format";
                 if (seg != -1)
                     command.Parameters.AddWithValue("?Segment", seg);
 				
-				if (!chbShowDisabled.Checked)
+				if (!checkBoxShowDisabled.Checked)
 				{
 					// Если галочка "Показывать недействующие" НЕ выделена
 					// тогда мы добавляем параметры для выборки только действующих
@@ -542,7 +501,7 @@ order by Format";
 					command.Parameters.AddWithValue("?FirmStatus", 1);
 				}
 
-				bool showOnlyEnabled = !chbShowDisabled.Checked;
+				bool showOnlyEnabled = !checkBoxShowDisabled.Checked;
                 FilterParams = AddParams(shname, regcode, seg, showOnlyEnabled);
 
 				dtClientsFill(FilterParams, showOnlyEnabled);
@@ -583,8 +542,8 @@ order by Format";
 
 				FilterParams = AddParams(shname, regcode, seg);
 
-				dtPricesCostFill(FilterParams, false);
-				dtCostsFormRulesFill(FilterParams, false);
+				dtPricesCostFill(FilterParams, !_showDisabledFirm);
+				dtCostsFormRulesFill(FilterParams, !_showDisabledFirm);
 			}
 		}
 		
@@ -592,34 +551,32 @@ order by Format";
 		{
 			if (showOnlyEnabled)
 			{
-				command.CommandText =
-					@"SELECT cd.FirmCode AS CCode,
-					cd.ShortName AS CShortName,
-					cd.FullName AS CFullName,
-					r.Region AS CRegion,
-                    cd.FirmSegment as CSegment
-				FROM usersettings.clientsdata cd
-				inner join farm.regions r on r.RegionCode = cd.RegionCode
-				WHERE firmcode in (
-					SELECT firmcode FROM usersettings.pricesdata PD where PD.pricecode in (
-						SELECT pricecode FROM usersettings.pricescosts where priceitemid in (
-							SELECT id FROM usersettings.priceitems 
-							WHERE datediff(curdate(), date(pricedate)) < 200)) and (PD.Enabled = 1) and (PD.AgencyEnabled = 1)
-				) and cd.firmtype = 0 ";
+				command.CommandText = @"
+SELECT cd.FirmCode AS CCode,
+cd.ShortName AS CShortName,
+cd.FullName AS CFullName,
+r.Region AS CRegion,
+cd.FirmSegment as CSegment
+FROM usersettings.clientsdata cd
+INNER JOIN farm.regions r ON r.RegionCode = cd.RegionCode
+WHERE firmcode IN (
+	SELECT firmcode FROM usersettings.pricesdata PD where PD.pricecode IN (
+		SELECT pricecode FROM usersettings.pricescosts where priceitemid IN (
+			SELECT id FROM usersettings.priceitems
+			WHERE datediff(curdate(), date(pricedate)) < 200)) AND (PD.Enabled = 1)
+				AND (PD.AgencyEnabled = 1)) AND cd.firmtype = 0 ";
 			}
 			else
 			{
-				command.CommandText =
-				@"SELECT 
-					cd.FirmCode AS CCode,
-					cd.ShortName AS CShortName,
-					cd.FullName AS CFullName,
-					r.Region AS CRegion,
-                    cd.FirmSegment as CSegment
-				FROM 
-					usersettings.clientsdata cd
-                    inner join farm.regions r on r.RegionCode = cd.RegionCode
-				WHERE cd.firmtype = 0 ";
+				command.CommandText = @"
+SELECT cd.FirmCode AS CCode,
+cd.ShortName AS CShortName,
+cd.FullName AS CFullName,
+r.Region AS CRegion,
+cd.FirmSegment as CSegment
+FROM usersettings.clientsdata cd
+INNER JOIN farm.regions r ON r.RegionCode = cd.RegionCode
+WHERE cd.firmtype = 0 ";
 			}
 			command.CommandText += param;
 			command.CommandText += " ORDER BY cd.ShortName";
@@ -631,7 +588,7 @@ order by Format";
 		{
 			string sqlPart = String.Empty;
 			if (showOnlyEnabled)
-				sqlPart += @"and (datediff(curdate(), date(pim.pricedate)) < 200)";
+				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) ";
 			// Выбираем прайс-листы с мультиколоночными ценами
 			command.CommandText =
 @"
@@ -962,12 +919,14 @@ where
 			}
 		}
 
+		// Открывает прайс
         private void OpenPrice(DataRow drP)
         {
             ClearPrice();
 
             Application.DoEvents();
             DataRow[] drFR;
+			// Выбираем правила для текущего priceItemId
             drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
             existParentRules = drFR[0]["FRRules"].ToString();
 
@@ -1074,6 +1033,7 @@ order by PriceName
 
 			fileExist = false;
 
+			// Если формат не установлен, то больше ничего не делаем
 			if (fmt != null)
 			{
 				try
@@ -1951,12 +1911,12 @@ order by PriceName
             {
                 dtSet.EnforceConstraints = true;
             }
-            dtClientsFill(String.Empty, false);
-            dtPricesFill(String.Empty, false);
-            dtPricesCostFill(String.Empty, false);
-            dtFormRulesFill(String.Empty, false);
+            dtClientsFill(String.Empty, !_showDisabledFirm);
+			dtPricesFill(String.Empty, !_showDisabledFirm);
+			dtPricesCostFill(String.Empty, !_showDisabledFirm);
+			dtFormRulesFill(String.Empty, !_showDisabledFirm);
             dtPriceFMTsFill();
-            dtCostsFormRulesFill(String.Empty, false);
+			dtCostsFormRulesFill(String.Empty, !_showDisabledFirm);
             cbRegionsFill();
             dtSet.AcceptChanges();
         }
@@ -1982,16 +1942,17 @@ order by PriceName
             }
         }
 
-        private void tbControl_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void tbControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (tbControl.SelectedTab == tpFirms)
             {
-				if (cmbFormatHandlerRegistered)
+				if (_isComboBoxFormatHandlerRegistered)
 				{
-					this.cmbFormat.SelectedIndexChanged -=
-						new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
-					cmbFormatHandlerRegistered = !cmbFormatHandlerRegistered;
+					cmbFormat.SelectedIndexChanged -= cmbFormat_SelectedIndexChanged;
+					_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 				}
+            	fmt = null;
+            	delimiter = null;
 				SaveCostsSettings();
                 bsCostsFormRules.Filter = String.Empty;
                 bsFormRules.Filter = String.Empty;
@@ -2008,7 +1969,7 @@ order by PriceName
             else
                 if (tbControl.SelectedTab == tpPrice)
                 {
-                    CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+                	CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
                     DataRowView drv = (DataRowView)currencyManager.Current;
                     DataView dv = (DataView)currencyManager.List;
 
@@ -2025,20 +1986,30 @@ order by PriceName
 					bsFormRules.ResumeBinding();
 
 					//Разрешено добавлять и редактировать ценовые колонки только в том случае, если это мультиколоночный прайс-лист
-					indgvCosts.AllowUserToAddRows = Convert.ToByte(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName]) == 0;
+					if (((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)
+						indgvCosts.AllowUserToAddRows = false;
+					else
+						indgvCosts.AllowUserToAddRows = Convert.ToByte(
+							((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName]) == 0;
 					indgvCosts.ReadOnly = !indgvCosts.AllowUserToAddRows;
 
-					btnPutToBase.Enabled = !Convert.IsDBNull(((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
+					btnPutToBase.Enabled = !Convert.IsDBNull(
+						((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
 
 					if (indgvCosts.AllowUserToAddRows)
 					{
-						(bsCostsFormRules.List as DataView).Table.Columns[CFRPriceItemId.ColumnName].DefaultValue = ((DataRowView)bsFormRules.Current)["FRPriceItemId"];
+						(bsCostsFormRules.List as DataView).Table
+							.Columns[CFRPriceItemId.ColumnName]
+							.DefaultValue = ((DataRowView)bsFormRules.Current)["FRPriceItemId"];
 					}
 					else
 					{
-						(bsCostsFormRules.List as DataView).Table.Columns[CFRPriceItemId.ColumnName].DefaultValue = DBNull.Value;
+						(bsCostsFormRules.List as DataView).Table
+							.Columns[CFRPriceItemId.ColumnName]
+							.DefaultValue = DBNull.Value;
 					}
-
+                	fmt = null;
+                	delimiter = null;
 					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
 					if (indgvPriceData.RowCount > 0)
@@ -2047,11 +2018,10 @@ order by PriceName
 						indgvPriceData.Focus();
 					}
 					tbSearchInPrice.Text = String.Empty;
-					if (!cmbFormatHandlerRegistered)
+					if (!_isComboBoxFormatHandlerRegistered)
 					{						
-						this.cmbFormat.SelectedIndexChanged +=
-							new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
-						cmbFormatHandlerRegistered = !cmbFormatHandlerRegistered;
+						cmbFormat.SelectedIndexChanged += cmbFormat_SelectedIndexChanged;
+						_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 					}
 				}			
         }
@@ -2615,10 +2585,22 @@ and c.Type = ?ContactType;",
             }
 			if (e.TabPage == tpFirms)
 			{
-				//Если мы пытаемся перейти на вкладку "Прайс", а у нас нет в списке прайсов, то делать это не нужно
-				CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-				if (currencyManager.Count == 0)
+				if (!CostIsValid())
 					e.Cancel = true;
+				else
+				{
+					int selectedRow = indgvPrice.SelectedCells[0].RowIndex;
+					TrySaveData();
+					// Если мы пытаемся перейти на вкладку "Прайс", а у нас нет 
+					// в списке прайсов, то делать это не нужно
+					CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, 
+						indgvPrice.DataMember];
+					if (currencyManager.Count == 0)
+						e.Cancel = true;
+					indgvPrice.CurrentCell = indgvPrice.Rows[selectedRow].Cells[0];
+				}
+				
+				//CheckOnePrice(currencyManager);
 			}
         }
 
@@ -2680,10 +2662,10 @@ and c.Type = ?ContactType;",
                         connection.Open();
                     try
                     {
-                        MySqlTransaction tr = connection.BeginTransaction();
                         try
                         {
-                            MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", connection, tr);
+                            MySqlCommand SetCMD = new MySqlCommand(
+								"set @INHost = ?INHost; set @INUser = ?INUser;", connection);
                             SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
                             SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
@@ -2734,20 +2716,17 @@ and c.Type = ?ContactType;",
 								string _firmName = drClient[CShortName.ColumnName].ToString();
 								string _regionName = drClient[CRegion.ColumnName].ToString();
 
-								SendNotificationLetter(body.ToString(), _priceName, _firmName, _regionName);
+								Mailer.SendNotificationLetter(connection, body.ToString(), 
+									_priceName, _firmName, _regionName);
 							}
-
-							tr.Commit();
                             dtSet.AcceptChanges();
 							//Обновляе цены и правила формализации цен для того, чтобы загрузить корректные ID новых цен
 							FillCosts(shortNameFilter, regionCodeFilter, segmentFilter);
-
                         }
                         catch (Exception ex)
                         {
 							MessageBox.Show("Не удалось применить изменения в правилах формализации прайс-листа. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в правилах формализации.", ex));
-							tr.Rollback();
                         }
                     }
                     finally
@@ -2805,13 +2784,13 @@ and fr.Id = pim.FormRuleId;
 ";
 
                             mcmdUPrice.Parameters.Clear();
-                            mcmdUPrice.Parameters.Add("?PPriceType", MySql.Data.MySqlClient.MySqlDbType.Int32);
-                            mcmdUPrice.Parameters.Add("?PCostType", MySql.Data.MySqlClient.MySqlDbType.Int32);
-                            mcmdUPrice.Parameters.Add("?PWaitingDownloadInterval", MySql.Data.MySqlClient.MySqlDbType.Int32);
-                            mcmdUPrice.Parameters.Add("?PMaxOld", MySql.Data.MySqlClient.MySqlDbType.Int32);
-                            mcmdUPrice.Parameters.Add("?PPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
-							mcmdUPrice.Parameters.Add("?PPriceItemId", MySql.Data.MySqlClient.MySqlDbType.Int64);
-							mcmdUPrice.Parameters.Add("?PIsParent", MySql.Data.MySqlClient.MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PPriceType", MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PCostType", MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PWaitingDownloadInterval", MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PMaxOld", MySqlDbType.Int32);
+                            mcmdUPrice.Parameters.Add("?PPriceCode", MySqlDbType.Int64);
+							mcmdUPrice.Parameters.Add("?PPriceItemId", MySqlDbType.Int64);
+							mcmdUPrice.Parameters.Add("?PIsParent", MySqlDbType.Int32);
 
                             foreach (MySqlParameter ms in mcmdUPrice.Parameters)
                             {
@@ -2883,86 +2862,14 @@ and fr.Id = pim.FormRuleId;
 					}
 					else
 					{
-						SendWarningLetter(String.Format("При применении изменений после смена формата файла (или разделителя) файл {0} не найден", filePath));
+						Mailer.SendWarningLetter(String.Format(
+							"При применении изменений после смена формата файла (или разделителя) файл {0} не найден", filePath));
 						MessageBox.Show(String.Format("Невозможно изменить формат файла. Файл {0} не найден",
 							filePath), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}	
 			}
         }
-
-		private void SendNotificationLetter(string body, string priceName, string providerName, string regionName)
-		{
-			try
-			{
-				//Получаем e-mail оператора
-				string operatorMail = (string)MySqlHelper.ExecuteScalar(
-					connection,
-@"SELECT 
-  regionaladmins.email 
-FROM 
-  accessright.regionaladmins
-WHERE  
-  username = ?UserName", new MySqlParameter("?UserName", Environment.UserName));
-
-				//Формируем сообщение
-				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
-					"register@analit.net",
-#if DEBUG
-					"d.dorofeev@analit.net",
-#else
-					"RegisterList@subscribe.analit.net",
-#endif
- String.Format("\"{0}\" - изменения в списке ценовых колонок", providerName),
-					String.Format(@"
-Оператор   : {0} 
-Поставщик  : {1}
-Регион     : {2}
-Прайс-лист : {3}
-
-{4}
-
-С уважением,
-  АК Инфорум.",
-						Environment.UserName,
-						providerName,
-						regionName,
-						priceName,
-						body));
-				if (!String.IsNullOrEmpty(operatorMail))
-					m.Bcc.Add(operatorMail);
-				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("mail.adc.analit.net");
-				sm.Send(m);
-
-
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show("Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Program.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
-			}
-		}
-
-		private void SendWarningLetter(string body)
-		{
-			try
-			{
-				string messageBody = String.Format("Оператор: {0}\nТекст сообщения:{1}\n",
-					Environment.UserName, body);
-                //Формируем сообщение
-				System.Net.Mail.MailMessage m = new System.Net.Mail.MailMessage(
-					"service@analit.net", "service@analit.net", "Предупреждение в FREditor", messageBody);
-				System.Net.Mail.SmtpClient sm = new System.Net.Mail.SmtpClient("mail.adc.analit.net");
-				sm.Send(m);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(
-					@"Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.",
-					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Program.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
-			}
-		}
 
         private void frmFREMain_KeyDown(object sender, KeyEventArgs e)
         {
@@ -3332,7 +3239,8 @@ WHERE
 
         private void indgvFirm_DoubleClick(object sender, EventArgs e)
         {
-            CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
+            CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, 
+				indgvFirm.DataMember];
             CheckOnePrice(currencyManager);
         }
 
@@ -3919,8 +3827,9 @@ order by PriceName
 			}
 		}
 
-		private void chbShowDisabled_CheckedChanged(object sender, EventArgs e)
+		private void checkBoxShowDisabled_CheckedChanged(object sender, EventArgs e)
 		{
+			_showDisabledFirm = checkBoxShowDisabled.Checked;
 			FillTables(shortNameFilter, regionCodeFilter, segmentFilter);
 			indgvFirm.Focus();
 		}
@@ -4008,18 +3917,49 @@ order by PriceName
 			}
 		}
 
+		// Возвращает формат текущего прайса 
+		private PriceFormat? GetCurrentPriceFormat()
+		{
+			var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource,
+				indgvPrice.DataMember];
+			var currentRowView = (DataRowView)currencyManager.Current;
+			var dataRowPrice = currentRowView.Row;
+			var dataRowFormRules = dtFormRules.Select(String.Format("FRPriceItemId = {0}",
+				dataRowPrice[PPriceItemId.ColumnName].ToString()));
+			PriceFormat? format = (dataRowFormRules[0]["FRPriceFormatId"] is DBNull) ? null :
+                (PriceFormat?)Convert.ToInt32(dataRowFormRules[0]["FRPriceFormatId"]);
+			return format;
+		}
+
+		private string GetShortNameForCurrentPrice()
+		{
+			var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource,
+				indgvPrice.DataMember];
+			var currentRowView = (DataRowView)currencyManager.Current;
+			var dataRowPrice = currentRowView.Row;
+			var dataRowFormRules = dtFormRules.Select(String.Format("FRPriceItemId = {0}",
+				dataRowPrice[PPriceItemId.ColumnName].ToString()));
+			string shortNameByPriceItemId = dataRowFormRules[0]["FRPriceItemId"].ToString();
+			return shortNameByPriceItemId;
+		}
+
 		private void cmbFormat_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (cmbFormatHandlerRegistered)
+			if (_isComboBoxFormatHandlerRegistered)
 			{
-				this.cmbFormat.SelectedIndexChanged -=
-					new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
-				cmbFormatHandlerRegistered = !cmbFormatHandlerRegistered;
+				cmbFormat.SelectedIndexChanged -= cmbFormat_SelectedIndexChanged;
+				_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 			}
 			// Если формат прайса или разделитель был изменен
 			if (!(fmt.Equals((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue))) ||
 				!(delimiter.Equals(tbDevider.Text)))
 			{
+				string priceShortName = GetShortNameForCurrentPrice();
+				// Проверяем, если формат файла равен null, значит это первая настройка, 
+				// и значит при открытии такого прайса не создалась папка, поэтому создаем ее
+				if (GetCurrentPriceFormat() == null)
+					Directory.CreateDirectory(EndPath + priceShortName + "\\");
+
 				var priceFormat = (PriceFormat)Enum.Parse(typeof(PriceFormat), 
 					(cmbFormat.SelectedItem as DataRowView)[0].ToString());
 				string fileExt = "";
@@ -4034,16 +3974,18 @@ order by PriceName
 				// Если мы получили от пользователя новый файл в нужном формате
 				if (ofdNewFormat.ShowDialog() == DialogResult.OK)
 				{
+					
 					// Получаем имя файла, хранящегося в локальном Temp
 					CurrencyManager currencyManager = 
 						(CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-					var drv = (DataRowView)currencyManager.Current;
-					var drP = drv.Row;
+					var dataRowPrice = ((DataRowView)currencyManager.Current).Row;
+					/*
 					var drFR = dtFormRules.Select("FRPriceItemId = " + 
 						drP[PPriceItemId.ColumnName].ToString());
 					string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
-					string takeFile = shortFileNameByPriceItemId + fileExt;
-					string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
+					*/
+					string takeFile = priceShortName + fileExt;
+					string filePath = EndPath + priceShortName + "\\" + takeFile;
 					if (File.Exists(ofdNewFormat.FileName))
 					{
 						using (var readStream = File.OpenRead(ofdNewFormat.FileName))
@@ -4057,28 +3999,32 @@ order by PriceName
 									_isFormatChanged = true;
 								}
 							}
-							catch (Exception)
+							catch (Exception ex)
 							{
+								Mailer.SendWarningLetter(String.Format(
+									@"Ошибка при изменении формата файла. Невозможно записать в файл {0}\n{1}",
+									filePath, ex.ToString()));
 								MessageBox.Show(String.Format("Невозможно записать файл {0}", filePath),
                                     "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 						}						
-						DoOpenPrice(drP);
+						DoOpenPrice(dataRowPrice);
 						_isFormatChanged = false;
 					}
 					else
 					{
-						SendWarningLetter(String.Format("При изменении формата файла (или разделителя) новый файл {0} не найден", ofdNewFormat.FileName));
+						Mailer.SendWarningLetter(String.Format(
+							"При изменении формата файла (или разделителя) новый файл {0} не найден",
+							ofdNewFormat.FileName));
 						MessageBox.Show(String.Format("Файл '{0}' не найден", ofdNewFormat.FileName),
 							"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
 			}
-			if (!cmbFormatHandlerRegistered)
+			if (!_isComboBoxFormatHandlerRegistered)
 			{
-				this.cmbFormat.SelectedIndexChanged +=
-					new System.EventHandler(this.cmbFormat_SelectedIndexChanged);
-				cmbFormatHandlerRegistered = !cmbFormatHandlerRegistered;
+				cmbFormat.SelectedIndexChanged += cmbFormat_SelectedIndexChanged;
+				_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 			}
 		}
 

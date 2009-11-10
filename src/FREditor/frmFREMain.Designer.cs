@@ -187,7 +187,7 @@ namespace FREditor
 			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cSegmentDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel3 = new System.Windows.Forms.Panel();
-			this.chbShowDisabled = new System.Windows.Forms.CheckBox();
+			this.checkBoxShowDisabled = new System.Windows.Forms.CheckBox();
 			this.btnRetrancePrice = new System.Windows.Forms.Button();
 			this.cbSegment = new System.Windows.Forms.ComboBox();
 			this.label28 = new System.Windows.Forms.Label();
@@ -1374,7 +1374,7 @@ namespace FREditor
 			// 
 			// panel3
 			// 
-			this.panel3.Controls.Add(this.chbShowDisabled);
+			this.panel3.Controls.Add(this.checkBoxShowDisabled);
 			this.panel3.Controls.Add(this.btnRetrancePrice);
 			this.panel3.Controls.Add(this.cbSegment);
 			this.panel3.Controls.Add(this.label28);
@@ -1388,16 +1388,17 @@ namespace FREditor
 			this.panel3.Size = new System.Drawing.Size(984, 30);
 			this.panel3.TabIndex = 4;
 			// 
-			// chbShowDisabled
+			// checkBoxShowDisabled
 			// 
-			this.chbShowDisabled.AutoSize = true;
-			this.chbShowDisabled.Location = new System.Drawing.Point(617, 5);
-			this.chbShowDisabled.Name = "chbShowDisabled";
-			this.chbShowDisabled.Size = new System.Drawing.Size(173, 17);
-			this.chbShowDisabled.TabIndex = 7;
-			this.chbShowDisabled.Text = "Показывать недействующие";
-			this.chbShowDisabled.UseVisualStyleBackColor = true;
-			this.chbShowDisabled.CheckedChanged += new System.EventHandler(this.chbShowDisabled_CheckedChanged);
+			this.checkBoxShowDisabled.AutoSize = true;
+			this.checkBoxShowDisabled.Location = new System.Drawing.Point(617, 5);
+			this.checkBoxShowDisabled.Name = "checkBoxShowDisabled";
+			this.checkBoxShowDisabled.Size = new System.Drawing.Size(173, 17);
+			this.checkBoxShowDisabled.TabIndex = 7;
+			this.checkBoxShowDisabled.Text = "Показывать недействующие";
+			this.checkBoxShowDisabled.UseVisualStyleBackColor = true;
+			this.checkBoxShowDisabled.CheckedChanged += new System.EventHandler(
+				this.checkBoxShowDisabled_CheckedChanged);
 			// 
 			// btnRetrancePrice
 			// 
@@ -4174,7 +4175,7 @@ namespace FREditor
 		private System.Windows.Forms.Timer tmrCostSearch;
 		private System.Windows.Forms.Timer tmrSetNewCost;
 		private System.Windows.Forms.Button btnPutToBase;
-		private System.Windows.Forms.CheckBox chbShowDisabled;
+		private System.Windows.Forms.CheckBox checkBoxShowDisabled;
 		private System.Windows.Forms.Timer tmrSearchInPrice;
 		private System.Windows.Forms.TextBox tbSearch;
 		private System.Windows.Forms.Label label14;
