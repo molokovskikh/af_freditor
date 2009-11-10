@@ -382,28 +382,6 @@ where
 
 		private void Form1_Load(object sender, System.EventArgs e)
         {
-			//—оздаем провайдер, чтобы не было нарушени€ безопасности
-			
-			// rem var provider = new BinaryServerFormatterSinkProvider();
-
-			//Ѕез установки этого свойства тоже работает, но в примерах оно тоже установлено
-			//ќпытным путем вы€снено, что дл€ клиента достаточно указать провайдера,
-			//это свойство устанавливать необ€зательно
-			//надо указать одинаковый провайдер BinaryServerFormatterSinkProvider дл€ клиента и дл€ сервера,
-			//и на сервере выставить provider.TypeFilterLevel = TypeFilterLevel.Full
-			//ћы это сделаем сразу, чтобы не напоротьс€ на другие возможные проблемы безопасности
-
-			/* remoting
-			provider.TypeFilterLevel = TypeFilterLevel.Full;
-			//”станавливаем свойства провайдера
-			IDictionary props = new Hashtable();
-			props["port"] = 0;
-			//Ѕез установки этого свойства тоже работает, но в примерах оно тоже установлено
-			props["typeFilterLevel"] = "Full";
-
-			var tcpChannel = new TcpChannel(props, null, provider);
-			ChannelServices.RegisterChannel(tcpChannel, false);
-			/**/
 			connection.Open();
 			command.Connection = connection;
 			dataAdapter = new MySqlDataAdapter(command);
@@ -2662,10 +2640,11 @@ and c.Type = ?ContactType;",
                         connection.Open();
                     try
                     {
+						MySqlTransaction tr = connection.BeginTransaction();
                         try
-                        {
+                        {							
                             MySqlCommand SetCMD = new MySqlCommand(
-								"set @INHost = ?INHost; set @INUser = ?INUser;", connection);
+								"set @INHost = ?INHost; set @INUser = ?INUser;", connection, tr);
                             SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
                             SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
@@ -2722,9 +2701,11 @@ and c.Type = ?ContactType;",
                             dtSet.AcceptChanges();
 							//ќбновл€е цены и правила формализации цен дл€ того, чтобы загрузить корректные ID новых цен
 							FillCosts(shortNameFilter, regionCodeFilter, segmentFilter);
+							tr.Commit();
                         }
                         catch (Exception ex)
                         {
+							tr.Rollback();
 							MessageBox.Show("Ќе удалось применить изменени€ в правилах формализации прайс-листа. —ообщение было отправлено разработчику.", "ќшибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							Program.SendMessageOnException(null, new Exception("ќшибка при применении изменений в правилах формализации.", ex));
                         }
@@ -2748,7 +2729,8 @@ and c.Type = ?ContactType;",
                         MySqlTransaction tr = connection.BeginTransaction();
                         try
                         {
-                            MySqlCommand SetCMD = new MySqlCommand("set @INHost = ?INHost; set @INUser = ?INUser;", connection, tr);
+                            MySqlCommand SetCMD = new MySqlCommand(
+								"set @INHost = ?INHost; set @INUser = ?INUser;", connection, tr);
                             SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
                             SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
                             SetCMD.ExecuteNonQuery();
@@ -2803,10 +2785,10 @@ and fr.Id = pim.FormRuleId;
                             daPrice.TableMappings.Add("Table", dtPrices.TableName);
                             daPrice.Update(chg.Tables[dtPrices.TableName]);
                             
-                            tr.Commit();
                             dtSet.AcceptChanges();
 							RefreshDataBind();
-                        }
+							tr.Commit();
+						}
                         catch (Exception ex)
                         {
 							MessageBox.Show("Ќе удалось применить изменени€ в настройках прайс-листов. —ообщение было отправлено разработчику.", "ќшибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
