@@ -110,7 +110,7 @@ namespace FREditor
 
 		// Флаг показывает нужно выбирать только действующих поставщиков (true)
 		// или же всех подряд (false)
-    	private bool _showDisabledFirm;
+    	private bool _showDisabledFirm = false;
 
         public frmFREMain()
         {
@@ -469,8 +469,9 @@ order by Format";
                     command.Parameters.AddWithValue("?RegionCode", regcode);
                 if (seg != -1)
                     command.Parameters.AddWithValue("?Segment", seg);
-				
-				if (!checkBoxShowDisabled.Checked)
+
+				bool showOnlyEnabled = !_showDisabledFirm;
+				if (showOnlyEnabled)
 				{
 					// Если галочка "Показывать недействующие" НЕ выделена
 					// тогда мы добавляем параметры для выборки только действующих
@@ -479,7 +480,6 @@ order by Format";
 					command.Parameters.AddWithValue("?FirmStatus", 1);
 				}
 
-				bool showOnlyEnabled = !checkBoxShowDisabled.Checked;
                 FilterParams = AddParams(shname, regcode, seg, showOnlyEnabled);
 
 				dtClientsFill(FilterParams, showOnlyEnabled);
@@ -518,7 +518,19 @@ order by Format";
 				if (seg != -1)
 					command.Parameters.AddWithValue("?Segment", seg);
 
-				FilterParams = AddParams(shname, regcode, seg);
+				bool showOnlyEnabled = !_showDisabledFirm;
+				if (showOnlyEnabled)
+				{
+					// Если галочка "Показывать недействующие" НЕ выделена
+					// тогда мы добавляем параметры для выборки только действующих
+					command.Parameters.AddWithValue("?AgencyEnabled", 1);
+					command.Parameters.AddWithValue("?Enabled", 1);
+					command.Parameters.AddWithValue("?FirmStatus", 1);
+				}
+
+				FilterParams = AddParams(shname, regcode, seg, showOnlyEnabled);
+				if (showOnlyEnabled)
+					FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 
 				dtPricesCostFill(FilterParams, !_showDisabledFirm);
 				dtCostsFormRulesFill(FilterParams, !_showDisabledFirm);
@@ -1877,7 +1889,7 @@ order by PriceName
 
             tcInnerTable.Visible = false;
         }
-
+		
         public void RefreshDataSet()
         {
             dtSet.EnforceConstraints = false;
@@ -1889,13 +1901,27 @@ order by PriceName
             {
                 dtSet.EnforceConstraints = true;
             }
-            dtClientsFill(String.Empty, !_showDisabledFirm);
-			dtPricesFill(String.Empty, !_showDisabledFirm);
-			dtPricesCostFill(String.Empty, !_showDisabledFirm);
-			dtFormRulesFill(String.Empty, !_showDisabledFirm);
-            dtPriceFMTsFill();
-			dtCostsFormRulesFill(String.Empty, !_showDisabledFirm);
-            cbRegionsFill();
+			bool showOnlyEnabled = !_showDisabledFirm;
+			if (showOnlyEnabled)
+			{
+				// Если галочка "Показывать недействующие" НЕ выделена
+				// тогда мы добавляем параметры для выборки только действующих
+				command.Parameters.AddWithValue("?AgencyEnabled", 1);
+				command.Parameters.AddWithValue("?Enabled", 1);
+				command.Parameters.AddWithValue("?FirmStatus", 1);
+			}
+
+			FilterParams = AddParams(String.Empty, 0, -1, showOnlyEnabled);
+
+			dtClientsFill(FilterParams, showOnlyEnabled);
+			if (showOnlyEnabled)
+				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
+			dtPricesFill(FilterParams, showOnlyEnabled);
+			dtPricesCostFill(FilterParams, showOnlyEnabled);
+			dtFormRulesFill(FilterParams, showOnlyEnabled);
+			dtPriceFMTsFill();
+			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
+			cbRegionsFill();
             dtSet.AcceptChanges();
         }
 
