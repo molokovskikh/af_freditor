@@ -1956,7 +1956,9 @@ order by PriceName
 					_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 				}
             	fmt = null;
-            	delimiter = null;
+            	_prevFmt = null;
+            	delimiter = String.Empty;
+            	_prevDelimiter = String.Empty;
 				SaveCostsSettings();
                 bsCostsFormRules.Filter = String.Empty;
                 bsFormRules.Filter = String.Empty;
@@ -2012,8 +2014,10 @@ order by PriceName
 							.Columns[CFRPriceItemId.ColumnName]
 							.DefaultValue = DBNull.Value;
 					}
-                	fmt = null;
-                	delimiter = null;
+					fmt = null;
+					_prevFmt = null;
+					delimiter = String.Empty;
+					_prevDelimiter = String.Empty;
 					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
 					if (indgvPriceData.RowCount > 0)
@@ -2603,8 +2607,6 @@ and c.Type = ?ContactType;",
 						e.Cancel = true;
 					indgvPrice.CurrentCell = indgvPrice.Rows[selectedRow].Cells[0];
 				}
-				
-				//CheckOnePrice(currencyManager);
 			}
         }
 
