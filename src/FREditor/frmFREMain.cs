@@ -914,7 +914,7 @@ where
         {
             ClearPrice();
 
-            Application.DoEvents();
+			Application.DoEvents();
             DataRow[] drFR;
 			// Выбираем правила для текущего priceItemId
             drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
@@ -929,7 +929,6 @@ where
 			_prevFmt = fmt;
             fmt = (drFR[0]["FRPriceFormatId"] is DBNull) ? null : 
 				(PriceFormat?)Convert.ToInt32(drFR[0]["FRPriceFormatId"]);
-
 			//Делаем фильтрацию по форматам прайс-листа
 			CurrencyManager cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);
 			if ((cm != null) && (cm.List is DataView))
@@ -2644,7 +2643,6 @@ and c.Type = ?ContactType;",
 				DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + priceFormat + "'");
 				if (exts.Length == 1)
 					fileExt = exts[0]["FMTExt"].ToString();
-
 				CurrencyManager currencyManager =
 					(CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
 				var drv = (DataRowView)currencyManager.Current;
@@ -3943,6 +3941,7 @@ order by PriceName
 
 		private string GetShortNameForCurrentPrice()
 		{
+			CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceItemId.ColumnName, currentPriceItemId);
 			var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource,
 				indgvPrice.DataMember];
 			var currentRowView = (DataRowView)currencyManager.Current;
@@ -3964,6 +3963,7 @@ order by PriceName
 			if (!(fmt.Equals((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue))) ||
 				!(delimiter.Equals(tbDevider.Text)))
 			{
+				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceItemId.ColumnName, currentPriceItemId);
 				string priceShortName = GetShortNameForCurrentPrice();
 				// Проверяем, если формат файла равен null, значит это первая настройка, 
 				// и значит при открытии такого прайса не создалась папка, поэтому создаем ее
@@ -3983,12 +3983,12 @@ order by PriceName
 					ofdNewFormat.Title += " Разделитель: '" + tbDevider.Text + "'";
 				// Если мы получили от пользователя новый файл в нужном формате
 				if (ofdNewFormat.ShowDialog() == DialogResult.OK)
-				{
-					
+				{					
 					// Получаем имя файла, хранящегося в локальном Temp
 					CurrencyManager currencyManager = 
 						(CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
 					var dataRowPrice = ((DataRowView)currencyManager.Current).Row;
+
 					/*
 					var drFR = dtFormRules.Select("FRPriceItemId = " + 
 						drP[PPriceItemId.ColumnName].ToString());
