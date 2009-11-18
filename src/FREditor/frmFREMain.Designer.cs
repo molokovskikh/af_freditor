@@ -207,9 +207,6 @@ namespace FREditor
 			this.lblMaster = new System.Windows.Forms.Label();
 			this.grpbParent = new System.Windows.Forms.GroupBox();
 			this.cmbParentSynonyms = new System.Windows.Forms.ComboBox();
-			this.cmbParentRules = new System.Windows.Forms.ComboBox();
-			this.lblSynonyms = new System.Windows.Forms.Label();
-			this.lblRules = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.lblDevider = new System.Windows.Forms.Label();
 			this.tbDevider = new System.Windows.Forms.TextBox();
@@ -1397,8 +1394,7 @@ namespace FREditor
 			this.checkBoxShowDisabled.TabIndex = 7;
 			this.checkBoxShowDisabled.Text = "Показывать недействующие";
 			this.checkBoxShowDisabled.UseVisualStyleBackColor = true;
-			this.checkBoxShowDisabled.CheckedChanged += new System.EventHandler(
-				this.checkBoxShowDisabled_CheckedChanged);
+			this.checkBoxShowDisabled.CheckedChanged += new System.EventHandler(this.checkBoxShowDisabled_CheckedChanged);
 			// 
 			// btnRetrancePrice
 			// 
@@ -1574,53 +1570,22 @@ namespace FREditor
 			// grpbParent
 			// 
 			this.grpbParent.Controls.Add(this.cmbParentSynonyms);
-			this.grpbParent.Controls.Add(this.cmbParentRules);
-			this.grpbParent.Controls.Add(this.lblSynonyms);
-			this.grpbParent.Controls.Add(this.lblRules);
 			this.grpbParent.Location = new System.Drawing.Point(20, 209);
 			this.grpbParent.Name = "grpbParent";
-			this.grpbParent.Size = new System.Drawing.Size(200, 118);
+			this.grpbParent.Size = new System.Drawing.Size(200, 52);
 			this.grpbParent.TabIndex = 31;
 			this.grpbParent.TabStop = false;
-			this.grpbParent.Text = "Родительские...";
+			this.grpbParent.Text = "Родительские синонимы";
 			// 
 			// cmbParentSynonyms
 			// 
 			this.cmbParentSynonyms.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRSynonyms", true));
 			this.cmbParentSynonyms.FormattingEnabled = true;
-			this.cmbParentSynonyms.Location = new System.Drawing.Point(6, 86);
+			this.cmbParentSynonyms.Location = new System.Drawing.Point(6, 19);
 			this.cmbParentSynonyms.Name = "cmbParentSynonyms";
 			this.cmbParentSynonyms.Size = new System.Drawing.Size(188, 21);
 			this.cmbParentSynonyms.TabIndex = 5;
 			this.cmbParentSynonyms.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbParentSynonyms_KeyDown);
-			// 
-			// cmbParentRules
-			// 
-			this.cmbParentRules.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRRules", true));
-			this.cmbParentRules.FormattingEnabled = true;
-			this.cmbParentRules.Location = new System.Drawing.Point(6, 39);
-			this.cmbParentRules.Name = "cmbParentRules";
-			this.cmbParentRules.Size = new System.Drawing.Size(185, 21);
-			this.cmbParentRules.TabIndex = 4;
-			this.cmbParentRules.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbParentRules_KeyDown);
-			// 
-			// lblSynonyms
-			// 
-			this.lblSynonyms.Location = new System.Drawing.Point(6, 63);
-			this.lblSynonyms.Name = "lblSynonyms";
-			this.lblSynonyms.Size = new System.Drawing.Size(80, 20);
-			this.lblSynonyms.TabIndex = 3;
-			this.lblSynonyms.Text = "... синонимы :";
-			this.lblSynonyms.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// lblRules
-			// 
-			this.lblRules.Location = new System.Drawing.Point(6, 16);
-			this.lblRules.Name = "lblRules";
-			this.lblRules.Size = new System.Drawing.Size(72, 20);
-			this.lblRules.TabIndex = 2;
-			this.lblRules.Text = "... правила :";
-			this.lblRules.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// groupBox2
 			// 
@@ -4023,9 +3988,7 @@ namespace FREditor
         private System.Windows.Forms.Label lblArticle;
         private System.Windows.Forms.LinkLabel lLblMaster;
         private System.Windows.Forms.Label lblMaster;
-        private System.Windows.Forms.GroupBox grpbParent;
-        private System.Windows.Forms.Label lblSynonyms;
-		private System.Windows.Forms.Label lblRules;
+		private System.Windows.Forms.GroupBox grpbParent;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label lblDevider;
         private System.Windows.Forms.TextBox tbDevider;
@@ -4117,8 +4080,7 @@ namespace FREditor
         private System.Data.DataColumn FRTxtMaxBoundCostEnd;
         private System.Windows.Forms.TextBox txtBoxMaxBoundCostEnd;
         private System.Windows.Forms.TextBox txtBoxMaxBoundCostBegin;
-        private System.Windows.Forms.Label label45;
-		private System.Windows.Forms.ComboBox cmbParentRules;
+		private System.Windows.Forms.Label label45;
 		private System.Windows.Forms.ComboBox cmbParentSynonyms;
 		private System.Data.DataColumn FRFOrderCost;
 		private System.Data.DataColumn FRTxtOrderCostBegin;

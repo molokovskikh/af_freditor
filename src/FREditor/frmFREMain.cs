@@ -963,30 +963,6 @@ where
 				else
 					//Запрещаем устаревшие текстовые форматы, DBF и NativeXLS
 					((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 10))";
-
-			FillParentComboBox(cmbParentRules,
-				@"
-select
-  pim.FormRuleID,
-  concat(cd.ShortName, ' (', if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName), ') - ', r.Region) PriceName
-from
-  usersettings.clientsdata cd,
-  usersettings.pricesdata pd,
-  usersettings.pricescosts pc,
-  usersettings.priceitems pim,
-  farm.regions r
-where
-  pd.FirmCode = cd.FirmCode
-and pd.CostType is not null
-and r.RegionCode = cd.RegionCode
-and pc.PriceCode = pd.PriceCode
-and ((pd.CostType = 1) or (pc.BaseCost = 1))
-and pim.id = pc.PriceItemId
-and pim.FormRuleID = ?ParentValue
-order by PriceName",
-				drFR[0]["FRRules"],
-				"FormRuleId",
-				"PriceName");
 			FillParentComboBox(
 				cmbParentSynonyms, 
 				@"
