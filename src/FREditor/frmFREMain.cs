@@ -66,7 +66,6 @@ namespace FREditor
 		long currentClientCode = 0;
         long startLine = 0;
         string[] FFieldNames;
-        string existParentRules = String.Empty;
 
         string nameR = String.Empty;
         string FilterParams = String.Empty;
@@ -193,7 +192,7 @@ WHERE c.CostCode = ?CostCode;";
 
             this.mcmdUpdateFormRules.CommandText =
 @"UPDATE formrules SET
-  ParentFormRules = ?FRRules,
+  ParentFormRules = null,
 
   JunkPos = ?FRSelfJunkPos,
   AwaitPos = ?FRSelfAwaitPos,
@@ -286,84 +285,83 @@ set
   RowCount = if(RowCount <> ?FRPosNum, 0, RowCount)
 where
   Id = ?FRPriceItemId";
-			this.mcmdUpdateFormRules.Parameters.Add("?FRFormID", MySql.Data.MySqlClient.MySqlDbType.Int64);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRSelfPriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRPriceItemId", MySql.Data.MySqlClient.MySqlDbType.Int64);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRSynonyms", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRRules", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRStartLine", MySql.Data.MySqlClient.MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRFormID", MySqlDbType.Int64);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRSelfPriceCode", MySqlDbType.Int64);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRPriceItemId", MySqlDbType.Int64);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRSynonyms", MySqlDbType.Int64);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRStartLine", MySqlDbType.Int32);
 
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNameBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNameEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtFirmCrBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtFirmCrEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtUnitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtUnitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVolumeBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVolumeEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtQuantityBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtQuantityEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNoteBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNoteEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtPeriodBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtPeriodEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtDocBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtDocEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtJunkBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtJunkEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtAwaitBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtAwaitEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRequestRatioBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRequestRatioEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRegistryCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRegistryCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVitallyImportantBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVitallyImportantEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMaxBoundCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMaxBoundCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtOrderCostBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtOrderCostEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountBegin", MySql.Data.MySqlClient.MySqlDbType.Int32);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySql.Data.MySqlClient.MySqlDbType.Int32);			
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeCrBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtCodeCrEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNameBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNameEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtFirmCrBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtFirmCrEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinBoundCostBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinBoundCostEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtUnitBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtUnitEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVolumeBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVolumeEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtQuantityBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtQuantityEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNoteBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNoteEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtPeriodBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtPeriodEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtDocBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtDocEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtJunkBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtJunkEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtAwaitBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtAwaitEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRequestRatioBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRequestRatioEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRegistryCostBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtRegistryCostEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVitallyImportantBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtVitallyImportantEnd", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMaxBoundCostBegin", MySqlDbType.Int32);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMaxBoundCostEnd", MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtOrderCostBegin", MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtOrderCostEnd", MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountBegin", MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySqlDbType.Int32);			
 
-            this.mcmdUpdateFormRules.Parameters.Add("?FRDelimiter", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRPosNum", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRSelfJunkPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRSelfAwaitPos", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRPriceFormatId", MySql.Data.MySqlClient.MySqlDbType.Int64);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRListName", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRNameMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRForbWords", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRSelfVitallyImportantMask", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRDelimiter", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRPosNum", MySqlDbType.Int64);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRSelfJunkPos", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRSelfAwaitPos", MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRPriceFormatId", MySqlDbType.Int64);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRListName", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRNameMask", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRForbWords", MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRSelfVitallyImportantMask", MySqlDbType.VarString);
 
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFCode", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFCodeCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFName1", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFName2", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFName3", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFFirmCr", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFMinBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFUnit", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFVolume", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFQuantity", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFNote", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFPeriod", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFDoc", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFJunk", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFAwait", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFRequestRatio", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFRegistryCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFVitallyImportant", MySql.Data.MySqlClient.MySqlDbType.VarString);
-            this.mcmdUpdateFormRules.Parameters.Add("?FRFMaxBoundCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRFOrderCost", MySql.Data.MySqlClient.MySqlDbType.VarString);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRFMinOrderCount", MySql.Data.MySqlClient.MySqlDbType.VarString);			
-            this.mcmdUpdateFormRules.Parameters.Add("?FRMemo", MySql.Data.MySqlClient.MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFCode", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFCodeCr", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFName1", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFName2", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFName3", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFFirmCr", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFMinBoundCost", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFUnit", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFVolume", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFQuantity", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFNote", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFPeriod", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFDoc", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFJunk", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFAwait", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFRequestRatio", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFRegistryCost", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFVitallyImportant", MySqlDbType.VarString);
+            this.mcmdUpdateFormRules.Parameters.Add("?FRFMaxBoundCost", MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRFOrderCost", MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRFMinOrderCount", MySqlDbType.VarString);			
+            this.mcmdUpdateFormRules.Parameters.Add("?FRMemo", MySqlDbType.VarString);
 
             foreach (MySqlParameter ms in this.mcmdUpdateFormRules.Parameters)
             {
@@ -752,8 +750,6 @@ SELECT
     pd.PriceCode as FRSelfPriceCode,
     pd.ParentSynonym AS FRSynonyms,
 
-	FR.ParentFormRules AS FRRules,
-
     PFR.PriceFormatId as FRPriceFormatId,
 
 	FR.Memo As FRMemo,
@@ -918,7 +914,6 @@ where
             DataRow[] drFR;
 			// Выбираем правила для текущего priceItemId
             drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
-            existParentRules = drFR[0]["FRRules"].ToString();
 
             DataRow drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
             frmCaption = String.Format("{0}; {1}", drC["CShortName"], drC["CRegion"]);
@@ -1138,20 +1133,10 @@ order by PriceName
 					break;
 			}
 
-			if (existParentRules == String.Empty)
-			{
-				txtBoxSelfAwaitPos.ReadOnly = false;
-				txtBoxSelfJunkPos.ReadOnly = false;
-				txtBoxNameMask.ReadOnly = false;
-				txtBoxForbWords.ReadOnly = false;
-			}
-			else
-			{
-				txtBoxSelfAwaitPos.ReadOnly = true;
-				txtBoxSelfJunkPos.ReadOnly = true;
-				txtBoxNameMask.ReadOnly = true;
-				txtBoxForbWords.ReadOnly = true;
-			}
+            txtBoxSelfAwaitPos.ReadOnly = false;
+            txtBoxSelfJunkPos.ReadOnly = false;
+            txtBoxNameMask.ReadOnly = false;
+            txtBoxForbWords.ReadOnly = false;
 		}
 
 		private void FillParentComboBox(ComboBox cmbParent, string FillSQL, object ParentValue, string IdField, string NameField)
@@ -2035,15 +2020,12 @@ order by PriceName
 
         private void txtBoxCode_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(typeof(DropField)))
-            {
-                if (existParentRules == String.Empty)
-                    e.Effect = DragDropEffects.Copy;
-                else
-                    e.Effect = DragDropEffects.None;
-            }
-            else
-                e.Effect = DragDropEffects.None;
+			if (e.Data.GetDataPresent(typeof(DropField)))
+			{
+				e.Effect = DragDropEffects.Copy;
+			}
+			else
+				e.Effect = DragDropEffects.None;
         }
 
         private void txtBoxCode_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
@@ -2054,10 +2036,7 @@ order by PriceName
         private void txtBoxSheetName_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(DropSheet)))
-                if (existParentRules == String.Empty)
-                    e.Effect = DragDropEffects.Copy;
-                else
-                    e.Effect = DragDropEffects.None;
+				e.Effect = DragDropEffects.Copy;
             else
                 e.Effect = DragDropEffects.None;
         }
@@ -2070,10 +2049,7 @@ order by PriceName
         private void txtBoxCodeBegin_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(DropField)))
-                if (existParentRules == String.Empty)
-                    e.Effect = DragDropEffects.Copy;
-                else
-                    e.Effect = DragDropEffects.None;
+				e.Effect = DragDropEffects.Copy;
             else
                 e.Effect = DragDropEffects.None;
         }
@@ -2142,12 +2118,7 @@ order by PriceName
         private void txtBoxStartLine_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(DropField)))
-            {
-                if (existParentRules == String.Empty)
-                    e.Effect = DragDropEffects.Copy;
-                else
-                    e.Effect = DragDropEffects.None;
-            }
+                e.Effect = DragDropEffects.Copy;
             else
                 e.Effect = DragDropEffects.None;
         }
