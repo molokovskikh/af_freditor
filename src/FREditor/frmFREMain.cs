@@ -192,8 +192,6 @@ WHERE c.CostCode = ?CostCode;";
 
             this.mcmdUpdateFormRules.CommandText =
 @"UPDATE formrules SET
-  ParentFormRules = null,
-
   JunkPos = ?FRSelfJunkPos,
   AwaitPos = ?FRSelfAwaitPos,
   VitallyImportantMask = ?FRSelfVitallyImportantMask,
@@ -858,7 +856,7 @@ FROM
 + sqlPart +
 @"	
   inner join Farm.formrules AS FR ON FR.Id = pim.FormRuleId
-  left join Farm.FormRules AS PFR ON PFR.id = ifnull(fr.ParentFormRules, FR.Id)
+  left join Farm.FormRules AS PFR ON PFR.id = FR.Id
   left join Farm.PriceFMTs as pfmt on pfmt.id = PFR.PriceFormatId
 where
   ((pd.CostType = 1) or (pc.BaseCost = 1)) 
@@ -3200,14 +3198,20 @@ and fr.Id = pim.FormRuleId;
         }
 
         private bool CostIsValid()
-        {            
-            if ((indgvPrice.CurrentRow.DataBoundItem == null) || ((indgvPrice.CurrentRow.DataBoundItem != null) && (((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)))
-            {
-                MessageBox.Show("Необходимо указать тип цены!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-            else
-                return true;
+        {
+			if (indgvPrice.CurrentRow != null)
+			{
+				if ((indgvPrice.CurrentRow.DataBoundItem == null) ||
+				    ((indgvPrice.CurrentRow.DataBoundItem != null) &&
+				     (((DataRowView) indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)))
+				{
+					MessageBox.Show("Необходимо указать тип цены!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return false;
+				}
+				else
+					return true;
+			}
+        	return false;
         }
 
         private void indgvFirm_KeyDown(object sender, KeyEventArgs e)
