@@ -2552,7 +2552,12 @@ and c.Type = ?ContactType;",
 						indgvPrice.DataMember];
 					if (currencyManager.Count == 0)
 						e.Cancel = true;
-					indgvPrice.CurrentCell = indgvPrice.Rows[selectedRow].Cells[0];
+					try
+					{
+						indgvPrice.CurrentCell = indgvPrice.Rows[selectedRow].Cells[0];
+					}
+					catch(Exception)
+					{}
 				}
 			}
         }
@@ -2580,6 +2585,8 @@ and c.Type = ?ContactType;",
 
         private void tsbApply_Click(object sender, EventArgs e)
         {
+			Point selectedFirmCell = new Point(indgvFirm.SelectedCells[0].RowIndex, indgvFirm.SelectedCells[0].ColumnIndex);
+			Point selectedPriceCell = new Point(indgvPrice.SelectedCells[0].RowIndex, indgvPrice.SelectedCells[0].ColumnIndex);
 			string filePath = String.Empty;
         	filePath = EndPath + Path.GetFileNameWithoutExtension(_priceFileFormatHelper.NewShortFileName) +
         	           Path.DirectorySeparatorChar + _priceFileFormatHelper.NewShortFileName;
@@ -2772,7 +2779,7 @@ and fr.Id = pim.FormRuleId;
 							var _clientProxy = _wcfChannelFactory.CreateChannel();
 							try
 							{
-								_clientProxy.PutFileToBase(filePriceInfo);
+								_clientProxy.PutFileToInbound(filePriceInfo);
 								((ICommunicationObject) _clientProxy).Close();
 							}
 							catch (FaultException fex)
@@ -2805,6 +2812,13 @@ and fr.Id = pim.FormRuleId;
 					}
 				}	
 			}
+        	try
+        	{
+				indgvFirm.CurrentCell = indgvFirm.Rows[selectedFirmCell.X].Cells[selectedFirmCell.Y];
+				indgvPrice.CurrentCell = indgvPrice.Rows[selectedPriceCell.X].Cells[selectedPriceCell.Y];
+        	}
+        	catch (Exception)
+        	{}
         }
 
         private void frmFREMain_KeyDown(object sender, KeyEventArgs e)
