@@ -17,6 +17,7 @@ using Common.Tools;
 using System.ServiceModel;
 using RemotePriceProcessor;
 using System.Net.Security;
+using FREditor.Helpers;
 
 namespace FREditor
 {
@@ -54,12 +55,6 @@ namespace FREditor
         string listName = String.Empty;
         string delimiter = String.Empty;
 		PriceFormat? fmt = null;
-
-		// Предыдущий формат (чтобы при нажатии "Применить", 
-		// можно было бы определить, менялся ли формат прайса)
-		private PriceFormat? _prevFmt = null;
-
-		private string _prevDelimiter = String.Empty;
 
 		//Текущий клиент, с которым происходит работа и текущий прайс
 		long currentPriceItemId = 0;
@@ -110,6 +105,8 @@ namespace FREditor
 		// Флаг показывает нужно выбирать только действующих поставщиков (true)
 		// или же всех подряд (false)
     	private bool _showDisabledFirm = false;
+
+    	private PriceFileFormatHelper _priceFileFormatHelper;
 
         public frmFREMain()
         {
@@ -379,6 +376,9 @@ where
 		private void Form1_Load(object sender, System.EventArgs e)
         {
 			connection.Open();
+
+			_priceFileFormatHelper = new PriceFileFormatHelper(connection);
+
 			command.Connection = connection;
 			dataAdapter = new MySqlDataAdapter(command);
 
@@ -918,10 +918,7 @@ where
 
 			string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
 
-			// Сохраняем предыдущий формат
-			_prevFmt = fmt;
-            fmt = (drFR[0]["FRPriceFormatId"] is DBNull) ? null : 
-				(PriceFormat?)Convert.ToInt32(drFR[0]["FRPriceFormatId"]);
+        	fmt = _priceFileFormatHelper.NewFormat;
 			//Делаем фильтрацию по форматам прайс-листа
 			CurrencyManager cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);
 			if ((cm != null) && (cm.List is DataView))
@@ -956,6 +953,8 @@ where
 				else
 					//Запрещаем устаревшие текстовые форматы, DBF и NativeXLS
 					((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 10))";
+			if (fmt.HasValue)
+				CurrencyManagerPosition(cm, "FMTId", drFR[0]["FRPriceFormatId"]);
 			FillParentComboBox(
 				cmbParentSynonyms, 
 				@"
@@ -982,10 +981,9 @@ order by PriceName
             if (exts.Length == 1)
                 r = exts[0]["FMTExt"].ToString();
 
-			_prevDelimiter = delimiter;
-            delimiter = drFR[0]["FRDelimiter"].ToString();
+			delimiter = _priceFileFormatHelper.NewDelimiter; 
 
-            string takeFile = shortFileNameByPriceItemId + r;
+        	string takeFile = _priceFileFormatHelper.NewShortFileName;
 
 			PrepareShowTab(fmt);
 
@@ -997,7 +995,7 @@ order by PriceName
 				try
 				{
 					fileExist = true;
-					string filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
+					string filePath = EndPath + Convert.ToString(currentPriceItemId) + Path.DirectorySeparatorChar + takeFile;
 
 					if (!_isFormatChanged)
 					{
@@ -1914,9 +1912,9 @@ order by PriceName
 					_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 				}
             	fmt = null;
-            	_prevFmt = null;
+            	//_prevFmt = null;
             	delimiter = String.Empty;
-            	_prevDelimiter = String.Empty;
+            	//_prevDelimiter = String.Empty;
 				SaveCostsSettings();
                 bsCostsFormRules.Filter = String.Empty;
                 bsFormRules.Filter = String.Empty;
@@ -1942,6 +1940,11 @@ order by PriceName
 
 					currentClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
 					currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
+
+					var row = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
+                    var priceFormat = (row[0]["FRPriceFormatId"] is DBNull) ? null : (PriceFormat?)Convert.ToInt32(row[0]["FRPriceFormatId"]);
+					var delim = Convert.ToString(row[0]["FRDelimiter"]);
+					_priceFileFormatHelper.LoadPriceFormat((ulong)currentPriceItemId, priceFormat, delim);
 
 					bsCostsFormRules.Filter = "CFRPriceItemId = " + currentPriceItemId.ToString();
 					bsFormRules.Filter = "FRPriceItemId = " + currentPriceItemId.ToString();
@@ -1973,9 +1976,9 @@ order by PriceName
 							.DefaultValue = DBNull.Value;
 					}
 					fmt = null;
-					_prevFmt = null;
+					//_prevFmt = null;
 					delimiter = String.Empty;
-					_prevDelimiter = String.Empty;
+					//_prevDelimiter = String.Empty;
 					DoOpenPrice(drP);
                     tmrUpdateApply.Start();
 					if (indgvPriceData.RowCount > 0)
@@ -2578,28 +2581,8 @@ and c.Type = ?ContactType;",
         private void tsbApply_Click(object sender, EventArgs e)
         {
 			string filePath = String.Empty;
-			// Если изменился формат или разделитель
-			if ((_prevFmt != fmt) || (_prevDelimiter != delimiter))
-			{
-				var priceFormat = (PriceFormat)Enum.Parse(typeof(PriceFormat),
-					(cmbFormat.SelectedItem as DataRowView)[0].ToString());
-				string fileExt = "";
-				// Получить расширение для нового формата
-				DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + priceFormat + "'");
-				if (exts.Length == 1)
-					fileExt = exts[0]["FMTExt"].ToString();
-				CurrencyManager currencyManager =
-					(CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-				var drv = (DataRowView)currencyManager.Current;
-				var drP = drv.Row;
-				var drFR = dtFormRules.Select("FRPriceItemId = " +
-					drP[PPriceItemId.ColumnName].ToString());
-				// Получить разделитель
-				delimiter = drFR[0]["FRDelimiter"].ToString();
-				string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
-				string takeFile = shortFileNameByPriceItemId + fileExt;
-				filePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;			
-			}
+        	filePath = EndPath + Path.GetFileNameWithoutExtension(_priceFileFormatHelper.NewShortFileName) +
+        	           Path.DirectorySeparatorChar + _priceFileFormatHelper.NewShortFileName;
 
             CommitAllEdit();
             DataSet chg = dtSet.GetChanges();
@@ -2776,9 +2759,9 @@ and fr.Id = pim.FormRuleId;
             tsbApply.Enabled = false;
             tsbCancel.Enabled = false;
 
-			if ((_prevFmt != fmt) || (_prevDelimiter != delimiter))
+			if (_priceFileFormatHelper.ChangeFormat())
 			{
-				using (FilePriceInfo filePriceInfo = new FilePriceInfo())
+				using (var filePriceInfo = new FilePriceInfo())
 				{
 					if (File.Exists(filePath))
 					{
@@ -2786,7 +2769,7 @@ and fr.Id = pim.FormRuleId;
 						filePriceInfo.PriceItemId = Convert.ToUInt32(currentPriceItemId);
 						try
 						{
-							IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
+							var _clientProxy = _wcfChannelFactory.CreateChannel();
 							try
 							{
 								_clientProxy.PutFileToBase(filePriceInfo);
@@ -3910,78 +3893,71 @@ order by PriceName
 				cmbFormat.SelectedIndexChanged -= cmbFormat_SelectedIndexChanged;
 				_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 			}
-			// Если формат прайса или разделитель был изменен
-			if (!(fmt.Equals((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue))) ||
-				!(delimiter.Equals(tbDevider.Text)))
+
+			var tempDirectory = EndPath + Convert.ToString(currentPriceItemId) + Path.DirectorySeparatorChar;
+			if (!Directory.Exists(tempDirectory))
+				Directory.CreateDirectory(tempDirectory);
+
+			if (_priceFileFormatHelper.SetNewFormat((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue), tbDevider.Text))
 			{
-				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceItemId.ColumnName, currentPriceItemId);
-				string priceShortName = GetShortNameForCurrentPrice();
-				// Проверяем, если формат файла равен null, значит это первая настройка, 
-				// и значит при открытии такого прайса не создалась папка, поэтому создаем ее
-				if (GetCurrentPriceFormat() == null)
-					Directory.CreateDirectory(EndPath + priceShortName + "\\");
-
-				var priceFormat = (PriceFormat)Enum.Parse(typeof(PriceFormat), 
-					(cmbFormat.SelectedItem as DataRowView)[0].ToString());
-				string fileExt = "";
-				// Получить расширение для нового формата
-				DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + priceFormat + "'");
-				if (exts.Length == 1)
-					fileExt = exts[0]["FMTExt"].ToString();
-				ofdNewFormat.Filter = priceFormat.ToString() + "|*" + fileExt;
-				ofdNewFormat.Title = "Выберите файл в новом формате (" + priceFormat.ToString() + ").";
-				if (tbDevider.Text.Length > 0)
+				var newFormatFileExtension = _priceFileFormatHelper.NewFileExtension;
+				ofdNewFormat.Filter = _priceFileFormatHelper.NewFormat + "|*" + newFormatFileExtension;
+				ofdNewFormat.Title = "Выберите файл в новом формате (" + _priceFileFormatHelper.NewFormat + ").";
+				if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
 					ofdNewFormat.Title += " Разделитель: '" + tbDevider.Text + "'";
-				// Если мы получили от пользователя новый файл в нужном формате
-				if (ofdNewFormat.ShowDialog() == DialogResult.OK)
-				{					
-					// Получаем имя файла, хранящегося в локальном Temp
-					CurrencyManager currencyManager = 
-						(CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-					var dataRowPrice = ((DataRowView)currencyManager.Current).Row;
 
-					/*
-					var drFR = dtFormRules.Select("FRPriceItemId = " + 
-						drP[PPriceItemId.ColumnName].ToString());
-					string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
-					*/
-					string takeFile = priceShortName + fileExt;
-					string filePath = EndPath + priceShortName + "\\" + takeFile;
+				if (ofdNewFormat.ShowDialog() == DialogResult.OK)
+				{
 					if (File.Exists(ofdNewFormat.FileName))
 					{
-						using (var readStream = File.OpenRead(ofdNewFormat.FileName))
+						using (var newSourceFile = File.OpenRead(ofdNewFormat.FileName))
 						{
+							var destinationFilePath = tempDirectory + _priceFileFormatHelper.NewShortFileName;
 							try
 							{
-								using (var writeStream = File.OpenWrite(filePath))
+								using (var newDestinationFile = File.OpenWrite(destinationFilePath))
 								{
-									writeStream.Seek(0, SeekOrigin.Begin);
-									CopyStreams(readStream, writeStream);
-									_isFormatChanged = true;
+									newDestinationFile.Seek(0, SeekOrigin.Begin);
+									CopyStreams(newSourceFile, newDestinationFile);
+									_isFormatChanged = true;									
 								}
 							}
-							catch (Exception ex)
-							{
-								Mailer.SendWarningLetter(String.Format(
-									@"Ошибка при изменении формата файла. Невозможно записать в файл {0}\n{1}",
-									filePath, ex.ToString()));
-								MessageBox.Show(String.Format("Невозможно записать файл {0}", filePath),
-                                    "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							catch(Exception)
+							{								
+								_priceFileFormatHelper.ResetNewFormat();
+								Mailer.SendWarningLetter(
+									String.Format(
+										@"Изменение формата прайс-листа. Невозможно записать указанный файл в новом формате в локальную веременную директорию. Файл {0}",
+										destinationFilePath));
 							}
-						}						
+						}
+						var dataRowPrice = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
 						DoOpenPrice(dataRowPrice);
 						_isFormatChanged = false;
 					}
 					else
 					{
-						Mailer.SendWarningLetter(String.Format(
-							"При изменении формата файла (или разделителя) новый файл {0} не найден",
-							ofdNewFormat.FileName));
-						MessageBox.Show(String.Format("Файл '{0}' не найден", ofdNewFormat.FileName),
-							"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						_priceFileFormatHelper.ResetNewFormat();
+						// TODO: выставить в comboBox старый формат
+						Mailer.SendWarningLetter(
+							String.Format(
+								@"Изменение формата прайс-листа. Пользователь выбрал файл в новом формате, однако этот файл не был найден. Файл {0}",
+								ofdNewFormat.FileName));
+						MessageBox.Show("Выбранный вами файл был переименован, перемещен или удален. Выберите другой файл", "Ошибка",
+						                MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
+				else
+				{
+					_priceFileFormatHelper.ResetNewFormat();
+				}
 			}
+			else
+			{
+				if (!String.IsNullOrEmpty(_priceFileFormatHelper.LastErrorMessage))
+					MessageBox.Show(_priceFileFormatHelper.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+			
 			if (!_isComboBoxFormatHandlerRegistered)
 			{
 				cmbFormat.SelectedIndexChanged += cmbFormat_SelectedIndexChanged;

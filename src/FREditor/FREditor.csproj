@@ -198,6 +198,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Helpers\InputLanguageHelper.cs" />
+    <Compile Include="Helpers\PriceFileFormatHelper.cs" />
     <Compile Include="Mailer.cs" />
     <Compile Include="PriceFields.cs" />
     <Compile Include="PriceFormat.cs" />
