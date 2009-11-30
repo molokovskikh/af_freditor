@@ -84,8 +84,7 @@ namespace FREditor
         public DataTable dtFirmSegment;
         protected dgFocus fcs;
 
-        // Фабрика для создания соединений с WCF сервисом
-        private ChannelFactory<IRemotePriceProcessor> _wcfChannelFactory;
+    	private PriceProcessorWcfHelper _priceProcessor;
 
 		// Поле для хранения текста, который нужно найти 
 		// внутри колонок прайса (или среди заголовков колонок)
@@ -363,14 +362,7 @@ where
                 ms.SourceColumn = ms.ParameterName.Substring(1);
             }
 
-            NetTcpBinding binding = new NetTcpBinding();
-            binding.Security.Transport.ProtectionLevel = ProtectionLevel.EncryptAndSign;
-            binding.Security.Mode = SecurityMode.None;
-            binding.TransferMode = TransferMode.Streamed;
-            binding.MaxReceivedMessageSize = Int32.MaxValue;
-            binding.MaxBufferSize = 524288; // 0.5 Мб
-            _wcfChannelFactory = new ChannelFactory<IRemotePriceProcessor>(binding,
-                Settings.Default.WCFServiceUrl);
+			_priceProcessor = new PriceProcessorWcfHelper(Settings.Default.WCFServiceUrl);
         }
 
 		private void Form1_Load(object sender, System.EventArgs e)
@@ -999,39 +991,27 @@ order by PriceName
 
 					if (!_isFormatChanged)
 					{
-
 						Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
 
 						if (File.Exists(filePath))
 							File.Delete(filePath);
 
-						IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
-						try
-						{
-							using (Stream _openFile = _clientProxy.BaseFile(
-								Convert.ToUInt32(shortFileNameByPriceItemId)))
+						// Берем файл из Base
+                        using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
+                        {
+							if (openFile != null)
 							{
-								using (FileStream _fileStream = File.Create(filePath))
+								using (var fileStream = File.Create(filePath))
 								{
-									CopyStreams(_openFile, _fileStream);
+									CopyStreams(openFile, fileStream);
 								}
 							}
-							((ICommunicationObject)_clientProxy).Close();
-						}
-						catch (FaultException fex)
-						{
-							MessageBox.Show(fex.Reason.ToString(), "Ошибка",
-								MessageBoxButtons.OK, MessageBoxIcon.Error);
-							if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-								((ICommunicationObject)_clientProxy).Abort();
-							return;
-						}
-						catch (Exception)
-						{
-							if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-								((ICommunicationObject)_clientProxy).Abort();
-							throw;
-						}
+							else
+							{
+								MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+								return;
+							}
+                        }
 					}
 
 					Application.DoEvents();
@@ -2766,59 +2746,32 @@ and fr.Id = pim.FormRuleId;
             tsbApply.Enabled = false;
             tsbCancel.Enabled = false;
 
-			if (_priceFileFormatHelper.ChangeFormat())
+			try
 			{
-				using (var filePriceInfo = new FilePriceInfo())
-				{
-					if (File.Exists(filePath))
-					{
-						filePriceInfo.Stream = File.OpenRead(filePath);
-						filePriceInfo.PriceItemId = Convert.ToUInt32(currentPriceItemId);
-						try
-						{
-							var _clientProxy = _wcfChannelFactory.CreateChannel();
-							try
-							{
-								_clientProxy.PutFileToInbound(filePriceInfo);
-								((ICommunicationObject) _clientProxy).Close();
-							}
-							catch (FaultException fex)
-							{
-								MessageBox.Show(fex.Reason.ToString(), "Ошибка", MessageBoxButtons.OK,
-								                MessageBoxIcon.Error);
-								if (((ICommunicationObject) _clientProxy).State != CommunicationState.Closed)
-									((ICommunicationObject) _clientProxy).Abort();
-								return;
-							}
-							catch (Exception)
-							{
-								if (((ICommunicationObject) _clientProxy).State != CommunicationState.Closed)
-									((ICommunicationObject) _clientProxy).Abort();
-								throw;
-							}
-						}
-						catch (PriceProcessorException priceProcessorException)
-						{
-							MessageBox.Show(priceProcessorException.Message, 
-								"Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-						}
-					}
-					else
-					{
-						Mailer.SendWarningLetter(String.Format(
-							"При применении изменений после смена формата файла (или разделителя) файл {0} не найден", filePath));
-						MessageBox.Show(String.Format("Невозможно изменить формат файла. Файл {0} не найден",
-							filePath), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-				}	
-			}
-        	try
-        	{
 				indgvFirm.CurrentCell = indgvFirm.Rows[selectedFirmCell.X].Cells[selectedFirmCell.Y];
 				indgvPrice.CurrentCell = indgvPrice.Rows[selectedPriceCell.X].Cells[selectedPriceCell.Y];
-        	}
-        	catch (Exception)
-        	{}
+			}
+			catch (Exception)
+			{ }
+
+			if (_priceFileFormatHelper.ChangeFormat())
+			{
+				if (File.Exists(filePath))
+				{
+					if (!_priceProcessor.PutFileToInbound(Convert.ToUInt32(currentPriceItemId), File.OpenRead(filePath)))
+					{
+						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
+						                MessageBoxIcon.Error);
+					}
+				}
+				else
+				{
+					Mailer.SendWarningLetter(String.Format(
+						"При применении изменений после смена формата файла (или разделителя) файл {0} не найден", filePath));
+					MessageBox.Show(String.Format("Невозможно изменить формат файла. Файл {0} не найден",
+						filePath), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
         }
 
         private void frmFREMain_KeyDown(object sender, KeyEventArgs e)
@@ -2859,6 +2812,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void frmFREMain_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			_priceProcessor.Dispose();
 			TrySaveData();
             SaveCostsSettings();
             SaveMarkingSettings();
@@ -3348,52 +3302,31 @@ and p.Id = f.PriceFormatID",
 		{
 			if (indgvPrice.CurrentRow != null)
 			{
-				DataRow selectedPrice = ((DataRowView)indgvPrice.CurrentRow.DataBoundItem).Row;
+				var selectedPrice = ((DataRowView) indgvPrice.CurrentRow.DataBoundItem).Row;
 
+				if (!_priceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId])))
+				{
+					MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка",
+					                MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
+
+				connection.Open();
 				try
 				{
-                    IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
-                    try
-                    {
-                        _clientProxy.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId]));
-                        ((ICommunicationObject)_clientProxy).Close();
-                    }
-                    catch (FaultException fex)
-                    {
-                        MessageBox.Show(fex.Reason.ToString(), "Ошибка", 
-                            MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-                            ((ICommunicationObject)_clientProxy).Abort();
-                        return;
-                    }
-                    catch (Exception)
-                    {
-                        if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-                            ((ICommunicationObject)_clientProxy).Abort();
-                        throw;
-                    }
-
-					connection.Open();
-					try
-					{
-						MySqlHelper.ExecuteNonQuery(
-							connection,
-							"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
-							new MySqlParameter("?UserName", Environment.UserName),
-							new MySqlParameter("?UserHost", Environment.MachineName),
-							new MySqlParameter("?PriceItemId", Convert.ToInt64(selectedPrice[PPriceItemId])));
-					}
-					finally
-					{
-						connection.Close();
-					}
-
-					MessageBox.Show("Прайс-лист успешно переподложен.");
+					MySqlHelper.ExecuteNonQuery(
+						connection,
+						"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
+						new MySqlParameter("?UserName", Environment.UserName),
+						new MySqlParameter("?UserHost", Environment.MachineName),
+						new MySqlParameter("?PriceItemId", Convert.ToInt64(selectedPrice[PPriceItemId])));
 				}
-				catch (RemotePriceProcessor.PriceProcessorException priceProcessorException)
+				finally
 				{
-					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					connection.Close();
 				}
+
+				MessageBox.Show("Прайс-лист успешно переподложен.");
 
 				indgvPrice.Focus();
 			}
@@ -3743,43 +3676,21 @@ order by PriceName
 		{
 			var dialog = new OpenFileDialog();
 			dialog.RestoreDirectory = true;
+			dialog.Filter = String.Format("{0}|*{1}", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
-				var fileName = dialog.FileName;                                
-                
-				using(FilePriceInfo filePriceInfo = new FilePriceInfo())
+				var fileName = dialog.FileName;
+
+				if (!_priceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), File.OpenRead(fileName)))
 				{
-                    filePriceInfo.Stream = File.OpenRead(fileName);
-                    filePriceInfo.PriceItemId = Convert.ToUInt32(currentPriceItemId);
-					try
-					{
-                        IRemotePriceProcessor _clientProxy = _wcfChannelFactory.CreateChannel();
-                        try
-                        {
-                            _clientProxy.PutFileToBase(filePriceInfo);
-                            ((ICommunicationObject)_clientProxy).Close();
-                            MessageBox.Show("Прайс-лист успешно положен в Base.");
-                        }
-                        catch (FaultException fex)
-                        {
-                            MessageBox.Show(fex.Reason.ToString(), "Ошибка", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-                            if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-                                ((ICommunicationObject)_clientProxy).Abort();
-                            return;
-                        }
-                        catch (Exception)
-                        {
-                            if (((ICommunicationObject)_clientProxy).State != CommunicationState.Closed)
-                                ((ICommunicationObject)_clientProxy).Abort();
-                            throw;
-                        }
-					}
-					catch (RemotePriceProcessor.PriceProcessorException priceProcessorException)
-					{
-						MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					}
-				}				
+					MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
+					                MessageBoxIcon.Error);
+				}
+				else
+				{
+					MessageBox.Show("Прайс-лист успешно положен в Base.", "Информация", MessageBoxButtons.OK,
+					                MessageBoxIcon.Information);
+				}
 			}
 		}
 
