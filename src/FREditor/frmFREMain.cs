@@ -3303,31 +3303,36 @@ and p.Id = f.PriceFormatID",
 			if (indgvPrice.CurrentRow != null)
 			{
 				var selectedPrice = ((DataRowView) indgvPrice.CurrentRow.DataBoundItem).Row;
-
-				if (!_priceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId])))
-				{
-					MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка",
-					                MessageBoxButtons.OK, MessageBoxIcon.Error);
-					return;
-				}
-
-				connection.Open();
 				try
 				{
-					MySqlHelper.ExecuteNonQuery(
-						connection,
-						"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
-						new MySqlParameter("?UserName", Environment.UserName),
-						new MySqlParameter("?UserHost", Environment.MachineName),
-						new MySqlParameter("?PriceItemId", Convert.ToInt64(selectedPrice[PPriceItemId])));
+					if (!_priceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId])))
+					{
+						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка",
+						                MessageBoxButtons.OK, MessageBoxIcon.Error);
+						return;
+					}
+
+					connection.Open();
+					try
+					{
+						MySqlHelper.ExecuteNonQuery(
+							connection,
+							"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
+							new MySqlParameter("?UserName", Environment.UserName),
+							new MySqlParameter("?UserHost", Environment.MachineName),
+							new MySqlParameter("?PriceItemId", Convert.ToInt64(selectedPrice[PPriceItemId])));
+					}
+					finally
+					{
+						connection.Close();
+					}
+
+					MessageBox.Show("Прайс-лист успешно переподложен.");
 				}
-				finally
+				catch (Exception ex)
 				{
-					connection.Close();
+					MessageBox.Show("Не удалось переподложить прайс-лист", "Ошибка");
 				}
-
-				MessageBox.Show("Прайс-лист успешно переподложен.");
-
 				indgvPrice.Focus();
 			}
 			else
@@ -3681,15 +3686,22 @@ order by PriceName
 			{
 				var fileName = dialog.FileName;
 
-				if (!_priceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), File.OpenRead(fileName)))
+				try
 				{
-					MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
-					                MessageBoxIcon.Error);
+					if (!_priceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), File.OpenRead(fileName)))
+					{
+						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
+						                MessageBoxIcon.Error);
+					}
+					else
+					{
+						MessageBox.Show("Прайс-лист успешно положен в Base.", "Информация", MessageBoxButtons.OK,
+						                MessageBoxIcon.Information);
+					}
 				}
-				else
+				catch (Exception)
 				{
-					MessageBox.Show("Прайс-лист успешно положен в Base.", "Информация", MessageBoxButtons.OK,
-					                MessageBoxIcon.Information);
+					MessageBox.Show("Не удалось положить файл в Base", "Ошибка");
 				}
 			}
 		}
