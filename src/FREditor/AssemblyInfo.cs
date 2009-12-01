@@ -11,5 +11,5 @@ using log4net.Config;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: XmlConfigurator(Watch = true)]
-[assembly: AssemblyVersion("1.2.37.2")]
+[assembly: AssemblyVersion("1.2.37.4")]
 [assembly: AssemblyDelaySign(false)]

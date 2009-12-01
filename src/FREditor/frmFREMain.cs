@@ -995,23 +995,32 @@ order by PriceName
 
 						if (File.Exists(filePath))
 							File.Delete(filePath);
-
-						// Берем файл из Base
-                        using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
-                        {
-							if (openFile != null)
+						try
+						{
+							// Берем файл из Base
+							using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
 							{
-								using (var fileStream = File.Create(filePath))
+								if (openFile != null)
 								{
-									CopyStreams(openFile, fileStream);
+									using (var fileStream = File.Create(filePath))
+									{
+										CopyStreams(openFile, fileStream);
+									}
+								}
+								else
+								{
+									MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+									return;
 								}
 							}
-							else
-							{
-								MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-								return;
-							}
-                        }
+						}
+						catch (Exception ex)
+						{
+#if !DEBUG
+							Mailer.SendErrorMessageToService("Ошибка при получить файл из Base", ex);
+#endif
+							return;
+						}
 					}
 
 					Application.DoEvents();
@@ -2758,10 +2767,20 @@ and fr.Id = pim.FormRuleId;
 			{
 				if (File.Exists(filePath))
 				{
-					if (!_priceProcessor.PutFileToInbound(Convert.ToUInt32(currentPriceItemId), File.OpenRead(filePath)))
+					try
 					{
-						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
-						                MessageBoxIcon.Error);
+						if (!_priceProcessor.PutFileToInbound(Convert.ToUInt32(currentPriceItemId), File.OpenRead(filePath)))
+						{
+							MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
+							                MessageBoxIcon.Error);
+						}
+					}
+					catch (Exception ex)
+					{
+#if !DEBUG
+						Mailer.SendErrorMessageToService(
+							"Ошибка при применении изменений после смены формата файла (или разделителя). Невозможно положить файл в Inbound", ex);
+#endif
 					}
 				}
 				else
@@ -3331,7 +3350,11 @@ and p.Id = f.PriceFormatID",
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show("Не удалось переподложить прайс-лист", "Ошибка");
+					MessageBox.Show("Не удалось переподложить прайс-лист. Сообщение об ошибке отправлено разработчику", "Ошибка",
+					                MessageBoxButtons.OK, MessageBoxIcon.Error);
+#if !DEBUG
+					Mailer.SendErrorMessageToService("Ошибка при попытке переподложить прайс-лист", ex);
+#endif
 				}
 				indgvPrice.Focus();
 			}
@@ -3699,9 +3722,13 @@ order by PriceName
 						                MessageBoxIcon.Information);
 					}
 				}
-				catch (Exception)
+				catch (Exception ex)
 				{
-					MessageBox.Show("Не удалось положить файл в Base", "Ошибка");
+					MessageBox.Show("Не удалось положить файл в Base. Сообщение об ошибке отправлено разработчику",
+					                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#if !DEBUG
+					Mailer.SendErrorMessageToService("Ошибка при попытке положить файл в Base", ex);
+#endif
 				}
 			}
 		}

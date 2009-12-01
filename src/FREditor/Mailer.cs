@@ -15,6 +15,8 @@ namespace FREditor
 	{
 		private static string SmtpServerName = "mail.adc.analit.net";
 
+		private static string EmailService = "service@analit.net";
+
 		public static void SendNotificationLetter(MySqlConnection connection,
 			string body, string priceName, string providerName, string regionName)
 		{
@@ -86,6 +88,24 @@ WHERE
 					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				Program.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
 			}
+		}
+
+		public static void SendErrorMessageToService(string messageBody, Exception exception)
+		{
+			try
+			{
+				messageBody = String.Format("{0}\nКомпьютер: {1}\nОператор: {2}\nОшибка: {3}",
+				                            messageBody, Environment.MachineName, Environment.UserName, exception);
+				var mailMessage = new MailMessage(EmailService, EmailService, "Ошибка в FREditor", messageBody);
+				var smtpClient = new SmtpClient(SmtpServerName);
+				smtpClient.Send(mailMessage);
+			}
+			catch (Exception)
+			{
+				MessageBox.Show(@"Не удалось отправить разработчику сообщение об ошибке. Свяжитесь с разработчиком",
+				                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				
+			}			
 		}
 	}
 }
