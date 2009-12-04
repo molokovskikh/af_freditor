@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 namespace FREditor
 {
 
@@ -222,6 +223,7 @@ namespace FREditor
 			this.tbpSheet1 = new System.Windows.Forms.TabPage();
 			this.indgvPriceData = new Inforoom.WinForms.INDataGridView();
 			this.panel4 = new System.Windows.Forms.Panel();
+			this.buttonSearchNext = new System.Windows.Forms.Button();
 			this.tbSearchInPrice = new System.Windows.Forms.TextBox();
 			this.label23 = new System.Windows.Forms.Label();
 			this.tbpMarking = new System.Windows.Forms.TabPage();
@@ -233,10 +235,10 @@ namespace FREditor
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.pCosts = new System.Windows.Forms.Panel();
 			this.indgvCosts = new Inforoom.WinForms.INDataGridView();
-			this.cFRCostNameDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
-			this.cFRFieldNameDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
-			this.cFRTextBeginDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
-			this.cFRTextEndDataGridViewTextBoxColumn = new Inforoom.WinForms.INDataGridViewTextBoxColumn();
+			this.cFRCostNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cFRFieldNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cFRTextBeginDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cFRTextEndDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.bsCostsFormRules = new System.Windows.Forms.BindingSource(this.components);
 			this.pCostFind = new System.Windows.Forms.Panel();
 			this.tbCostFind = new System.Windows.Forms.TextBox();
@@ -1658,6 +1660,7 @@ namespace FREditor
 			this.cmbFormat.Size = new System.Drawing.Size(92, 21);
 			this.cmbFormat.TabIndex = 8;
 			this.cmbFormat.ValueMember = "Форматы прайса.FMTId";
+        	this.cmbFormat.SelectedIndexChanged += cmbFormat_SelectedIndexChanged;
 			// 
 			// lblPriceName
 			// 
@@ -1765,6 +1768,7 @@ namespace FREditor
 			// 
 			// panel4
 			// 
+			this.panel4.Controls.Add(this.buttonSearchNext);
 			this.panel4.Controls.Add(this.tbSearchInPrice);
 			this.panel4.Controls.Add(this.label23);
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1773,13 +1777,26 @@ namespace FREditor
 			this.panel4.Size = new System.Drawing.Size(952, 27);
 			this.panel4.TabIndex = 0;
 			// 
+			// buttonSearchNext
+			// 
+			this.buttonSearchNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.buttonSearchNext.Location = new System.Drawing.Point(272, 1);
+			this.buttonSearchNext.Name = "buttonSearchNext";
+			this.buttonSearchNext.Size = new System.Drawing.Size(124, 23);
+			this.buttonSearchNext.TabIndex = 4;
+			this.buttonSearchNext.Text = "Искать следующее";
+			this.buttonSearchNext.UseVisualStyleBackColor = true;
+			this.buttonSearchNext.Click += new System.EventHandler(this.buttonSearchNext_Click);
+			// 
 			// tbSearchInPrice
 			// 
+			this.tbSearchInPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tbSearchInPrice.Location = new System.Drawing.Point(51, 3);
 			this.tbSearchInPrice.Name = "tbSearchInPrice";
-			this.tbSearchInPrice.Size = new System.Drawing.Size(159, 20);
+			this.tbSearchInPrice.Size = new System.Drawing.Size(209, 20);
 			this.tbSearchInPrice.TabIndex = 3;
 			this.tbSearchInPrice.TextChanged += new System.EventHandler(this.tbSearchInPrice_TextChanged);
+			this.tbSearchInPrice.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearchInPrice_KeyDown);
 			// 
 			// label23
 			// 
@@ -4128,10 +4145,10 @@ namespace FREditor
 		private System.Windows.Forms.Button btnNewCostColor;
 		private System.Windows.Forms.ColorDialog cdLegend;
 		private System.Windows.Forms.Label lCostCount;
-		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
-		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
-		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
-		private Inforoom.WinForms.INDataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
 		private System.Windows.Forms.Panel pCostFind;
 		private System.Windows.Forms.TextBox tbCostFind;
 		private System.Windows.Forms.Timer tmrCostSearch;
@@ -4148,5 +4165,6 @@ namespace FREditor
 		private System.Windows.Forms.Panel panel4;
 		private System.Windows.Forms.TextBox tbSearchInPrice;
 		private System.Windows.Forms.Label label23;
+		private Button buttonSearchNext;
     }
 }

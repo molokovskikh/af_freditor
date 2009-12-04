@@ -899,25 +899,22 @@ where
         private void OpenPrice(DataRow drP)
         {
             ClearPrice();
-
 			Application.DoEvents();
             DataRow[] drFR;
 			// Выбираем правила для текущего priceItemId
             drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
-
             DataRow drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
             frmCaption = String.Format("{0}; {1}", drC["CShortName"], drC["CRegion"]);
-
 			string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
-
         	fmt = _priceFileFormatHelper.NewFormat;
 			//Делаем фильтрацию по форматам прайс-листа
 			CurrencyManager cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);
+
 			if ((cm != null) && (cm.List is DataView))
 				if (fmt.HasValue)
 				{
 					switch (fmt)
-					{ 
+					{
 						case PriceFormat.DBF:
 							//Запрещаем устаревшие текстовые форматы, NativeDBF и NativeXLS
 							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 6, 7, 8, 10))";
@@ -937,16 +934,23 @@ where
 							break;
 
 						default:
-							//Запрещаем устаревшие текстовые форматы, DBF и NativeXLS
-							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 10))";
-							break;
+							{
+								bsFormRules.SuspendBinding();
+								//Запрещаем устаревшие текстовые форматы, DBF и NativeXLS
+								((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 10))";
+								bsFormRules.ResumeBinding();								
+								break;
+							}
 					}
 				}
 				else
+				{
+					bsFormRules.SuspendBinding();
 					//Запрещаем устаревшие текстовые форматы, DBF и NativeXLS
-					((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 10))";
-			if (fmt.HasValue)
-				CurrencyManagerPosition(cm, "FMTId", drFR[0]["FRPriceFormatId"]);
+					((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 10))";
+					bsFormRules.SuspendBinding();
+				}
+
 			FillParentComboBox(
 				cmbParentSynonyms, 
 				@"
@@ -992,9 +996,6 @@ order by PriceName
 					if (!_isFormatChanged)
 					{
 						Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
-
-						if (File.Exists(filePath))
-							File.Delete(filePath);
 						try
 						{
 							// Берем файл из Base
@@ -1356,7 +1357,8 @@ order by PriceName
 
         private void OpenTXTDFile(string filePath, PriceFormat? fmt)
         {
-            using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
+        	var fileName = Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini";
+            using (var w = new StreamWriter(fileName, false, Encoding.GetEncoding(1251)))
             {
                 w.WriteLine("[" + Path.GetFileName(filePath) + "]");
 				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN))) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
@@ -1472,14 +1474,33 @@ order by PriceName
 			foreach (DataRowView drv in bsCostsFormRules)
 			{
 				if (!(drv[CFRTextBegin.ColumnName] is DBNull) && !(drv[CFRTextEnd.ColumnName] is DBNull))
-					fds.Add(new TxtFieldDef(
-						"Cost" + drv[CFRCost_Code.ColumnName].ToString(),
-						Convert.ToInt32(drv[CFRTextBegin.ColumnName]),
-						Convert.ToInt32(drv[CFRTextEnd.ColumnName])));
+						fds.Add(new TxtFieldDef(
+							"Cost" + drv[CFRCost_Code.ColumnName].ToString(),
+                            Convert.ToInt32(drv[CFRTextBegin.ColumnName]),
+                            Convert.ToInt32(drv[CFRTextEnd.ColumnName])));
 			}
 			
 
             fds.Sort(new TxtFieldDef());
+
+			// Удаляем поля, которые выставлены в 0 или 
+			// установлены неправильные значения для начала и конца (конец больше начала) или
+			// есть перекрывающийся индекс
+        	var lastPosition = 0;
+			for (var index = 0; index < fds.Count; index++)
+			{				
+				var field = (TxtFieldDef)fds[index];
+				if (((field.posBegin == 0) && (field.posEnd == 0)) ||
+					(field.posBegin >= field.posEnd) ||
+					(lastPosition >= field.posBegin))
+				{
+					fds.RemoveAt(index--);
+				}
+				else
+				{
+					lastPosition = field.posEnd;
+				}
+			}
 
             DataRow mdr;
             int countx = 1;
@@ -1896,10 +1917,7 @@ order by PriceName
             if (tbControl.SelectedTab == tpFirms)
             {
 				if (_isComboBoxFormatHandlerRegistered)
-				{
-					cmbFormat.SelectedIndexChanged -= cmbFormat_SelectedIndexChanged;
 					_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
-				}
             	fmt = null;
             	//_prevFmt = null;
             	delimiter = String.Empty;
@@ -1977,11 +1995,8 @@ order by PriceName
 					}
 					tbSearchInPrice.Text = String.Empty;
 					if (!_isComboBoxFormatHandlerRegistered)
-					{						
-						cmbFormat.SelectedIndexChanged += cmbFormat_SelectedIndexChanged;
 						_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
-					}
-				}			
+				}
         }
 
 		private void RefreshDataBind()
@@ -2969,6 +2984,7 @@ and fr.Id = pim.FormRuleId;
 
         private void LoadCostsSettings()
         {
+			/*
 			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
 				(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
             {
@@ -2979,7 +2995,7 @@ and fr.Id = pim.FormRuleId;
                 CregKey = BaseRegKey + "\\CostsDataGrid";
             }
             indgvCosts.LoadSettings(CregKey);
-
+			*/
 			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
 				(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
 			{
@@ -3751,7 +3767,7 @@ order by PriceName
 			}
 		}
 
-		private bool SearchTextInGridView(string text, DataGridView grid)
+		private bool SearchTextInGridView(string text, DataGridView grid, bool moveToNextResult, bool enterPressed)
 		{
 			if (grid == null)
 				grid = indgvPriceData;
@@ -3766,16 +3782,24 @@ order by PriceName
 				}
 			}
 			// Потом ищем по ячейкам. Сначала по тем, которые ниже текущей
-			for (int i = grid.CurrentRow.Index; i < grid.Rows.Count; i++)
-				foreach (DataGridViewCell cell in grid.Rows[i].Cells)
+			var indexColumn = moveToNextResult ? (grid.CurrentCell.ColumnIndex + 1) : 0;
+			var indexRow = enterPressed ? (grid.CurrentRow.Index - 1) : grid.CurrentRow.Index;
+			for (var i = indexRow; i < grid.Rows.Count; i++)
+			{
+				for (var j = indexColumn; j < grid.Columns.Count; j++)
+				{
+					var cell = grid.Rows[i].Cells[j];
 					if (cell.Value != null)
 						if (cell.Value.ToString().ToUpper().Contains(text.ToUpper()))
-						{							
+						{
 							grid.CurrentCell = grid.Rows[i].Cells[cell.ColumnIndex];
 							return true;
 						}
+				}
+				indexColumn = 0;
+			}
 			// Затем сначала и до текущей строки 
-			for (int i = 0; i < grid.CurrentRow.Index; i++)
+			for (var i = 0; i < grid.CurrentRow.Index; i++)
 				foreach (DataGridViewCell cell in grid.Rows[i].Cells)
 					if (cell.Value != null)
 						if (cell.Value.ToString().ToUpper().Contains(text.ToUpper()))
@@ -3800,6 +3824,20 @@ order by PriceName
 				if (tbSearchInPrice.Text.Length > 0)
 					tbSearchInPrice.Text = tbSearchInPrice.Text.Remove(
 						tbSearchInPrice.Text.Length - 1, 1);
+			} else if (e.KeyChar.Equals('\r'))
+			{
+				if (!String.IsNullOrEmpty(tbSearchInPrice.Text))
+				{
+					if (SearchTextInGridView(tbSearchInPrice.Text, indgvPriceData, true, true))
+						tbSearchInPrice.BackColor = Color.Green;
+					else
+						tbSearchInPrice.BackColor = Color.Red;
+				}
+				else
+				{
+					tbSearchInPrice.BackColor = Color.White;
+					tbSearchInPrice.ForeColor = Color.Black;
+				}
 			}
 			else
 				tbSearchInPrice.Text += e.KeyChar;
@@ -3811,7 +3849,7 @@ order by PriceName
 			if (tbSearchInPrice.Text.Length > 0)
 			{
 				tbSearchInPrice.ForeColor = Color.White;
-				if (SearchTextInGridView(tbSearchInPrice.Text, _searchGrid))
+				if (SearchTextInGridView(tbSearchInPrice.Text, _searchGrid, false, false))
 					tbSearchInPrice.BackColor = Color.Green;
 				else
 					tbSearchInPrice.BackColor = Color.Red;
@@ -3854,78 +3892,72 @@ order by PriceName
 		{
 			if (_isComboBoxFormatHandlerRegistered)
 			{
-				cmbFormat.SelectedIndexChanged -= cmbFormat_SelectedIndexChanged;
 				_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
-			}
 
-			var tempDirectory = EndPath + Convert.ToString(currentPriceItemId) + Path.DirectorySeparatorChar;
-			if (!Directory.Exists(tempDirectory))
-				Directory.CreateDirectory(tempDirectory);
+				var tempDirectory = EndPath + Convert.ToString(currentPriceItemId) + Path.DirectorySeparatorChar;
+				if (!Directory.Exists(tempDirectory))
+					Directory.CreateDirectory(tempDirectory);
 
-			if (_priceFileFormatHelper.SetNewFormat((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue), tbDevider.Text))
-			{
-				var newFormatFileExtension = _priceFileFormatHelper.NewFileExtension;
-				ofdNewFormat.Filter = _priceFileFormatHelper.NewFormat + "|*" + newFormatFileExtension;
-				ofdNewFormat.Title = "Выберите файл в новом формате (" + _priceFileFormatHelper.NewFormat + ").";
-				if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
-					ofdNewFormat.Title += " Разделитель: '" + tbDevider.Text + "'";
-
-				if (ofdNewFormat.ShowDialog() == DialogResult.OK)
+				if (_priceFileFormatHelper.SetNewFormat((PriceFormat?) Convert.ToInt32(cmbFormat.SelectedValue), tbDevider.Text))
 				{
-					if (File.Exists(ofdNewFormat.FileName))
+					var newFormatFileExtension = _priceFileFormatHelper.NewFileExtension;
+					ofdNewFormat.Filter = _priceFileFormatHelper.NewFormat + "|*" + newFormatFileExtension;
+					ofdNewFormat.Title = "Выберите файл в новом формате (" + _priceFileFormatHelper.NewFormat + ").";
+					if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
+						ofdNewFormat.Title += " Разделитель: '" + tbDevider.Text + "'";
+
+					if (ofdNewFormat.ShowDialog() == DialogResult.OK)
 					{
-						using (var newSourceFile = File.OpenRead(ofdNewFormat.FileName))
+						if (File.Exists(ofdNewFormat.FileName))
 						{
-							var destinationFilePath = tempDirectory + _priceFileFormatHelper.NewShortFileName;
-							try
+							using (var newSourceFile = File.OpenRead(ofdNewFormat.FileName))
 							{
-								using (var newDestinationFile = File.OpenWrite(destinationFilePath))
+								var destinationFilePath = tempDirectory + _priceFileFormatHelper.NewShortFileName;
+								try
 								{
-									newDestinationFile.Seek(0, SeekOrigin.Begin);
-									CopyStreams(newSourceFile, newDestinationFile);
-									_isFormatChanged = true;									
+									using (var newDestinationFile = File.Create(destinationFilePath))
+									{
+										CopyStreams(newSourceFile, newDestinationFile);
+										_isFormatChanged = true;
+									}
+								}
+								catch (Exception)
+								{
+									_priceFileFormatHelper.ResetNewFormat();
+									Mailer.SendWarningLetter(
+										String.Format(
+											@"Изменение формата прайс-листа. Невозможно записать указанный файл в новом формате в локальную веременную директорию. Файл {0}",
+											destinationFilePath));
 								}
 							}
-							catch(Exception)
-							{								
-								_priceFileFormatHelper.ResetNewFormat();
-								Mailer.SendWarningLetter(
-									String.Format(
-										@"Изменение формата прайс-листа. Невозможно записать указанный файл в новом формате в локальную веременную директорию. Файл {0}",
-										destinationFilePath));
-							}
+							var dataRowPrice = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
+							DoOpenPrice(dataRowPrice);
+							_isFormatChanged = false;
 						}
-						var dataRowPrice = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
-						DoOpenPrice(dataRowPrice);
-						_isFormatChanged = false;
+						else
+						{
+							_priceFileFormatHelper.ResetNewFormat();
+							dtSet.RejectChanges();
+							// TODO: выставить в comboBox старый формат
+							Mailer.SendWarningLetter(
+								String.Format(
+									@"Изменение формата прайс-листа. Пользователь выбрал файл в новом формате, однако этот файл не был найден. Файл {0}",
+									ofdNewFormat.FileName));
+							MessageBox.Show("Выбранный вами файл был переименован, перемещен или удален. Выберите другой файл", "Ошибка",
+							                MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
 					}
 					else
 					{
 						_priceFileFormatHelper.ResetNewFormat();
-						// TODO: выставить в comboBox старый формат
-						Mailer.SendWarningLetter(
-							String.Format(
-								@"Изменение формата прайс-листа. Пользователь выбрал файл в новом формате, однако этот файл не был найден. Файл {0}",
-								ofdNewFormat.FileName));
-						MessageBox.Show("Выбранный вами файл был переименован, перемещен или удален. Выберите другой файл", "Ошибка",
-						                MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
 				else
 				{
-					_priceFileFormatHelper.ResetNewFormat();
+					if (!String.IsNullOrEmpty(_priceFileFormatHelper.LastErrorMessage))
+						MessageBox.Show(_priceFileFormatHelper.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
-			}
-			else
-			{
-				if (!String.IsNullOrEmpty(_priceFileFormatHelper.LastErrorMessage))
-					MessageBox.Show(_priceFileFormatHelper.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}
-			
-			if (!_isComboBoxFormatHandlerRegistered)
-			{
-				cmbFormat.SelectedIndexChanged += cmbFormat_SelectedIndexChanged;
-				_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
+                _isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 			}
 		}
 
@@ -3940,6 +3972,30 @@ order by PriceName
 		private void indgvPriceData_Enter(object sender, EventArgs e)
 		{
 			cmbFormat_SelectedIndexChanged(sender, e);
+		}
+
+		private void buttonSearchNext_Click(object sender, EventArgs e)
+		{
+			if (!String.IsNullOrEmpty(tbSearchInPrice.Text))
+			{
+				if (SearchTextInGridView(tbSearchInPrice.Text, indgvPriceData, true, false))
+					tbSearchInPrice.BackColor = Color.Green;
+				else
+					tbSearchInPrice.BackColor = Color.Red;
+			}
+			else
+			{
+				tbSearchInPrice.BackColor = Color.White;
+				tbSearchInPrice.ForeColor = Color.Black;
+			}
+		}
+
+		private void tbSearchInPrice_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				buttonSearchNext_Click(sender, e);
+			}
 		}
 
     }
