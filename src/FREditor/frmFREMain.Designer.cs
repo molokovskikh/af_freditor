@@ -1716,6 +1716,8 @@ namespace FREditor
 			this.tcInnerSheets.Size = new System.Drawing.Size(952, 471);
 			this.tcInnerSheets.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tcInnerSheets.TabIndex = 1;
+			this.tcInnerSheets.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tcInnerSheets_MouseDown);
+			this.tcInnerSheets.SelectedIndexChanged += new System.EventHandler(this.tcInnerSheets_SelectedIndexChanged);
 			// 
 			// tbpSheet1
 			// 
