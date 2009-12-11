@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using System.Net.Mail;
+using FREditor.Properties;
 
 namespace FREditor
 {	
@@ -15,7 +16,7 @@ namespace FREditor
 	{
 		private static string SmtpServerName = "mail.adc.analit.net";
 
-		private static string EmailService = "service@analit.net";
+		private static string EmailService = Settings.Default.EmailService;
 
 		public static void SendNotificationLetter(MySqlConnection connection,
 			string body, string priceName, string providerName, string regionName)
@@ -76,9 +77,8 @@ WHERE
 				string messageBody = String.Format("Оператор: {0}\nТекст сообщения:{1}\n",
 					Environment.UserName, body);
 				//Формируем сообщение
-				MailMessage m = new MailMessage(
-					"service@analit.net", "service@analit.net", "Предупреждение в FREditor", messageBody);
-				SmtpClient sm = new SmtpClient(SmtpServerName);
+				var m = new MailMessage(EmailService, EmailService, "Предупреждение в FREditor", messageBody);
+				var sm = new SmtpClient(SmtpServerName);
 				sm.Send(m);
 			}
 			catch (Exception ex)
@@ -94,8 +94,8 @@ WHERE
 		{
 			try
 			{
-				messageBody = String.Format("{0}\nКомпьютер: {1}\nОператор: {2}\nОшибка: {3}",
-				                            messageBody, Environment.MachineName, Environment.UserName, exception);
+				messageBody = String.Format("{0}\nВерсия программы: {1}\nКомпьютер: {2}\nОператор: {3}\nОшибка: {4}",
+				                            messageBody, Application.ProductVersion, Environment.MachineName, Environment.UserName, exception);
 				var mailMessage = new MailMessage(EmailService, EmailService, "Ошибка в FREditor", messageBody);
 				var smtpClient = new SmtpClient(SmtpServerName);
 				smtpClient.Send(mailMessage);
@@ -103,8 +103,7 @@ WHERE
 			catch (Exception)
 			{
 				MessageBox.Show(@"Не удалось отправить разработчику сообщение об ошибке. Свяжитесь с разработчиком",
-				                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				
+				                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);				
 			}			
 		}
 	}

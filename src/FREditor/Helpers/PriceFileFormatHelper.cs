@@ -11,6 +11,10 @@ namespace FREditor.Helpers
 	{
 		private PriceFormat? _currentPriceFormat = null;
 
+		private PriceFormat? _currentOpenedFileFormat = null;
+
+		private string _currentOpenedFileDelimiter = null;
+
 		private string _currentDelimiter = String.Empty;
 
 		private ulong _priceItemId = 0;
@@ -58,6 +62,9 @@ FROM
 			_newPriceFormat = priceFormat;
 			_newDelimiter = delimiter;
 
+			_currentOpenedFileFormat = priceFormat;
+			_currentOpenedFileDelimiter = delimiter;
+
 			_priceItemId = priceItemId;
 		}
 
@@ -89,6 +96,12 @@ FROM
 			return false;
 		}
 
+		public void OpenFileInNewFormat()
+		{
+			_currentOpenedFileFormat = _newPriceFormat;
+			_currentOpenedFileDelimiter = _newDelimiter;
+		}
+
 		public bool ChangeFormat()
 		{
 			if (_priceItemId != 0)
@@ -116,6 +129,16 @@ FROM
 			return false;
 		}
 
+		public PriceFormat? CurrentOpenedFileFormat
+		{
+			get { return _currentOpenedFileFormat; }
+		}
+
+		public string CurrentOpenedFileDelimiter
+		{
+			get { return _currentOpenedFileDelimiter; }
+		}
+
 		public void ClearFormat()
 		{
 			_errorMessage = String.Empty;
@@ -125,6 +148,9 @@ FROM
 
 			_newPriceFormat = null;
 			_newDelimiter = String.Empty;
+
+			_currentOpenedFileFormat = null;
+			_currentOpenedFileDelimiter = String.Empty;
 
 			_priceItemId = 0;
 		}
@@ -200,6 +226,11 @@ FROM
 			get { return GetFileExtension(_currentPriceFormat); }
 		}
 
+		public string CurrentOpenedFileExtension
+		{
+			get { return GetFileExtension(_currentOpenedFileFormat); }
+		}
+
 		/// <summary>
 		/// Расширение для файла прайс-листа в новом формате
 		/// </summary>
@@ -232,13 +263,26 @@ FROM
 		{
 			if (_priceItemId != 0)
 			{
-				_newPriceFormat = _currentPriceFormat;
-				_newDelimiter = _currentDelimiter;
+				_newPriceFormat = _currentOpenedFileFormat;
+				_newDelimiter = _currentOpenedFileDelimiter;
 			}
 			else
 			{
 				_errorMessage = MessageFormatNotLoaded;
 			}
+		}
+
+		public static bool IsTextFormat(PriceFormat? priceFormat)
+		{
+			return ((priceFormat == PriceFormat.FixedDOS) ||
+			        (priceFormat == PriceFormat.FixedWIN) ||
+			        (priceFormat == PriceFormat.NativeDelimDOS) ||
+			        (priceFormat == PriceFormat.NativeDelimWIN) ||
+			        (priceFormat == PriceFormat.NativeFixedDOS) ||
+			        (priceFormat == PriceFormat.NativeFixedWIN) ||
+			        (priceFormat == PriceFormat.DelimWIN) ||
+			        (priceFormat == PriceFormat.DelimDOS));
+
 		}
 	}
 }

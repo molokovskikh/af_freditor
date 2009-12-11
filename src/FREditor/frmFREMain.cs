@@ -2128,21 +2128,19 @@ order by PriceName
                 e.Effect = DragDropEffects.None;
         }
 
-        private void lLblMaster_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        private void lLblMaster_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-			if (connection.State == ConnectionState.Closed)
-				connection.Open();
 			try
 			{
-				long FirmCode = Convert.ToInt64(
-					MySqlHelper.ExecuteScalar(connection, 
-					"select FirmCode from usersettings.pricesdata where PriceCode = ?SelfPriceCode",
-					new MySqlParameter("?SelfPriceCode", ((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName])));
-				System.Diagnostics.Process.Start(String.Format("mailto:{0}", GetContactText(FirmCode, 2, 0)));
+				if (bsFormRules.Current == null)
+					return;
+				var priceCode = Convert.ToInt64(((DataRowView) bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
+				var firmCode = GetFirmCodeByPriceCode(priceCode);
+				System.Diagnostics.Process.Start(String.Format("mailto:{0}", GetContactText(firmCode, 2, 0)));
 			}
-			finally
+			catch (Exception ex)
 			{
-				connection.Close();
+				Mailer.SendErrorMessageToService("Ошибка при попытке создать письмо ответственному за прайс лист из вкладки 'Прайс'", ex);
 			}
         }
 
@@ -3720,7 +3718,14 @@ order by PriceName
 		{
 			var dialog = new OpenFileDialog();
 			dialog.RestoreDirectory = true;
-			dialog.Filter = String.Format("{0}|*{1}", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
+			if (PriceFileFormatHelper.IsTextFormat(_priceFileFormatHelper.NewFormat))
+				dialog.Filter = String.Format("Все файлы|*.*|{0}|*{1}", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
+			else
+                dialog.Filter = String.Format("{0}|*{1}|Все файлы|*.*", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
+			dialog.FilterIndex = 0;
+			dialog.Title = String.Format("Выберите файл в формате {0}. ", _priceFileFormatHelper.NewFormat.ToString());
+			if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
+				dialog.Title += String.Format("Разделитель '{0}'", _priceFileFormatHelper.NewDelimiter);
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				var fileName = dialog.FileName;
@@ -3901,7 +3906,11 @@ order by PriceName
 				if (_priceFileFormatHelper.SetNewFormat((PriceFormat?) Convert.ToInt32(cmbFormat.SelectedValue), tbDevider.Text))
 				{
 					var newFormatFileExtension = _priceFileFormatHelper.NewFileExtension;
-					ofdNewFormat.Filter = _priceFileFormatHelper.NewFormat + "|*" + newFormatFileExtension;
+					if (PriceFileFormatHelper.IsTextFormat(_priceFileFormatHelper.NewFormat))
+						ofdNewFormat.Filter = String.Format("Все файлы|*.*|{0}|*{1}", _priceFileFormatHelper.NewFormat, newFormatFileExtension);
+					else
+						ofdNewFormat.Filter = _priceFileFormatHelper.NewFormat + "|*" + newFormatFileExtension + "|Все файлы|*.*";
+					ofdNewFormat.FilterIndex = 0;
 					ofdNewFormat.Title = "Выберите файл в новом формате (" + _priceFileFormatHelper.NewFormat + ").";
 					if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
 						ofdNewFormat.Title += " Разделитель: '" + tbDevider.Text + "'";
@@ -3923,7 +3932,8 @@ order by PriceName
 								}
 								catch (Exception)
 								{
-									_priceFileFormatHelper.ResetNewFormat();
+									ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
+									_priceFileFormatHelper.ResetNewFormat();									
 									Mailer.SendWarningLetter(
 										String.Format(
 											@"Изменение формата прайс-листа. Невозможно записать указанный файл в новом формате в локальную веременную директорию. Файл {0}",
@@ -3933,10 +3943,12 @@ order by PriceName
 							var dataRowPrice = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
 							DoOpenPrice(dataRowPrice);
 							_isFormatChanged = false;
+							_priceFileFormatHelper.OpenFileInNewFormat();
 						}
 						else
 						{
-							_priceFileFormatHelper.ResetNewFormat();
+							ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
+							_priceFileFormatHelper.ResetNewFormat();							
 							dtSet.RejectChanges();
 							// TODO: выставить в comboBox старый формат
 							Mailer.SendWarningLetter(
@@ -3949,16 +3961,45 @@ order by PriceName
 					}
 					else
 					{
-						_priceFileFormatHelper.ResetNewFormat();
+						ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
+						_priceFileFormatHelper.ResetNewFormat();						
 					}
 				}
 				else
 				{
+					ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
+					_priceFileFormatHelper.ResetNewFormat();					
 					if (!String.IsNullOrEmpty(_priceFileFormatHelper.LastErrorMessage))
 						MessageBox.Show(_priceFileFormatHelper.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
                 _isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 			}
+		}
+
+		private void ComboBoxFormatSetSelectedText(string text)
+		{
+			try
+			{
+				foreach (var item in cmbFormat.Items)
+				{
+					var rowView = (item as DataRowView);
+					if (rowView != null)
+					{
+						var dataRow = rowView.Row;
+						if (dataRow != null)
+						{
+							var formatText = dataRow[FMTFormat.ColumnName].ToString();
+							if (String.Equals(formatText.ToUpper(), text.ToUpper()))
+							{
+								cmbFormat.SelectedItem = item;
+								return;
+							}
+						}
+					}
+				}
+			}
+			catch (Exception)
+			{}
 		}
 
 		private void tbDevider_KeyDown(object sender, KeyEventArgs e)
@@ -3995,6 +4036,56 @@ order by PriceName
 			if (e.KeyCode == Keys.Enter)
 			{
 				buttonSearchNext_Click(sender, e);
+			}
+		}
+
+		private void buttonCreateMail_Click(object sender, EventArgs e)
+		{
+			try
+			{
+				if (indgvPrice.CurrentRow == null)
+				{
+					MessageBox.Show("Выберите прайс-лист", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					return;
+				}
+				var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+				var dataRowView = (DataRowView) currencyManager.Current;
+				var row = dataRowView.Row;
+
+				var priceCode = Convert.ToInt64(row[PPriceCode.ColumnName]);
+				var firmCode = GetFirmCodeByPriceCode(priceCode);
+				if (firmCode > 0)
+					System.Diagnostics.Process.Start(String.Format("mailto:{0}", GetContactText(firmCode, 2, 0)));
+				else
+					MessageBox.Show("Ошибка при попытке создать письмо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Ошибка при попытке создать письмо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				Mailer.SendErrorMessageToService("Ошибка при попытке создать письмо ответственному за прайс-лист из вкладки 'Фирмы'", ex);
+			}
+		}
+
+		private long GetFirmCodeByPriceCode(long priceCode)
+		{
+			if (connection.State == ConnectionState.Closed)
+				connection.Open();
+			try
+			{
+				var firmCode = Convert.ToInt64(
+					MySqlHelper.ExecuteScalar(connection,
+					"select FirmCode from usersettings.pricesdata where PriceCode = ?SelfPriceCode",
+					new MySqlParameter("?SelfPriceCode", priceCode)));
+				return firmCode;
+			}
+			catch (Exception ex)
+			{
+				Mailer.SendErrorMessageToService("Ошибка при попытке получить FirmCode по коду прайса", ex);
+				return -1;
+			}
+			finally
+			{
+				connection.Close();
 			}
 		}
 

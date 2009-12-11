@@ -82,10 +82,19 @@ namespace FREditor.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("net.tcp://fms.adc.analit.net:900/RemotePriceProcessorService")]
+        [global::System.Configuration.DefaultSettingValueAttribute("net.tcp://prg4:900/RemotePriceProcessorService")]
         public string WCFServiceUrl {
             get {
                 return ((string)(this["WCFServiceUrl"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("d.dorofeev@analit.net")]
+        public string EmailService {
+            get {
+                return ((string)(this["EmailService"]));
             }
         }
     }
