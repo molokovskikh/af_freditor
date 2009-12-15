@@ -1873,6 +1873,7 @@ namespace FREditor
 			this.indgvMarking.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
 			this.indgvMarking.Size = new System.Drawing.Size(1137, 498);
 			this.indgvMarking.TabIndex = 7;
+        	this.indgvMarking.CellValidating += new DataGridViewCellValidatingEventHandler(this.InDataGridViewMarking_CellValidating);
 			// 
 			// MNameFieldINDataGridViewTextBoxColumn
 			// 

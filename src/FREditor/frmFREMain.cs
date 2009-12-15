@@ -3015,6 +3015,20 @@ and fr.Id = pim.FormRuleId;
             indgvMarking.LoadSettings(BaseRegKey + "\\MarkingDataGrid");
         }
 
+		private void InDataGridViewMarking_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+		{
+			var testString = e.FormattedValue.ToString();
+			var dataGridView = sender as DataGridView;
+			if (dataGridView == null)
+				return;
+			dataGridView.Rows[e.RowIndex].ErrorText = String.Empty;
+			if (testString.Contains(" "))
+			{				
+				e.Cancel = true;
+				dataGridView.Rows[e.RowIndex].ErrorText = "—трока не должна содержать пробелов";
+			}			
+		}
+
         private void SaveMarkingSettings()
         {
             if (fileExist)
