@@ -18,6 +18,7 @@ using System.ServiceModel;
 using RemotePriceProcessor;
 using System.Net.Security;
 using FREditor.Helpers;
+using System.Threading;
 
 namespace FREditor
 {
@@ -33,7 +34,7 @@ namespace FREditor
 		private bool _isFormatChanged;
 
         ArrayList gds = new ArrayList();
-        ArrayList dtables = new ArrayList();
+        List<DataTable> dtables = new List<DataTable>();
         ArrayList tblstyles = new ArrayList();
         DataTable dtPrice = new DataTable();
 
@@ -107,6 +108,11 @@ namespace FREditor
 
     	private PriceFileFormatHelper _priceFileFormatHelper;
 
+		// Полный путь к текущему открытому файлу прайс-листа
+    	private string _currentFilename;
+
+		private DataTableMarking _dataTableMarking = new DataTableMarking();
+
         public frmFREMain()
         {
             //
@@ -153,17 +159,17 @@ INSERT INTO usersettings.PricesCosts (PriceCode, BaseCost, PriceItemId, CostName
 SET @NewPriceCostId:=Last_Insert_ID();
 INSERT INTO farm.costformrules (CostCode, FieldName, TxtBegin, TxtEnd) values (@NewPriceCostId, ?FieldName, ?TxtBegin, ?TxtEnd);
 ";
-			this.mcmdInsertCostRules.Parameters.Add("?PriceItemId", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRPriceItemId");
-			this.mcmdInsertCostRules.Parameters.Add("?PriceCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0);
-			this.mcmdInsertCostRules.Parameters.Add("?CostName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRCostName");
-			this.mcmdInsertCostRules.Parameters.Add("?FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRFieldName");
-			this.mcmdInsertCostRules.Parameters.Add("?TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextBegin");
-			this.mcmdInsertCostRules.Parameters.Add("?TxtEnd", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextEnd");
+			this.mcmdInsertCostRules.Parameters.Add("?PriceItemId", MySqlDbType.Int64, 0, "CFRPriceItemId");
+			this.mcmdInsertCostRules.Parameters.Add("?PriceCode", MySqlDbType.Int64, 0);
+			this.mcmdInsertCostRules.Parameters.Add("?CostName", MySqlDbType.VarString, 0, "CFRCostName");
+			this.mcmdInsertCostRules.Parameters.Add("?FieldName", MySqlDbType.VarString, 0, "CFRFieldName");
+			this.mcmdInsertCostRules.Parameters.Add("?TxtBegin", MySqlDbType.VarString, 0, "CFRTextBegin");
+			this.mcmdInsertCostRules.Parameters.Add("?TxtEnd", MySqlDbType.VarString, 0, "CFRTextEnd");
 
 			this.mcmdDeleteCostRules.CommandText = "usersettings.DeleteCost";
 			this.mcmdDeleteCostRules.CommandType = CommandType.StoredProcedure;
 			this.mcmdDeleteCostRules.Parameters.Clear();
-			this.mcmdDeleteCostRules.Parameters.Add("?inCostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRCost_Code");
+			this.mcmdDeleteCostRules.Parameters.Add("?inCostCode", MySqlDbType.Int64, 0, "CFRCost_Code");
 			this.mcmdDeleteCostRules.Parameters["?inCostCode"].Direction = ParameterDirection.Input;
 
 
@@ -180,11 +186,11 @@ UPDATE farm.costformrules c SET
   TxtEnd = ?TxtEnd
 WHERE c.CostCode = ?CostCode;";
 
-            this.mcmdUpdateCostRules.Parameters.Add("?CostCode", MySql.Data.MySqlClient.MySqlDbType.Int64, 0, "CFRCost_Code");
-			this.mcmdUpdateCostRules.Parameters.Add("?CostName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRCostName");
-			this.mcmdUpdateCostRules.Parameters.Add("?FieldName", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRFieldName");
-			this.mcmdUpdateCostRules.Parameters.Add("?TxtBegin", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextBegin");
-			this.mcmdUpdateCostRules.Parameters.Add("?TxtEnd", MySql.Data.MySqlClient.MySqlDbType.VarString, 0, "CFRTextEnd");
+            this.mcmdUpdateCostRules.Parameters.Add("?CostCode", MySqlDbType.Int64, 0, "CFRCost_Code");
+			this.mcmdUpdateCostRules.Parameters.Add("?CostName", MySqlDbType.VarString, 0, "CFRCostName");
+			this.mcmdUpdateCostRules.Parameters.Add("?FieldName", MySqlDbType.VarString, 0, "CFRFieldName");
+			this.mcmdUpdateCostRules.Parameters.Add("?TxtBegin", MySqlDbType.VarString, 0, "CFRTextBegin");
+			this.mcmdUpdateCostRules.Parameters.Add("?TxtEnd", MySqlDbType.VarString, 0, "CFRTextEnd");
 
             this.mcmdUpdateFormRules.CommandText =
 @"UPDATE formrules SET
@@ -361,6 +367,8 @@ where
             {
                 ms.SourceColumn = ms.ParameterName.Substring(1);
             }
+
+			dtSet.Tables.Add(_dataTableMarking);
 
 			_priceProcessor = new PriceProcessorWcfHelper(Settings.Default.WCFServiceUrl);
         }
@@ -558,7 +566,6 @@ WHERE cd.firmtype = 0 ";
 			}
 			command.CommandText += param;
 			command.CommandText += " ORDER BY cd.ShortName";
-
 			dataAdapter.Fill(dtClients);
 		}
 		
@@ -857,7 +864,7 @@ where
             dataAdapter.Fill(dtFormRules);
         }
 
-        private void Form1_Closed(object sender, System.EventArgs e)
+        private void Form1_Closed(object sender, EventArgs e)
         {
             connection.Close();
         }
@@ -865,21 +872,16 @@ where
         private void DoOpenPrice(DataRow drP)
         {
             fW = new frmWait();
-
 			try
 			{
-
 				fW.openPrice += new OpenPriceDelegate(OpenPrice);
 				fW.drP = drP;
-
 				fW.ShowDialog();			
-
 			}
 			finally
 			{
 				fW = null;
 			}
-
         }
 
         public delegate void OpenPriceDelegate(DataRow drP);
@@ -1018,44 +1020,24 @@ order by PriceName
 						catch (Exception ex)
 						{
 #if !DEBUG
-							Mailer.SendErrorMessageToService("Ошибка при получить файл из Base", ex);
+							Mailer.SendErrorMessageToService("Ошибка при попытке получить файл из Base", ex);
 #endif
 							return;
 						}
 					}
-
 					Application.DoEvents();
-
-					if ((fmt == PriceFormat.DBF) || (fmt == PriceFormat.NativeDbf))
+					_currentFilename = filePath;
+					_dataTableMarking.Fill(drFR[0], dtCostsFormRules.Select("CFRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString()));
+					var tables = PriceFileHelper.OpenPriceFile(filePath, fmt, delimiter, _dataTableMarking);
+					dtPrice = tables[0]; 
+					if (fmt == PriceFormat.XLS)
 					{
-						OpenDBFFile(filePath);
-					}
-					else
-						if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls))
-						{
-							listName = drFR[0]["FRListName"].ToString();
-							OpenEXLFile(filePath);
-						}
-						else
-							if ((fmt == PriceFormat.DelimDOS) || (fmt == PriceFormat.DelimWIN) ||
-								(fmt == PriceFormat.NativeDelimWIN) || (fmt == PriceFormat.NativeDelimDOS) )
-							{
-								dbcMain.Close();
-								dbcMain.Dispose();
-								OpenTXTDFile(filePath, fmt);
-							}
-							else
-								if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
-									(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
-								{
-									dbcMain.Close();
-									dbcMain.Dispose();
-									startLine = drFR[0]["FRStartLine"] is DBNull ? -1 : Convert.ToInt64(drFR[0]["FRStartLine"]);
-
-									TxtFilePath = EndPath + shortFileNameByPriceItemId + "\\" + takeFile;
-									dtMarking.Clear();
-									OpenTXTFFile(filePath, drFR[0]);
-								}
+						tbpSheet1.Text = tables[0].TableName;						
+						tables.RemoveAt(0);
+						dtables = tables;
+						listName = drFR[0]["FRListName"].ToString();
+						SetupXlsPriceView();
+					}						
 					Application.DoEvents();
 					ShowTab(fmt);
 					Application.DoEvents();
@@ -1068,7 +1050,34 @@ order by PriceName
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
-        }
+        }		
+
+		private void SetupXlsPriceView()
+		{
+			for (var i = 0; i < dtables.Count; i++)
+			{
+				var table = dtables[i];
+				var tabPage = new TabPage(table.TableName);
+				tabPage.Name = "tbpSheet" + (i + 1);			
+				tcInnerSheets.TabPages.Add(tabPage);
+
+				var indgv = new INDataGridView();
+				indgv.Name = "indgvPriceData" + (i + 1);
+				indgv.Parent = tabPage;
+				indgv.KeyDown += new KeyEventHandler(indgvPriceData_KeyDown);
+				indgv.Dock = DockStyle.Fill;
+				indgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
+				indgv.ReadOnly = true;
+				indgv.RowHeadersVisible = false;
+				indgv.MouseDown += indgvPriceData_MouseDown;
+				indgv.KeyPress += indgvPriceData_KeyPress;
+				foreach (DataGridViewTextBoxColumn dc in indgv.Columns)
+					dc.Width = 300;
+				gds.Add(indgv);
+				((INDataGridView) gds[i]).Columns.Clear();
+				((INDataGridView) gds[i]).DataSource = dtables[i];
+			}
+		}
 
 		private void PrepareShowTab(PriceFormat? fmt)
 		{
@@ -1235,361 +1244,6 @@ order by PriceName
             indgvPriceData.Select();
         }
 
-        private void OpenDBFFile(string filePath)
-        {
-            Application.DoEvents();
-			try
-			{
-				dtPrice = Dbf.Load(filePath);
-			}
-			finally
-			{
-				//dbcMain.Close();
-				//dbcMain.Dispose();
-				Application.DoEvents();
-			}
-
-			//dbcMain.ConnectionString = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"dBase 5.0\"", System.IO.Path.GetDirectoryName(filePath));
-			//dbcMain.Open();
-			//try
-			//{
-			//    Application.DoEvents();
-			//    OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from [{0}]", System.IO.Path.GetFileNameWithoutExtension(filePath)), dbcMain);
-			//    CreateThread(da, dtPrice, indgvPriceData);
-			//}
-			//finally
-			//{
-			//    dbcMain.Close();
-			//    dbcMain.Dispose();
-			//    Application.DoEvents();
-			//}
-        }
-
-        private void OpenEXLFile(string filePath)
-        {
-            Application.DoEvents();
-            dbcMain.ConnectionString = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Excel 5.0;HDR=No;IMEX=1\"", filePath);
-            bool res = false;
-            do
-            {
-                dbcMain.Open();
-                try
-                {
-                    Application.DoEvents();
-                    DataTable TableNames = dbcMain.GetOleDbSchemaTable(OleDbSchemaGuid.Tables,
-                        new object[] { null, null, null, "TABLE" });
-                    string[] Sheet = null;
-
-                    Sheet = new string[TableNames.Rows.Count];
-
-                    Sheet[0] = (string)TableNames.Rows[0]["TABLE_NAME"];
-                    tbpSheet1.Text = Sheet[0];
-                    INDataGridView indgv;
-                    for (int i = 1; i < TableNames.Rows.Count; i++)
-                    {
-                        DataRow dr = TableNames.Rows[i];
-                        if (!(dr["TABLE_NAME"] is DBNull))
-                        {
-                            Sheet[i] = (string)dr["TABLE_NAME"];
-                            TabPage tp = new TabPage();
-                            tp.Name = "tbpSheet" + (i + 1);
-                            tp.Text = Sheet[i];
-                            tcInnerSheets.TabPages.Add(tp);
-
-                            indgv = new INDataGridView();
-                            indgv.Name = "indgvPriceData" + (i + 1);
-                            indgv.Parent = tp;
-                            indgv.KeyDown += new System.Windows.Forms.KeyEventHandler(indgvPriceData_KeyDown);
-                            indgv.Dock = DockStyle.Fill;
-                            indgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.None;
-                            indgv.ReadOnly = true;
-                            indgv.RowHeadersVisible = false;
-                            indgv.MouseDown += new System.Windows.Forms.MouseEventHandler(this.indgvPriceData_MouseDown);
-							indgv.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvPriceData_KeyPress);
-                            foreach (DataGridViewTextBoxColumn dc in indgv.Columns)
-                                dc.Width = 300;
-                            gds.Add(indgv);
-
-                            DataTable dt = new DataTable();
-                            dt.TableName = "Прайс" + (i + 1);
-                            dtables.Add(dt);
-                        }
-                        Application.DoEvents();
-                    }
-                    for (int j = 0; j < TableNames.Rows.Count; j++)
-                    {
-                        try
-                        {
-                            DataTable ColumnNames = dbcMain.GetOleDbSchemaTable(OleDbSchemaGuid.Columns,
-                                new object[] { null, null, Sheet[j], null });
-                            string FieldNames = "F1";
-                            int MaxColCount = (ColumnNames.Rows.Count >= 256) ? 255 : ColumnNames.Rows.Count;
-                            for (int i = 1; i < MaxColCount; i++)
-                            {
-                                FieldNames = FieldNames + ", F" + Convert.ToString(i + 1);
-                            }
-                            OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select {0} from [{1}]", FieldNames, Sheet[j]), dbcMain);
-                            if (j == 0)
-                            {
-                                CreateThread(da, dtPrice, indgvPriceData);
-                            }
-                            else
-                            {
-                                ((INDataGridView)gds[j - 1]).Columns.Clear();
-                                CreateThread(da, ((DataTable)(dtables[j - 1])), ((INDataGridView)gds[j - 1]));
-                                ((INDataGridView)gds[j - 1]).DataSource = ((DataTable)(dtables[j - 1]));
-                            }
-                        }
-                        catch
-                        {
-                        }
-                    }
-                }
-                finally
-                {
-                    dbcMain.Close();
-                    dbcMain.Dispose();
-                    Application.DoEvents();
-                }
-                res = true;
-            } while (!res);
-        }
-
-        private void OpenTXTDFile(string filePath, PriceFormat? fmt)
-        {
-        	var fileName = Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini";
-            using (var w = new StreamWriter(fileName, false, Encoding.GetEncoding(1251)))
-            {
-                w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN))) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
-                w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
-                w.WriteLine("ColNameHeader=False");
-                w.WriteLine("MaxScanRows=300");
-            }
-
-			string replaceFile;
-			using (StreamReader r = new StreamReader(filePath, Encoding.GetEncoding(1251)))
-			{
-				replaceFile = r.ReadToEnd();
-			}
-
-			replaceFile = replaceFile.Replace("\"", "");
-
-			using (StreamWriter rw = new StreamWriter(filePath, false, Encoding.GetEncoding(1251)))
-			{
-				rw.Write(replaceFile);
-			}
-
-			int MaxColCount = 0;
-            string TableName = System.IO.Path.GetFileName(filePath).Replace(".", "#");
-            dbcMain.ConnectionString = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Text\"", System.IO.Path.GetDirectoryName(filePath));
-
-            Application.DoEvents();
-
-            dbcMain.Open();
-            DataTable ColumnNames = dbcMain.GetOleDbSchemaTable(OleDbSchemaGuid.Columns,
-                new object[] { null, null, TableName, null });
-            MaxColCount = (ColumnNames.Rows.Count >= 256) ? 255 : ColumnNames.Rows.Count;
-            dbcMain.Close();
-            dbcMain.Dispose();
-
-            Application.DoEvents();
-
-            using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
-            {
-                w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN))) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
-                w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
-                w.WriteLine("ColNameHeader=False");
-                w.WriteLine("MaxScanRows=300");
-                for (int i = 0; i <= MaxColCount; i++)
-                {
-                    w.WriteLine("Col{0}=F{0} Text", i);
-                }
-            }
-
-            Application.DoEvents();
-            dbcMain.ConnectionString = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Text\"", System.IO.Path.GetDirectoryName(filePath));
-            dbcMain.Open();
-            OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from {0}", System.IO.Path.GetFileName(filePath).Replace(".", "#")), dbcMain);
-
-            CreateThread(da, dtPrice, indgvPriceData);
-            dbcMain.Close();
-            dbcMain.Dispose();
-            Application.DoEvents();
-        }
-
-        public void SetFieldName(PriceFields PF, string Value)
-        {
-            FFieldNames[(int)PF] = Value;
-        }
-
-        public string GetFieldName(PriceFields PF)
-        {
-            return FFieldNames[(int)PF];
-        }
-
-        private void FillMarking(string filePath, DataRow dr)
-        {
-            FFieldNames = new string[Enum.GetNames(typeof(PriceFields)).Length];
-
-            string TmpName;
-            int TmpIndex;
-
-            foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields)))
-            {
-                if (PriceFields.OriginalName == pf || PriceFields.Name1 == pf)//|| PriceFields.Name2 == pf || PriceFields.Name3 == pf)
-                    TmpName = "Name";
-                else
-                    TmpName = pf.ToString();
-                try
-                {
-                    TmpIndex = dr.Table.Columns.IndexOf("FRTxt" + TmpName + "Begin");
-                }
-                catch
-                {
-                    TmpIndex = -1;
-                }
-                SetFieldName(pf, ((-1 < TmpIndex) && !(dr["FRTxt" + TmpName + "Begin"] is DBNull)) ? TmpName : String.Empty);
-            }
-
-            fds = new ArrayList();
-            int TxtBegin, TxtEnd;
-            foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields)))
-            {
-                TmpName = GetFieldName(pf);
-				if ((PriceFields.OriginalName != pf) && (String.Empty != TmpName))
-                {
-                    try
-                    {
-                        TxtBegin = Convert.ToInt32(dr["FRTxt" + TmpName + "Begin"]);
-                        TxtEnd = Convert.ToInt32(dr["FRTxt" + TmpName + "End"]);
-                        fds.Add(new TxtFieldDef(TmpName, TxtBegin, TxtEnd));
-                    }
-                    catch { }
-                }
-            }
-
-			//Добавляем в список цены, если у них выставленны границы
-			foreach (DataRowView drv in bsCostsFormRules)
-			{
-				if (!(drv[CFRTextBegin.ColumnName] is DBNull) && !(drv[CFRTextEnd.ColumnName] is DBNull))
-						fds.Add(new TxtFieldDef(
-							"Cost" + drv[CFRCost_Code.ColumnName].ToString(),
-                            Convert.ToInt32(drv[CFRTextBegin.ColumnName]),
-                            Convert.ToInt32(drv[CFRTextEnd.ColumnName])));
-			}
-			
-
-            fds.Sort(new TxtFieldDef());
-
-			// Удаляем поля, которые выставлены в 0 или 
-			// установлены неправильные значения для начала и конца (конец больше начала) или
-			// есть перекрывающийся индекс
-        	var lastPosition = 0;
-			for (var index = 0; index < fds.Count; index++)
-			{				
-				var field = (TxtFieldDef)fds[index];
-				if (((field.posBegin == 0) && (field.posEnd == 0)) ||
-					(field.posBegin >= field.posEnd) ||
-					(lastPosition >= field.posBegin))
-				{
-					fds.RemoveAt(index--);
-				}
-				else
-				{
-					lastPosition = field.posEnd;
-				}
-			}
-
-            DataRow mdr;
-            int countx = 1;
-
-            if (fds.Count > 0)
-            {
-                TxtFieldDef prevTFD, currTFD = (TxtFieldDef)fds[0];
-
-                if (1 == currTFD.posBegin)
-                {
-                    mdr = dtMarking.NewRow();
-                    mdr["MNameField"] = currTFD.fieldName;
-                    mdr["MBeginField"] = 1;
-                    mdr["MEndField"] = currTFD.posEnd;
-                    dtMarking.Rows.Add(mdr);
-                }
-                else
-                {
-                    mdr = dtMarking.NewRow();
-                    mdr["MNameField"] = String.Format("x{0}", countx);
-                    mdr["MBeginField"] = 1;
-                    mdr["MEndField"] = currTFD.posBegin-1;
-                    dtMarking.Rows.Add(mdr);
-
-                    countx++;
-
-                    mdr = dtMarking.NewRow();
-                    mdr["MNameField"] = currTFD.fieldName;
-                    mdr["MBeginField"] = currTFD.posBegin;
-                    mdr["MEndField"] = currTFD.posEnd;
-                    dtMarking.Rows.Add(mdr);
-                }
-                int i = 1;
-                for (i = 1; i <= fds.Count - 1; i++)
-                {
-                    prevTFD = (TxtFieldDef)fds[i - 1];
-                    currTFD = (TxtFieldDef)fds[i];
-                    if (currTFD.posBegin == prevTFD.posEnd + 1)
-                    {
-                        mdr = dtMarking.NewRow();
-                        mdr["MNameField"] = currTFD.fieldName;
-                        mdr["MBeginField"] = currTFD.posBegin;
-                        mdr["MEndField"] = currTFD.posEnd;
-                        dtMarking.Rows.Add(mdr);
-                    }
-                    else
-                    {
-                        mdr = dtMarking.NewRow();
-                        mdr["MNameField"] = String.Format("x{0}", countx);
-                        mdr["MBeginField"] = prevTFD.posEnd + 1;
-                        mdr["MEndField"] = currTFD.posBegin - 1;
-                        dtMarking.Rows.Add(mdr);
-
-                        countx++;
-
-                        mdr = dtMarking.NewRow();
-                        mdr["MNameField"] = currTFD.fieldName;
-                        mdr["MBeginField"] = currTFD.posBegin;
-                        mdr["MEndField"] = currTFD.posEnd;
-                        dtMarking.Rows.Add(mdr);
-                    }
-                }
-                TxtFieldDef lastTFD = (TxtFieldDef)fds[i - 1];
-                if (lastTFD.posEnd < 255)
-                {
-                    mdr = dtMarking.NewRow();
-                    mdr["MNameField"] = String.Format("x{0}", countx);
-                    mdr["MBeginField"] = lastTFD.posEnd + 1;
-                    mdr["MEndField"] = 255;
-                    dtMarking.Rows.Add(mdr);
-                }
-            }
-            else
-            {
-                mdr = dtMarking.NewRow();
-                mdr["MNameField"] = "x1";
-                mdr["MBeginField"] = 1;
-                mdr["MEndField"] = 255;
-                dtMarking.Rows.Add(mdr);
-            }
-			dtMarking.AcceptChanges();
-        }
-
-        private void OpenTXTFFile(string filePath, DataRow dr)
-        {
-            FillMarking(filePath, dr);
-            OpenTable(fmt);
-        }
-
         private void DelCostsColumns()
         {
             indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = false;
@@ -1599,7 +1253,7 @@ order by PriceName
 
         public string strToANSI(string Dest)
         {
-            System.Text.Encoding ansi = System.Text.Encoding.GetEncoding(1251);
+            Encoding ansi = System.Text.Encoding.GetEncoding(1251);
             byte[] unicodeBytes = System.Text.Encoding.Unicode.GetBytes(Dest);
             byte[] ansiBytes = System.Text.Encoding.Convert(System.Text.Encoding.Unicode, ansi, unicodeBytes);
             return ansi.GetString(ansiBytes);
@@ -1617,153 +1271,15 @@ order by PriceName
             }
         }
 
-        private bool Check_Marking()
-        {
-            bool flag = true;
-            int i = 1;
-            if (dtMarking.Rows.Count > 2)
-            {
-				DataTable newMarking = dtMarking.DefaultView.ToTable();
-				while ((i < newMarking.Rows.Count) && (flag))
-                {
-					DataRow drP = newMarking.Rows[i - 1];
-					DataRow drN = newMarking.Rows[i];
-                    if ((!(drP["MBeginField"] is DBNull)) || (!(drP["MEndField"] is DBNull)))
-                    {
-                        int beg = Convert.ToInt32(drP["MBeginField"]);
-                        int end = Convert.ToInt32(drP["MEndField"]);
-                        if (beg - end > 0)
-                        {
-                            flag = false;
-                        }
-                        else
-                            if (!(drN["MEndField"] is DBNull))
-                            {
-                                if (Convert.ToInt32(drN["MBeginField"]) - Convert.ToInt32(drP["MEndField"]) != 1)
-                                {
-                                    flag = false;
-                                }
-                                else
-                                    i++;
-                            }
-                            else
-                                flag = false;
-                    }
-                    else
-                        flag = false;
-                }
-            }
-            else
-            {
-                int beg = Convert.ToInt32(dtMarking.Rows[0]["MBeginField"]);
-                int end = Convert.ToInt32(dtMarking.Rows[0]["MEndField"]);
-                if (beg - end > 0)
-                {
-                    flag = false;
-                }
-            }
-            return flag;
-        }
-
-        private void OpenTable(PriceFormat? fmt)
-        {
-            if (dtMarking.Rows.Count > 1)
-            {
-                string TmpName;
-                fds = new ArrayList();
-                for (int i = 0; i < dtMarking.Rows.Count; i++)
-                {
-                    DataRow dr = dtMarking.Rows[i];
-
-                    int TxtBegin, TxtEnd;
-
-                    TmpName = dr["MNameField"].ToString();
-                    TxtBegin = Convert.ToInt32(dr["MBeginField"]);
-                    TxtEnd = Convert.ToInt32(dr["MEndField"]);
-                    fds.Add(new TxtFieldDef(TmpName, TxtBegin, TxtEnd));
-                }
-
-				fds.Sort(new TxtFieldDef());
-
-				using (StreamWriter w = new StreamWriter(Path.GetDirectoryName(TxtFilePath) + Path.DirectorySeparatorChar + "Schema.ini", false, Encoding.GetEncoding(1251)))
-                {
-                    w.WriteLine("[" + Path.GetFileName(TxtFilePath) + "]");
-					w.WriteLine(((fmt == PriceFormat.FixedWIN) || (fmt == PriceFormat.NativeFixedWIN)) ? "CharacterSet=ANSI" : "CharacterSet=OEM");
-                    w.WriteLine("Format=FixedLength");
-                    w.WriteLine("ColNameHeader=False");
-                    w.WriteLine("MaxScanRows=300");
-
-                    if (fds.Count > 0)
-                    {
-                        int j = 1;
-                        TxtFieldDef prevTFD, currTFD = (TxtFieldDef)fds[0];
-
-                        if (1 == currTFD.posBegin)
-                        {
-                            w.WriteLine(String.Format("Col{0}={1} Text Width {2}", j, currTFD.fieldName, currTFD.posEnd));
-                            j++;
-                        }
-                        else
-                        {
-                            w.WriteLine(String.Format("Col{0}={1} Text Width {2}", j, "x", currTFD.posBegin - 1));
-                            j++;
-                            w.WriteLine(String.Format("Col{0}={1} Text Width {2}", j, currTFD.fieldName, currTFD.posEnd - currTFD.posBegin + 1));
-                            j++;
-                        }
-
-                        for (int i = 1; i <= fds.Count - 1; i++)
-                        {
-                            prevTFD = (TxtFieldDef)fds[i - 1];
-                            currTFD = (TxtFieldDef)fds[i];
-                            if (currTFD.posBegin == prevTFD.posEnd + 1)
-                            {
-                                w.WriteLine(String.Format("Col{0}={1} Text Width {2}", j, currTFD.fieldName, currTFD.posEnd - currTFD.posBegin + 1));
-                                j++;
-                            }
-                            else
-                            {
-                                w.WriteLine(String.Format("Col{0}={1} Text Width {2}", j, "x", currTFD.posBegin - prevTFD.posEnd - 1));
-                                j++;
-                                w.WriteLine(String.Format("Col{0}={1} Text Width {2}", j, currTFD.fieldName, currTFD.posEnd - currTFD.posBegin + 1));
-                                j++;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        w.WriteLine(String.Format("Col{0}=x1 Text Width {1}", 1, 255));
-                    }
-                }
-                dbcMain.ConnectionString = String.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Text\"", System.IO.Path.GetDirectoryName(TxtFilePath));
-                dbcMain.Open();
-                try
-                {
-                    OleDbDataAdapter da = new OleDbDataAdapter(String.Format("select * from {0}", System.IO.Path.GetFileName(TxtFilePath).Replace(".", "#")), dbcMain);
-                    indgvPriceData.Columns.Clear();
-
-					dtPrice.Rows.Clear();
-					dtPrice.Columns.Clear();
-					dtPrice.Clear();
-
-                    CreateThread(da, dtPrice, indgvPriceData);
-                }
-                finally
-                {
-                    dbcMain.Close();
-                    dbcMain.Dispose();
-                }
-            }
-        }
-
         private void tcInnerTable_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             if (tcInnerTable.SelectedTab == tbpTable)
             {
                 SaveMarkingSettings();
-                DataTable dtTemp = dtMarking.GetChanges();
+                DataTable dtTemp = _dataTableMarking.GetChanges();
                 if (!(dtTemp == null))
                 {
-                    if (!Check_Marking())
+                    if (!_dataTableMarking.Check())
                     {
                         tcInnerTable.SelectedTab = tbpMarking;
                         MessageBox.Show("Неправильный ввод поля!", "Плохо, очень плохо", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -1796,12 +1312,12 @@ order by PriceName
 
         private void DoOpenTable(DataRow drFict)
         {
-            dtMarking.AcceptChanges();
+            _dataTableMarking.AcceptChanges();
             Application.DoEvents();
             indgvPriceData.DataSource = null;
             Application.DoEvents();
 
-            OpenTable(fmt);
+			dtPrice = PriceFileHelper.OpenPriceTable(_currentFilename, _dataTableMarking, _priceFileFormatHelper.NewFormat);// OpenTable(fmt);
             Application.DoEvents();
 
             indgvPriceData.DataSource = dtPrice;
@@ -1837,7 +1353,7 @@ order by PriceName
             gds.Clear();
             dtables.Clear();
             tblstyles.Clear();
-            dtMarking.Clear();
+            _dataTableMarking.Clear();
 
             dtPrice.Rows.Clear();
             dtPrice.Columns.Clear();
@@ -2226,18 +1742,6 @@ and c.Type = ?ContactType;",
             fW.Close();
         }
 
-        private void CreateThread(OleDbDataAdapter da, DataTable dt, INDataGridView dgv)
-        {
-            TestAsync ta = new TestAsync(TestD);
-            Object state = new Object();
-
-			DataTable temp = new DataTable();
-
-			System.IAsyncResult ar = ta.BeginInvoke(da, dt, null, state);
-			while (!ar.IsCompleted)
-				Application.DoEvents();
-        }
-
         private void btnFloatPanel_Click(object sender, System.EventArgs e)
         {
             if (pnlFloat.Visible)
@@ -2286,7 +1790,7 @@ and c.Type = ?ContactType;",
                     {
                         if ((txtExistBegin.Text != String.Empty) && (txtExistEnd.Text != String.Empty))
                         {
-                            foreach (DataRow dr in dtMarking.Rows)
+                            foreach (DataRow dr in _dataTableMarking.Rows)
                             {
                                 if ((dr["MBeginField"].ToString() == txtExistBegin.Text) && (dr["MEndField"].ToString() == txtExistEnd.Text))
                                     CheckErrors(r, dr["MNameField"].ToString(), dtPrice, indgvPriceData);
@@ -2370,8 +1874,8 @@ and c.Type = ?ContactType;",
                 {
                     if (txtBoxName1Begin.Text != String.Empty)
                     {
-                        DataRow[] drcol = dtMarking.Select("MBeginField = " + txtBoxName1Begin.Text);
-                        col = drcol[0][MNameField].ToString();
+                        DataRow[] drcol = _dataTableMarking.Select("MBeginField = " + txtBoxName1Begin.Text);
+                        col = drcol[0]["MNameField"].ToString();
                     }
                 }
 
@@ -3010,8 +2514,8 @@ and fr.Id = pim.FormRuleId;
 
         private void LoadMarkingSettings()
         {
-			dtMarking.DefaultView.Sort = "MBeginField";
-			indgvMarking.DataSource = dtMarking.DefaultView;
+			_dataTableMarking.DefaultView.Sort = "MBeginField";
+			indgvMarking.DataSource = _dataTableMarking.DefaultView;
             indgvMarking.LoadSettings(BaseRegKey + "\\MarkingDataGrid");
         }
 
@@ -3041,13 +2545,6 @@ and fr.Id = pim.FormRuleId;
         {
 			if (e.KeyCode == Keys.Escape)
 				tbControl.SelectedTab = tpFirms;
-			//    if (e.Control && (e.KeyCode == Keys.F))
-			//    {
-			//        using (frmPriceDataSearch frm = new frmPriceDataSearch((INDataGridView)sender))
-			//        {
-			//            frm.ShowDialog();
-			//        }
-			//    }		
         }
 
         private void indgvPriceData_MouseDown(object sender, MouseEventArgs e)
@@ -3072,9 +2569,9 @@ and fr.Id = pim.FormRuleId;
                     int i = 0;
                     bool findField = false;
                     DataRow dr;
-                    while ((i < dtMarking.Rows.Count) && (!findField))
+                    while ((i < _dataTableMarking.Rows.Count) && (!findField))
                     {
-                        dr = dtMarking.Rows[i];
+                        dr = _dataTableMarking.Rows[i];
                         if (dr["MNameField"].ToString() == FieldText)
                         {
                             findField = true;
@@ -3743,9 +3240,17 @@ order by PriceName
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				var fileName = dialog.FileName;
-
+				var tables = PriceFileHelper.AsyncOpenPriceFile(fileName, _priceFileFormatHelper.NewFormat,
+                    _priceFileFormatHelper.NewDelimiter, _dataTableMarking);
+				if ((tables == null) || (tables.Count == 0) || (tables[0].Rows.Count == 0))
+				{
+					MessageBox.Show("Неправильный формат или файл поврежден", "Ошибка открытия файла", MessageBoxButtons.OK,
+					                MessageBoxIcon.Error);
+					return;
+				}
 				try
 				{
+					currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
 					if (!_priceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), File.OpenRead(fileName)))
 					{
 						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
@@ -3878,33 +3383,6 @@ order by PriceName
 				tbSearchInPrice.ForeColor = Color.Black;
 				tbSearchInPrice.BackColor = Color.White;
 			}
-		}
-
-		// Возвращает формат текущего прайса 
-		private PriceFormat? GetCurrentPriceFormat()
-		{
-			var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource,
-				indgvPrice.DataMember];
-			var currentRowView = (DataRowView)currencyManager.Current;
-			var dataRowPrice = currentRowView.Row;
-			var dataRowFormRules = dtFormRules.Select(String.Format("FRPriceItemId = {0}",
-				dataRowPrice[PPriceItemId.ColumnName].ToString()));
-			PriceFormat? format = (dataRowFormRules[0]["FRPriceFormatId"] is DBNull) ? null :
-                (PriceFormat?)Convert.ToInt32(dataRowFormRules[0]["FRPriceFormatId"]);
-			return format;
-		}
-
-		private string GetShortNameForCurrentPrice()
-		{
-			CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceItemId.ColumnName, currentPriceItemId);
-			var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource,
-				indgvPrice.DataMember];
-			var currentRowView = (DataRowView)currencyManager.Current;
-			var dataRowPrice = currentRowView.Row;
-			var dataRowFormRules = dtFormRules.Select(String.Format("FRPriceItemId = {0}",
-				dataRowPrice[PPriceItemId.ColumnName].ToString()));
-			string shortNameByPriceItemId = dataRowFormRules[0]["FRPriceItemId"].ToString();
-			return shortNameByPriceItemId;
 		}
 
 		private void cmbFormat_SelectedIndexChanged(object sender, EventArgs e)

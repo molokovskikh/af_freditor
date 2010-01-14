@@ -98,8 +98,10 @@ namespace FREditor
 					MessageBox.Show("Не удалось открыть прайс-лист. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					Program.SendMessageOnException(null, new Exception("Ошибка при открытии прайс-листа.", ex));
 				}
-
-			Close();
+				finally
+				{
+					Close();
+				}
 		}
 
 		private void frmWait_Load(object sender, System.EventArgs e)

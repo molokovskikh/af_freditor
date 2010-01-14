@@ -168,10 +168,6 @@ namespace FREditor
 			this.FMTFormat = new System.Data.DataColumn();
 			this.FMTExt = new System.Data.DataColumn();
 			this.FMTId = new System.Data.DataColumn();
-			this.dtMarking = new System.Data.DataTable();
-			this.MNameField = new System.Data.DataColumn();
-			this.MBeginField = new System.Data.DataColumn();
-			this.MEndField = new System.Data.DataColumn();
 			this.dtCostsFormRules = new System.Data.DataTable();
 			this.CFRCost_Code = new System.Data.DataColumn();
 			this.CFRFieldName = new System.Data.DataColumn();
@@ -403,7 +399,6 @@ namespace FREditor
 			((System.ComponentModel.ISupportInitialize)(this.dtPricesCost)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dtFormRules)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dtPriceFMTs)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.dtMarking)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dtCostsFormRules)).BeginInit();
 			this.pnlGrid.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.indgvFirm)).BeginInit();
@@ -598,7 +593,6 @@ namespace FREditor
             this.dtPricesCost,
             this.dtFormRules,
             this.dtPriceFMTs,
-            this.dtMarking,
             this.dtCostsFormRules});
 			// 
 			// dtClients
@@ -1194,31 +1188,6 @@ namespace FREditor
 			// 
 			this.FMTId.ColumnName = "FMTId";
 			this.FMTId.DataType = typeof(long);
-			// 
-			// dtMarking
-			// 
-			this.dtMarking.Columns.AddRange(new System.Data.DataColumn[] {
-            this.MNameField,
-            this.MBeginField,
-            this.MEndField});
-			this.dtMarking.Constraints.AddRange(new System.Data.Constraint[] {
-            new System.Data.UniqueConstraint("Constraint1", new string[] {
-                        "MNameField"}, false)});
-			this.dtMarking.TableName = "Разметка";
-			// 
-			// MNameField
-			// 
-			this.MNameField.ColumnName = "MNameField";
-			// 
-			// MBeginField
-			// 
-			this.MBeginField.ColumnName = "MBeginField";
-			this.MBeginField.DataType = typeof(int);
-			// 
-			// MEndField
-			// 
-			this.MEndField.ColumnName = "MEndField";
-			this.MEndField.DataType = typeof(int);
 			// 
 			// dtCostsFormRules
 			// 
@@ -3787,7 +3756,6 @@ namespace FREditor
 			((System.ComponentModel.ISupportInitialize)(this.dtPricesCost)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dtFormRules)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dtPriceFMTs)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.dtMarking)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dtCostsFormRules)).EndInit();
 			this.pnlGrid.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.indgvFirm)).EndInit();
@@ -3871,10 +3839,6 @@ namespace FREditor
         private System.Windows.Forms.Panel panel1;
         private System.Data.DataColumn FRListName;
         private System.Data.DataColumn FRStartLine;
-        private System.Data.DataTable dtMarking;
-        private System.Data.DataColumn MNameField;
-        private System.Data.DataColumn MBeginField;
-        private System.Data.DataColumn MEndField;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label19;
