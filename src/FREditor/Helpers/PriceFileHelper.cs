@@ -177,7 +177,9 @@ namespace FREditor.Helpers
 			                                       	"select * from {0}", Path.GetFileName(filePath).Replace(".", "#")),
 			                                       connection);
 			var	dataTablePrice = new DataTable();
-			dataAdapter.SyncFill(dataTablePrice);			
+			dataAdapter.SyncFill(dataTablePrice);
+			if (dataTablePrice.Rows.Count == 0)
+				throw new Exception("При открытии файла таблица с полями прайс-листа оказалась пуста. Предположительно неверный формат или файл поврежден");
 			connection.Close();
 			Application.DoEvents();
 			return dataTablePrice;
@@ -265,6 +267,8 @@ namespace FREditor.Helpers
 						Path.GetFileName(filePath).Replace(".", "#")), connection);
 					dataTablePrice = new DataTable();
 					dataAdapter.SyncFill(dataTablePrice);
+					if (dataTablePrice.Rows.Count == 0)
+						throw new Exception("При открытии файла таблица с полями прайс-листа оказалась пуста. Предположительно неверный формат или файл поврежден");
 				}
 			}
 			return dataTablePrice;
