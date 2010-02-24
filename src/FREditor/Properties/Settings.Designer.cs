@@ -91,7 +91,7 @@ namespace FREditor.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("d.dorofeev@analit.net")]
+        [global::System.Configuration.DefaultSettingValueAttribute("KvasovTest@analit.net")]
         public string EmailService {
             get {
                 return ((string)(this["EmailService"]));

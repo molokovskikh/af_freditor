@@ -244,6 +244,8 @@ WHERE c.CostCode = ?CostCode;";
   TxtOrderCostEnd = ?FRTxtOrderCostEnd,
   TxtMinOrderCountBegin = ?FRTxtMinOrderCountBegin,
   TxtMinOrderCountEnd = ?FRTxtMinOrderCountEnd,
+  TxtProducerCostBegin = ?FRTxtProducerCostBegin,
+  TxtProducerCostEnd = ?FRTxtProducerCostEnd,
 
   FCode = ?FRFCode,
   FCodeCr = ?FRFCodeCr,
@@ -266,7 +268,7 @@ WHERE c.CostCode = ?CostCode;";
   FMaxBoundCost = ?FRFMaxBoundCost,
   FOrderCost = ?FRFOrderCost,
   FMinOrderCount = ?FRFMinOrderCount,
-
+  FProducerCost = ?FRFProducerCost,	
 
   Memo = ?FRMemo
 where
@@ -328,7 +330,9 @@ where
 			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtOrderCostBegin", MySqlDbType.Int32);
 			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtOrderCostEnd", MySqlDbType.Int32);
 			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountBegin", MySqlDbType.Int32);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySqlDbType.Int32);			
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySqlDbType.Int32);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtProducerCostBegin", MySqlDbType.Int32);
+        	this.mcmdUpdateFormRules.Parameters.Add("?FRTxtProducerCostEnd", MySqlDbType.Int32);
 
             this.mcmdUpdateFormRules.Parameters.Add("?FRDelimiter", MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRPosNum", MySqlDbType.Int64);
@@ -360,7 +364,8 @@ where
             this.mcmdUpdateFormRules.Parameters.Add("?FRFVitallyImportant", MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRFMaxBoundCost", MySqlDbType.VarString);
 			this.mcmdUpdateFormRules.Parameters.Add("?FRFOrderCost", MySqlDbType.VarString);
-			this.mcmdUpdateFormRules.Parameters.Add("?FRFMinOrderCount", MySqlDbType.VarString);			
+			this.mcmdUpdateFormRules.Parameters.Add("?FRFMinOrderCount", MySqlDbType.VarString);
+			this.mcmdUpdateFormRules.Parameters.Add("?FRFProducerCost", MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRMemo", MySqlDbType.VarString);
 
             foreach (MySqlParameter ms in this.mcmdUpdateFormRules.Parameters)
@@ -823,6 +828,8 @@ SELECT
 	PFR.TxtMinOrderCountBegin as FRTxtMinOrderCountBegin,
 	PFR.TxtMinOrderCountEnd as FRTxtMinOrderCountEnd,
 
+	PFR.TxtProducerCostBegin as FRTxtProducerCostBegin,
+	PFR.TxtProducerCostEnd as FRTxtProducerCostEnd,
 
 	PFR.FCode as FRFCode,
 	PFR.FCodeCr as FRFCodeCr,
@@ -844,7 +851,8 @@ SELECT
 	PFR.FVitallyImportant as FRFVitallyImportant,
 	PFR.FMaxBoundCost as FRFMaxBoundCost,
 	PFR.FOrderCost as FRFOrderCost,
-	PFR.FMinOrderCount as FRFMinOrderCount
+	PFR.FMinOrderCount as FRFMinOrderCount,
+	PFR.FProducerCost as FRFProducerCost
 FROM 
   UserSettings.PricesData AS PD
   INNER JOIN UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0

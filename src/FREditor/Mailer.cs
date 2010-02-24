@@ -36,7 +36,7 @@ WHERE
 				//Формируем сообщение
 				MailMessage m = new MailMessage("register@analit.net",
 #if DEBUG
- "d.dorofeev@analit.net",
+ "KvasovTest@analit.net",
 #else
 					"RegisterList@subscribe.analit.net",
 #endif
