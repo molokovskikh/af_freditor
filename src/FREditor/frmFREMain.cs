@@ -1792,7 +1792,8 @@ and c.Type = ?ContactType;",
                 try
                 {
                     erP.Clear();
-                    r = new Regex(txtMask.Text);
+                	var regexMask = txtMask.Text;//.Replace("*", "+?");
+                    r = new Regex(regexMask, RegexOptions.IgnoreCase);
                     if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
 						(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
                     {
@@ -1926,8 +1927,8 @@ and c.Type = ?ContactType;",
         {
             if (txtBoxNameMask.Text != String.Empty)
             {
-
-                Regex r = new Regex(txtBoxNameMask.Text);
+            	var regexMask = txtBoxNameMask.Text;//.Replace("*", "+?");
+                Regex r = new Regex(regexMask, RegexOptions.IgnoreCase);
                 string[] groups = new string[17];
                 int i = 0;
                 foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields)))

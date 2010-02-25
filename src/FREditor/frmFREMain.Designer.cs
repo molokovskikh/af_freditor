@@ -3506,7 +3506,7 @@ namespace FREditor
 			this.btnVitallyImportantCheck.Name = "btnVitallyImportantCheck";
 			this.btnVitallyImportantCheck.Size = new System.Drawing.Size(24, 20);
 			this.btnVitallyImportantCheck.TabIndex = 26;
-			this.ttMain.SetToolTip(this.btnVitallyImportantCheck, "Проверка маски сроковых");
+			this.ttMain.SetToolTip(this.btnVitallyImportantCheck, "Проверка маски ЖВЛС");
 			this.btnVitallyImportantCheck.Click += new System.EventHandler(this.btnVitallyImportantCheck_Click);
 			// 
 			// txtBoxVitallyImportantMask
