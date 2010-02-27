@@ -95,7 +95,7 @@ WHERE
 			try
 			{
 				messageBody = String.Format("{0}\nВерсия программы: {1}\nКомпьютер: {2}\nОператор: {3}\nОшибка: {4}",
-                    messageBody, Application.ProductVersion, Environment.MachineName, Environment.UserName, exception.StackTrace);
+                    messageBody, Application.ProductVersion, Environment.MachineName, Environment.UserName, exception.ToString());
 				var mailMessage = new MailMessage(EmailService, EmailService, "Ошибка в FREditor", messageBody);
 				var smtpClient = new SmtpClient(SmtpServerName);
 				smtpClient.Send(mailMessage);
