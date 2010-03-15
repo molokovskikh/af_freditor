@@ -1027,9 +1027,7 @@ order by PriceName
 						}
 						catch (Exception ex)
 						{
-#if !DEBUG
 							Mailer.SendErrorMessageToService("Ошибка при попытке получить файл из Base", ex);
-#endif
 							return;
 						}
 					}
@@ -1037,6 +1035,12 @@ order by PriceName
 					_currentFilename = filePath;
 					_dataTableMarking.Fill(drFR[0], dtCostsFormRules.Select("CFRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString()));
 					var tables = PriceFileHelper.OpenPriceFile(filePath, fmt, delimiter, _dataTableMarking);
+					if (tables == null)
+					{
+						MessageBox.Show("Неправильный формат или файл поврежден", "Ошибка открытия файла", MessageBoxButtons.OK,
+										MessageBoxIcon.Error);
+						return;
+					}
 					dtPrice = tables[0]; 
 					if (fmt == PriceFormat.XLS)
 					{
