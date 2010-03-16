@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="PrepareClickOnceDeployment" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\Microsoft.Sdc.Common.tasks"/>
+  <Import Project="Microsoft.Sdc.Common.tasks"/>
 
   <PropertyGroup>
     <PublishDir></PublishDir>
@@ -12,6 +12,7 @@
     <Company>Inforoom</Company>
     <Password></Password>
     <SdkPath></SdkPath>
+	<BootstrapperSdkPath></BootstrapperSdkPath>
     <BootstrapperComponentsLocation>Relative</BootstrapperComponentsLocation>
     <Version>0.0.0.0</Version>
     <MinVersion>0.0.0.0</MinVersion>
@@ -27,8 +28,7 @@
     <ClickOnceInstallationFiles Include="setup.exe"/>
   </ItemGroup> 
 
-  <Target Name="PrepareClickOnceDeployment">
-        
+  <Target Name="PrepareClickOnceDeployment">        
     <CreateItem Include="$(PublishDir)\**\*.*">
       <Output TaskParameter="Include" ItemName="AppManifestContents"/>
     </CreateItem>
@@ -37,8 +37,7 @@
         AssemblyName="$(SolutionName).exe"
         AssemblyVersion="$(Version)"
         EntryPoint="$(PublishDir)\$(SolutionName).exe"
-        OutputManifest="$(SolutionName).exe.manifest"
-    	TargetCulture="ru-RU"/>
+        OutputManifest="$(SolutionName).exe.manifest"/>
     <Exec Command="&quot;$(SdkPath)bin\\mage.exe&quot; -Update $(SolutionName).exe.manifest -TrustLevel FullTrust -Name &quot;$(SolutionName)&quot; -FromDirectory $(PublishDir)"/>
     <Exec Command="&quot;$(SdkPath)bin\\mage.exe&quot; -Sign $(SolutionName).exe.manifest -CertFile $(SigningCert) -Password $(password)"/>
     <GenerateDeploymentManifest AssemblyName="$(SolutionName).application"
@@ -65,7 +64,7 @@
       CopyComponents="true"
       ComponentsLocation="$(BootstrapperComponentsLocation)"
       Validate="false"
-      Path="$(SdkPath)Bootstrapper\\"
+      Path="$(BootstrapperSdkPath)"
       OutputPath="." />
   </Target>
 
