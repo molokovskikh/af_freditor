@@ -69,24 +69,26 @@ namespace FREditor.Helpers
 		{
 			try
 			{
+				if (!priceFormat.HasValue)
+					throw new Exception(String.Format("Неизвестный формат {0}", priceFormat));
 				var tables = new List<DataTable>();
-				if ((priceFormat == PriceFormat.DBF) || (priceFormat == PriceFormat.NativeDbf))
+				if ((priceFormat.Value == PriceFormat.DBF) || (priceFormat.Value == PriceFormat.NativeDbf))
 				{					
 					tables.Add(OpenDbfFile(filePath));
 					return tables;
 				}
-				if ((priceFormat == PriceFormat.XLS) || (priceFormat == PriceFormat.NativeXls))
+				if ((priceFormat.Value == PriceFormat.XLS) || (priceFormat.Value == PriceFormat.NativeXls))
 				{					
 					return OpenXlsFile(filePath);
 				}
-				if ((priceFormat == PriceFormat.DelimDOS) || (priceFormat == PriceFormat.DelimWIN) ||
-                    (priceFormat == PriceFormat.NativeDelimWIN) || (priceFormat == PriceFormat.NativeDelimDOS))
+				if ((priceFormat.Value == PriceFormat.DelimDOS) || (priceFormat.Value == PriceFormat.DelimWIN) ||
+                    (priceFormat.Value == PriceFormat.NativeDelimWIN) || (priceFormat.Value == PriceFormat.NativeDelimDOS))
 				{
                     tables.Add(OpenTextDelimiterFile(filePath, priceFormat, delimiter));
 					return tables;
 				}
-				if ((priceFormat == PriceFormat.FixedDOS) || (priceFormat == PriceFormat.FixedWIN) ||
-                    (priceFormat == PriceFormat.NativeFixedDOS) || (priceFormat == PriceFormat.NativeFixedWIN))
+				if ((priceFormat.Value == PriceFormat.FixedDOS) || (priceFormat.Value == PriceFormat.FixedWIN) ||
+                    (priceFormat.Value == PriceFormat.NativeFixedDOS) || (priceFormat.Value == PriceFormat.NativeFixedWIN))
 				{
 					tables.Add(OpenTextFixedFile(filePath, priceFormat, dataTableMarking));
 					return tables;

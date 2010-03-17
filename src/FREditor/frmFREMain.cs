@@ -1042,7 +1042,7 @@ order by PriceName
 						return;
 					}
 					dtPrice = tables[0]; 
-					if (fmt == PriceFormat.XLS)
+					if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls))
 					{
 						tbpSheet1.Text = tables[0].TableName;						
 						tables.RemoveAt(0);
