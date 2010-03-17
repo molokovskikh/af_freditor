@@ -37,7 +37,8 @@
         AssemblyName="$(SolutionName).exe"
         AssemblyVersion="$(Version)"
         EntryPoint="$(PublishDir)\$(SolutionName).exe"
-        OutputManifest="$(SolutionName).exe.manifest"/>
+        OutputManifest="$(SolutionName).exe.manifest"
+		TargetCulture="ru-RU"/>
     <Exec Command="&quot;$(SdkPath)bin\\mage.exe&quot; -Update $(SolutionName).exe.manifest -TrustLevel FullTrust -Name &quot;$(SolutionName)&quot; -FromDirectory $(PublishDir)"/>
     <Exec Command="&quot;$(SdkPath)bin\\mage.exe&quot; -Sign $(SolutionName).exe.manifest -CertFile $(SigningCert) -Password $(password)"/>
     <GenerateDeploymentManifest AssemblyName="$(SolutionName).application"
