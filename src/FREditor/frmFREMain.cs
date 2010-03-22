@@ -918,16 +918,16 @@ where
 			string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
         	fmt = _priceFileFormatHelper.NewFormat;
 			//Делаем фильтрацию по форматам прайс-листа
-			CurrencyManager cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);
-
+			CurrencyManager cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);			
 			if ((cm != null) && (cm.List is DataView))
 				if (fmt.HasValue)
 				{
+					bsFormRules.SuspendBinding();
 					switch (fmt)
 					{
 						case PriceFormat.DBF:
-							//Запрещаем устаревшие текстовые форматы, NativeDBF и NativeXLS
-							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 6, 7, 8, 10))";
+							//Запрещаем устаревшие текстовые форматы, NativeDBF и XLS
+							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 6, 7, 8))";
 							break;
 
 						case PriceFormat.NativeXls:
@@ -935,23 +935,27 @@ where
 							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 4, 6, 7))";
 							break;
 
+						case PriceFormat.XLS:
+								//Запрещаем устаревшие текстовые форматы, DBF и NativeXls								
+								((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 10, 4, 6, 7))";								
+								break;
+
 						case PriceFormat.DelimDOS:
 						case PriceFormat.DelimWIN:
 						case PriceFormat.FixedWIN:
 						case PriceFormat.FixedDOS:
-							//Запрещаем новые текстовые форматы, DBF и NativeXLS
-							((DataView)cm.List).RowFilter = "not (FmtId in (4, 10, 11, 12, 13, 14))";
+							//Запрещаем новые текстовые форматы, DBF и XLS
+							((DataView)cm.List).RowFilter = "not (FmtId in (3, 4, 11, 12, 13, 14))";
 							break;
 
 						default:
 							{
-								bsFormRules.SuspendBinding();
-								//Запрещаем устаревшие текстовые форматы, DBF и NativeXLS
-								((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 10))";
-								bsFormRules.ResumeBinding();								
+								//Запрещаем устаревшие текстовые форматы, DBF и XLS
+								((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 4, 6, 7))";
 								break;
 							}
 					}
+					bsFormRules.ResumeBinding();
 				}
 				else
 				{
