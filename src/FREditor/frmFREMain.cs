@@ -960,8 +960,8 @@ where
 				else
 				{
 					bsFormRules.SuspendBinding();
-					//«апрещаем устаревшие текстовые форматы, DBF и NativeXLS
-					((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 10))";
+					//«апрещаем устаревшие текстовые форматы, DBF и XLS
+					((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 3))";
 					bsFormRules.SuspendBinding();
 				}
 
