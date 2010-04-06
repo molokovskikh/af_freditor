@@ -4,6 +4,7 @@ import file from ClickOnce.bake
 Global(
 	project : "FREditor",
 	humanReadableName : "Редактор правил формализации",
+	platform : "x86",
 	libs : ("Common.Tools", "Common.MySql")
 )
 
