@@ -246,6 +246,8 @@ WHERE c.CostCode = ?CostCode;";
   TxtMinOrderCountEnd = ?FRTxtMinOrderCountEnd,
   TxtProducerCostBegin = ?FRTxtProducerCostBegin,
   TxtProducerCostEnd = ?FRTxtProducerCostEnd,
+  TxtNdsBegin = ?FRTxtNdsBegin,
+  TxtNdsEnd = ?FRTxtNdsEnd,
 
   FCode = ?FRFCode,
   FCodeCr = ?FRFCodeCr,
@@ -269,6 +271,7 @@ WHERE c.CostCode = ?CostCode;";
   FOrderCost = ?FRFOrderCost,
   FMinOrderCount = ?FRFMinOrderCount,
   FProducerCost = ?FRFProducerCost,	
+  FNds = ?FRFNds,
 
   Memo = ?FRMemo
 where
@@ -333,6 +336,8 @@ where
 			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtMinOrderCountEnd", MySqlDbType.Int32);
 			this.mcmdUpdateFormRules.Parameters.Add("?FRTxtProducerCostBegin", MySqlDbType.Int32);
         	this.mcmdUpdateFormRules.Parameters.Add("?FRTxtProducerCostEnd", MySqlDbType.Int32);
+        	this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNdsBegin", MySqlDbType.Int32);
+        	this.mcmdUpdateFormRules.Parameters.Add("?FRTxtNdsEnd", MySqlDbType.Int32);
 
             this.mcmdUpdateFormRules.Parameters.Add("?FRDelimiter", MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRPosNum", MySqlDbType.Int64);
@@ -366,6 +371,7 @@ where
 			this.mcmdUpdateFormRules.Parameters.Add("?FRFOrderCost", MySqlDbType.VarString);
 			this.mcmdUpdateFormRules.Parameters.Add("?FRFMinOrderCount", MySqlDbType.VarString);
 			this.mcmdUpdateFormRules.Parameters.Add("?FRFProducerCost", MySqlDbType.VarString);
+        	this.mcmdUpdateFormRules.Parameters.Add("?FRFNds", MySqlDbType.VarString);
             this.mcmdUpdateFormRules.Parameters.Add("?FRMemo", MySqlDbType.VarString);
 
             foreach (MySqlParameter ms in this.mcmdUpdateFormRules.Parameters)
@@ -831,6 +837,9 @@ SELECT
 	PFR.TxtProducerCostBegin as FRTxtProducerCostBegin,
 	PFR.TxtProducerCostEnd as FRTxtProducerCostEnd,
 
+	PFR.TxtNdsBegin as FRTxtNdsBegin,
+	PFR.TxtNdsEnd as FRTxtNdsEnd,
+
 	PFR.FCode as FRFCode,
 	PFR.FCodeCr as FRFCodeCr,
 	PFR.FName1 as FRFName1,
@@ -852,7 +861,8 @@ SELECT
 	PFR.FMaxBoundCost as FRFMaxBoundCost,
 	PFR.FOrderCost as FRFOrderCost,
 	PFR.FMinOrderCount as FRFMinOrderCount,
-	PFR.FProducerCost as FRFProducerCost
+	PFR.FProducerCost as FRFProducerCost,
+	PFR.FNds as FRFNds
 FROM 
   UserSettings.PricesData AS PD
   INNER JOIN UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0

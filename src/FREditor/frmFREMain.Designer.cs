@@ -161,6 +161,9 @@ namespace FREditor
         	this.FRFProducerCost = new System.Data.DataColumn();
         	this.FRTxtProducerCostBegin = new System.Data.DataColumn();
         	this.FRTxtProducerCostEnd = new System.Data.DataColumn();
+        	this.FRFNds = new System.Data.DataColumn();
+        	this.FRTxtNdsBegin = new System.Data.DataColumn();
+        	this.FRTxtNdsEnd = new System.Data.DataColumn();
 			this.FRFMinOrderCount = new System.Data.DataColumn();
 			this.FRTxtMinOrderCountBegin = new System.Data.DataColumn();
 			this.FRTxtMinOrderCountEnd = new System.Data.DataColumn();
@@ -254,10 +257,18 @@ namespace FREditor
 			this.txtBoxMinOrderCountEnd = new System.Windows.Forms.TextBox();
 			this.txtBoxMinOrderCountBegin = new System.Windows.Forms.TextBox();
 			this.label51 = new System.Windows.Forms.Label();
+			// ProducerCost
         	this.textBoxProducerCostTxtBegin = new TextBox();
         	this.textBoxProducerCostTxtEnd = new TextBox();
         	this.textBoxProducerCost = new TextBox();
         	this.labelTxtProducerCost = new Label();
+			// Nds
+        	this.textBoxNdsTxtBegin = new TextBox();
+        	this.textBoxNdsTxtEnd = new TextBox();
+        	this.textBoxNds = new TextBox();
+        	this.labelTxtNds = new Label();
+        	this.labelNds = new Label();
+
         	this.labelProducerCost = new Label();
 			this.txtBoxOrderCostEnd = new System.Windows.Forms.TextBox();
 			this.txtBoxOrderCostBegin = new System.Windows.Forms.TextBox();
@@ -316,6 +327,7 @@ namespace FREditor
 			this.pnlGeneralFields = new System.Windows.Forms.Panel();
 			this.label50 = new System.Windows.Forms.Label();
 			this.labelTxtProducerCost = new Label();
+        	this.labelTxtNds = new Label();
 			this.txtBoxMinOrderCount = new System.Windows.Forms.TextBox();
 			this.label48 = new System.Windows.Forms.Label();
 			this.txtBoxOrderCost = new System.Windows.Forms.TextBox();
@@ -849,6 +861,9 @@ namespace FREditor
 			this.FRFProducerCost,
 			this.FRTxtProducerCostBegin,
 			this.FRTxtProducerCostEnd,
+			this.FRFNds,
+			this.FRTxtNdsBegin,
+			this.FRTxtNdsEnd,
             this.FRFMinOrderCount,
             this.FRTxtMinOrderCountBegin,
             this.FRTxtMinOrderCountEnd,
@@ -1160,6 +1175,18 @@ namespace FREditor
 			// FRTxtProducerCostEnd
 			//
 			this.FRTxtProducerCostEnd.ColumnName = "FRTxtProducerCostEnd";
+			//
+			// FRFNds
+			//
+        	this.FRFNds.ColumnName = "FRFNds";
+			//
+			// FRTxtNdsBegin
+			//
+        	this.FRTxtNdsBegin.ColumnName = "FRTxtNdsBegin";
+			//
+			// FRTxtNdsEnd
+			//
+        	this.FRTxtNdsEnd.ColumnName = "FRTxtNdsEnd";
 			// 
 			// FRFMinOrderCount
 			// 
@@ -2120,7 +2147,10 @@ namespace FREditor
 			this.grpbFields.Text = "Ïîëÿ";
 			// 
 			// pnlTxtFields
-			//         	
+			//
+        	this.pnlTxtFields.Controls.Add(this.textBoxNdsTxtEnd);
+			this.pnlTxtFields.Controls.Add(this.textBoxNdsTxtBegin);
+			this.pnlTxtFields.Controls.Add(this.labelTxtNds);
 			this.pnlTxtFields.Controls.Add(this.textBoxProducerCostTxtEnd);
         	this.pnlTxtFields.Controls.Add(this.textBoxProducerCostTxtBegin);
 			this.pnlTxtFields.Controls.Add(this.labelTxtProducerCost);
@@ -2287,6 +2317,42 @@ namespace FREditor
 			this.textBoxProducerCostTxtEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
 			this.textBoxProducerCostTxtEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.textBoxProducerCostTxtEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			//
+			// labelTxtNds
+			//
+			this.labelTxtNds.Location = new Point(326, 142);
+			this.labelTxtNds.Name = "labelTxtNds";
+			this.labelTxtNds.Size = new Size(104, 23);
+			this.labelTxtNds.Text = "ÍÄÑ :";
+			this.labelTxtNds.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			//
+			// textBoxNdsTxtBegin
+			//
+			this.textBoxNdsTxtBegin.AccessibleName = "NdsBegin";
+			this.textBoxNdsTxtBegin.AllowDrop = true;
+			this.textBoxNdsTxtBegin.DataBindings.Add(new Binding("Text", this.bsFormRules, "FRTxtNdsBegin", true));
+			this.textBoxNdsTxtBegin.Location = new Point(437, 144);
+			this.textBoxNdsTxtBegin.Name = "textBoxNdsTxtBegin";
+			this.textBoxNdsTxtBegin.ReadOnly = true;
+			this.textBoxNdsTxtBegin.Size = new Size(27, 20);
+			this.textBoxNdsTxtBegin.TabIndex = 126;
+			this.textBoxNdsTxtBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.textBoxNdsTxtBegin.DragDrop += new DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.textBoxNdsTxtBegin.DragEnter += new DragEventHandler(this.txtBoxCodeBegin_DragEnter);
+			//
+			// textBoxNdsTxtEnd
+			//
+			this.textBoxNdsTxtEnd.AccessibleName = "NdsEnd";
+			this.textBoxNdsTxtEnd.AllowDrop = true;
+			this.textBoxNdsTxtEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNdsEnd", true));
+			this.textBoxNdsTxtEnd.Location = new System.Drawing.Point(464, 144);
+			this.textBoxNdsTxtEnd.Name = "textBoxNdsTxtEnd";
+			this.textBoxNdsTxtEnd.ReadOnly = true;
+			this.textBoxNdsTxtEnd.Size = new System.Drawing.Size(27, 20);
+			this.textBoxNdsTxtEnd.TabIndex = 127;
+			this.textBoxNdsTxtEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
+			this.textBoxNdsTxtEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
+			this.textBoxNdsTxtEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			// 
 			// label49
 			// 
@@ -2928,7 +2994,9 @@ namespace FREditor
 			// 
 			// pnlGeneralFields
 			// 
-        	this.pnlGeneralFields.Controls.Add(this.labelProducerCost);
+			this.pnlGeneralFields.Controls.Add(this.labelNds);
+			this.pnlGeneralFields.Controls.Add(this.textBoxNds);
+			this.pnlGeneralFields.Controls.Add(this.labelProducerCost);
 			this.pnlGeneralFields.Controls.Add(this.textBoxProducerCost);
 			this.pnlGeneralFields.Controls.Add(this.label50);
 			this.pnlGeneralFields.Controls.Add(this.txtBoxMinOrderCount);
@@ -3019,6 +3087,26 @@ namespace FREditor
         	this.textBoxProducerCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
         	this.textBoxProducerCost.DragDrop += new DragEventHandler(this.txtBoxCode_DragDrop);
         	this.textBoxProducerCost.DragEnter += new DragEventHandler(this.txtBoxCode_DragEnter);
+			//
+			// labelNds
+			//
+			this.labelNds.Location = new Point(326, 133);
+			this.labelNds.Name = "labelNds";
+			this.labelNds.Size = new Size(104, 23);
+			this.labelNds.Text = "ÍÄÑ :";
+			this.labelNds.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			//
+			// textBoxNds
+			//
+			this.textBoxNds.AllowDrop = true;
+			this.textBoxNds.DataBindings.Add(new Binding("Text", this.bsFormRules, "FRFNds", true));
+			this.textBoxNds.Location = new Point(437, 133);
+			this.textBoxNds.Name = "textBoxNds";
+			this.textBoxNds.ReadOnly = true;
+			this.textBoxNds.Size = new Size(40, 20);
+			this.textBoxNds.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
+			this.textBoxNds.DragDrop += new DragEventHandler(this.txtBoxCode_DragDrop);
+			this.textBoxNds.DragEnter += new DragEventHandler(this.txtBoxCode_DragEnter);
 			// 
 			// label48
 			// 
@@ -4173,6 +4261,9 @@ namespace FREditor
     	private System.Data.DataColumn FRFProducerCost;
     	private System.Data.DataColumn FRTxtProducerCostBegin;
 		private System.Data.DataColumn FRTxtProducerCostEnd;
+    	private System.Data.DataColumn FRFNds;
+    	private System.Data.DataColumn FRTxtNdsBegin;
+    	private System.Data.DataColumn FRTxtNdsEnd;
 		private System.Windows.Forms.Label label48;
 		private System.Windows.Forms.TextBox txtBoxOrderCost;
 		private System.Windows.Forms.TextBox txtBoxOrderCostEnd;
@@ -4238,10 +4329,17 @@ namespace FREditor
 		private System.Windows.Forms.Label label23;
 		private Button buttonSearchNext;
 		private Button buttonCreateMail;
+
     	private Label labelProducerCost;
     	private Label labelTxtProducerCost;
     	private TextBox textBoxProducerCost;
     	private TextBox textBoxProducerCostTxtBegin;
     	private TextBox textBoxProducerCostTxtEnd;
+
+    	private Label labelNds;
+    	private Label labelTxtNds;
+    	private TextBox textBoxNds;
+    	private TextBox textBoxNdsTxtBegin;
+    	private TextBox textBoxNdsTxtEnd;
     }
 }
