@@ -2,12 +2,12 @@
 import file from ClickOnce.bake
 
 Global(
-	project : "FREditor",
-	humanReadableName : "Редактор правил формализации",
-	platform : "x86",
+	Project : "FREditor",
+	HumanReadableName : "Редактор правил формализации",
+	Platform : "x86",
 	libs : ("Common.Tools", "Common.MySql")
 )
 
 Task @default, [@build]
 
-Task @deploy, [@Migrate, @publish]
+Task @deploy, [@build, @Production, @Migrate, @publish]
