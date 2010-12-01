@@ -2972,7 +2972,7 @@ order by PriceName
 			if (e.KeyCode == Keys.Enter)
 			{
 				FillParentComboBoxBySearch(
-					(ComboBox)sender, 
+					(ComboBox)sender,
 @"select
   pd.PriceCode,
   concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
@@ -2984,6 +2984,7 @@ where
   pd.FirmCode = cd.FirmCode
 and pd.CostType is not null
 and r.RegionCode = cd.RegionCode
+and pd.ParentSynonym is null
 and ((pd.PriceCode = ?PrevParentValue) or (pd.PriceName like ?SearchText) or (cd.ShortName like ?SearchText))
 order by PriceName
 ", 
