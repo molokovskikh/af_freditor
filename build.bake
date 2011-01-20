@@ -1,13 +1,11 @@
-﻿import file from Migration.bake
-import file from ClickOnce.bake
+﻿import file from ClickOnce.bake
 
 Global(
 	Project : "FREditor",
 	HumanReadableName : "Редактор правил формализации",
-	Platform : "x86",
-	libs : ("Common.Tools", "Common.MySql")
+	Platform : "x86"
 )
 
-Task @default, [@build]
+task @default, [@ClickOnceBuild]
 
-Task @deploy, [@build, @Production, @Migrate, @publish]
+task @deploy, [@ClickOnceDeploy]
