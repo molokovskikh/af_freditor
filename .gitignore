@@ -1,3 +1,2 @@
-src/Common.Tools/
-src/Common.MySql/
-build/
+output/
+AssemblyInfo.cs

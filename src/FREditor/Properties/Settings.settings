@@ -14,9 +14,6 @@
     <Setting Name="DeletedCostColor" Type="System.Drawing.Color" Scope="User">
       <Value Profile="(Default)">IndianRed</Value>
     </Setting>
-    <Setting Name="PriceProcessorURL" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">tcp://localhost:889/RemotePriceProcessor</Value>
-    </Setting>
     <Setting Name="WCFServiceUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">net.tcp://prg4:900/RemotePriceProcessorService</Value>
     </Setting>

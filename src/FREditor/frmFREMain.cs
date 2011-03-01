@@ -928,7 +928,7 @@ where
 			string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
         	fmt = _priceFileFormatHelper.NewFormat;
 			//Делаем фильтрацию по форматам прайс-листа
-			CurrencyManager cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);			
+			var cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);			
 			if ((cm != null) && (cm.List is DataView))
 				if (fmt.HasValue)
 				{
@@ -1020,30 +1020,8 @@ order by PriceName
 					if (!_isFormatChanged)
 					{
 						Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
-						try
-						{
-							// Берем файл из Base
-							using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
-							{
-								if (openFile != null)
-								{
-									using (var fileStream = File.Create(filePath))
-									{
-										CopyStreams(openFile, fileStream);
-									}
-								}
-								else
-								{
-									MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-									return;
-								}
-							}
-						}
-						catch (Exception ex)
-						{
-							Mailer.SendErrorMessageToService("Ошибка при попытке получить файл из Base", ex);
-							return;
-						}
+						LoadFileFromBase(shortFileNameByPriceItemId, filePath);
+						return;
 					}
 					Application.DoEvents();
 					_currentFilename = filePath;
@@ -1076,9 +1054,37 @@ order by PriceName
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
-        }		
+        }
 
-		private void SetupXlsPriceView()
+    	private void LoadFileFromBase(string shortFileNameByPriceItemId, string filePath)
+    	{
+    		try
+    		{
+    			// Берем файл из Base
+    			using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
+    			{
+    				if (openFile != null)
+    				{
+    					using (var fileStream = File.Create(filePath))
+    					{
+    						CopyStreams(openFile, fileStream);
+    					}
+    				}
+    				else
+    				{
+    					MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+    					return;
+    				}
+    			}
+    		}
+    		catch (Exception ex)
+    		{
+    			Mailer.SendErrorMessageToService("Ошибка при попытке получить файл из Base", ex);
+    			return;
+    		}
+    	}
+
+    	private void SetupXlsPriceView()
 		{
 			for (var i = 0; i < dtables.Count; i++)
 			{
@@ -3609,6 +3615,19 @@ order by PriceName
 			}
 		}
 
+		private void SavePriceButton_Click(object sender, EventArgs e)
+		{
+			var row = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
+			var id = row[PPriceItemId.ColumnName].ToString();
+			using(var dialog = new SaveFileDialog())
+			{
+				if (dialog.ShowDialog() == DialogResult.OK)
+				{
+					LoadFileFromBase(id, dialog.FileName);
+					MessageBox.Show("Сохранено");
+				}
+			}
+		}
     }
 
     public class WaitWindowThread
