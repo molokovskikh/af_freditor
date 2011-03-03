@@ -43,7 +43,8 @@ namespace FREditor.Helpers
 SELECT 
 	Id AS FormatId,
 	Format AS FormatName,
-	FileExtention AS FormatFileExtension
+	FileExtention AS FormatFileExtension,
+	Comment
 FROM
 	farm.pricefmts
 ";
@@ -190,6 +191,19 @@ FROM
 		public string LastErrorMessage
 		{
 			get { return _errorMessage; }
+		}
+
+		public string Name
+		{
+			get
+			{
+				if (CurrentFormat == null)
+					return null;
+				var format = _dataTableFormats.Select("FormatName = '" + CurrentFormat + "'").FirstOrDefault();
+				if (format == null)
+					return null;
+				return format["Comment"].ToString();
+			}
 		}
 
 		private string GetFileExtension(PriceFormat? priceFormat)

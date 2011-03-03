@@ -1539,7 +1539,7 @@ namespace FREditor
 			this.SavePriceButton.Name = "SavePriceButton";
 			this.SavePriceButton.Size = new System.Drawing.Size(200, 36);
 			this.SavePriceButton.TabIndex = 34;
-			this.SavePriceButton.Text = "Сохранить прайс текущий прайс";
+			this.SavePriceButton.Text = "Сохранить текущий прайс";
 			this.SavePriceButton.UseVisualStyleBackColor = true;
 			this.SavePriceButton.Click += new System.EventHandler(this.SavePriceButton_Click);
 			// 

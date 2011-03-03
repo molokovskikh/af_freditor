@@ -1021,7 +1021,6 @@ order by PriceName
 					{
 						Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
 						LoadFileFromBase(shortFileNameByPriceItemId, filePath);
-						return;
 					}
 					Application.DoEvents();
 					_currentFilename = filePath;
@@ -3621,6 +3620,10 @@ order by PriceName
 			var id = row[PPriceItemId.ColumnName].ToString();
 			using(var dialog = new SaveFileDialog())
 			{
+				dialog.DefaultExt = _priceFileFormatHelper.CurrentFileExtension;
+				if (!String.IsNullOrEmpty(_priceFileFormatHelper.Name))
+					dialog.Filter = string.Format("{0} (*{1})|*.{1}", _priceFileFormatHelper.Name, _priceFileFormatHelper.CurrentFileExtension);
+
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
 					LoadFileFromBase(id, dialog.FileName);
