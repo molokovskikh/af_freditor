@@ -1020,7 +1020,8 @@ order by PriceName
 					if (!_isFormatChanged)
 					{
 						Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
-						LoadFileFromBase(shortFileNameByPriceItemId, filePath);
+						if (!LoadFileFromBase(shortFileNameByPriceItemId, filePath))
+							return;
 					}
 					Application.DoEvents();
 					_currentFilename = filePath;
@@ -1055,7 +1056,7 @@ order by PriceName
 			}
         }
 
-    	private void LoadFileFromBase(string shortFileNameByPriceItemId, string filePath)
+    	private bool LoadFileFromBase(string shortFileNameByPriceItemId, string filePath)
     	{
     		try
     		{
@@ -1067,19 +1068,20 @@ order by PriceName
     					using (var fileStream = File.Create(filePath))
     					{
     						CopyStreams(openFile, fileStream);
+							return true;
     					}
     				}
     				else
     				{
     					MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-    					return;
+    					return false;
     				}
     			}
     		}
     		catch (Exception ex)
     		{
     			Mailer.SendErrorMessageToService("Ошибка при попытке получить файл из Base", ex);
-    			return;
+    			return false;
     		}
     	}
 
@@ -3618,17 +3620,12 @@ order by PriceName
 		{
 			var row = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
 			var id = row[PPriceItemId.ColumnName].ToString();
-			using(var dialog = new SaveFileDialog())
+			var file = _priceFileFormatHelper.CurrentShortFileName;
+			if (!String.IsNullOrEmpty(file))
 			{
-				dialog.DefaultExt = _priceFileFormatHelper.CurrentFileExtension;
-				if (!String.IsNullOrEmpty(_priceFileFormatHelper.Name))
-					dialog.Filter = string.Format("{0} (*{1})|*.{1}", _priceFileFormatHelper.Name, _priceFileFormatHelper.CurrentFileExtension);
-
-				if (dialog.ShowDialog() == DialogResult.OK)
-				{
-					LoadFileFromBase(id, dialog.FileName);
-					MessageBox.Show("Сохранено");
-				}
+				file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), file);
+				if (LoadFileFromBase(id, file))
+					MessageBox.Show(String.Format("Прайс сохранен на рабочий стол, файл {0}", Path.GetFileName(file)));
 			}
 		}
     }

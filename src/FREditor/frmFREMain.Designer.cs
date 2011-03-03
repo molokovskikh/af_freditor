@@ -1535,7 +1535,7 @@ namespace FREditor
 			// 
 			// SavePriceButton
 			// 
-			this.SavePriceButton.Location = new System.Drawing.Point(20, 88);
+			this.SavePriceButton.Location = new System.Drawing.Point(21, 113);
 			this.SavePriceButton.Name = "SavePriceButton";
 			this.SavePriceButton.Size = new System.Drawing.Size(200, 36);
 			this.SavePriceButton.TabIndex = 34;
@@ -1545,7 +1545,7 @@ namespace FREditor
 			// 
 			// btnPutToBase
 			// 
-			this.btnPutToBase.Location = new System.Drawing.Point(20, 59);
+			this.btnPutToBase.Location = new System.Drawing.Point(21, 84);
 			this.btnPutToBase.Name = "btnPutToBase";
 			this.btnPutToBase.Size = new System.Drawing.Size(200, 23);
 			this.btnPutToBase.TabIndex = 33;
@@ -1614,7 +1614,7 @@ namespace FREditor
 			// grpbParent
 			// 
 			this.grpbParent.Controls.Add(this.cmbParentSynonyms);
-			this.grpbParent.Location = new System.Drawing.Point(20, 250);
+			this.grpbParent.Location = new System.Drawing.Point(20, 275);
 			this.grpbParent.Name = "grpbParent";
 			this.grpbParent.Size = new System.Drawing.Size(200, 52);
 			this.grpbParent.TabIndex = 31;
@@ -1639,7 +1639,7 @@ namespace FREditor
 			this.groupBox2.Controls.Add(this.tbPosition);
 			this.groupBox2.Controls.Add(this.lblFormat);
 			this.groupBox2.Controls.Add(this.cmbFormat);
-			this.groupBox2.Location = new System.Drawing.Point(21, 130);
+			this.groupBox2.Location = new System.Drawing.Point(20, 155);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(200, 114);
 			this.groupBox2.TabIndex = 30;
@@ -1707,9 +1707,9 @@ namespace FREditor
 			// 
 			this.lblPriceName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRName", true));
 			this.lblPriceName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.lblPriceName.Location = new System.Drawing.Point(19, 32);
+			this.lblPriceName.Location = new System.Drawing.Point(23, 32);
 			this.lblPriceName.Name = "lblPriceName";
-			this.lblPriceName.Size = new System.Drawing.Size(184, 23);
+			this.lblPriceName.Size = new System.Drawing.Size(184, 49);
 			this.lblPriceName.TabIndex = 29;
 			// 
 			// lblNameFirm

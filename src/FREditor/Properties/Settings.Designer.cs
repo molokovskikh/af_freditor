@@ -73,19 +73,19 @@ namespace FREditor.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("net.tcp://prg4:900/RemotePriceProcessorService")]
-        public string WCFServiceUrl {
+        [global::System.Configuration.DefaultSettingValueAttribute("KvasovTest@analit.net")]
+        public string EmailService {
             get {
-                return ((string)(this["WCFServiceUrl"]));
+                return ((string)(this["EmailService"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("KvasovTest@analit.net")]
-        public string EmailService {
+        [global::System.Configuration.DefaultSettingValueAttribute("net.tcp://localhost:900/RemotePriceProcessorService")]
+        public string WCFServiceUrl {
             get {
-                return ((string)(this["EmailService"]));
+                return ((string)(this["WCFServiceUrl"]));
             }
         }
     }
