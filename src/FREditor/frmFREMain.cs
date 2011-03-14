@@ -46,22 +46,15 @@ namespace FREditor
         private string BaseRegKey = "Software\\Inforoom\\FREditor";
         private string CregKey;
 
-        private OleDbConnection dbcMain = new OleDbConnection();
-
 		string EndPath = Path.GetTempPath();
-        string TxtFilePath = String.Empty;
         string frmCaption = String.Empty;
 
-        DataRow openedPriceDR;
-        string listName = String.Empty;
         string delimiter = String.Empty;
-		PriceFormat? fmt = null;
+		PriceFormat? fmt;
 
 		//Текущий клиент, с которым происходит работа и текущий прайс
-		long currentPriceItemId = 0;
-		long currentClientCode = 0;
-        long startLine = 0;
-        string[] FFieldNames;
+		long currentPriceItemId;
+		long currentClientCode;
 
         string nameR = String.Empty;
         string FilterParams = String.Empty;
@@ -70,15 +63,13 @@ namespace FREditor
         private ulong regionCodeFilter = 0;
         private int segmentFilter = -1;
 
-        bool fileExist = false;
-        bool InSearch = false;
+        bool fileExist;
+        bool InSearch;
 
         StringFormat sf = new StringFormat();
 
-        ArrayList fds;
-
-        public frmWait fW = null;
-        public frmNameMask frmNM = null;
+        public frmWait fW;
+        public frmNameMask frmNM;
 
         public DataTable dtCostTypes;
         public DataTable dtPriceTypes;
@@ -1039,7 +1030,6 @@ order by PriceName
 						tbpSheet1.Text = tables[0].TableName;						
 						tables.RemoveAt(0);
 						dtables = tables;
-						listName = drFR[0]["FRListName"].ToString();
 						SetupXlsPriceView();
 					}						
 					Application.DoEvents();
@@ -1468,9 +1458,7 @@ order by PriceName
 				if (_isComboBoxFormatHandlerRegistered)
 					_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
             	fmt = null;
-            	//_prevFmt = null;
             	delimiter = String.Empty;
-            	//_prevDelimiter = String.Empty;
 				SaveCostsSettings();
                 bsCostsFormRules.Filter = String.Empty;
                 bsFormRules.Filter = String.Empty;
@@ -1492,7 +1480,6 @@ order by PriceName
                     DataView dv = (DataView)currencyManager.List;
 
                     DataRow drP = drv.Row;
-                    openedPriceDR = drP;
 
 					currentClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
 					currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
