@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Threading;
 using Inforoom.WinForms.Helpers;
 using FREditor.Properties;
+using log4net.Config;
 
 namespace FREditor
 {
@@ -17,6 +18,7 @@ namespace FREditor
 		[STAThread]
 		static void Main()
 		{
+			XmlConfigurator.Configure();
 			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(OnThreadException);
 			Application.ApplicationExit += new EventHandler(ApplicationExit);
 

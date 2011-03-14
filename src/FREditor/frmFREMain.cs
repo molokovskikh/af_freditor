@@ -607,6 +607,7 @@ where
 and ((pd.CostType = 1) or (pc.BaseCost = 1))";
 			command.CommandText += param;
 			command.CommandText += @" 
+group by pim.Id
 order by PPriceName";
 
 			dataAdapter.Fill(dtPrices);
