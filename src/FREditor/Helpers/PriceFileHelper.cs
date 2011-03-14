@@ -108,7 +108,7 @@ namespace FREditor.Helpers
 			Application.DoEvents();
 			try
 			{
-				return Dbf.Load(filePath);
+				return Dbf.Load(filePath, Encoding.GetEncoding(866), false, true);
 			}
 			finally
 			{
