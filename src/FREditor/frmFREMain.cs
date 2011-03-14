@@ -1554,11 +1554,6 @@ order by PriceName
 				}
 		}
 
-        private void MethodForThread(OleDbDataAdapter da, DataTable dt)
-        {
-            da.Fill(dt);
-        }
-
         private void txtBoxCode_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
         {
 			if (e.Data.GetDataPresent(typeof(DropField)))
@@ -1636,19 +1631,6 @@ order by PriceName
         {
             string NameText = tcInnerSheets.SelectedTab.Text;
             tcInnerSheets.DoDragDrop(new DropSheet(NameText), DragDropEffects.Copy | DragDropEffects.Move);
-        }
-
-        private void CostsDataGrid_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(typeof(DropField)))
-            {
-                if (dtCostsFormRules.Rows.Count > 0)
-                    e.Effect = DragDropEffects.Copy;
-                else
-                    e.Effect = DragDropEffects.None;
-            }
-            else
-                e.Effect = DragDropEffects.None;
         }
 
         private void txtBoxStartLine_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
@@ -1746,20 +1728,6 @@ and c.Type = ?ContactType;",
 					}
 				}
 			}
-        }
-
-        public delegate void TestAsync(OleDbDataAdapter da, DataTable dt);
-
-        void TestD(OleDbDataAdapter da, DataTable dt)
-        {
-			da.Fill(dt);
-        }
-
-        public delegate void CloseDelegate();
-
-        void WaitClose()
-        {
-            fW.Close();
         }
 
         private void btnFloatPanel_Click(object sender, System.EventArgs e)
@@ -2837,32 +2805,6 @@ and fr.Id = pim.FormRuleId;
             FindErrors(txtBoxVitallyImportantMask, txtBoxVitalyImportant, txtBoxVitalyImportantBegin, txtBoxVitalyImportantEnd);
         }
 
-		private string GetPriceFileExtention(long PriceItemtId)
-		{
-			connection.Open();
-			try
-			{
-				return (string)MySqlHelper.ExecuteScalar(
-					connection,
-					@"
-SELECT 
-  p.FileExtention 
-FROM 
-  usersettings.priceitems,
-  farm.formrules f, 
-  farm.pricefmts p
-where
-    priceitems.id = ?PriceItemtId
-and f.Id = priceitems.FormRuleID
-and p.Id = f.PriceFormatID",
-					new MySqlParameter("?PriceItemtId", PriceItemtId));
-			}
-			finally			
-			{
-				connection.Close();
-			}
-		}
-
 		private void btnRetrancePrice_Click(object sender, EventArgs e)
 		{
 			if (indgvPrice.CurrentRow != null)
@@ -2930,34 +2872,6 @@ and p.Id = f.PriceFormatID",
 						e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
 					}
 				}
-			}
-		}
-
-		private void cmbParentRules_KeyDown(object sender, KeyEventArgs e)
-		{
-			if (e.KeyCode == Keys.Enter)
-			{
-				FillParentComboBoxBySearch((ComboBox)sender, @"
-select
-  pim.FormRuleID,
-  concat(cd.ShortName, ' (', if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName), ') - ', r.Region) PriceName
-from
-  usersettings.clientsdata cd,
-  usersettings.pricesdata pd,
-  usersettings.pricescosts pc,
-  usersettings.priceitems pim,
-  farm.regions r
-where
-  pd.FirmCode = cd.FirmCode
-and pd.CostType is not null
-and r.RegionCode = cd.RegionCode
-and pc.PriceCode = pd.PriceCode
-and ((pd.CostType = 1) or (pc.BaseCost = 1))
-and pim.id = pc.PriceItemId
-and ((pim.FormRuleID = ?PrevParentValue) or (pd.PriceName like ?SearchText) or (cd.ShortName like ?SearchText))
-order by PriceName
-", 
-				"FormRuleId", "PriceName");
 			}
 		}
 
@@ -3133,7 +3047,6 @@ order by PriceName
 
 		private void indgvCosts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
-			// && (indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn)
 			if ((e.ColumnIndex > -1) && (e.RowIndex > -1))
 			{
 				if (!indgvCosts.Rows[e.RowIndex].IsNewRow)
