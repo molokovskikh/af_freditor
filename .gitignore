@@ -1,2 +1,16 @@
 output/
 AssemblyInfo.cs
+_ReSharper.*
+_resharper.*
+*.resharper
+*.ReSharper
+*.resharper.*
+*.ReSharper.*
+*.csproj.user
+*.resharper.user
+*.resharper
+obj
+bin
+*.suo
+*.cache
+*.user

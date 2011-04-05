@@ -3165,6 +3165,7 @@ order by PriceName
 		{
 			var dialog = new OpenFileDialog();
 			dialog.RestoreDirectory = true;
+			_priceFileFormatHelper.SetNewFormat((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue), tbDevider.Text);
 			if (PriceFileFormatHelper.IsTextFormat(_priceFileFormatHelper.NewFormat))
 				dialog.Filter = String.Format("Все файлы|*.*|{0}|*{1}", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
 			else
@@ -3196,6 +3197,7 @@ order by PriceName
 					{
 						MessageBox.Show("Прайс-лист успешно положен в Base.", "Информация", MessageBoxButtons.OK,
 						                MessageBoxIcon.Information);
+						tbControl_SelectedIndexChanged(sender, e);
 					}
 				}
 				catch (Exception ex)
