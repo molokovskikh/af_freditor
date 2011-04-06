@@ -6,6 +6,7 @@ using FREditor.Helpers;
 using NUnit.Framework;
 using FREditor.Test.Properties;
 using System.IO;
+using System.Data;
 
 namespace FREditor.Test
 {
@@ -42,5 +43,29 @@ namespace FREditor.Test
 				}
 			}
 		}
+
+		[Test]
+		public void OpenXlsFile()
+		{
+			var pricesDirectory = "prices";
+			var filename = "1236.xls";
+			var path = Settings.Default.TestDirectoryPath + pricesDirectory + Path.DirectorySeparatorChar + filename;
+			List<DataTable> tables = ExcelLoader.LoadTables(path);
+			Assert.That(tables.Count, Is.EqualTo(18));
+			var table = tables.Where(t => t.TableName == "Лист1").FirstOrDefault();
+			var rows = table.Rows;
+			Assert.That(rows.Count, Is.EqualTo(2));
+			var row = rows[0];
+			string value = Convert.ToString(row[0]);
+			Assert.That(value, Is.EqualTo("Абилифай 15мг №28 табл."));
+			value = Convert.ToString(row[1]);
+			Assert.That(value, Is.EqualTo("6330"));
+			row = rows[1];
+			value = Convert.ToString(row[0]);
+			Assert.That(value, Is.EqualTo("Абитаксел - Тева д/инф. 100мг/16.7мл фл.№1"));
+			value = Convert.ToString(row[1]);
+			Assert.That(value, Is.EqualTo("11000="));		
+		}
 	}
+
 }

@@ -10,9 +10,11 @@ using System.Windows.Forms;
 using Common.Tools;
 using Inforoom.WinForms;
 using System.Threading;
+using ExcelLibrary.BinaryFileFormat;
+using ExcelLibrary.SpreadSheet;
 
 namespace FREditor.Helpers
-{
+{	
 	public class OpenPriceFileThread
 	{
 		private string _filePath;
@@ -275,8 +277,14 @@ namespace FREditor.Helpers
 			}
 			return dataTablePrice;
 		}
-
+		
 		private static List<DataTable> OpenXlsFile(string filePath)
+		{			
+			return ExcelLoader.LoadTables(filePath);
+			
+		}
+		
+	/*	private static List<DataTable> OpenXlsFile(string filePath)
 		{
 			Application.DoEvents();
 			var excelTables = new List<DataTable>();
@@ -309,7 +317,7 @@ namespace FREditor.Helpers
 			}
 			return excelTables;
 		}
-
+		
 		private static void FillXlsSheetTable(OleDbConnection connection, DataTable table, string sheetName)
 		{
 			try
@@ -327,7 +335,118 @@ namespace FREditor.Helpers
 			}
 			catch {}
 		}
-		
+		*/
 		/**/
+	}
+	
+	public class ExcelLoader
+	{
+		private static int CompareTablesByName(DataTable t1, DataTable t2)
+		{
+			if (t1.TableName.Length == t2.TableName.Length) return t1.TableName.CompareTo(t2.TableName);
+			else
+				if (t1.TableName.Length < t2.TableName.Length) return -1;
+				else return 1;
+		}
+
+		public static List<DataTable> LoadTables(string file)
+		{
+			var workbook = Workbook.Load(file);
+			var worksheets = workbook.Worksheets;
+			var excelTables = worksheets.Select(worksheet => LoadTable(worksheet)).ToList();
+			excelTables.Sort(CompareTablesByName);
+			return excelTables;
+		}
+
+		private static DataTable LoadTable(Worksheet worksheet, int startLine = 0)
+		{			
+			var dataTable = new DataTable(worksheet.Name);
+			try
+			{				
+				var cells = worksheet.Cells;
+				if (cells.FirstRowIndex != Int32.MaxValue && cells.LastRowIndex != Int32.MaxValue &&
+				    cells.FirstColIndex != Int32.MaxValue && cells.LastColIndex != Int32.MaxValue)
+				{
+					var maxColCount = (cells.LastColIndex - cells.FirstColIndex + 1 >= 256)
+					                  	? 255
+					                  	: cells.LastColIndex - cells.FirstColIndex + 1;
+
+					dataTable.Columns
+						.AddRange(Enumerable.Range(cells.FirstColIndex + 1, /*cells.LastColIndex - cells.FirstColIndex + 1*/maxColCount)
+						          	.Select(i => new DataColumn("F" + i))
+						          	.ToArray());
+
+					for (var i = Math.Max(cells.FirstRowIndex, startLine); i <= cells.LastRowIndex; i++)
+					{
+						var row = dataTable.NewRow();
+						for (var j = cells.FirstColIndex; j <= cells.FirstColIndex + maxColCount - 1 /*cells.LastColIndex*/; j++)
+						{
+							var cell = cells[i, j];
+
+							var columnName = "F" + (j + 1);
+
+							ProcessFormatIfNeeded(columnName, cell, row);
+						}
+						dataTable.Rows.Add(row);
+					}
+				}
+			}
+			finally
+			{
+				Application.DoEvents();
+			}
+			return dataTable;
+		}
+
+		private static void ProcessFormatIfNeeded(string columnName, Cell cell, DataRow row)
+		{
+			if (cell.Value is double
+				&& cell.Format.FormatType == CellFormatType.Number
+				&& (cell.Format.FormatString == "0.00" || cell.Format.FormatString == "#,##0.00"))
+			{
+				row[columnName] = Math.Round((double)cell.Value, 2, MidpointRounding.AwayFromZero);
+				return;
+			}
+
+			if (cell.Value is decimal
+				&& cell.Format.FormatType == CellFormatType.Custom
+				&& cell.Format.FormatString == "#,##0.0")
+			{
+				row[columnName] = Math.Round((decimal)cell.Value, 1, MidpointRounding.AwayFromZero);
+				return;
+			}
+
+			if (cell.Value is double
+				&& cell.Format.FormatType == CellFormatType.Custom
+				&& cell.Format.FormatString == "#,##0.0")
+			{
+				row[columnName] = Math.Round((double)cell.Value, 1, MidpointRounding.AwayFromZero);
+				return;
+			}
+
+			if (cell.Value is double
+				&& cell.Format.FormatType == CellFormatType.Date
+				&& cell.Format.FormatString == "d-mmm")
+			{
+				var value = cell.TryToGetValueAsDateTime();
+				if (value != null)
+				{
+					row[columnName] = value.Value.ToString("dd.MMM");
+					return;
+				}
+			}
+
+			if (cell.Value is double
+				&& cell.Format.FormatType == CellFormatType.Custom
+				&& (cell.Format.FormatString == "00000000000"
+					|| cell.Format.FormatString == "00000000"
+					|| cell.Format.FormatString == "00000"))
+			{
+				var padCount = cell.FormatString.Length;
+				row[columnName] = cell.Value.ToString().PadLeft(padCount, '0');
+				return;
+			}
+			row[columnName] = cell.Value;
+		}
 	}
 }
