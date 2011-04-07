@@ -19,7 +19,7 @@ namespace FREditor.Test
 			var pricesDirectory = "prices";
 			var invalidPricesDirectory = "invalid_prices";
 			var pricesFiles = new string[3] {"1.txt", "2.xls", "3.dbf"};
-			var countsTables = new int[3] { 1, 3, 1 };
+			var countsTables = new int[3] { 1, 2, 1 };
 			var pricesFormats = new PriceFormat[3] { PriceFormat.DelimWIN, PriceFormat.XLS, PriceFormat.NativeDbf };
 			var indvalidPricesFiles = new string[3] {"1.xls", "2.xls", "3.txt"};
 			var index = 0;
