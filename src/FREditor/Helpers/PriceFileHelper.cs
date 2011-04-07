@@ -282,79 +282,17 @@ namespace FREditor.Helpers
 		{			
 			return ExcelLoader.LoadTables(filePath);
 			
-		}
-		
-	/*	private static List<DataTable> OpenXlsFile(string filePath)
-		{
-			Application.DoEvents();
-			var excelTables = new List<DataTable>();
-			var connectionString = String.Format(
-				"Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Excel 5.0;HDR=No;IMEX=1\"", filePath);
-			using (var connection = new OleDbConnection(connectionString))
-			{
-					connection.Open();
-					try
-					{
-						Application.DoEvents();
-						var tableNames = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] {null, null, null, "TABLE"});						
-						for (var i = 0; i < tableNames.Rows.Count; i++)
-						{
-							var row = tableNames.Rows[i];
-							if (!(row["TABLE_NAME"] is DBNull))
-							{
-								var sheetName = (string) row["TABLE_NAME"];
-								var table = new DataTable(sheetName);
-								excelTables.Add(table);
-								FillXlsSheetTable(connection, table, sheetName);
-							}
-							Application.DoEvents();
-						}
-					}
-					finally
-					{
-						Application.DoEvents();
-					}
-			}
-			return excelTables;
-		}
-		
-		private static void FillXlsSheetTable(OleDbConnection connection, DataTable table, string sheetName)
-		{
-			try
-			{
-				var columnNames = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns,
-					new object[] { null, null, sheetName, null });
-				var fieldNames = "F1";
-				var maxColCount = (columnNames.Rows.Count >= 256) ? 255 : columnNames.Rows.Count;
-				for (var i = 1; i < maxColCount; i++)
-				{
-					fieldNames = fieldNames + ", F" + Convert.ToString(i + 1);
-				}
-				var dataAdapter = new OleDbDataAdapter(String.Format("select {0} from [{1}]", fieldNames, sheetName), connection);
-				dataAdapter.SyncFill(table);
-			}
-			catch {}
-		}
-		*/
-		/**/
+		}	
 	}
 	
 	public class ExcelLoader
 	{
-		private static int CompareTablesByName(DataTable t1, DataTable t2)
-		{
-			if (t1.TableName.Length == t2.TableName.Length) return t1.TableName.CompareTo(t2.TableName);
-			else
-				if (t1.TableName.Length < t2.TableName.Length) return -1;
-				else return 1;
-		}
-
 		public static List<DataTable> LoadTables(string file)
 		{
 			var workbook = Workbook.Load(file);
 			var worksheets = workbook.Worksheets;
 			var excelTables = worksheets.Select(worksheet => LoadTable(worksheet)).ToList();
-			excelTables.Sort(CompareTablesByName);
+			excelTables.Sort((t1, t2) => t1.TableName.CompareTo(t2.TableName));
 			return excelTables;
 		}
 
