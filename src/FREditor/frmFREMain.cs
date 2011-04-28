@@ -591,7 +591,9 @@ SELECT
   pd.CostType as PCostType,
   pim.WaitingDownloadInterval as PWaitingDownloadInterval,
   -- редактировать тип ценовой колонки и тип прайс-листа можно только относительно базовой ценовой колонки
-  if(pc.BaseCost = 1, 1, 0) PIsParent
+  if(pc.BaseCost = 1, 1, 0) PIsParent,
+  pc.BaseCost as PBaseCost,
+  pc.CostCode as PCostCode	
 FROM
   usersettings.pricesdata pd
   inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
@@ -2194,6 +2196,7 @@ and c.Type = ?ContactType;",
 
 							//todo: здесь надо переписать
                             MySqlCommand mcmdUPrice = new MySqlCommand();
+							MySqlCommand mcmdDPrice = new MySqlCommand();
                             MySqlDataAdapter daPrice = new MySqlDataAdapter();
                             mcmdUPrice.CommandText = @"
 call usersettings.UpdateCostType(?PPriceCode, ?PCostType);
@@ -2236,11 +2239,31 @@ and fr.Id = pim.FormRuleId;
                                 ms.SourceColumn = ms.ParameterName.Substring(1);
                             }
 
+                        	mcmdDPrice.CommandText = "usersettings.DeleteCost";
+							mcmdDPrice.CommandType = CommandType.StoredProcedure;
+							mcmdDPrice.Parameters.Clear();
+							mcmdDPrice.Parameters.Add("?inCostCode", MySqlDbType.Int64, 0, "PCostCode");
+							mcmdDPrice.Parameters["?inCostCode"].Direction = ParameterDirection.Input;
+													
                             mcmdUPrice.Connection = connection;
-                            daPrice.UpdateCommand=mcmdUPrice;
+                        	mcmdDPrice.Connection = connection;
+
+                            daPrice.UpdateCommand = mcmdUPrice;
+                        	daPrice.DeleteCommand = mcmdDPrice;
                             daPrice.TableMappings.Clear();
                             daPrice.TableMappings.Add("Table", dtPrices.TableName);
-                            daPrice.Update(chg.Tables[dtPrices.TableName]);
+
+
+							foreach (DataRow changeRow in chg.Tables[dtPrices.TableName].Rows)
+							{
+								if ((bool)changeRow[PDeleted.ColumnName])
+								{
+									//body.AppendFormat("”далена ценова€ колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
+									changeRow.Delete();
+								}
+							}
+
+                        	daPrice.Update(chg.Tables[dtPrices.TableName]);
                             
                             dtSet.AcceptChanges();
 							RefreshDataBind();
@@ -2725,6 +2748,31 @@ and fr.Id = pim.FormRuleId;
                     tbControl.SelectedTab = tpPrice;
                 }
             }
+			if (e.KeyCode == Keys.Delete) // удаление ценовой колонки дл€ многофайлового ѕЋ
+			{
+				if(CostIsValid())
+				{
+					DataRowView item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
+					int cost_type = (int)item[PCostType.ColumnName];
+					if (cost_type == 0) return;	// дл€ удалени€ цен из мультиколоночных прайсов используетс€ другой механизм
+
+					byte isBaseCost = (byte) item[PBaseCost.ColumnName];		
+					if (isBaseCost == 1)
+					{
+						MessageBox.Show("Ќельз€ удалить базовую ценовую колонку", "¬нимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						return;	
+					}
+
+					if (MessageBox.Show("¬ы уверены в удалении ценовой колонки?", "¬нимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+					{
+						item[PDeleted.ColumnName] = true; // помечаем запись на удаление
+						item.EndEdit();
+						indgvPrice.Refresh();				
+					}
+					else
+						return;					
+				}				
+			}
         }
 
         private void indgvPrice_DoubleClick(object sender, EventArgs e)
@@ -2873,6 +2921,10 @@ and fr.Id = pim.FormRuleId;
 						e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
 					}
 				}
+
+				DataRowView drv = (DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem;
+				if ((bool)drv[PDeleted.ColumnName])
+					e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
 			}
 		}
 
@@ -3530,6 +3582,11 @@ order by PriceName
 				if (LoadFileFromBase(id, file))
 					MessageBox.Show(String.Format("ѕрайс сохранен на рабочий стол, файл {0}", Path.GetFileName(file)));
 			}
+		}
+
+		private void indgvPrice_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+
 		}
     }
 
