@@ -2253,18 +2253,33 @@ and fr.Id = pim.FormRuleId;
                             daPrice.TableMappings.Clear();
                             daPrice.TableMappings.Add("Table", dtPrices.TableName);
 
-
+							//Формируем тело письма с изменениями в колонках
+							StringBuilder body = new StringBuilder();
+                        	string _priceName = "";
 							foreach (DataRow changeRow in chg.Tables[dtPrices.TableName].Rows)
 							{
 								if ((bool)changeRow[PDeleted.ColumnName])
 								{
-									//body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
+									body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[PPriceName.ColumnName]);
+									_priceName = changeRow[PPriceName.ColumnName].ToString();
 									changeRow.Delete();
 								}
 							}
 
                         	daPrice.Update(chg.Tables[dtPrices.TableName]);
-                            
+
+							if (body.Length > 0)
+							{
+								//Получаем информацию о поставщике, регионе и прайс-листе
+								if (indgvFirm.CurrentRow != null)
+								{
+									DataRowView firm = (DataRowView) indgvFirm.CurrentRow.DataBoundItem;
+									string _firmName = firm[CShortName.ColumnName].ToString();
+									string _regionName = firm[CRegion.ColumnName].ToString();
+									Mailer.SendNotificationLetter(connection, body.ToString(), _priceName, _firmName, _regionName);
+								}
+							}
+
                             dtSet.AcceptChanges();
 							RefreshDataBind();
 							tr.Commit();
@@ -2639,8 +2654,9 @@ and fr.Id = pim.FormRuleId;
         private void tbFirmName_TextChanged(object sender, EventArgs e)
         {
             if (!InSearch)
-            {
+            {				
                 tmrSearch.Stop();
+				TrySaveData();
                 tmrSearch.Start();
             }
         }
@@ -2920,11 +2936,12 @@ and fr.Id = pim.FormRuleId;
 					{
 						e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
 					}
-				}
-
-				DataRowView drv = (DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem;
-				if ((bool)drv[PDeleted.ColumnName])
-					e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
+				}				
+			}
+			DataRowView drv = (DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem;
+			if ((bool)drv[PDeleted.ColumnName])
+			{
+				e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
 			}
 		}
 

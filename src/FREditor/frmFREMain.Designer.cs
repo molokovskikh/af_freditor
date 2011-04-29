@@ -3903,20 +3903,25 @@ namespace FREditor
 			// pPriceNameDataGridViewTextBoxColumn
 			// 
 			this.pPriceNameDataGridViewTextBoxColumn.DataPropertyName = "PPriceName";
+			this.pPriceNameDataGridViewTextBoxColumn.FillWeight = 76.57723F;
 			this.pPriceNameDataGridViewTextBoxColumn.HeaderText = "Название прайс-листа";
 			this.pPriceNameDataGridViewTextBoxColumn.Name = "pPriceNameDataGridViewTextBoxColumn";
 			this.pPriceNameDataGridViewTextBoxColumn.ReadOnly = true;
 			// 
 			// pBaseCostDataGridViewCheckBoxColumn
 			// 
+			this.pBaseCostDataGridViewCheckBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
 			this.pBaseCostDataGridViewCheckBoxColumn.DataPropertyName = "PBaseCost";
+			this.pBaseCostDataGridViewCheckBoxColumn.FillWeight = 263.9594F;
 			this.pBaseCostDataGridViewCheckBoxColumn.HeaderText = "Базовая";
 			this.pBaseCostDataGridViewCheckBoxColumn.Name = "pBaseCostDataGridViewCheckBoxColumn";
 			this.pBaseCostDataGridViewCheckBoxColumn.ReadOnly = true;
+			this.pBaseCostDataGridViewCheckBoxColumn.Width = 65;
 			// 
 			// pDateCurPriceDataGridViewTextBoxColumn
 			// 
 			this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PPriceDate";
+			this.pDateCurPriceDataGridViewTextBoxColumn.FillWeight = 76.57723F;
 			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата текущего прайс-листа";
 			this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
 			this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
@@ -3924,6 +3929,7 @@ namespace FREditor
 			// pDateLastFormDataGridViewTextBoxColumn
 			// 
 			this.pDateLastFormDataGridViewTextBoxColumn.DataPropertyName = "PDateLastForm";
+			this.pDateLastFormDataGridViewTextBoxColumn.FillWeight = 76.57723F;
 			this.pDateLastFormDataGridViewTextBoxColumn.HeaderText = "Дата последней формализации";
 			this.pDateLastFormDataGridViewTextBoxColumn.Name = "pDateLastFormDataGridViewTextBoxColumn";
 			this.pDateLastFormDataGridViewTextBoxColumn.ReadOnly = true;
@@ -3931,24 +3937,28 @@ namespace FREditor
 			// pMaxOldDataGridViewTextBoxColumn
 			// 
 			this.pMaxOldDataGridViewTextBoxColumn.DataPropertyName = "PMaxOld";
+			this.pMaxOldDataGridViewTextBoxColumn.FillWeight = 76.57723F;
 			this.pMaxOldDataGridViewTextBoxColumn.HeaderText = "Актуальность";
 			this.pMaxOldDataGridViewTextBoxColumn.Name = "pMaxOldDataGridViewTextBoxColumn";
 			// 
 			// dataGridViewTextBoxColumn2
 			// 
 			this.dataGridViewTextBoxColumn2.DataPropertyName = "PWaitingDownloadInterval";
+			this.dataGridViewTextBoxColumn2.FillWeight = 76.57723F;
 			this.dataGridViewTextBoxColumn2.HeaderText = "Время ожидания (в часах)";
 			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
 			// 
 			// pPriceTypeDataGridViewComboBoxColumn
 			// 
 			this.pPriceTypeDataGridViewComboBoxColumn.DataPropertyName = "PPriceType";
+			this.pPriceTypeDataGridViewComboBoxColumn.FillWeight = 76.57723F;
 			this.pPriceTypeDataGridViewComboBoxColumn.HeaderText = "Тип прайс-листа";
 			this.pPriceTypeDataGridViewComboBoxColumn.Name = "pPriceTypeDataGridViewComboBoxColumn";
 			// 
 			// pCostTypeDataGridViewComboBoxColumn
 			// 
 			this.pCostTypeDataGridViewComboBoxColumn.DataPropertyName = "PCostType";
+			this.pCostTypeDataGridViewComboBoxColumn.FillWeight = 76.57723F;
 			this.pCostTypeDataGridViewComboBoxColumn.HeaderText = "Тип цены";
 			this.pCostTypeDataGridViewComboBoxColumn.Name = "pCostTypeDataGridViewComboBoxColumn";
 			// 
