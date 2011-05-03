@@ -19,6 +19,7 @@ using RemotePriceProcessor;
 using System.Net.Security;
 using FREditor.Helpers;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace FREditor
 {
@@ -2486,13 +2487,14 @@ and fr.Id = pim.FormRuleId;
             CregKey = BaseRegKey + "\\PriceDataGrid";
             indgvPrice.SaveSettings(CregKey);
         }
-
+		
         private void LoadFirmAndPriceSettings()
         {
             CregKey = BaseRegKey + "\\FirmDataGrid";
             indgvFirm.LoadSettings(CregKey);
             CregKey = BaseRegKey + "\\PriceDataGrid";
-            indgvPrice.LoadSettings(CregKey);
+        	if (indgvPrice.CanLoadSettings(CregKey))
+				indgvPrice.LoadSettings(CregKey);
         }
 
         private void SaveCostsSettings()
