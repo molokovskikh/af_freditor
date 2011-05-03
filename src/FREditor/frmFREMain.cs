@@ -1474,7 +1474,8 @@ order by PriceName
 				currentPriceItemId = 0;
 				tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
-                tmrUpdateApply.Stop();
+//                tmrUpdateApply.Stop();
+				tmrUpdateApply.Start();
             }
             else
                 if (tbControl.SelectedTab == tpPrice)
@@ -2075,8 +2076,9 @@ and c.Type = ?ContactType;",
                     }
                     else
                     {
-                        tsbApply.Enabled = false;
-                        tsbCancel.Enabled = false;
+						tsbCancel_Click(null, null);
+                       /* tsbApply.Enabled = false;
+                        tsbCancel.Enabled = false;*/
                     }
                 }
             }
@@ -2773,7 +2775,7 @@ and fr.Id = pim.FormRuleId;
 					DataRowView item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
 					int cost_type = (int)item[PCostType.ColumnName];
 					if (cost_type == 0) return;	// для удаления цен из мультиколоночных прайсов используется другой механизм
-
+					if ((bool)item[PDeleted.ColumnName] == true) return;
 					byte isBaseCost = (byte) item[PBaseCost.ColumnName];		
 					if (isBaseCost == 1)
 					{
@@ -2784,8 +2786,8 @@ and fr.Id = pim.FormRuleId;
 					if (MessageBox.Show("Вы уверены в удалении ценовой колонки?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
 					{
 						item[PDeleted.ColumnName] = true; // помечаем запись на удаление
-						item.EndEdit();
-						indgvPrice.Refresh();				
+						item.EndEdit();						
+						indgvPrice.Refresh();
 					}
 					else
 						return;					
