@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Tools.Tests", "Commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FREditor.Test", "FREditor.Test\FREditor.Test.csproj", "{3BAD982E-8048-45DE-8B91-4BE885C66816}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Support", "Test.Support\Test.Support\Test.Support.csproj", "{A215E837-1208-49E3-AF93-A9612223122C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,12 @@ Global
 		{3BAD982E-8048-45DE-8B91-4BE885C66816}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BAD982E-8048-45DE-8B91-4BE885C66816}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3BAD982E-8048-45DE-8B91-4BE885C66816}.Release|x86.ActiveCfg = Release|Any CPU
+		{A215E837-1208-49E3-AF93-A9612223122C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A215E837-1208-49E3-AF93-A9612223122C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A215E837-1208-49E3-AF93-A9612223122C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A215E837-1208-49E3-AF93-A9612223122C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A215E837-1208-49E3-AF93-A9612223122C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A215E837-1208-49E3-AF93-A9612223122C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,5 +63,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{72AFCFE8-C9E9-45FA-9698-BEE896A517A3} = {9F21EEB8-8B1E-4415-88A8-99113787DC64}
 		{A2C4864F-8976-4C5B-A2BF-60AE31749BB7} = {9F21EEB8-8B1E-4415-88A8-99113787DC64}
+		{A215E837-1208-49E3-AF93-A9612223122C} = {9F21EEB8-8B1E-4415-88A8-99113787DC64}
 	EndGlobalSection
 EndGlobal

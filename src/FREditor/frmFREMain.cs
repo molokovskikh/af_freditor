@@ -19,6 +19,7 @@ using RemotePriceProcessor;
 using System.Net.Security;
 using FREditor.Helpers;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace FREditor
 {
@@ -591,7 +592,9 @@ SELECT
   pd.CostType as PCostType,
   pim.WaitingDownloadInterval as PWaitingDownloadInterval,
   -- редактировать тип ценовой колонки и тип прайс-листа можно только относительно базовой ценовой колонки
-  if(pc.BaseCost = 1, 1, 0) PIsParent
+  if(pc.BaseCost = 1, 1, 0) PIsParent,
+  pc.BaseCost as PBaseCost,
+  pc.CostCode as PCostCode	
 FROM
   usersettings.pricesdata pd
   inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
@@ -1471,7 +1474,8 @@ order by PriceName
 				currentPriceItemId = 0;
 				tsbApply.Enabled = false;
                 tsbCancel.Enabled = false;
-                tmrUpdateApply.Stop();
+//                tmrUpdateApply.Stop();
+				tmrUpdateApply.Start();
             }
             else
                 if (tbControl.SelectedTab == tpPrice)
@@ -2072,8 +2076,9 @@ and c.Type = ?ContactType;",
                     }
                     else
                     {
-                        tsbApply.Enabled = false;
-                        tsbCancel.Enabled = false;
+						tsbCancel_Click(null, null);
+                       /* tsbApply.Enabled = false;
+                        tsbCancel.Enabled = false;*/
                     }
                 }
             }
@@ -2194,6 +2199,7 @@ and c.Type = ?ContactType;",
 
 							//todo: здесь надо переписать
                             MySqlCommand mcmdUPrice = new MySqlCommand();
+							MySqlCommand mcmdDPrice = new MySqlCommand();
                             MySqlDataAdapter daPrice = new MySqlDataAdapter();
                             mcmdUPrice.CommandText = @"
 call usersettings.UpdateCostType(?PPriceCode, ?PCostType);
@@ -2236,12 +2242,47 @@ and fr.Id = pim.FormRuleId;
                                 ms.SourceColumn = ms.ParameterName.Substring(1);
                             }
 
+                        	mcmdDPrice.CommandText = "usersettings.DeleteCost";
+							mcmdDPrice.CommandType = CommandType.StoredProcedure;
+							mcmdDPrice.Parameters.Clear();
+							mcmdDPrice.Parameters.Add("?inCostCode", MySqlDbType.Int64, 0, "PCostCode");
+							mcmdDPrice.Parameters["?inCostCode"].Direction = ParameterDirection.Input;
+													
                             mcmdUPrice.Connection = connection;
-                            daPrice.UpdateCommand=mcmdUPrice;
+                        	mcmdDPrice.Connection = connection;
+
+                            daPrice.UpdateCommand = mcmdUPrice;
+                        	daPrice.DeleteCommand = mcmdDPrice;
                             daPrice.TableMappings.Clear();
                             daPrice.TableMappings.Add("Table", dtPrices.TableName);
-                            daPrice.Update(chg.Tables[dtPrices.TableName]);
-                            
+
+							//Формируем тело письма с изменениями в колонках
+							StringBuilder body = new StringBuilder();
+                        	string _priceName = "";
+							foreach (DataRow changeRow in chg.Tables[dtPrices.TableName].Rows)
+							{
+								if ((bool)changeRow[PDeleted.ColumnName])
+								{
+									body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[PPriceName.ColumnName]);
+									_priceName = changeRow[PPriceName.ColumnName].ToString();
+									changeRow.Delete();
+								}
+							}
+
+                        	daPrice.Update(chg.Tables[dtPrices.TableName]);
+
+							if (body.Length > 0)
+							{
+								//Получаем информацию о поставщике, регионе и прайс-листе
+								if (indgvFirm.CurrentRow != null)
+								{
+									DataRowView firm = (DataRowView) indgvFirm.CurrentRow.DataBoundItem;
+									string _firmName = firm[CShortName.ColumnName].ToString();
+									string _regionName = firm[CRegion.ColumnName].ToString();
+									Mailer.SendNotificationLetter(connection, body.ToString(), _priceName, _firmName, _regionName);
+								}
+							}
+
                             dtSet.AcceptChanges();
 							RefreshDataBind();
 							tr.Commit();
@@ -2448,13 +2489,14 @@ and fr.Id = pim.FormRuleId;
             CregKey = BaseRegKey + "\\PriceDataGrid";
             indgvPrice.SaveSettings(CregKey);
         }
-
+		
         private void LoadFirmAndPriceSettings()
         {
             CregKey = BaseRegKey + "\\FirmDataGrid";
             indgvFirm.LoadSettings(CregKey);
             CregKey = BaseRegKey + "\\PriceDataGrid";
-            indgvPrice.LoadSettings(CregKey);
+        	if (indgvPrice.CanLoadSettings(CregKey))
+				indgvPrice.LoadSettings(CregKey);
         }
 
         private void SaveCostsSettings()
@@ -2616,8 +2658,9 @@ and fr.Id = pim.FormRuleId;
         private void tbFirmName_TextChanged(object sender, EventArgs e)
         {
             if (!InSearch)
-            {
+            {				
                 tmrSearch.Stop();
+				TrySaveData();
                 tmrSearch.Start();
             }
         }
@@ -2725,6 +2768,31 @@ and fr.Id = pim.FormRuleId;
                     tbControl.SelectedTab = tpPrice;
                 }
             }
+			if (e.KeyCode == Keys.Delete) // удаление ценовой колонки для многофайлового ПЛ
+			{
+				if(CostIsValid())
+				{
+					DataRowView item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
+					int cost_type = (int)item[PCostType.ColumnName];
+					if (cost_type == 0) return;	// для удаления цен из мультиколоночных прайсов используется другой механизм
+					if ((bool)item[PDeleted.ColumnName] == true) return;
+					byte isBaseCost = (byte) item[PBaseCost.ColumnName];		
+					if (isBaseCost == 1)
+					{
+						MessageBox.Show("Нельзя удалить базовую ценовую колонку", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						return;	
+					}
+
+					if (MessageBox.Show("Вы уверены в удалении ценовой колонки?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+					{
+						item[PDeleted.ColumnName] = true; // помечаем запись на удаление
+						item.EndEdit();						
+						indgvPrice.Refresh();
+					}
+					else
+						return;					
+				}				
+			}
         }
 
         private void indgvPrice_DoubleClick(object sender, EventArgs e)
@@ -2872,7 +2940,12 @@ and fr.Id = pim.FormRuleId;
 					{
 						e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
 					}
-				}
+				}				
+			}
+			DataRowView drv = (DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem;
+			if ((bool)drv[PDeleted.ColumnName])
+			{
+				e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
 			}
 		}
 
@@ -3530,6 +3603,11 @@ order by PriceName
 				if (LoadFileFromBase(id, file))
 					MessageBox.Show(String.Format("Прайс сохранен на рабочий стол, файл {0}", Path.GetFileName(file)));
 			}
+		}
+
+		private void indgvPrice_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+
 		}
     }
 
