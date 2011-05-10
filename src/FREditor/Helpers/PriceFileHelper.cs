@@ -85,7 +85,7 @@ namespace FREditor.Helpers
 				}
 				if ((priceFormat.Value == PriceFormat.DelimDOS) || (priceFormat.Value == PriceFormat.DelimWIN) ||
                     (priceFormat.Value == PriceFormat.NativeDelimWIN) || (priceFormat.Value == PriceFormat.NativeDelimDOS))
-				{
+				{										
                     tables.Add(OpenTextDelimiterFile(filePath, priceFormat, delimiter));
 					return tables;
 				}
@@ -118,8 +118,26 @@ namespace FREditor.Helpers
 			}
 		}
 
+		public static string CreateCopyWithoutSpaces(string filePath)
+		{
+			string oldpath = Path.GetDirectoryName(filePath);
+			string oldfile = Path.GetFileName(filePath);
+			string newfile = String.Empty;
+			if (oldfile != null && oldfile.Contains(" "))
+			{
+				newfile = oldfile.Replace(" ", "_");
+				if (newfile != String.Empty)
+				{
+					File.Copy(filePath, Path.Combine(Path.GetDirectoryName(filePath), newfile));
+					filePath = Path.Combine(Path.GetDirectoryName(filePath), newfile);					
+				}
+			}
+			return filePath;
+		}
+
 		private static DataTable OpenTextDelimiterFile(string filePath, PriceFormat? fmt, string delimiter)
 		{
+			filePath = CreateCopyWithoutSpaces(filePath);
 			var fileName = Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini";
 			using (var w = new StreamWriter(fileName, false, Encoding.GetEncoding(1251)))
 			{
@@ -146,6 +164,7 @@ namespace FREditor.Helpers
 
 			int maxColCount = 0;
 			var tableName = Path.GetFileName(filePath).Replace(".", "#");
+
 
 			var connectionFormatString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source={0};Extended Properties=\"Text\"";
 			var connectionString = String.Format(connectionFormatString, Path.GetDirectoryName(filePath));

@@ -104,7 +104,7 @@ group by pim.Id
 order by PPriceName";
 
 			dataAdapter.Fill(dtPrices);
-			connection.Clone();
+			connection.Close();
 		}
 
 		public TestPrice CreateTestSupplierWithPrice()

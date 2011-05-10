@@ -66,6 +66,25 @@ namespace FREditor.Test
 			value = Convert.ToString(row[1]);
 			Assert.That(value, Is.EqualTo("11000="));		
 		}
+
+		[Test]
+		public void CreateCopyWithoutSpaces()
+		{
+			var path = Settings.Default.TestDirectoryPath + "Тестовый файл";
+			File.Delete(path);
+			using (var w = new StreamWriter(path, false, Encoding.GetEncoding(1251)))
+			{
+				w.WriteLine("Тестовый файл");
+			}
+			string path2 = PriceFileHelper.CreateCopyWithoutSpaces(path);
+
+			Assert.That(File.Exists(path), Is.True);
+			Assert.That(Path.GetFileName(path2), Is.EqualTo("Тестовый_файл"));
+			Assert.That(File.Exists(path2), Is.True);
+
+			File.Delete(path);
+			File.Delete(path2);
+		}
 	}
 
 }
