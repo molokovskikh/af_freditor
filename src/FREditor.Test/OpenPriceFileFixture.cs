@@ -82,6 +82,8 @@ namespace FREditor.Test
 			Assert.That(Path.GetFileName(path2), Is.EqualTo("Тестовый_файл"));
 			Assert.That(File.Exists(path2), Is.True);
 
+			string path3 = PriceFileHelper.CreateCopyWithoutSpaces(path);
+
 			File.Delete(path);
 			File.Delete(path2);
 		}

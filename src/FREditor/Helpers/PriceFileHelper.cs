@@ -128,8 +128,11 @@ namespace FREditor.Helpers
 				newfile = oldfile.Replace(" ", "_");
 				if (newfile != String.Empty)
 				{
-					File.Copy(filePath, Path.Combine(Path.GetDirectoryName(filePath), newfile));
-					filePath = Path.Combine(Path.GetDirectoryName(filePath), newfile);					
+					if (!File.Exists(Path.Combine(Path.GetDirectoryName(filePath), newfile)))
+					{
+						File.Copy(filePath, Path.Combine(Path.GetDirectoryName(filePath), newfile));
+						filePath = Path.Combine(Path.GetDirectoryName(filePath), newfile);					
+					}
 				}
 			}
 			return filePath;
