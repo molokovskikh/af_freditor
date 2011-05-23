@@ -118,21 +118,21 @@ namespace FREditor.Helpers
 			}
 		}
 
-		public static string CreateCopyWithoutSpaces(string filePath)
+		public static string CreateCopyWithoutSpacesAndDots(string filePath)
 		{
 			string oldpath = Path.GetDirectoryName(filePath);
-			string oldfile = Path.GetFileName(filePath);
+			string oldfile = Path.GetFileNameWithoutExtension(filePath);
+			string ext = Path.GetExtension(filePath);
 			string newfile = String.Empty;
-			if (oldfile != null && oldfile.Contains(" "))
+			if (oldfile != null)
 			{
-				newfile = oldfile.Replace(" ", "_");
+				newfile = oldfile.Replace(" ", "_").Replace(".", "_");
 				if (newfile != String.Empty)
 				{
+					newfile = String.Concat(newfile, ext);					
 					if (!File.Exists(Path.Combine(Path.GetDirectoryName(filePath), newfile)))
-					{
-						File.Copy(filePath, Path.Combine(Path.GetDirectoryName(filePath), newfile));
-						filePath = Path.Combine(Path.GetDirectoryName(filePath), newfile);					
-					}
+						File.Copy(filePath, Path.Combine(Path.GetDirectoryName(filePath), newfile));											
+					filePath = Path.Combine(Path.GetDirectoryName(filePath), newfile);					
 				}
 			}
 			return filePath;
@@ -140,7 +140,7 @@ namespace FREditor.Helpers
 
 		private static DataTable OpenTextDelimiterFile(string filePath, PriceFormat? fmt, string delimiter)
 		{
-			filePath = CreateCopyWithoutSpaces(filePath);
+			filePath = CreateCopyWithoutSpacesAndDots(filePath);
 			var fileName = Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini";
 			using (var w = new StreamWriter(fileName, false, Encoding.GetEncoding(1251)))
 			{

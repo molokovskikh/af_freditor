@@ -76,13 +76,13 @@ namespace FREditor.Test
 			{
 				w.WriteLine("Тестовый файл");
 			}
-			string path2 = PriceFileHelper.CreateCopyWithoutSpaces(path);
+			string path2 = PriceFileHelper.CreateCopyWithoutSpacesAndDots(path);
 
 			Assert.That(File.Exists(path), Is.True);
 			Assert.That(Path.GetFileName(path2), Is.EqualTo("Тестовый_файл"));
 			Assert.That(File.Exists(path2), Is.True);
 
-			string path3 = PriceFileHelper.CreateCopyWithoutSpaces(path);
+			string path3 = PriceFileHelper.CreateCopyWithoutSpacesAndDots(path);
 
 			File.Delete(path);
 			File.Delete(path2);
