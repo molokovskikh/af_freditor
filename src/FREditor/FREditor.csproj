@@ -179,7 +179,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="frmMatchProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMatchProgress.Designer.cs">
+      <DependentUpon>frmMatchProgress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SynonymMatcher.cs" />
     <Content Include="App.ico" />
+    <Compile Include="frmMatchResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMatchResult.Designer.cs">
+      <DependentUpon>frmMatchResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\INDataGridViewExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -216,6 +229,12 @@
     <EmbeddedResource Include="frmFREMain.resx">
       <DependentUpon>frmFREMain.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMatchProgress.resx">
+      <DependentUpon>frmMatchProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMatchResult.resx">
+      <DependentUpon>frmMatchResult.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmNameMask.resx">
       <DependentUpon>frmNameMask.cs</DependentUpon>
@@ -280,7 +299,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

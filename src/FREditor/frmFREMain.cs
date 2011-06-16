@@ -72,12 +72,13 @@ namespace FREditor
         public frmWait fW;
         public frmNameMask frmNM;
 
+
         public DataTable dtCostTypes;
         public DataTable dtPriceTypes;
         public DataTable dtFirmSegment;
         protected dgFocus fcs;
 
-    	private PriceProcessorWcfHelper _priceProcessor;
+    	public PriceProcessorWcfHelper _priceProcessor;
 
 		// Поле для хранения текста, который нужно найти 
 		// внутри колонок прайса (или среди заголовков колонок)
@@ -104,6 +105,8 @@ namespace FREditor
     	private string _currentFilename;
 
 		private DataTableMarking _dataTableMarking = new DataTableMarking();
+
+        public SynonymMatcher matcher;
 
         public frmFREMain()
         {
@@ -374,6 +377,8 @@ where
 			dtSet.Tables.Add(_dataTableMarking);
 
 			_priceProcessor = new PriceProcessorWcfHelper(Settings.Default.WCFServiceUrl);
+
+            matcher = new SynonymMatcher(this);
         }
 
 		private void Form1_Load(object sender, System.EventArgs e)
@@ -2345,7 +2350,7 @@ and fr.Id = pim.FormRuleId;
         {
             if ((e.KeyCode == Keys.Escape) && (tbControl.SelectedTab == tpPrice))
                 tbControl.SelectedTab = tpFirms;
-        }
+        }        
 
 		private void tmrUpdateApply_Tick(object sender, EventArgs e)
 		{
@@ -3605,10 +3610,13 @@ order by PriceName
 			}
 		}
 
-		private void indgvPrice_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-
-		}
+        private void MatchPriceButton_Click(object sender, EventArgs e)
+        {
+            var row = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
+            var priceItemId = Convert.ToUInt32(row[PPriceItemId.ColumnName]);
+            var priceCode = Convert.ToUInt32(row[PPriceCode.ColumnName]);
+            matcher.StartMatching(priceItemId, priceCode);
+        }
     }
 
     public class WaitWindowThread
