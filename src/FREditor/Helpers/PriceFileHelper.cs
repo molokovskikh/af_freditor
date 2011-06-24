@@ -311,6 +311,7 @@ namespace FREditor.Helpers
 	{
 		public static List<DataTable> LoadTables(string file)
 		{
+            StringDecoder.DefaultEncoding = Encoding.GetEncoding(1251);
 			var workbook = Workbook.Load(file);
 			var worksheets = workbook.Worksheets;
 			var excelTables = worksheets.Select(worksheet => LoadTable(worksheet)).ToList();
