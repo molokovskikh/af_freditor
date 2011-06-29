@@ -2162,8 +2162,25 @@ and c.Type = ?ContactType;",
 								string _firmName = drClient[CShortName.ColumnName].ToString();
 								string _regionName = drClient[CRegion.ColumnName].ToString();
 
+							    uint _priceItemId = Convert.ToUInt32(drPrice[PPriceItemId.ColumnName]);
+
 								Mailer.SendNotificationLetter(connection, body.ToString(), 
 									_priceName, _firmName, _regionName);
+
+                                // Перепроводим прайс
+                                if (!_priceProcessor.RetransPrice(_priceItemId))
+                                {
+                                    MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка",
+                                                    MessageBoxButtons.OK, MessageBoxIcon.Error);                                    
+                                    throw new Exception("Не удалось перепровести прайс");
+                                }
+                                MySqlHelper.ExecuteNonQuery(
+                                    connection,
+                                    "insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
+                                    new MySqlParameter("?UserName", Environment.UserName),
+                                    new MySqlParameter("?UserHost", Environment.MachineName),
+                                    new MySqlParameter("?PriceItemId", _priceItemId));
+                                
 							}
                             dtSet.AcceptChanges();
 							//Обновляе цены и правила формализации цен для того, чтобы загрузить корректные ID новых цен
