@@ -70,8 +70,9 @@ namespace FREditor.Test
 		[Test]
 		public void CreateCopyWithoutSpaces()
 		{
-			var path = Settings.Default.TestDirectoryPath + "Тестовый файл";
-			File.Delete(path);
+			var path = Settings.Default.TestDirectoryPath + "Т#е$с т.о в ы й  ф а й-л.txt";
+            if(File.Exists(path))
+			    File.Delete(path);
 			using (var w = new StreamWriter(path, false, Encoding.GetEncoding(1251)))
 			{
 				w.WriteLine("Тестовый файл");
@@ -79,7 +80,7 @@ namespace FREditor.Test
 			string path2 = PriceFileHelper.CreateCopyWithoutSpacesAndDots(path);
 
 			Assert.That(File.Exists(path), Is.True);
-			Assert.That(Path.GetFileName(path2), Is.EqualTo("Тестовый_файл"));
+			Assert.That(Path.GetFileName(path2), Is.EqualTo("Т_е_с_т_о_в_ы_й__ф_а_й_л.txt"));
 			Assert.That(File.Exists(path2), Is.True);
 
 			string path3 = PriceFileHelper.CreateCopyWithoutSpacesAndDots(path);

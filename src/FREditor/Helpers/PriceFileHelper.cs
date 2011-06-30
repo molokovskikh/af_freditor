@@ -122,11 +122,16 @@ namespace FREditor.Helpers
 		{
 			string oldpath = Path.GetDirectoryName(filePath);
 			string oldfile = Path.GetFileNameWithoutExtension(filePath);
-			string ext = Path.GetExtension(filePath);
-			string newfile = String.Empty;
+			string ext = Path.GetExtension(filePath);			
+            string newfile = oldfile;
+		    var forbiddenChars = "!#$%^&*()-=+|<>,. \\/@\"`~?{}[]";
+		    
 			if (oldfile != null)
 			{
-				newfile = oldfile.Replace(" ", "_").Replace(".", "_");
+                foreach (var forbiddenChar in forbiddenChars)
+                {
+                    newfile = newfile.Replace(forbiddenChar, '_');
+                }
 				if (newfile != String.Empty)
 				{
 					newfile = String.Concat(newfile, ext);					
