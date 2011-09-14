@@ -2420,7 +2420,7 @@ and fr.Id = pim.FormRuleId;
                     DataRowView drv = (DataRowView)cm.Current;
 
 					//Если запись не является помеченной на удаление, то позволяем назначать поля
-					if (!(bool)drv[CFRDeleted.ColumnName])
+					if (!(bool)drv[CFRDeleted.ColumnName]) 
 					{
 						string _concurentCostName = String.Empty;
 
