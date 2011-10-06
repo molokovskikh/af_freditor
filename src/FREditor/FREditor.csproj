@@ -185,6 +185,7 @@
     <Compile Include="frmMatchProgress.Designer.cs">
       <DependentUpon>frmMatchProgress.cs</DependentUpon>
     </Compile>
+    <Compile Include="Literals.cs" />
     <Compile Include="SynonymMatcher.cs" />
     <Content Include="App.ico" />
     <Compile Include="frmMatchResult.cs">
@@ -278,7 +279,9 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="App.Release.config" />
+    <None Include="App.Release.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -299,7 +302,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -38,9 +38,8 @@ namespace FREditor
         List<DataTable> dtables = new List<DataTable>();
         ArrayList tblstyles = new ArrayList();
         DataTable dtPrice = new DataTable();
-
-		private MySqlConnection connection = new MySqlConnection(
-            ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
+		
+		private MySqlConnection connection = new MySqlConnection(Literals.ConnectionString());
 
 		private MySqlCommand command = new MySqlCommand();
         private MySqlDataAdapter dataAdapter = new MySqlDataAdapter();

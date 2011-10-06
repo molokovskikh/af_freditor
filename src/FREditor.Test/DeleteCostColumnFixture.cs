@@ -8,6 +8,7 @@ using Castle.ActiveRecord;
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Configuration;
+using Test.Support.Suppliers;
 
 namespace FREditor.Test
 {
@@ -40,8 +41,8 @@ namespace FREditor.Test
 
 		[SetUp]
 		public void Setup()
-		{
-			connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
+		{			
+			connection = new MySqlConnection(Literals.ConnectionString());
 			command = new MySqlCommand();
 			command.Connection = connection;
 			dataAdapter = new MySqlDataAdapter(command);
@@ -129,8 +130,8 @@ order by PPriceName";
 			
 			var price = new TestPrice
 			{
-				CostType = CostType.MultiFile,
-				Supplier = TestOldClient.CreateTestSupplier(),
+				CostType = CostType.MultiFile,				
+				Supplier = TestSupplier.Create(),
 				PriceName = "test"
 			};
 			var cost = price.NewPriceCost(priceItem, "");

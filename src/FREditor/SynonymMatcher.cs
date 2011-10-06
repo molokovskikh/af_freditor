@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 
@@ -19,7 +17,7 @@ namespace FREditor
         private uint currentPriceItemId;
 
         private Dictionary<uint, FirmSummary> firms;
-        private MySqlConnection connection = new MySqlConnection(ConfigurationManager.ConnectionStrings["DB"].ConnectionString);
+		private MySqlConnection connection = new MySqlConnection(Literals.ConnectionString());
 
         private bool auto_matching = false;
 
