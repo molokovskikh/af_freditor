@@ -1,29 +1,23 @@
 using System;
-using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Forms;
 using System.Data;
-using System.IO;
-using MySql.Data.MySqlClient;
 using System.Data.OleDb;
+using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Inforoom.WinForms;
-using FREditor.Properties;
-using System.Configuration;
-using Common.Tools;
-using System.ServiceModel;
-using RemotePriceProcessor;
-using System.Net.Security;
+using System.Windows.Forms;
+using System.Diagnostics;
 using FREditor.Helpers;
-using System.Threading;
-using Microsoft.Win32;
+using FREditor.Properties;
+using Inforoom.WinForms;
+using MySql.Data.MySqlClient;
+using RemotePriceProcessor;
 
 namespace FREditor
 {
-	// рабочий INDataGridView
     public enum dgFocus
     {
         Firm,
@@ -427,11 +421,11 @@ order by Format";
         {
             string cmnd = String.Empty;
             if (shname != String.Empty)
-                cmnd += "and cd.ShortName like ?ShortName ";
+				cmnd += "and s.Name like ?ShortName ";
             if (regcode != 0)
                 cmnd += "and r.regioncode = ?RegionCode ";
             if (seg != -1)
-                cmnd += "and cd.firmSegment = ?Segment ";
+				cmnd += "and s.Segment = ?Segment ";
             return cmnd;
         }
 
@@ -440,7 +434,7 @@ order by Format";
 			string cmnd = String.Empty;
 			cmnd += AddParams(shname, regcode, seg);
 			if (showOnlyEnabledFirm)
-				cmnd += "and cd.FirmStatus = ?FirmStatus ";
+				cmnd += "and s.Disabled = ?FirmStatus ";
 			return cmnd;
 		}
 
@@ -480,7 +474,7 @@ order by Format";
 					// тогда мы добавляем параметры для выборки только действующих
 					command.Parameters.AddWithValue("?AgencyEnabled", 1);
 					command.Parameters.AddWithValue("?Enabled", 1);
-					command.Parameters.AddWithValue("?FirmStatus", 1);
+					command.Parameters.AddWithValue("?FirmStatus", 0);
 				}
 
                 FilterParams = AddParams(shname, regcode, seg, showOnlyEnabled);
@@ -528,7 +522,7 @@ order by Format";
 					// тогда мы добавляем параметры для выборки только действующих
 					command.Parameters.AddWithValue("?AgencyEnabled", 1);
 					command.Parameters.AddWithValue("?Enabled", 1);
-					command.Parameters.AddWithValue("?FirmStatus", 1);
+					command.Parameters.AddWithValue("?FirmStatus", 0);
 				}
 
 				FilterParams = AddParams(shname, regcode, seg, showOnlyEnabled);
@@ -545,34 +539,36 @@ order by Format";
 			if (showOnlyEnabled)
 			{
 				command.CommandText = @"
-SELECT cd.FirmCode AS CCode,
-cd.ShortName AS CShortName,
-cd.FullName AS CFullName,
+SELECT s.Id AS CCode,
+s.Name AS CShortName,
+s.FullName AS CFullName,
 r.Region AS CRegion,
-cd.FirmSegment as CSegment
-FROM usersettings.clientsdata cd
-INNER JOIN farm.regions r ON r.RegionCode = cd.RegionCode
-WHERE firmcode IN (
+s.Segment as CSegment
+FROM future.suppliers s
+INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
+WHERE s.Id IN (
 	SELECT firmcode FROM usersettings.pricesdata PD where PD.pricecode IN (
 		SELECT pricecode FROM usersettings.pricescosts where priceitemid IN (
 			SELECT id FROM usersettings.priceitems
 			WHERE datediff(curdate(), date(pricedate)) < 200)) AND (PD.Enabled = 1)
-				AND (PD.AgencyEnabled = 1)) AND cd.firmtype = 0 ";
+				AND (PD.AgencyEnabled = 1)) ";
 			}
 			else
 			{
 				command.CommandText = @"
-SELECT cd.FirmCode AS CCode,
-cd.ShortName AS CShortName,
-cd.FullName AS CFullName,
+SELECT s.Id AS CCode,
+s.Name AS CShortName,
+s.FullName AS CFullName,
 r.Region AS CRegion,
-cd.FirmSegment as CSegment
-FROM usersettings.clientsdata cd
-INNER JOIN farm.regions r ON r.RegionCode = cd.RegionCode
-WHERE cd.firmtype = 0 ";
+s.Segment as CSegment
+FROM future.Suppliers s
+INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
+WHERE 1=1 ";
 			}
+
+
 			command.CommandText += param;
-			command.CommandText += " ORDER BY cd.ShortName";
+			command.CommandText += " ORDER BY s.Name";
 			dataAdapter.Fill(dtClients);
 		}
 		
@@ -582,6 +578,7 @@ WHERE cd.firmtype = 0 ";
 			if (showOnlyEnabled)
 				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) ";
 			// Выбираем прайс-листы с мультиколоночными ценами
+
 			command.CommandText =
 @"
 SELECT
@@ -606,17 +603,15 @@ FROM
 "
 + sqlPart +
 @"	
-  inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+  inner join future.suppliers s on s.Id = pd.FirmCode
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
-  inner join farm.regions r on r.regioncode=cd.regioncode
-where 
-    cd.FirmType = 0
-and ((pd.CostType = 1) or (pc.BaseCost = 1))";
+  inner join farm.regions r on r.regioncode=s.HomeRegion
+where     
+ ((pd.CostType = 1) or (pc.BaseCost = 1)) ";
 			command.CommandText += param;
 			command.CommandText += @" 
 group by pim.Id
 order by PPriceName";
-
 			dataAdapter.Fill(dtPrices);
 		}
 
@@ -666,10 +661,10 @@ select
 from
   usersettings.pricescosts pc
   inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
-  inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
-  inner join farm.regions r on r.regioncode=cd.regioncode
+  inner join future.suppliers s on s.Id = pd.firmcode
+  inner join farm.regions r on r.regioncode=s.HomeRegion
 where
-      (cd.firmtype = 0) 
+      (1=1) 
 " + sqlPart;
 			command.CommandText += param;
 			command.CommandText += @"  
@@ -728,12 +723,12 @@ FROM
 + sqlPart +
 @"
   inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
-  inner join usersettings.clientsdata cd on cd.firmcode = pd.firmcode
-  inner join farm.regions r on r.regioncode=cd.regioncode
+  inner join future.suppliers s on s.Id = pd.firmcode
+  inner join farm.regions r on r.regioncode=s.HomeRegion
 where 
-     cd.firmtype = 0 
-and pd.CostType is not null
+  pd.CostType is not null
 ";
+
 			command.CommandText += param;
 			command.CommandText += @"   
 order by CFRCostName";
@@ -864,8 +859,8 @@ SELECT
 	PFR.FNds as FRFNds
 FROM 
   UserSettings.PricesData AS PD
-  INNER JOIN UserSettings.ClientsData AS CD on cd.FirmCode = pd.FirmCode and cd.FirmType = 0
-  INNER JOIN farm.regions r on r.regioncode=cd.regioncode
+  INNER JOIN future.suppliers s on s.Id = pd.FirmCode
+  INNER JOIN farm.regions r on r.regioncode=s.HomeRegion
   inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode
   inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId 
 "
@@ -975,30 +970,25 @@ where
 				}
 
 			FillParentComboBox(
-				cmbParentSynonyms, 
+				cmbParentSynonyms,
 				@"
 select
   pd.PriceCode,
-  concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
+  concat(s.Name, ' (', pd.PriceName, ') - ', r.Region) PriceName
 from
-  usersettings.clientsdata cd,
+  future.suppliers s,
   usersettings.pricesdata pd,
   farm.regions r
 where
-  pd.FirmCode = cd.FirmCode
+  pd.FirmCode = s.Id
 and pd.CostType is not null
-and r.RegionCode = cd.RegionCode
+and r.RegionCode = s.HomeRegion
 and pd.PriceCode = ?ParentValue
 order by PriceName
 ",
 				drFR[0]["FRSynonyms"],
 				"PriceCode",
-				"PriceName");
-
-            string r = ".err";
-            DataRow[] exts = dtPriceFMTs.Select("FMTFormat = '" + fmt + "'");
-            if (exts.Length == 1)
-                r = exts[0]["FMTExt"].ToString();
+				"PriceName");            
 
 			delimiter = _priceFileFormatHelper.NewDelimiter; 
 
@@ -1421,7 +1411,7 @@ order by PriceName
 				// тогда мы добавляем параметры для выборки только действующих
 				command.Parameters.AddWithValue("?AgencyEnabled", 1);
 				command.Parameters.AddWithValue("?Enabled", 1);
-				command.Parameters.AddWithValue("?FirmStatus", 1);
+				command.Parameters.AddWithValue("?FirmStatus", 0);
 			}
 
 			FilterParams = AddParams(String.Empty, 0, -1, showOnlyEnabled);
@@ -1680,25 +1670,25 @@ order by PriceName
 		/// <returns>Текст контактов, разделенный ";"</returns>
 		private string GetContactText(long FirmCode, byte ContactGroupType, byte ContactType)
 		{
-			DataSet dsContacts = MySqlHelper.ExecuteDataset(connection, @"
+			DataSet dsContacts = MySqlHelper.ExecuteDataset(connection,@"
 select distinct c.contactText
-from usersettings.clientsdata cd
-  join contacts.contact_groups cg on cd.ContactGroupOwnerId = cg.ContactGroupOwnerId
+from future.suppliers s
+  join contacts.contact_groups cg on s.ContactGroupOwnerId = cg.ContactGroupOwnerId
     join contacts.contacts c on cg.Id = c.ContactOwnerId
 where
-    firmcode = ?FirmCode
+    s.Id = ?FirmCode
 and cg.Type = ?ContactGroupType
 and c.Type = ?ContactType
 
 union
 
 select distinct c.contactText
-from usersettings.clientsdata cd
-  join contacts.contact_groups cg on cd.ContactGroupOwnerId = cg.ContactGroupOwnerId
+from future.suppliers s
+  join contacts.contact_groups cg on s.ContactGroupOwnerId = cg.ContactGroupOwnerId
     join contacts.persons p on cg.id = p.ContactGroupId
       join contacts.contacts c on p.Id = c.ContactOwnerId
 where
-    firmcode = ?FirmCode
+    s.Id = ?FirmCode
 and cg.Type = ?ContactGroupType
 and c.Type = ?ContactType;",
 				new MySqlParameter("?FirmCode", FirmCode),
@@ -2978,19 +2968,19 @@ and fr.Id = pim.FormRuleId;
 					(ComboBox)sender,
 @"select
   pd.PriceCode,
-  concat(cd.ShortName, ' (', pd.PriceName, ') - ', r.Region) PriceName
+  concat(s.Name, ' (', pd.PriceName, ') - ', r.Region) PriceName
 from
-  usersettings.clientsdata cd,
+  future.suppliers s,
   usersettings.pricesdata pd,
   farm.regions r
 where
-  pd.FirmCode = cd.FirmCode
+  pd.FirmCode = s.Id
 and pd.CostType is not null
-and r.RegionCode = cd.RegionCode
+and r.RegionCode = s.HomeRegion
 and pd.ParentSynonym is null
-and ((pd.PriceCode = ?PrevParentValue) or (pd.PriceName like ?SearchText) or (cd.ShortName like ?SearchText))
+and ((pd.PriceCode = ?PrevParentValue) or (pd.PriceName like ?SearchText) or (s.Name like ?SearchText))
 order by PriceName
-", 
+",
 	"PriceCode", 
 	"PriceName");
 			}
