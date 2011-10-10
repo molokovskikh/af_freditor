@@ -77,6 +77,7 @@
   <ItemGroup>
     <None Include="..\FREditor\app.config">
       <Link>app.config</Link>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
