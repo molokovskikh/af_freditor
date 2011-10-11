@@ -3,7 +3,7 @@ import file from Test.bake
 
 Global(
 	Project : "FREditor",
-	HumanReadableName : "Редактор правил формализации",
+	HumanReadableName : "Редактор правил формализации"
 )
 
 task @default, [@ClickOnceBuild]
