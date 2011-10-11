@@ -4,7 +4,6 @@ import file from Test.bake
 Global(
 	Project : "FREditor",
 	HumanReadableName : "Редактор правил формализации",
-	Platform : "x86"
 )
 
 task @default, [@ClickOnceBuild]
