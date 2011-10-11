@@ -1451,6 +1451,7 @@ order by PriceName
 
         private void tbControl_SelectedIndexChanged(object sender, EventArgs e)
         {
+        	MatchPriceButton.Enabled = true;
             if (tbControl.SelectedTab == tpFirms)
             {
 				if (_isComboBoxFormatHandlerRegistered)
@@ -1531,7 +1532,7 @@ order by PriceName
 					tbSearchInPrice.Text = String.Empty;
 					if (!_isComboBoxFormatHandlerRegistered)
 						_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
-				}
+				}        	
         }
 
 		private void RefreshDataBind()
@@ -3622,7 +3623,14 @@ order by PriceName
             var priceItemId = Convert.ToUInt32(row[PPriceItemId.ColumnName]);
             var priceCode = Convert.ToUInt32(row[PPriceCode.ColumnName]);
             matcher.StartMatching(priceItemId, priceCode);
+        	MatchPriceButton.Enabled = false;
         }
+
+		public void EnableMatchBtn()
+		{
+			if(!MatchPriceButton.Enabled)
+				MatchPriceButton.Enabled = true;
+		}
     }
 
     public class WaitWindowThread

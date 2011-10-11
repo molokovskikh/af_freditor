@@ -17,9 +17,7 @@ namespace FREditor
         private uint currentPriceItemId;
 
         private Dictionary<uint, FirmSummary> firms;
-		private readonly MySqlConnection connection = new MySqlConnection(Literals.ConnectionString());
-
-		private object syncObj = new object();
+		private readonly MySqlConnection connection = new MySqlConnection(Literals.ConnectionString());		
 
         public Dictionary<uint, FirmSummary> Firms
         {
@@ -55,50 +53,43 @@ namespace FREditor
         public bool StartMatching(uint priceItemId, uint priceCode)
         {
 			bool ret = false;
-			lock (syncObj)
-			{				
-				try
+			try
+			{
+				string[] res = owner._priceProcessor.FindSynonyms(Convert.ToUInt32(priceItemId));
+				if (res[0] == "Error")
 				{
-					string[] res = owner._priceProcessor.FindSynonyms(Convert.ToUInt32(priceItemId));
-					if (res[0] == "Error")
-					{
-						iterCount = 0;
-						MessageBox.Show(res[1], "Ошибка сопоставления синонимов", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-					if (res[0] == "Success")
-					{
-						currentTask = Convert.ToInt64(res[1]);
-						currentPriceCode = priceCode;
-						currentPriceItemId = priceItemId;
-						frmMatchProgr.SetValue(0);
-						timer.Start();
-						ret = true;
-					}
+					iterCount = 0;
+					MessageBox.Show(res[1], "Ошибка сопоставления синонимов", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				catch (Exception ex)
+				if (res[0] == "Success")
 				{
-					MessageBox.Show("Не удалось произвести сопоставление синонимов. Сообщение об ошибке отправлено разработчику",
-					                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					currentTask = Convert.ToInt64(res[1]);
+					currentPriceCode = priceCode;
+					currentPriceItemId = priceItemId;
+					timer.Start();
+					ret = true;
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Не удалось произвести сопоставление синонимов. Сообщение об ошибке отправлено разработчику",
+					            "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #if !DEBUG
-					Mailer.SendErrorMessageToService("Ошибка при старте сопоставления", ex);
+				Mailer.SendErrorMessageToService("Ошибка при старте сопоставления", ex);
 #endif
-				}
 			}
         	return ret;
         }
 
         public void StopMatching()
-        {
-			lock (syncObj)
+        {			
+			try
 			{
-				try
-				{
-					owner._priceProcessor.StopFindSynonyms(currentTask.ToString());
-				}
-				catch (Exception ex)
-				{
-					Mailer.SendErrorMessageToService("Ошибка при остановке задачи сопоставления", ex);
-				}
+				owner._priceProcessor.StopFindSynonyms(currentTask.ToString());
+			}
+			catch (Exception ex)
+			{
+				Mailer.SendErrorMessageToService("Ошибка при остановке задачи сопоставления", ex);
 			}
         }
 
@@ -116,70 +107,66 @@ namespace FREditor
         
         private void OnTimedEvent(object sender, System.EventArgs e)
         {
-			lock (syncObj)
+			try
 			{
-				try
+				string[] res = owner._priceProcessor.FindSynonymsResult(currentTask.ToString());
+				if (res[0] == "Running")
 				{
-					string[] res = owner._priceProcessor.FindSynonymsResult(currentTask.ToString());
-					if (res[0] == "Running")
+					if (!frmMatchProgr.Modal) frmMatchProgr.ShowDialog();
+					frmMatchProgr.SetValue(Convert.ToUInt32(res[1]));
+					owner.EnableMatchBtn();
+					return;
+				}
+				if (res[0] == "Success")
+				{
+					timer.Stop();
+					FillSummary(res); // заполняем информацию о совпадениях по поставщикам
+					if (iterCount == 0)
 					{
-						if (!frmMatchProgr.Modal) frmMatchProgr.ShowDialog();
-						frmMatchProgr.SetValue(Convert.ToUInt32(res[1]));
-						return;
+						frmMatchRes.Fill(firms); // выводим окно со списком совпадений						
 					}
-					if (res[0] == "Success")
+					else
 					{
-						timer.Stop();
-						FillSummary(res); // заполняем информацию о совпадениях по поставщикам
-						if (iterCount == 0)
+						if (firms.Count > 0 && iterCount > 0)
 						{
-							frmMatchProgr.SetValue(0);
-							frmMatchRes.Fill(firms); // выводим окно со списком совпадений						
+							iterCount--;
+							CreateSynonyms(firms.First().Key);
+							if (iterCount == 0) return;
+							StartMatching(currentPriceItemId, currentPriceCode);
 						}
 						else
 						{
-							if (firms.Count > 0 && iterCount > 0)
-							{
-								iterCount--;
-								CreateSynonyms(firms.First().Key);
-								frmMatchProgr.SetValue(0);
-								if (iterCount == 0) return;
-								StartMatching(currentPriceItemId, currentPriceCode);
-							}
-							else
-							{
-								iterCount = 0;
-								CloseProgressBar();
-							}
+							iterCount = 0;
+							CloseProgressBar();
 						}
-						return;
 					}
-					if (res[0] == "Error")
-					{
-						iterCount = 0;
-						timer.Stop();
-						CloseProgressBar();
-						MessageBox.Show(res[1], "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-						return;
-					}
-					if (res[0] == "Canceled")
-					{
-						iterCount = 0;
-						timer.Stop();
-						CloseProgressBar();
-						return;
-					}
+					return;
 				}
-				catch (Exception ex)
+				if (res[0] == "Error")
 				{
+					iterCount = 0;
 					timer.Stop();
 					CloseProgressBar();
-					MessageBox.Show("Ошибка в процессе сопоставления синонимов. Сообщение об ошибке отправлено разработчику",
-					                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#if !DEBUG
-					Mailer.SendErrorMessageToService("Ошибка при сопоставлении", ex);
-#endif
+					MessageBox.Show(res[1], "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
 				}
+				if (res[0] == "Canceled")
+				{
+					iterCount = 0;
+					timer.Stop();
+					CloseProgressBar();
+					return;
+				}
+			}
+			catch (Exception ex)
+			{
+				timer.Stop();
+				CloseProgressBar();
+				MessageBox.Show("Ошибка в процессе сопоставления синонимов. Сообщение об ошибке отправлено разработчику",
+					            "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+#if !DEBUG
+				Mailer.SendErrorMessageToService("Ошибка при сопоставлении", ex);
+#endif
 			}
         }
 

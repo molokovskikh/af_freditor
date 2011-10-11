@@ -63,8 +63,7 @@ namespace FREditor
         {        	
         	if (Matcher.Firms.Count <= 0) return;
         	btnMatchAll.Enabled = false;
-			Close();
-        	//Matcher.CreateSynonyms(Matcher.Firms.First().Key);
+			Close();        	
         	Matcher.StartAutoMatching();
         }
     }
