@@ -24,7 +24,6 @@ namespace FREditor
 
             if(matchCnt == 0)
             {
-				Matcher.CloseProgressBar();
                 MessageBox.Show("Не найдено совпадений с имеющимися синонимами", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
@@ -48,14 +47,12 @@ namespace FREditor
             var firmname = row.Cells[0].FormattedValue.ToString();
             var firmcode = Matcher.Firms.Where(f => f.Value.FullName() == firmname).FirstOrDefault().Key;
             Matcher.CreateSynonyms(firmcode);
-        	Matcher.CloseProgressBar();
 			Close();
 
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-			Matcher.CloseProgressBar();
 			Close();
         }
 

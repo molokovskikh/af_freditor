@@ -3622,7 +3622,7 @@ order by PriceName
             var row = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
             var priceItemId = Convert.ToUInt32(row[PPriceItemId.ColumnName]);
             var priceCode = Convert.ToUInt32(row[PPriceCode.ColumnName]);
-            matcher.StartMatching(priceItemId, priceCode);
+            matcher.Start(priceItemId, priceCode);
         	MatchPriceButton.Enabled = false;
         }
 

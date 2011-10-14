@@ -25,6 +25,7 @@ namespace FREditor
         }
 
         private int iterCount = 0;
+    	private bool matching = false;
 
         public SynonymMatcher(frmFREMain _owner)
         {
@@ -40,17 +41,27 @@ namespace FREditor
 
     	public void CloseProgressBar()
     	{
+			frmMatchProgr.SetValue(0);
     		frmMatchProgr.Close();
     	}
+
+		public void Start(uint priceItemId, uint priceCode)
+		{
+			currentPriceCode = priceCode;
+			currentPriceItemId = priceItemId;
+			matching = true;
+			timer.Start();
+		}
 
         public void StartAutoMatching()
         {
 			CreateSynonyms(Firms.First().Key);
             iterCount = 5;
-            StartMatching(currentPriceItemId, currentPriceCode);            
+        	matching = true;
+			timer.Start();        	
         }
 
-        public bool StartMatching(uint priceItemId, uint priceCode)
+        private bool StartMatching(uint priceItemId, uint priceCode)
         {
 			bool ret = false;
 			try
@@ -62,10 +73,8 @@ namespace FREditor
 					MessageBox.Show(res[1], "Ошибка сопоставления синонимов", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 				if (res[0] == "Success")
-				{
+				{					
 					currentTask = Convert.ToInt64(res[1]);
-					currentPriceCode = priceCode;
-					currentPriceItemId = priceItemId;
 					timer.Start();
 					ret = true;
 				}
@@ -109,11 +118,22 @@ namespace FREditor
         {
 			try
 			{
+				if(matching)
+				{
+					if (StartMatching(currentPriceItemId, currentPriceCode))
+					{
+						matching = false;
+						if (!frmMatchProgr.Modal) frmMatchProgr.ShowDialog();
+					}
+					else
+						timer.Stop();
+					return;
+				}
+
 				string[] res = owner._priceProcessor.FindSynonymsResult(currentTask.ToString());
 				if (res[0] == "Running")
 				{
-					if (!frmMatchProgr.Modal) frmMatchProgr.ShowDialog();
-					frmMatchProgr.SetValue(Convert.ToUInt32(res[1]));
+					frmMatchProgr.SetValue(Convert.ToUInt32(res[1]));										
 					owner.EnableMatchBtn();
 					return;
 				}
@@ -122,8 +142,9 @@ namespace FREditor
 					timer.Stop();
 					FillSummary(res); // заполняем информацию о совпадениях по поставщикам
 					if (iterCount == 0)
-					{
-						frmMatchRes.Fill(firms); // выводим окно со списком совпадений						
+					{						
+						frmMatchRes.Fill(firms); // выводим окно со списком совпадений
+						CloseProgressBar();
 					}
 					else
 					{

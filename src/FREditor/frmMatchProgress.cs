@@ -24,13 +24,7 @@ namespace FREditor
         private void btnCancel_Click(object sender, EventArgs e)
         {
             if(Matcher != null) Matcher.StopMatching();
-        }
-
-	/*	public void ShowProgress()
-		{
-			if (Modal) Visible = true;
-			else ShowDialog();
-		}*/
+        }	
     }
 
 }
