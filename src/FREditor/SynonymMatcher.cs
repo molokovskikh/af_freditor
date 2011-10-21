@@ -82,6 +82,8 @@ namespace FREditor
 			}
 			catch (Exception ex)
 			{
+				iterCount = 0;
+				timer.Stop();
 				MessageBox.Show("Не удалось произвести сопоставление синонимов. Сообщение об ошибке отправлено разработчику",
 					            "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 #if !DEBUG
