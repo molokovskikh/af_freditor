@@ -70,6 +70,7 @@ namespace FREditor
 				if (res[0] == "Error")
 				{
 					iterCount = 0;
+					timer.Stop();
 					MessageBox.Show(res[1], "Ошибка сопоставления синонимов", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 				if (res[0] == "Success")
@@ -152,7 +153,10 @@ namespace FREditor
 						{
 							iterCount--;
 							CreateSynonyms(firms.First().Key);
-							if (iterCount == 0) return;
+							if (iterCount == 0) {
+								CloseProgressBar();
+								return;
+							}
 							StartMatching(currentPriceItemId, currentPriceCode);
 						}
 						else
