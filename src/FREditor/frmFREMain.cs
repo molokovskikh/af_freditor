@@ -2072,8 +2072,6 @@ and c.Type = ?ContactType;",
                     else
                     {
 						tsbCancel_Click(null, null);
-                       /* tsbApply.Enabled = false;
-                        tsbCancel.Enabled = false;*/
                     }
                 }
             }
@@ -2657,14 +2655,6 @@ and fr.Id = pim.FormRuleId;
                         ((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[pairtb.DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
                     }
                 }
-        }
-
-        private void tbRules_TextChanged(object sender, EventArgs e)
-        {
-            tmrUpdateApply.Stop();
-            if (((TextBox)sender).Text == String.Empty)
-                ((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
-            tmrUpdateApply.Start();
         }
 
         private void tbFirmName_TextChanged(object sender, EventArgs e)
