@@ -55,7 +55,6 @@ namespace FREditor
 
 		private string shortNameFilter = String.Empty;
 		private ulong regionCodeFilter = 0;
-		private int segmentFilter = -1;
 
 		bool fileExist;
 		bool InSearch;
@@ -68,7 +67,6 @@ namespace FREditor
 
 		public DataTable dtCostTypes;
 		public DataTable dtPriceTypes;
-		public DataTable dtFirmSegment;
 		protected dgFocus fcs;
 
 		public PriceProcessorWcfHelper _priceProcessor;
@@ -130,17 +128,6 @@ namespace FREditor
 			pPriceTypeDataGridViewComboBoxColumn.DataSource = dtPriceTypes;
 			pPriceTypeDataGridViewComboBoxColumn.DisplayMember = "Name";
 			pPriceTypeDataGridViewComboBoxColumn.ValueMember = "ID";
-
-			dtFirmSegment = new DataTable("FirmSegment");
-			dtFirmSegment.Columns.Add("ID", typeof(int));
-			dtFirmSegment.Columns.Add("Segment", typeof(string));
-			dtFirmSegment.Rows.Add(new object[] { -1, "Все" });
-			dtFirmSegment.Rows.Add(new object[] { 0, "Опт" });
-			dtFirmSegment.Rows.Add(new object[] { 1, "Розница" });
-
-			cbSegment.DataSource = dtFirmSegment;
-			cbSegment.DisplayMember = "Segment";
-			cbSegment.ValueMember = "ID";
 
 			this.mcmdInsertCostRules.CommandText = @"
 INSERT INTO usersettings.PricesCosts (PriceCode, BaseCost, PriceItemId, CostName) values (?PriceCode, 0, ?PriceItemId, ?CostName);
@@ -417,30 +404,28 @@ order by Format";
 			dataAdapter.Fill(dtPriceFMTs);
 		}
 
-		private string AddParams(string shname, ulong regcode, int seg)
+		private string AddParams(string shname, ulong regcode)
 		{
 			string cmnd = String.Empty;
 			if (!String.IsNullOrEmpty(shname))
 				cmnd += "and s.Name like ?ShortName ";
 			if (regcode != 0)
 				cmnd += "and r.regioncode = ?RegionCode ";
-			if (seg != -1)
-				cmnd += "and s.Segment = ?Segment ";
 			return cmnd;
 		}
 
-		private string AddParams(string shname, ulong regcode, int seg, bool showOnlyEnabledFirm)
+		private string AddParams(string shname, ulong regcode, bool showOnlyEnabledFirm)
 		{
 			string cmnd = String.Empty;
-			cmnd += AddParams(shname, regcode, seg);
+			cmnd += AddParams(shname, regcode);
 			if (showOnlyEnabledFirm)
 				cmnd += "and s.Disabled = ?FirmStatus ";
 			return cmnd;
 		}
 
-		private void FillTables(string shname, ulong regcode, int seg)
+		private void FillTables(string shname, ulong regcode)
 		{
-			var filter = new Filter(shname, regcode, seg);
+			var filter = new Filter(shname, regcode);
 
 			dtSet.EnforceConstraints = false;
 			try
@@ -465,8 +450,6 @@ order by Format";
 				command.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
 			if (regcode != 0)
 				command.Parameters.AddWithValue("?RegionCode", regcode);
-			if (seg != -1)
-				command.Parameters.AddWithValue("?Segment", seg);
 
 			var showOnlyEnabled = !_showDisabledFirm;
 			if (showOnlyEnabled)
@@ -478,7 +461,7 @@ order by Format";
 				command.Parameters.AddWithValue("?FirmStatus", 0);
 			}
 
-			FilterParams = AddParams(shname, regcode, seg, showOnlyEnabled);
+			FilterParams = AddParams(shname, regcode, showOnlyEnabled);
 
 			dtClientsFill(FilterParams, showOnlyEnabled);
 			if (showOnlyEnabled)
@@ -489,7 +472,7 @@ order by Format";
 			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
 		}
 
-		private void FillCosts(string shname, ulong regcode, int seg)
+		private void FillCosts(string shname, ulong regcode)
 		{
 			dtSet.EnforceConstraints = false;
 			try
@@ -512,8 +495,6 @@ order by Format";
 					command.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
 				if (regcode != 0)
 					command.Parameters.AddWithValue("?RegionCode", regcode);
-				if (seg != -1)
-					command.Parameters.AddWithValue("?Segment", seg);
 
 				bool showOnlyEnabled = !_showDisabledFirm;
 				if (showOnlyEnabled)
@@ -525,7 +506,7 @@ order by Format";
 					command.Parameters.AddWithValue("?FirmStatus", 0);
 				}
 
-				FilterParams = AddParams(shname, regcode, seg, showOnlyEnabled);
+				FilterParams = AddParams(shname, regcode, showOnlyEnabled);
 				if (showOnlyEnabled)
 					FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 
@@ -1414,7 +1395,7 @@ order by PriceName
 				command.Parameters.AddWithValue("?FirmStatus", 0);
 			}
 
-			FilterParams = AddParams(String.Empty, 0, -1, showOnlyEnabled);
+			FilterParams = AddParams(String.Empty, 0, showOnlyEnabled);
 
 			dtClientsFill(FilterParams, showOnlyEnabled);
 			if (showOnlyEnabled)
@@ -1537,7 +1518,7 @@ order by PriceName
 
 		private void RefreshDataBind()
 		{
-			FillTables(shortNameFilter, regionCodeFilter, segmentFilter);
+			FillTables(shortNameFilter, regionCodeFilter);
 
 			this.Text = "Редактор Правил Формализации";
 			if (fcs == dgFocus.Firm)
@@ -2172,7 +2153,7 @@ and c.Type = ?ContactType;",
 							}
 							dtSet.AcceptChanges();
 							//Обновляе цены и правила формализации цен для того, чтобы загрузить корректные ID новых цен
-							FillCosts(shortNameFilter, regionCodeFilter, segmentFilter);
+							FillCosts(shortNameFilter, regionCodeFilter);
 							tr.Commit();
 						}
 						catch (Exception ex)
@@ -2686,14 +2667,10 @@ and fr.Id = pim.FormRuleId;
 				ulong regcode = 0;
 				if ((cbRegions.SelectedItem != null) && (Convert.ToUInt64(cbRegions.SelectedValue) != 0))
 					regcode = Convert.ToUInt64(cbRegions.SelectedValue);
-				int seg = -1;
-				if ((cbSegment.SelectedItem != null) && (Convert.ToInt32(cbSegment.SelectedValue) != -1))
-					seg = Convert.ToInt32(cbSegment.SelectedValue);
 				string shname = tbFirmName.Text;
-				FillTables(shname, regcode, seg);
+				FillTables(shname, regcode);
 				shortNameFilter = shname;
 				regionCodeFilter = regcode;
-				segmentFilter = seg;
 				indgvFirm.Focus();
 			}
 			finally
@@ -3289,7 +3266,7 @@ order by PriceName
 		private void checkBoxShowDisabled_CheckedChanged(object sender, EventArgs e)
 		{
 			_showDisabledFirm = checkBoxShowDisabled.Checked;
-			FillTables(shortNameFilter, regionCodeFilter, segmentFilter);
+			FillTables(shortNameFilter, regionCodeFilter);
 			indgvFirm.Focus();
 		}
 
