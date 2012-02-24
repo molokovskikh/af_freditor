@@ -67,7 +67,6 @@ namespace FREditor
 			this.CShortName = new System.Data.DataColumn();
 			this.CRegion = new System.Data.DataColumn();
 			this.CFullName = new System.Data.DataColumn();
-			this.CSegment = new System.Data.DataColumn();
 			this.dtPrices = new System.Data.DataTable();
 			this.PPriceCode = new System.Data.DataColumn();
 			this.PFirmCode = new System.Data.DataColumn();
@@ -193,7 +192,6 @@ namespace FREditor
 			this.indgvFirm = new Inforoom.WinForms.INDataGridView();
 			this.cShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cSegmentDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.buttonCreateMail = new System.Windows.Forms.Button();
 			this.checkBoxShowDisabled = new System.Windows.Forms.CheckBox();
@@ -640,8 +638,7 @@ namespace FREditor
             this.CCode,
             this.CShortName,
             this.CRegion,
-            this.CFullName,
-            this.CSegment});
+            this.CFullName});
 			this.dtClients.Constraints.AddRange(new System.Data.Constraint[] {
             new System.Data.UniqueConstraint("Constraint1", new string[] {
                         "CCode"}, true)});
@@ -667,11 +664,6 @@ namespace FREditor
 			// CFullName
 			// 
 			this.CFullName.ColumnName = "CFullName";
-			// 
-			// CSegment
-			// 
-			this.CSegment.ColumnName = "CSegment";
-			this.CSegment.DataType = typeof(int);
 			// 
 			// dtPrices
 			// 
@@ -1375,8 +1367,7 @@ namespace FREditor
 			this.indgvFirm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvFirm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cShortNameDataGridViewTextBoxColumn,
-            this.cRegionDataGridViewTextBoxColumn,
-            this.cSegmentDataGridViewTextBoxColumn});
+            this.cRegionDataGridViewTextBoxColumn});
 			this.indgvFirm.DataMember = "Поставщики";
 			this.indgvFirm.DataSource = this.dtSet;
 			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1404,7 +1395,6 @@ namespace FREditor
 			this.indgvFirm.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.indgvFirm.Size = new System.Drawing.Size(1169, 389);
 			this.indgvFirm.TabIndex = 2;
-			this.indgvFirm.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.indgvFirm_CellFormatting);
 			this.indgvFirm.DoubleClick += new System.EventHandler(this.indgvFirm_DoubleClick);
 			this.indgvFirm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvFirm_KeyDown);
 			this.indgvFirm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvFirm_KeyPress);
@@ -1422,13 +1412,6 @@ namespace FREditor
 			this.cRegionDataGridViewTextBoxColumn.HeaderText = "Регион";
 			this.cRegionDataGridViewTextBoxColumn.Name = "cRegionDataGridViewTextBoxColumn";
 			this.cRegionDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// cSegmentDataGridViewTextBoxColumn
-			// 
-			this.cSegmentDataGridViewTextBoxColumn.DataPropertyName = "CSegment";
-			this.cSegmentDataGridViewTextBoxColumn.HeaderText = "Сегмент";
-			this.cSegmentDataGridViewTextBoxColumn.Name = "cSegmentDataGridViewTextBoxColumn";
-			this.cSegmentDataGridViewTextBoxColumn.ReadOnly = true;
 			// 
 			// panel3
 			// 
@@ -4240,7 +4223,6 @@ namespace FREditor
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox tbFirmName;
         private System.Windows.Forms.ComboBox cbRegions;
-		private System.Data.DataColumn CSegment;
         private System.Data.DataColumn PDateCurPrice;
         private System.Data.DataColumn PDateLastForm;
         private System.Data.DataColumn PMaxOld;
@@ -4255,7 +4237,6 @@ namespace FREditor
 		private System.Windows.Forms.BindingSource bsCostsFormRules;
         private System.Windows.Forms.DataGridViewTextBoxColumn cShortNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn cRegionDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cSegmentDataGridViewTextBoxColumn;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.TextBox txtBoxRegistryCost;

@@ -523,8 +523,7 @@ order by Format";
 SELECT s.Id AS CCode,
 s.Name AS CShortName,
 s.FullName AS CFullName,
-r.Region AS CRegion,
-s.Segment as CSegment
+r.Region AS CRegion
 FROM future.suppliers s
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 WHERE s.Id IN (
@@ -540,8 +539,7 @@ WHERE s.Id IN (
 SELECT s.Id AS CCode,
 s.Name AS CShortName,
 s.FullName AS CFullName,
-r.Region AS CRegion,
-s.Segment as CSegment
+r.Region AS CRegion
 FROM future.Suppliers s
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 WHERE 1=1 ";
@@ -2686,20 +2684,9 @@ and fr.Id = pim.FormRuleId;
 			tmrUpdateApply.Start();
 		}
 
-		private void indgvFirm_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
-		{
-			if (e.ColumnIndex == cSegmentDataGridViewTextBoxColumn.Index)
-			{
-				if ((int)e.Value == 0)
-					e.Value = "Опт";
-				else if ((int)e.Value == 1)
-					e.Value = "Розница";
-			}
-		}
-
 		private void indgvFirm_DoubleClick(object sender, EventArgs e)
 		{
-			CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, 
+			var currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, 
 				indgvFirm.DataMember];
 			CheckOnePrice(currencyManager);
 		}
