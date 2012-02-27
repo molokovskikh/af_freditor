@@ -415,12 +415,14 @@ order by Format";
 			return cmnd;
 		}
 
-		private string AddParams(string shname, ulong regcode, bool showOnlyEnabledFirm)
+		private string AddParams(string shname, ulong regcode, bool showOnlyEnabledFirm, int _sourceIndex)
 		{
 			string cmnd = String.Empty;
 			cmnd += AddParams(shname, regcode);
 			if (showOnlyEnabledFirm)
 				cmnd += " and s.Disabled = ?FirmStatus ";
+			if (_sourceIndex > 0)
+				cmnd += " and st.Id = ?sourceIndex ";
 			return cmnd;
 		}
 
@@ -464,12 +466,12 @@ order by Format";
 				command.Parameters.AddWithValue("?FirmStatus", 0);
 			}
 
-			FilterParams = AddParams(shname, regcode, showOnlyEnabled);
+			FilterParams = AddParams(shname, regcode, showOnlyEnabled, _sourceIndex);
 
-			dtClientsFill(FilterParams, showOnlyEnabled, _sourceIndex);
+			dtClientsFill(FilterParams, showOnlyEnabled);
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
-			dtPricesFill(FilterParams, showOnlyEnabled, _sourceIndex);
+			dtPricesFill(FilterParams, showOnlyEnabled);
 			dtPricesCostFill(FilterParams, showOnlyEnabled);
 			dtFormRulesFill(FilterParams, showOnlyEnabled);
 			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
@@ -509,7 +511,7 @@ order by Format";
 					command.Parameters.AddWithValue("?FirmStatus", 0);
 				}
 
-				FilterParams = AddParams(shname, regcode, showOnlyEnabled);
+				FilterParams = AddParams(shname, regcode, showOnlyEnabled, sourceIndex);
 				if (showOnlyEnabled)
 					FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 
@@ -518,7 +520,7 @@ order by Format";
 			}
 		}
 		
-		private void dtClientsFill(string param, bool showOnlyEnabled, int _sourceIndex)
+		private void dtClientsFill(string param, bool showOnlyEnabled)
 		{
 			if (showOnlyEnabled)
 			{
@@ -550,15 +552,12 @@ FROM future.Suppliers s
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 WHERE 1=1 ";
 			}
-
-			if (_sourceIndex > 0)
-				command.CommandText += " and st.Id = ?sourceIndex ";
 			command.CommandText += param;
 			command.CommandText += " group by s.id ORDER BY s.Name";
 			dataAdapter.Fill(dtClients);
 		}
 		
-		private void dtPricesFill(string param, bool showOnlyEnabled, int _sourceIndex)
+		private void dtPricesFill(string param, bool showOnlyEnabled)
 		{
 			string sqlPart = String.Empty;
 			if (showOnlyEnabled)
@@ -596,8 +595,6 @@ FROM
 join farm.sourcetypes st on st.id = so.SourceTypeId
 where     
  ((pd.CostType = 1) or (pc.BaseCost = 1)) ";
-if (_sourceIndex > 0)
-		command.CommandText += " and st.Id = ?sourceIndex ";
 			command.CommandText += param;
 			command.CommandText += @" 
 group by pim.Id
@@ -672,6 +669,11 @@ select
 from
   usersettings.pricescosts pc
   inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
+
+  inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
+	join Farm.Sources so on so.id = pim.SourceId
+	join farm.sourcetypes st on st.id = so.SourceTypeId
+
   inner join future.suppliers s on s.Id = pd.firmcode
   inner join farm.regions r on r.regioncode=s.HomeRegion
 where
@@ -733,6 +735,9 @@ FROM
 "
 + sqlPart +
 @"
+  inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
+	join Farm.Sources so on so.id = pim.SourceId
+	join farm.sourcetypes st on st.id = so.SourceTypeId
   inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
   inner join future.suppliers s on s.Id = pd.firmcode
   inner join farm.regions r on r.regioncode=s.HomeRegion
@@ -877,6 +882,8 @@ FROM
 "
 + sqlPart +
 @"	
+join Farm.Sources so on so.id = pim.SourceId
+join farm.sourcetypes st on st.id = so.SourceTypeId
   inner join Farm.formrules AS FR ON FR.Id = pim.FormRuleId
   left join Farm.FormRules AS PFR ON PFR.id = FR.Id
   left join Farm.PriceFMTs as pfmt on pfmt.id = PFR.PriceFormatId
@@ -1425,12 +1432,12 @@ order by PriceName
 				command.Parameters.AddWithValue("?FirmStatus", 0);
 			}
 
-			FilterParams = AddParams(String.Empty, 0, showOnlyEnabled);
+			FilterParams = AddParams(String.Empty, 0, showOnlyEnabled, sourceIndex);
 
-			dtClientsFill(FilterParams, showOnlyEnabled, sourceIndex);
+			dtClientsFill(FilterParams, showOnlyEnabled);
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
-			dtPricesFill(FilterParams, showOnlyEnabled, sourceIndex);
+			dtPricesFill(FilterParams, showOnlyEnabled);
 			dtPricesCostFill(FilterParams, showOnlyEnabled);
 			dtFormRulesFill(FilterParams, showOnlyEnabled);
 			dtPriceFMTsFill();
