@@ -55,6 +55,7 @@ namespace FREditor
 
 		private string shortNameFilter = String.Empty;
 		private ulong regionCodeFilter = 0;
+		private int sourceIndex = 0;
 
 		bool fileExist;
 		bool InSearch;
@@ -372,7 +373,7 @@ where
 
 			dtPriceFMTsFill();
 			cbRegionsFill();
-
+			cbSourceFill();
 			connection.Close();
 
 			bsCostsFormRules.SuspendBinding();
@@ -408,9 +409,9 @@ order by Format";
 		{
 			string cmnd = String.Empty;
 			if (!String.IsNullOrEmpty(shname))
-				cmnd += "and s.Name like ?ShortName ";
+				cmnd += " and s.Name like ?ShortName ";
 			if (regcode != 0)
-				cmnd += "and r.regioncode = ?RegionCode ";
+				cmnd += " and r.regioncode = ?RegionCode ";
 			return cmnd;
 		}
 
@@ -419,11 +420,11 @@ order by Format";
 			string cmnd = String.Empty;
 			cmnd += AddParams(shname, regcode);
 			if (showOnlyEnabledFirm)
-				cmnd += "and s.Disabled = ?FirmStatus ";
+				cmnd += " and s.Disabled = ?FirmStatus ";
 			return cmnd;
 		}
 
-		private void FillTables(string shname, ulong regcode)
+		private void FillTables(string shname, ulong regcode, int _sourceIndex)
 		{
 			var filter = new Filter(shname, regcode);
 
@@ -450,6 +451,8 @@ order by Format";
 				command.Parameters.AddWithValue("?ShortName", "%" + shname + "%");
 			if (regcode != 0)
 				command.Parameters.AddWithValue("?RegionCode", regcode);
+			if (_sourceIndex > 0)
+				command.Parameters.AddWithValue("?sourceIndex", _sourceIndex);
 
 			var showOnlyEnabled = !_showDisabledFirm;
 			if (showOnlyEnabled)
@@ -463,10 +466,10 @@ order by Format";
 
 			FilterParams = AddParams(shname, regcode, showOnlyEnabled);
 
-			dtClientsFill(FilterParams, showOnlyEnabled);
+			dtClientsFill(FilterParams, showOnlyEnabled, _sourceIndex);
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
-			dtPricesFill(FilterParams, showOnlyEnabled);
+			dtPricesFill(FilterParams, showOnlyEnabled, _sourceIndex);
 			dtPricesCostFill(FilterParams, showOnlyEnabled);
 			dtFormRulesFill(FilterParams, showOnlyEnabled);
 			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
@@ -515,7 +518,7 @@ order by Format";
 			}
 		}
 		
-		private void dtClientsFill(string param, bool showOnlyEnabled)
+		private void dtClientsFill(string param, bool showOnlyEnabled, int _sourceIndex)
 		{
 			if (showOnlyEnabled)
 			{
@@ -523,15 +526,18 @@ order by Format";
 SELECT s.Id AS CCode,
 s.Name AS CShortName,
 s.FullName AS CFullName,
-r.Region AS CRegion
+r.Region AS CRegion,
+st.Type AS CSourceIndex
 FROM future.suppliers s
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
-WHERE s.Id IN (
-	SELECT firmcode FROM usersettings.pricesdata PD where PD.pricecode IN (
-		SELECT pricecode FROM usersettings.pricescosts where priceitemid IN (
-			SELECT id FROM usersettings.priceitems
-			WHERE datediff(curdate(), date(pricedate)) < 200)) AND (PD.Enabled = 1)
-				AND (PD.AgencyEnabled = 1)) ";
+join usersettings.pricesdata PD on s.Id = PD.firmcode
+join usersettings.pricescosts PC on pc.pricecode = pd.pricecode
+join usersettings.priceitems pi on pc.priceitemid = pi.id
+join Farm.Sources so on so.id = pi.SourceId
+join farm.sourcetypes st on st.id = so.SourceTypeId
+WHERE datediff(curdate(), date(pi.pricedate)) < 200 AND (PD.Enabled = 1)
+AND (PD.AgencyEnabled = 1) 
+ ";
 			}
 			else
 			{
@@ -545,13 +551,14 @@ INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 WHERE 1=1 ";
 			}
 
-
+			if (_sourceIndex > 0)
+				command.CommandText += " and st.Id = ?sourceIndex ";
 			command.CommandText += param;
-			command.CommandText += " ORDER BY s.Name";
+			command.CommandText += " group by s.id ORDER BY s.Name";
 			dataAdapter.Fill(dtClients);
 		}
 		
-		private void dtPricesFill(string param, bool showOnlyEnabled)
+		private void dtPricesFill(string param, bool showOnlyEnabled, int _sourceIndex)
 		{
 			string sqlPart = String.Empty;
 			if (showOnlyEnabled)
@@ -585,8 +592,12 @@ FROM
   inner join future.suppliers s on s.Id = pd.FirmCode
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
   inner join farm.regions r on r.regioncode=s.HomeRegion
+	join Farm.Sources so on so.id = pim.SourceId
+join farm.sourcetypes st on st.id = so.SourceTypeId
 where     
  ((pd.CostType = 1) or (pc.BaseCost = 1)) ";
+if (_sourceIndex > 0)
+		command.CommandText += " and st.Id = ?sourceIndex ";
 			command.CommandText += param;
 			command.CommandText += @" 
 group by pim.Id
@@ -617,6 +628,27 @@ Order By Region
 			cbRegions.ValueMember = "RegionCode";
 
 		}
+
+		private void cbSourceFill()
+		{
+			var dtSource = new DataTable("Source");
+			dtSource.Columns.Add("Id", typeof(ulong));
+			dtSource.Columns.Add("Type", typeof(string));
+			dtSource.Clear();
+			dtSource.Rows.Add(new object[] { 0, "Все" });
+			command.CommandText = @"
+SELECT
+	Id,
+	Type
+FROM
+	farm.sourcetypes";
+			dataAdapter.Fill(dtSource);
+			cbSource.DataSource = dtSource;
+			cbSource.DisplayMember = "Type";
+			cbSource.ValueMember = "Id";
+		}
+
+
 		
 		private void dtPricesCostFill(string param, bool showOnlyEnabled)
 		{
@@ -1395,15 +1427,16 @@ order by PriceName
 
 			FilterParams = AddParams(String.Empty, 0, showOnlyEnabled);
 
-			dtClientsFill(FilterParams, showOnlyEnabled);
+			dtClientsFill(FilterParams, showOnlyEnabled, sourceIndex);
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
-			dtPricesFill(FilterParams, showOnlyEnabled);
+			dtPricesFill(FilterParams, showOnlyEnabled, sourceIndex);
 			dtPricesCostFill(FilterParams, showOnlyEnabled);
 			dtFormRulesFill(FilterParams, showOnlyEnabled);
 			dtPriceFMTsFill();
 			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
 			cbRegionsFill();
+			cbSourceFill();
 			dtSet.AcceptChanges();
 		}
 
@@ -1516,7 +1549,7 @@ order by PriceName
 
 		private void RefreshDataBind()
 		{
-			FillTables(shortNameFilter, regionCodeFilter);
+			FillTables(shortNameFilter, regionCodeFilter, sourceIndex);
 
 			this.Text = "Редактор Правил Формализации";
 			if (fcs == dgFocus.Firm)
@@ -2665,8 +2698,11 @@ and fr.Id = pim.FormRuleId;
 				ulong regcode = 0;
 				if ((cbRegions.SelectedItem != null) && (Convert.ToUInt64(cbRegions.SelectedValue) != 0))
 					regcode = Convert.ToUInt64(cbRegions.SelectedValue);
+				var _sourceIndex = 0;
+				if (cbSource.SelectedItem != null)
+					_sourceIndex = Convert.ToInt32(cbSource.SelectedValue);
 				string shname = tbFirmName.Text;
-				FillTables(shname, regcode);
+				FillTables(shname, regcode, _sourceIndex);
 				shortNameFilter = shname;
 				regionCodeFilter = regcode;
 				indgvFirm.Focus();
@@ -3253,7 +3289,7 @@ order by PriceName
 		private void checkBoxShowDisabled_CheckedChanged(object sender, EventArgs e)
 		{
 			_showDisabledFirm = checkBoxShowDisabled.Checked;
-			FillTables(shortNameFilter, regionCodeFilter);
+			FillTables(shortNameFilter, regionCodeFilter, sourceIndex);
 			indgvFirm.Focus();
 		}
 
@@ -3584,6 +3620,15 @@ order by PriceName
 		{
 			if(!MatchPriceButton.Enabled)
 				MatchPriceButton.Enabled = true;
+		}
+
+		private void cbSource_SelectedValueChanged(object sender, EventArgs e)
+		{
+			if (!InSearch)
+			{
+				tmrSearch.Stop();
+				tmrSearch.Start();
+			}
 		}
 	}
 

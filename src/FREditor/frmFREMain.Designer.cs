@@ -67,6 +67,7 @@ namespace FREditor
 			this.CShortName = new System.Data.DataColumn();
 			this.CRegion = new System.Data.DataColumn();
 			this.CFullName = new System.Data.DataColumn();
+			this.CSourceIndex = new System.Data.DataColumn();
 			this.dtPrices = new System.Data.DataTable();
 			this.PPriceCode = new System.Data.DataColumn();
 			this.PFirmCode = new System.Data.DataColumn();
@@ -190,9 +191,9 @@ namespace FREditor
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.pnlGrid = new System.Windows.Forms.Panel();
 			this.indgvFirm = new Inforoom.WinForms.INDataGridView();
-			this.cShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.cbSource = new System.Windows.Forms.ComboBox();
+			this.label27 = new System.Windows.Forms.Label();
 			this.buttonCreateMail = new System.Windows.Forms.Button();
 			this.checkBoxShowDisabled = new System.Windows.Forms.CheckBox();
 			this.btnRetrancePrice = new System.Windows.Forms.Button();
@@ -408,6 +409,9 @@ namespace FREditor
 			this.tbSearch = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.ofdNewFormat = new System.Windows.Forms.OpenFileDialog();
+			this.cShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.CSourceIndexViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -638,7 +642,8 @@ namespace FREditor
             this.CCode,
             this.CShortName,
             this.CRegion,
-            this.CFullName});
+            this.CFullName,
+            this.CSourceIndex});
 			this.dtClients.Constraints.AddRange(new System.Data.Constraint[] {
             new System.Data.UniqueConstraint("Constraint1", new string[] {
                         "CCode"}, true)});
@@ -664,6 +669,10 @@ namespace FREditor
 			// CFullName
 			// 
 			this.CFullName.ColumnName = "CFullName";
+			// 
+			// CSourceIndex
+			// 
+			this.CSourceIndex.ColumnName = "CSourceIndex";
 			// 
 			// dtPrices
 			// 
@@ -1367,7 +1376,8 @@ namespace FREditor
 			this.indgvFirm.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvFirm.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cShortNameDataGridViewTextBoxColumn,
-            this.cRegionDataGridViewTextBoxColumn});
+            this.cRegionDataGridViewTextBoxColumn,
+            this.CSourceIndexViewTextBoxColumn});
 			this.indgvFirm.DataMember = "Поставщики";
 			this.indgvFirm.DataSource = this.dtSet;
 			dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1399,22 +1409,10 @@ namespace FREditor
 			this.indgvFirm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvFirm_KeyDown);
 			this.indgvFirm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvFirm_KeyPress);
 			// 
-			// cShortNameDataGridViewTextBoxColumn
-			// 
-			this.cShortNameDataGridViewTextBoxColumn.DataPropertyName = "CShortName";
-			this.cShortNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
-			this.cShortNameDataGridViewTextBoxColumn.Name = "cShortNameDataGridViewTextBoxColumn";
-			this.cShortNameDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// cRegionDataGridViewTextBoxColumn
-			// 
-			this.cRegionDataGridViewTextBoxColumn.DataPropertyName = "CRegion";
-			this.cRegionDataGridViewTextBoxColumn.HeaderText = "Регион";
-			this.cRegionDataGridViewTextBoxColumn.Name = "cRegionDataGridViewTextBoxColumn";
-			this.cRegionDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
 			// panel3
 			// 
+			this.panel3.Controls.Add(this.cbSource);
+			this.panel3.Controls.Add(this.label27);
 			this.panel3.Controls.Add(this.buttonCreateMail);
 			this.panel3.Controls.Add(this.checkBoxShowDisabled);
 			this.panel3.Controls.Add(this.btnRetrancePrice);
@@ -1427,6 +1425,25 @@ namespace FREditor
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(1169, 30);
 			this.panel3.TabIndex = 4;
+			// 
+			// cbSource
+			// 
+			this.cbSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbSource.FormattingEnabled = true;
+			this.cbSource.Location = new System.Drawing.Point(471, 4);
+			this.cbSource.Name = "cbSource";
+			this.cbSource.Size = new System.Drawing.Size(121, 21);
+			this.cbSource.TabIndex = 10;
+			this.cbSource.SelectedValueChanged += new System.EventHandler(this.cbSource_SelectedValueChanged);
+			// 
+			// label27
+			// 
+			this.label27.AutoSize = true;
+			this.label27.Location = new System.Drawing.Point(407, 11);
+			this.label27.Name = "label27";
+			this.label27.Size = new System.Drawing.Size(58, 13);
+			this.label27.TabIndex = 9;
+			this.label27.Text = "Источник:";
 			// 
 			// buttonCreateMail
 			// 
@@ -1443,7 +1460,7 @@ namespace FREditor
 			// checkBoxShowDisabled
 			// 
 			this.checkBoxShowDisabled.AutoSize = true;
-			this.checkBoxShowDisabled.Location = new System.Drawing.Point(402, 7);
+			this.checkBoxShowDisabled.Location = new System.Drawing.Point(609, 7);
 			this.checkBoxShowDisabled.Name = "checkBoxShowDisabled";
 			this.checkBoxShowDisabled.Size = new System.Drawing.Size(173, 17);
 			this.checkBoxShowDisabled.TabIndex = 7;
@@ -1475,7 +1492,7 @@ namespace FREditor
 			// label22
 			// 
 			this.label22.AutoSize = true;
-			this.label22.Location = new System.Drawing.Point(231, 9);
+			this.label22.Location = new System.Drawing.Point(223, 11);
 			this.label22.Name = "label22";
 			this.label22.Size = new System.Drawing.Size(46, 13);
 			this.label22.TabIndex = 2;
@@ -3933,6 +3950,27 @@ namespace FREditor
 			this.label14.TabIndex = 5;
 			this.label14.Text = "Поиск";
 			// 
+			// cShortNameDataGridViewTextBoxColumn
+			// 
+			this.cShortNameDataGridViewTextBoxColumn.DataPropertyName = "CShortName";
+			this.cShortNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
+			this.cShortNameDataGridViewTextBoxColumn.Name = "cShortNameDataGridViewTextBoxColumn";
+			this.cShortNameDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// cRegionDataGridViewTextBoxColumn
+			// 
+			this.cRegionDataGridViewTextBoxColumn.DataPropertyName = "CRegion";
+			this.cRegionDataGridViewTextBoxColumn.HeaderText = "Регион";
+			this.cRegionDataGridViewTextBoxColumn.Name = "cRegionDataGridViewTextBoxColumn";
+			this.cRegionDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// CSourceIndexViewTextBoxColumn
+			// 
+			this.CSourceIndexViewTextBoxColumn.DataPropertyName = "CSourceIndex";
+			this.CSourceIndexViewTextBoxColumn.HeaderText = "Источник";
+			this.CSourceIndexViewTextBoxColumn.Name = "CSourceIndexViewTextBoxColumn";
+			this.CSourceIndexViewTextBoxColumn.ReadOnly = true;
+			// 
 			// frmFREMain
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
@@ -4016,6 +4054,7 @@ namespace FREditor
         private System.Data.DataColumn CCode;
         private System.Data.DataColumn CShortName;
         private System.Data.DataColumn CRegion;
+        private System.Data.DataColumn CSourceIndex;
         private System.Data.DataColumn CFullName;
         private System.Data.DataTable dtPrices;
         private System.Data.DataColumn PPriceName;
@@ -4235,8 +4274,6 @@ namespace FREditor
         private System.Windows.Forms.Splitter splitter1;
         private System.Windows.Forms.BindingSource bsFormRules;
 		private System.Windows.Forms.BindingSource bsCostsFormRules;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cShortNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cRegionDataGridViewTextBoxColumn;
         private System.Windows.Forms.Label label37;
         private System.Windows.Forms.Label label36;
         private System.Windows.Forms.TextBox txtBoxRegistryCost;
@@ -4368,6 +4405,11 @@ namespace FREditor
 		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
 		private DataGridViewComboBoxColumn pPriceTypeDataGridViewComboBoxColumn;
 		private DataGridViewComboBoxColumn pCostTypeDataGridViewComboBoxColumn;
-        private Button MatchPriceButton;		
+        private Button MatchPriceButton;
+		private ComboBox cbSource;
+		private Label label27;
+		private DataGridViewTextBoxColumn cShortNameDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn cRegionDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn CSourceIndexViewTextBoxColumn;		
     }
 }
