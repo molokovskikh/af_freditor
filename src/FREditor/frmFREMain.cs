@@ -428,7 +428,7 @@ order by Format";
 
 		private void FillTables(string shname, ulong regcode, int _sourceIndex)
 		{
-			var filter = new Filter(shname, regcode);
+			var filter = new Filter(shname, regcode, _sourceIndex);
 
 			dtSet.EnforceConstraints = false;
 			try
