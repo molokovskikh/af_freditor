@@ -13,7 +13,7 @@ namespace FREditor.Test
 		[SetUp]
 		public void Setup()
 		{	
-			TestSupport.Setup.Initialize();						
+			TestSupport.Setup.Initialize();
 		}
 	}
 }
