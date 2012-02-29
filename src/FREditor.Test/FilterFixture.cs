@@ -35,7 +35,7 @@ namespace FREditor.Test
 				
 				cbSource.SelectedIndex = 4;
 				Assert.That(cbSource.Items.Count, Is.EqualTo(5));
-				var vrn = cbRegions.Items.Cast<DataRowView>().FirstOrDefault(r => Convert.ToInt32(r[0]) == 1);
+				var vrn = cbRegions.Items.Cast<DataRowView>().FirstOrDefault(r => Convert.ToInt64(r[0]) == 1);
 				cbRegions.SelectedIndex = cbRegions.Items.IndexOf(vrn);
 				Thread.Sleep(2000);
 
