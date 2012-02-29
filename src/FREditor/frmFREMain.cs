@@ -547,8 +547,14 @@ AND (PD.AgencyEnabled = 1)
 SELECT s.Id AS CCode,
 s.Name AS CShortName,
 s.FullName AS CFullName,
-r.Region AS CRegion
+r.Region AS CRegion,
+st.Type AS CSourceIndex
 FROM future.Suppliers s
+join usersettings.pricesdata PD on s.Id = PD.firmcode
+join usersettings.pricescosts PC on pc.pricecode = pd.pricecode
+join usersettings.priceitems pi on pc.priceitemid = pi.id
+join Farm.Sources so on so.id = pi.SourceId
+join farm.sourcetypes st on st.id = so.SourceTypeId
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 WHERE 1=1 ";
 			}
