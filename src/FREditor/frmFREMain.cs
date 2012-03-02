@@ -2123,11 +2123,7 @@ and c.Type = ?ContactType;",
 						MySqlTransaction tr = connection.BeginTransaction();
 						try
 						{							
-							MySqlCommand SetCMD = new MySqlCommand(
-								"set @INHost = ?INHost; set @INUser = ?INUser;", connection, tr);
-							SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
-							SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
-							SetCMD.ExecuteNonQuery();
+							DbHelper.SetLogParameters(connection);
 
 							mcmdUpdateCostRules.Connection = connection;
 							mcmdInsertCostRules.Connection = connection;
@@ -2217,7 +2213,7 @@ and c.Type = ?ContactType;",
 				}
 				else if (tbControl.SelectedTab == tpFirms)
 				{
-					((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember]).EndCurrentEdit();
+					BindingContext[indgvPrice.DataSource, indgvPrice.DataMember].EndCurrentEdit();
 
 					if (connection.State == ConnectionState.Closed)
 						connection.Open();
@@ -2226,11 +2222,7 @@ and c.Type = ?ContactType;",
 						MySqlTransaction tr = connection.BeginTransaction();
 						try
 						{
-							MySqlCommand SetCMD = new MySqlCommand(
-								"set @INHost = ?INHost; set @INUser = ?INUser;", connection, tr);
-							SetCMD.Parameters.AddWithValue("?INHost", Environment.MachineName);
-							SetCMD.Parameters.AddWithValue("?INUser", Environment.UserName);
-							SetCMD.ExecuteNonQuery();
+							DbHelper.SetLogParameters(connection);
 
 							//todo: здесь надо переписать
 							MySqlCommand mcmdUPrice = new MySqlCommand();
