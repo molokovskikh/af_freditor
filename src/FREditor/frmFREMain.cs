@@ -530,7 +530,7 @@ s.Name AS CShortName,
 s.FullName AS CFullName,
 r.Region AS CRegion,
 st.Type AS CSourceIndex
-FROM future.suppliers s
+FROM Customers.suppliers s
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 join usersettings.pricesdata PD on s.Id = PD.firmcode
 join usersettings.pricescosts PC on pc.pricecode = pd.pricecode
@@ -549,7 +549,7 @@ s.Name AS CShortName,
 s.FullName AS CFullName,
 r.Region AS CRegion,
 st.Type AS CSourceIndex
-FROM future.Suppliers s
+FROM Customers.Suppliers s
 join usersettings.pricesdata PD on s.Id = PD.firmcode
 join usersettings.pricescosts PC on pc.pricecode = pd.pricecode
 join usersettings.priceitems pi on pc.priceitemid = pi.id
@@ -594,7 +594,7 @@ FROM
 "
 + sqlPart +
 @"	
-  inner join future.suppliers s on s.Id = pd.FirmCode
+  inner join Customers.suppliers s on s.Id = pd.FirmCode
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
   inner join farm.regions r on r.regioncode=s.HomeRegion
 	join Farm.Sources so on so.id = pim.SourceId
@@ -680,7 +680,7 @@ from
 	join Farm.Sources so on so.id = pim.SourceId
 	join farm.sourcetypes st on st.id = so.SourceTypeId
 
-  inner join future.suppliers s on s.Id = pd.firmcode
+  inner join Customers.suppliers s on s.Id = pd.firmcode
   inner join farm.regions r on r.regioncode=s.HomeRegion
 where
 	  (1=1) 
@@ -745,7 +745,7 @@ FROM
 	join Farm.Sources so on so.id = pim.SourceId
 	join farm.sourcetypes st on st.id = so.SourceTypeId
   inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
-  inner join future.suppliers s on s.Id = pd.firmcode
+  inner join Customers.suppliers s on s.Id = pd.firmcode
   inner join farm.regions r on r.regioncode=s.HomeRegion
 where 
   pd.CostType is not null
@@ -881,7 +881,7 @@ SELECT
 	PFR.FNds as FRFNds
 FROM 
   UserSettings.PricesData AS PD
-  INNER JOIN future.suppliers s on s.Id = pd.FirmCode
+  INNER JOIN Customers.suppliers s on s.Id = pd.FirmCode
   INNER JOIN farm.regions r on r.regioncode=s.HomeRegion
   inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode
   inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId 
@@ -1000,7 +1000,7 @@ select
   pd.PriceCode,
   concat(s.Name, ' (', pd.PriceName, ') - ', r.Region) PriceName
 from
-  future.suppliers s,
+  Customers.suppliers s,
   usersettings.pricesdata pd,
   farm.regions r
 where
@@ -1698,7 +1698,7 @@ order by PriceName
 		{
 			DataSet dsContacts = MySqlHelper.ExecuteDataset(connection,@"
 select distinct c.contactText
-from future.suppliers s
+from Customers.suppliers s
   join contacts.contact_groups cg on s.ContactGroupOwnerId = cg.ContactGroupOwnerId
 	join contacts.contacts c on cg.Id = c.ContactOwnerId
 where
@@ -1709,7 +1709,7 @@ and c.Type = ?ContactType
 union
 
 select distinct c.contactText
-from future.suppliers s
+from Customers.suppliers s
   join contacts.contact_groups cg on s.ContactGroupOwnerId = cg.ContactGroupOwnerId
 	join contacts.persons p on cg.id = p.ContactGroupId
 	  join contacts.contacts c on p.Id = c.ContactOwnerId
@@ -2966,7 +2966,7 @@ and fr.Id = pim.FormRuleId;
   pd.PriceCode,
   concat(s.Name, ' (', pd.PriceName, ') - ', r.Region) PriceName
 from
-  future.suppliers s,
+  Customers.suppliers s,
   usersettings.pricesdata pd,
   farm.regions r
 where
