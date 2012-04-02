@@ -69,6 +69,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbHelperFixture.cs" />
     <Compile Include="DeleteCostColumnFixture.cs" />
     <Compile Include="FilterFixture.cs" />
     <Compile Include="FixtureSetup.cs" />
