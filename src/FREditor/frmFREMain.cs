@@ -3160,6 +3160,92 @@ order by PriceName
 			}
 		}
 
+		protected void CreateCost(uint priceCode, MySqlConnection mySql, string operatorName)
+		{
+			MySqlTransaction transaction = null;
+			try
+			{
+				//mySql.Open();
+				var adapter = new MySqlDataAdapter("", mySql);
+				adapter.SelectCommand.Transaction = mySql.BeginTransaction(IsolationLevel.RepeatableRead);
+				transaction = adapter.SelectCommand.Transaction;
+
+				adapter.SelectCommand.Parameters.AddWithValue("?PriceCode", priceCode);
+				adapter.SelectCommand.Parameters.AddWithValue("?UserName", operatorName);
+
+				adapter.SelectCommand.CommandText = @"select 
+	s.id, s.name, pd.PriceName, r.Region, pd.CostType from usersettings.PricesData pd
+	join Customers.Suppliers s on s.id = pd.FirmCode
+	join farm.Regions r on s.HomeRegion = r.RegionCode
+	where PriceCode = ?PriceCode;";
+
+				var price = new DataTable();
+				adapter.Fill(price);
+
+				var supplierId = price.Rows[0][0];
+				var shortName = price.Rows[0][1];
+				var priceName = price.Rows[0][2];
+				var region = price.Rows[0][3];
+				var costType = (int)price.Rows[0][4];
+
+				adapter.SelectCommand.Parameters.AddWithValue("?FirmCode", supplierId);
+
+				if (costType == 0)
+					adapter.SelectCommand.CommandText =
+@"
+SELECT pc.PriceItemId
+FROM Usersettings.PricesData pd
+	JOIN Usersettings.PricesCosts pc on pd.PriceCode = pc.PriceCode
+WHERE pd.PriceCode = ?PriceCode and pc.BaseCost = 1
+INTO @NewPriceItemId;
+
+INSERT INTO PricesCosts (PriceCode, BaseCost, PriceItemId) SELECT ?PriceCode, 0, @NewPriceItemId;
+SET @NewPriceCostId:=Last_Insert_ID(); 
+
+INSERT INTO farm.costformrules (CostCode) SELECT @NewPriceCostId;
+";
+				else
+					adapter.SelectCommand.CommandText =
+@"
+INSERT INTO farm.formrules() VALUES();
+SET @NewFormRulesId = Last_Insert_ID();
+
+INSERT INTO farm.sources() VALUES(); 
+SET @NewSourceId = Last_Insert_ID();
+
+INSERT INTO usersettings.PriceItems(FormRuleId, SourceId) VALUES(@NewFormRulesId, @NewSourceId);
+SET @NewPriceItemId = Last_Insert_ID();
+
+INSERT INTO PricesCosts (PriceCode, BaseCost, PriceItemId) SELECT ?PriceCode, 0, @NewPriceItemId;
+SET @NewPriceCostId:=Last_Insert_ID(); 
+
+INSERT INTO farm.costformrules (CostCode) SELECT @NewPriceCostId; 
+";
+
+				adapter.SelectCommand.ExecuteNonQuery();
+
+				adapter.SelectCommand.Transaction.Commit();
+				/*NotificationHelper.NotifyAboutRegistration(
+					String.Format("\"{0}\" - регистрация ценовой колонки", shortName),
+					String.Format(
+@"Оператор: {0} 
+Поставщик: {1}
+Регион: {2}
+Прайс-лист: {3}
+", operatorName, shortName, region, priceName));*/
+			}
+			catch
+			{
+				if (transaction != null)
+					transaction.Rollback();
+				throw;
+			}
+			finally
+			{
+				//mySql.Close();
+			}
+		}
+
 		private void ColorChange(object sender, EventArgs e)
 		{
 			cdLegend.Color = ((Button)sender).BackColor;
@@ -3642,6 +3728,17 @@ order by PriceName
 				tmrSearch.Stop();
 				tmrSearch.Start();
 			}
+		}
+
+		private void button1_Click(object sender, EventArgs e)
+		{
+			var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+			var dataRowView = (DataRowView) currencyManager.Current;
+			var row = dataRowView.Row;
+
+			var priceCode = Convert.ToUInt32(row[PPriceCode.ColumnName]);
+
+			CreateCost(priceCode, connection, "");
 		}
 	}
 

@@ -191,6 +191,9 @@ namespace FREditor
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.pnlGrid = new System.Windows.Forms.Panel();
 			this.indgvFirm = new Inforoom.WinForms.INDataGridView();
+			this.cShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.CSourceIndexViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.cbSource = new System.Windows.Forms.ComboBox();
 			this.label27 = new System.Windows.Forms.Label();
@@ -409,9 +412,7 @@ namespace FREditor
 			this.tbSearch = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.ofdNewFormat = new System.Windows.Forms.OpenFileDialog();
-			this.cShortNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.CSourceIndexViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.button1 = new System.Windows.Forms.Button();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -1409,6 +1410,27 @@ namespace FREditor
 			this.indgvFirm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvFirm_KeyDown);
 			this.indgvFirm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvFirm_KeyPress);
 			// 
+			// cShortNameDataGridViewTextBoxColumn
+			// 
+			this.cShortNameDataGridViewTextBoxColumn.DataPropertyName = "CShortName";
+			this.cShortNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
+			this.cShortNameDataGridViewTextBoxColumn.Name = "cShortNameDataGridViewTextBoxColumn";
+			this.cShortNameDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// cRegionDataGridViewTextBoxColumn
+			// 
+			this.cRegionDataGridViewTextBoxColumn.DataPropertyName = "CRegion";
+			this.cRegionDataGridViewTextBoxColumn.HeaderText = "Регион";
+			this.cRegionDataGridViewTextBoxColumn.Name = "cRegionDataGridViewTextBoxColumn";
+			this.cRegionDataGridViewTextBoxColumn.ReadOnly = true;
+			// 
+			// CSourceIndexViewTextBoxColumn
+			// 
+			this.CSourceIndexViewTextBoxColumn.DataPropertyName = "CSourceIndex";
+			this.CSourceIndexViewTextBoxColumn.HeaderText = "Источник";
+			this.CSourceIndexViewTextBoxColumn.Name = "CSourceIndexViewTextBoxColumn";
+			this.CSourceIndexViewTextBoxColumn.ReadOnly = true;
+			// 
 			// panel3
 			// 
 			this.panel3.Controls.Add(this.cbSource);
@@ -2111,6 +2133,7 @@ namespace FREditor
 			// 
 			// gbCostLegends
 			// 
+			this.gbCostLegends.Controls.Add(this.button1);
 			this.gbCostLegends.Controls.Add(this.btnDeletedCostColor);
 			this.gbCostLegends.Controls.Add(this.btnChangedCostColor);
 			this.gbCostLegends.Controls.Add(this.btnNewCostColor);
@@ -3950,26 +3973,15 @@ namespace FREditor
 			this.label14.TabIndex = 5;
 			this.label14.Text = "Поиск";
 			// 
-			// cShortNameDataGridViewTextBoxColumn
+			// button1
 			// 
-			this.cShortNameDataGridViewTextBoxColumn.DataPropertyName = "CShortName";
-			this.cShortNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
-			this.cShortNameDataGridViewTextBoxColumn.Name = "cShortNameDataGridViewTextBoxColumn";
-			this.cShortNameDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// cRegionDataGridViewTextBoxColumn
-			// 
-			this.cRegionDataGridViewTextBoxColumn.DataPropertyName = "CRegion";
-			this.cRegionDataGridViewTextBoxColumn.HeaderText = "Регион";
-			this.cRegionDataGridViewTextBoxColumn.Name = "cRegionDataGridViewTextBoxColumn";
-			this.cRegionDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
-			// CSourceIndexViewTextBoxColumn
-			// 
-			this.CSourceIndexViewTextBoxColumn.DataPropertyName = "CSourceIndex";
-			this.CSourceIndexViewTextBoxColumn.HeaderText = "Источник";
-			this.CSourceIndexViewTextBoxColumn.Name = "CSourceIndexViewTextBoxColumn";
-			this.CSourceIndexViewTextBoxColumn.ReadOnly = true;
+			this.button1.Location = new System.Drawing.Point(6, 158);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(81, 23);
+			this.button1.TabIndex = 4;
+			this.button1.Text = "button1";
+			this.button1.UseVisualStyleBackColor = true;
+			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
 			// frmFREMain
 			// 
@@ -4410,6 +4422,7 @@ namespace FREditor
 		private Label label27;
 		private DataGridViewTextBoxColumn cShortNameDataGridViewTextBoxColumn;
 		private DataGridViewTextBoxColumn cRegionDataGridViewTextBoxColumn;
-		private DataGridViewTextBoxColumn CSourceIndexViewTextBoxColumn;		
+		private DataGridViewTextBoxColumn CSourceIndexViewTextBoxColumn;
+		private Button button1;		
     }
 }
