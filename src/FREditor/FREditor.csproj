@@ -193,6 +193,7 @@
       <DependentUpon>frmMatchProgress.cs</DependentUpon>
     </Compile>
     <Compile Include="Literals.cs" />
+    <Compile Include="RetrancePrice.cs" />
     <Compile Include="SynonymMatcher.cs" />
     <Content Include="App.ico" />
     <Compile Include="frmMatchResult.cs">
@@ -313,7 +314,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.None.Increment" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

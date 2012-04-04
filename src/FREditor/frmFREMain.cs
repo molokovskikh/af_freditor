@@ -2171,25 +2171,11 @@ and c.Type = ?ContactType;",
 								string _firmName = drClient[CShortName.ColumnName].ToString();
 								string _regionName = drClient[CRegion.ColumnName].ToString();
 
-								uint _priceItemId = Convert.ToUInt32(drPrice[PPriceItemId.ColumnName]);
-
 								Mailer.SendNotificationLetter(connection, body.ToString(), 
 									_priceName, _firmName, _regionName);
 
 								// Перепроводим прайс
-								if (!_priceProcessor.RetransPrice(_priceItemId))
-								{
-									MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка",
-													MessageBoxButtons.OK, MessageBoxIcon.Error);                                    
-									throw new Exception("Не удалось перепровести прайс");
-								}
-								MySqlHelper.ExecuteNonQuery(
-									connection,
-									"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
-									new MySqlParameter("?UserName", Environment.UserName),
-									new MySqlParameter("?UserHost", Environment.MachineName),
-									new MySqlParameter("?PriceItemId", _priceItemId));
-								
+								RetrancePrice.Go(indgvPrice, indgvFirm, connection, _priceProcessor, PPriceItemId);
 							}
 							dtSet.AcceptChanges();
 							//Обновляе цены и правила формализации цен для того, чтобы загрузить корректные ID новых цен
@@ -2207,7 +2193,7 @@ and c.Type = ?ContactType;",
 					{
 						connection.Close();
 					}
-
+					
 					btnPutToBase.Enabled = !Convert.IsDBNull(((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
 
 				}
@@ -2895,47 +2881,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void btnRetrancePrice_Click(object sender, EventArgs e)
 		{
-			if (indgvPrice.CurrentRow != null)
-			{
-				var selectedPrice = ((DataRowView) indgvPrice.CurrentRow.DataBoundItem).Row;
-				try
-				{
-					if (!_priceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId])))
-					{
-						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка",
-										MessageBoxButtons.OK, MessageBoxIcon.Error);
-						return;
-					}
-
-					connection.Open();
-					try
-					{
-						MySqlHelper.ExecuteNonQuery(
-							connection,
-							"insert into logs.pricesretrans (LogTime, OperatorName, OperatorHost, PriceItemId) values (now(), ?UserName, ?UserHost, ?PriceItemId)",
-							new MySqlParameter("?UserName", Environment.UserName),
-							new MySqlParameter("?UserHost", Environment.MachineName),
-							new MySqlParameter("?PriceItemId", Convert.ToInt64(selectedPrice[PPriceItemId])));
-					}
-					finally
-					{
-						connection.Close();
-					}
-
-					MessageBox.Show("Прайс-лист успешно переподложен.");
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show("Не удалось переподложить прайс-лист. Сообщение об ошибке отправлено разработчику", "Ошибка",
-									MessageBoxButtons.OK, MessageBoxIcon.Error);
-#if !DEBUG
-					Mailer.SendErrorMessageToService("Ошибка при попытке переподложить прайс-лист", ex);
-#endif
-				}
-				indgvPrice.Focus();
-			}
-			else
-				indgvFirm.Focus();
+			RetrancePrice.Go(indgvPrice, indgvFirm, connection, _priceProcessor, PPriceItemId);
 		}
 
 		private void indgvPrice_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
