@@ -26,8 +26,8 @@ namespace FREditor
 										MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return;
 					}
-
-					connection.Open();
+					if (connection.State == ConnectionState.Closed)
+						connection.Open();
 					try
 					{
 						MySqlHelper.ExecuteNonQuery(
