@@ -6,15 +6,18 @@ using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
+using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Diagnostics;
+using Common.MySql;
 using FREditor.Helpers;
 using FREditor.Properties;
 using Inforoom.WinForms;
 using MySql.Data.MySqlClient;
 using RemotePriceProcessor;
+using MySqlHelper = MySql.Data.MySqlClient.MySqlHelper;
 
 namespace FREditor
 {
@@ -1520,12 +1523,9 @@ order by PriceName
 					bsCostsFormRules.ResumeBinding();
 					bsFormRules.ResumeBinding();
 
-					//Разрешено добавлять и редактировать ценовые колонки только в том случае, если это мультиколоночный прайс-лист
 					if (((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)
 						indgvCosts.AllowUserToAddRows = false;
-					else
-						indgvCosts.AllowUserToAddRows = Convert.ToByte(
-							((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName]) == 0;
+
 					indgvCosts.ReadOnly = !indgvCosts.AllowUserToAddRows;
 
 					btnPutToBase.Enabled = !Convert.IsDBNull(
@@ -2401,7 +2401,7 @@ and fr.Id = pim.FormRuleId;
 				}
 			}
 			tmrUpdateApply.Start();
-		   
+		
 		}
 
 		private void frmFREMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -2773,6 +2773,7 @@ and fr.Id = pim.FormRuleId;
 				{
 					fcs = dgFocus.Price;
 					tbControl.SelectedTab = tpPrice;
+					PrepareCreateNewPriceCollumn();
 				}
 			}
 			if (e.KeyCode == Keys.Delete) // удаление ценовой колонки для многофайлового ПЛ
@@ -2802,12 +2803,23 @@ and fr.Id = pim.FormRuleId;
 			}
 		}
 
+		private void PrepareCreateNewPriceCollumn()
+		{
+			var item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
+			var cost_type = (int)item[PCostType.ColumnName];
+			if (cost_type == 0)
+				createNewPriceCollumn.Enabled = true;
+			else
+				createNewPriceCollumn.Enabled = false;
+		}
+
 		private void indgvPrice_DoubleClick(object sender, EventArgs e)
 		{
 			if (CostIsValid())
 			{
 				fcs = dgFocus.Price;
 				tbControl.SelectedTab = tpPrice;
+				PrepareCreateNewPriceCollumn();
 			}
 		}
 
@@ -3149,92 +3161,6 @@ order by PriceName
 							e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
 					}
 				}
-			}
-		}
-
-		protected void CreateCost(uint priceCode, MySqlConnection mySql, string operatorName)
-		{
-			MySqlTransaction transaction = null;
-			try
-			{
-				//mySql.Open();
-				var adapter = new MySqlDataAdapter("", mySql);
-				adapter.SelectCommand.Transaction = mySql.BeginTransaction(IsolationLevel.RepeatableRead);
-				transaction = adapter.SelectCommand.Transaction;
-
-				adapter.SelectCommand.Parameters.AddWithValue("?PriceCode", priceCode);
-				adapter.SelectCommand.Parameters.AddWithValue("?UserName", operatorName);
-
-				adapter.SelectCommand.CommandText = @"select 
-	s.id, s.name, pd.PriceName, r.Region, pd.CostType from usersettings.PricesData pd
-	join Customers.Suppliers s on s.id = pd.FirmCode
-	join farm.Regions r on s.HomeRegion = r.RegionCode
-	where PriceCode = ?PriceCode;";
-
-				var price = new DataTable();
-				adapter.Fill(price);
-
-				var supplierId = price.Rows[0][0];
-				var shortName = price.Rows[0][1];
-				var priceName = price.Rows[0][2];
-				var region = price.Rows[0][3];
-				var costType = (int)price.Rows[0][4];
-
-				adapter.SelectCommand.Parameters.AddWithValue("?FirmCode", supplierId);
-
-				if (costType == 0)
-					adapter.SelectCommand.CommandText =
-@"
-SELECT pc.PriceItemId
-FROM Usersettings.PricesData pd
-	JOIN Usersettings.PricesCosts pc on pd.PriceCode = pc.PriceCode
-WHERE pd.PriceCode = ?PriceCode and pc.BaseCost = 1
-INTO @NewPriceItemId;
-
-INSERT INTO PricesCosts (PriceCode, BaseCost, PriceItemId) SELECT ?PriceCode, 0, @NewPriceItemId;
-SET @NewPriceCostId:=Last_Insert_ID(); 
-
-INSERT INTO farm.costformrules (CostCode) SELECT @NewPriceCostId;
-";
-				else
-					adapter.SelectCommand.CommandText =
-@"
-INSERT INTO farm.formrules() VALUES();
-SET @NewFormRulesId = Last_Insert_ID();
-
-INSERT INTO farm.sources() VALUES(); 
-SET @NewSourceId = Last_Insert_ID();
-
-INSERT INTO usersettings.PriceItems(FormRuleId, SourceId) VALUES(@NewFormRulesId, @NewSourceId);
-SET @NewPriceItemId = Last_Insert_ID();
-
-INSERT INTO PricesCosts (PriceCode, BaseCost, PriceItemId) SELECT ?PriceCode, 0, @NewPriceItemId;
-SET @NewPriceCostId:=Last_Insert_ID(); 
-
-INSERT INTO farm.costformrules (CostCode) SELECT @NewPriceCostId; 
-";
-
-				adapter.SelectCommand.ExecuteNonQuery();
-
-				adapter.SelectCommand.Transaction.Commit();
-				/*NotificationHelper.NotifyAboutRegistration(
-					String.Format("\"{0}\" - регистрация ценовой колонки", shortName),
-					String.Format(
-@"Оператор: {0} 
-Поставщик: {1}
-Регион: {2}
-Прайс-лист: {3}
-", operatorName, shortName, region, priceName));*/
-			}
-			catch
-			{
-				if (transaction != null)
-					transaction.Rollback();
-				throw;
-			}
-			finally
-			{
-				//mySql.Close();
 			}
 		}
 
@@ -3722,7 +3648,7 @@ INSERT INTO farm.costformrules (CostCode) SELECT @NewPriceCostId;
 			}
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void createNewPriceCollumn_Click(object sender, EventArgs e)
 		{
 			var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
 			var dataRowView = (DataRowView) currencyManager.Current;
@@ -3730,7 +3656,56 @@ INSERT INTO farm.costformrules (CostCode) SELECT @NewPriceCostId;
 
 			var priceCode = Convert.ToUInt32(row[PPriceCode.ColumnName]);
 
-			CreateCost(priceCode, connection, "");
+			var collumnCreator = new CostCollumnCreator(field => {
+				var smtp = new SmtpClient("box.analit.net");
+#if !DEBUG
+				var mailToAdress = "RegisterList@subscribe.analit.net";
+#else
+				var mailToAdress = "a.zolotarev@analit.net";
+#endif
+				var message = new MailMessage();
+				message.To.Add(mailToAdress);
+				message.Subject = String.Format("\"{0}\" - регистрация ценовой колонки", field.ShortName);
+				message.From = new MailAddress("register@analit.net");
+				message.Body = String.Format(
+@"Оператор: {0} 
+Поставщик: {1}
+Регион: {2}
+Прайс-лист: {3}
+", field.OperatorName, field.ShortName, field.Region, field.PriceName);
+				smtp.Send(message);
+			});
+
+			collumnCreator.CreateCost(priceCode, connection, "FREditor");
+
+			RefreshDataBind();
+		}
+
+		private void createCostCollumnInManyFilesPrice_Click(object sender, EventArgs e)
+		{
+			var firmCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
+
+			createNewPriceCollumn_Click(null, null);
+			checkBoxShowDisabled.Checked = true;
+			
+			var currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
+			var count = 0;
+			foreach (var row in indgvFirm.Rows) {
+				((DataGridViewRow)row).Selected = false;
+				if ((long)((DataRowView)(((DataGridViewRow)row).DataBoundItem))[CCode.ColumnName] == firmCode)
+					currencyManager.Position = count;
+				count++;
+			}
+		}
+
+		private void indgvFirm_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			var item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
+			var cost_type = (int)item[PCostType.ColumnName];
+			if (cost_type > 0)
+				createCostCollumnInManyFilesPrice.Enabled = true;
+			else
+				createCostCollumnInManyFilesPrice.Enabled = false;
 		}
 	}
 

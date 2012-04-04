@@ -195,6 +195,7 @@ namespace FREditor
 			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.CSourceIndexViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.createCostCollumnInManyFilesPrice = new System.Windows.Forms.Button();
 			this.cbSource = new System.Windows.Forms.ComboBox();
 			this.label27 = new System.Windows.Forms.Label();
 			this.buttonCreateMail = new System.Windows.Forms.Button();
@@ -254,6 +255,7 @@ namespace FREditor
 			this.tbCostFind = new System.Windows.Forms.TextBox();
 			this.lCostCount = new System.Windows.Forms.Label();
 			this.gbCostLegends = new System.Windows.Forms.GroupBox();
+			this.createNewPriceCollumn = new System.Windows.Forms.Button();
 			this.btnDeletedCostColor = new System.Windows.Forms.Button();
 			this.btnChangedCostColor = new System.Windows.Forms.Button();
 			this.btnNewCostColor = new System.Windows.Forms.Button();
@@ -412,7 +414,6 @@ namespace FREditor
 			this.tbSearch = new System.Windows.Forms.TextBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.ofdNewFormat = new System.Windows.Forms.OpenFileDialog();
-			this.button1 = new System.Windows.Forms.Button();
 			this.tbControl.SuspendLayout();
 			this.tpFirms.SuspendLayout();
 			this.panel2.SuspendLayout();
@@ -468,7 +469,7 @@ namespace FREditor
 			this.tbControl.Location = new System.Drawing.Point(0, 0);
 			this.tbControl.Name = "tbControl";
 			this.tbControl.SelectedIndex = 0;
-			this.tbControl.Size = new System.Drawing.Size(1177, 728);
+			this.tbControl.Size = new System.Drawing.Size(1325, 728);
 			this.tbControl.TabIndex = 1;
 			this.tbControl.SelectedIndexChanged += new System.EventHandler(this.tbControl_SelectedIndexChanged);
 			this.tbControl.Deselecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tbControl_Deselecting);
@@ -480,7 +481,7 @@ namespace FREditor
 			this.tpFirms.Controls.Add(this.pnlGrid);
 			this.tpFirms.Location = new System.Drawing.Point(4, 22);
 			this.tpFirms.Name = "tpFirms";
-			this.tpFirms.Size = new System.Drawing.Size(1169, 702);
+			this.tpFirms.Size = new System.Drawing.Size(1317, 702);
 			this.tpFirms.TabIndex = 0;
 			this.tpFirms.Text = "Фирмы";
 			// 
@@ -490,7 +491,7 @@ namespace FREditor
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(0, 424);
 			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(1169, 278);
+			this.panel2.Size = new System.Drawing.Size(1317, 278);
 			this.panel2.TabIndex = 6;
 			// 
 			// indgvPrice
@@ -542,7 +543,7 @@ namespace FREditor
 			this.indgvPrice.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
 			this.indgvPrice.RowHeadersVisible = false;
 			this.indgvPrice.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-			this.indgvPrice.Size = new System.Drawing.Size(1169, 278);
+			this.indgvPrice.Size = new System.Drawing.Size(1317, 278);
 			this.indgvPrice.TabIndex = 4;
 			this.indgvPrice.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.indgvPrice_CellFormatting);
 			this.indgvPrice.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.indgvPrice_CellValueChanged);
@@ -1345,7 +1346,7 @@ namespace FREditor
 			this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.splitter1.Location = new System.Drawing.Point(0, 419);
 			this.splitter1.Name = "splitter1";
-			this.splitter1.Size = new System.Drawing.Size(1169, 5);
+			this.splitter1.Size = new System.Drawing.Size(1317, 5);
 			this.splitter1.TabIndex = 7;
 			this.splitter1.TabStop = false;
 			// 
@@ -1356,7 +1357,7 @@ namespace FREditor
 			this.pnlGrid.Dock = System.Windows.Forms.DockStyle.Top;
 			this.pnlGrid.Location = new System.Drawing.Point(0, 0);
 			this.pnlGrid.Name = "pnlGrid";
-			this.pnlGrid.Size = new System.Drawing.Size(1169, 419);
+			this.pnlGrid.Size = new System.Drawing.Size(1317, 419);
 			this.pnlGrid.TabIndex = 5;
 			// 
 			// indgvFirm
@@ -1404,8 +1405,9 @@ namespace FREditor
 			this.indgvFirm.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this.indgvFirm.RowHeadersVisible = false;
 			this.indgvFirm.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.indgvFirm.Size = new System.Drawing.Size(1169, 389);
+			this.indgvFirm.Size = new System.Drawing.Size(1317, 389);
 			this.indgvFirm.TabIndex = 2;
+			this.indgvFirm.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.indgvFirm_CellClick);
 			this.indgvFirm.DoubleClick += new System.EventHandler(this.indgvFirm_DoubleClick);
 			this.indgvFirm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvFirm_KeyDown);
 			this.indgvFirm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvFirm_KeyPress);
@@ -1433,6 +1435,7 @@ namespace FREditor
 			// 
 			// panel3
 			// 
+			this.panel3.Controls.Add(this.createCostCollumnInManyFilesPrice);
 			this.panel3.Controls.Add(this.cbSource);
 			this.panel3.Controls.Add(this.label27);
 			this.panel3.Controls.Add(this.buttonCreateMail);
@@ -1445,8 +1448,20 @@ namespace FREditor
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel3.Location = new System.Drawing.Point(0, 0);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(1169, 30);
+			this.panel3.Size = new System.Drawing.Size(1317, 30);
 			this.panel3.TabIndex = 4;
+			// 
+			// createCostCollumnInManyFilesPrice
+			// 
+			this.createCostCollumnInManyFilesPrice.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.createCostCollumnInManyFilesPrice.Enabled = false;
+			this.createCostCollumnInManyFilesPrice.Location = new System.Drawing.Point(834, 5);
+			this.createCostCollumnInManyFilesPrice.Name = "createCostCollumnInManyFilesPrice";
+			this.createCostCollumnInManyFilesPrice.Size = new System.Drawing.Size(170, 23);
+			this.createCostCollumnInManyFilesPrice.TabIndex = 11;
+			this.createCostCollumnInManyFilesPrice.Text = "Создать ценовую колонку";
+			this.createCostCollumnInManyFilesPrice.UseVisualStyleBackColor = true;
+			this.createCostCollumnInManyFilesPrice.Click += new System.EventHandler(this.createCostCollumnInManyFilesPrice_Click);
 			// 
 			// cbSource
 			// 
@@ -1470,7 +1485,7 @@ namespace FREditor
 			// buttonCreateMail
 			// 
 			this.buttonCreateMail.Anchor = System.Windows.Forms.AnchorStyles.Right;
-			this.buttonCreateMail.Location = new System.Drawing.Point(862, 5);
+			this.buttonCreateMail.Location = new System.Drawing.Point(1010, 5);
 			this.buttonCreateMail.Name = "buttonCreateMail";
 			this.buttonCreateMail.Size = new System.Drawing.Size(135, 23);
 			this.buttonCreateMail.TabIndex = 8;
@@ -1493,7 +1508,7 @@ namespace FREditor
 			// btnRetrancePrice
 			// 
 			this.btnRetrancePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnRetrancePrice.Location = new System.Drawing.Point(1003, 5);
+			this.btnRetrancePrice.Location = new System.Drawing.Point(1151, 5);
 			this.btnRetrancePrice.Name = "btnRetrancePrice";
 			this.btnRetrancePrice.Size = new System.Drawing.Size(158, 23);
 			this.btnRetrancePrice.TabIndex = 6;
@@ -1545,7 +1560,7 @@ namespace FREditor
 			this.tpPrice.Controls.Add(this.panel1);
 			this.tpPrice.Location = new System.Drawing.Point(4, 22);
 			this.tpPrice.Name = "tpPrice";
-			this.tpPrice.Size = new System.Drawing.Size(1169, 702);
+			this.tpPrice.Size = new System.Drawing.Size(1317, 702);
 			this.tpPrice.TabIndex = 1;
 			this.tpPrice.Text = "Прайс";
 			// 
@@ -1553,7 +1568,7 @@ namespace FREditor
 			// 
 			this.pnlFloat.Controls.Add(this.grpbGeneral);
 			this.pnlFloat.Dock = System.Windows.Forms.DockStyle.Right;
-			this.pnlFloat.Location = new System.Drawing.Point(913, 0);
+			this.pnlFloat.Location = new System.Drawing.Point(1061, 0);
 			this.pnlFloat.Name = "pnlFloat";
 			this.pnlFloat.Size = new System.Drawing.Size(232, 507);
 			this.pnlFloat.TabIndex = 4;
@@ -1783,7 +1798,7 @@ namespace FREditor
 			this.tcInnerTable.Location = new System.Drawing.Point(0, 0);
 			this.tcInnerTable.Name = "tcInnerTable";
 			this.tcInnerTable.SelectedIndex = 0;
-			this.tcInnerTable.Size = new System.Drawing.Size(1145, 507);
+			this.tcInnerTable.Size = new System.Drawing.Size(1293, 507);
 			this.tcInnerTable.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tcInnerTable.TabIndex = 3;
 			this.tcInnerTable.SelectedIndexChanged += new System.EventHandler(this.tcInnerTable_SelectedIndexChanged);
@@ -1794,7 +1809,7 @@ namespace FREditor
 			this.tbpTable.Controls.Add(this.panel4);
 			this.tbpTable.Location = new System.Drawing.Point(4, 5);
 			this.tbpTable.Name = "tbpTable";
-			this.tbpTable.Size = new System.Drawing.Size(1137, 498);
+			this.tbpTable.Size = new System.Drawing.Size(1285, 498);
 			this.tbpTable.TabIndex = 0;
 			this.tbpTable.Text = "Таблица";
 			// 
@@ -1807,7 +1822,7 @@ namespace FREditor
 			this.tcInnerSheets.Location = new System.Drawing.Point(0, 27);
 			this.tcInnerSheets.Name = "tcInnerSheets";
 			this.tcInnerSheets.SelectedIndex = 0;
-			this.tcInnerSheets.Size = new System.Drawing.Size(1137, 471);
+			this.tcInnerSheets.Size = new System.Drawing.Size(1285, 471);
 			this.tcInnerSheets.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tcInnerSheets.TabIndex = 1;
 			this.tcInnerSheets.SelectedIndexChanged += new System.EventHandler(this.tcInnerSheets_SelectedIndexChanged);
@@ -1818,7 +1833,7 @@ namespace FREditor
 			this.tbpSheet1.Controls.Add(this.indgvPriceData);
 			this.tbpSheet1.Location = new System.Drawing.Point(4, 5);
 			this.tbpSheet1.Name = "tbpSheet1";
-			this.tbpSheet1.Size = new System.Drawing.Size(1129, 462);
+			this.tbpSheet1.Size = new System.Drawing.Size(1277, 462);
 			this.tbpSheet1.TabIndex = 0;
 			this.tbpSheet1.Text = "sheet1";
 			// 
@@ -1855,7 +1870,7 @@ namespace FREditor
 			dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.indgvPriceData.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
 			this.indgvPriceData.RowHeadersVisible = false;
-			this.indgvPriceData.Size = new System.Drawing.Size(1129, 462);
+			this.indgvPriceData.Size = new System.Drawing.Size(1277, 462);
 			this.indgvPriceData.TabIndex = 3;
 			this.indgvPriceData.Enter += new System.EventHandler(this.indgvPriceData_Enter);
 			this.indgvPriceData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvPriceData_KeyDown);
@@ -1870,7 +1885,7 @@ namespace FREditor
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel4.Location = new System.Drawing.Point(0, 0);
 			this.panel4.Name = "panel4";
-			this.panel4.Size = new System.Drawing.Size(1137, 27);
+			this.panel4.Size = new System.Drawing.Size(1285, 27);
 			this.panel4.TabIndex = 0;
 			// 
 			// buttonSearchNext
@@ -1908,7 +1923,7 @@ namespace FREditor
 			this.tbpMarking.Controls.Add(this.indgvMarking);
 			this.tbpMarking.Location = new System.Drawing.Point(4, 5);
 			this.tbpMarking.Name = "tbpMarking";
-			this.tbpMarking.Size = new System.Drawing.Size(1137, 498);
+			this.tbpMarking.Size = new System.Drawing.Size(1285, 498);
 			this.tbpMarking.TabIndex = 1;
 			this.tbpMarking.Text = "Разметка";
 			this.tbpMarking.Visible = false;
@@ -1951,7 +1966,7 @@ namespace FREditor
 			dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
 			dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.indgvMarking.RowHeadersDefaultCellStyle = dataGridViewCellStyle12;
-			this.indgvMarking.Size = new System.Drawing.Size(1137, 498);
+			this.indgvMarking.Size = new System.Drawing.Size(1285, 498);
 			this.indgvMarking.TabIndex = 7;
 			this.indgvMarking.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.InDataGridViewMarking_CellValidating);
 			// 
@@ -1977,7 +1992,7 @@ namespace FREditor
 			// 
 			this.btnFloatPanel.Dock = System.Windows.Forms.DockStyle.Right;
 			this.btnFloatPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.btnFloatPanel.Location = new System.Drawing.Point(1145, 0);
+			this.btnFloatPanel.Location = new System.Drawing.Point(1293, 0);
 			this.btnFloatPanel.Name = "btnFloatPanel";
 			this.btnFloatPanel.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.btnFloatPanel.Size = new System.Drawing.Size(24, 507);
@@ -1993,7 +2008,7 @@ namespace FREditor
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panel1.Location = new System.Drawing.Point(0, 507);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(1169, 195);
+			this.panel1.Size = new System.Drawing.Size(1317, 195);
 			this.panel1.TabIndex = 0;
 			// 
 			// pCosts
@@ -2005,7 +2020,7 @@ namespace FREditor
 			this.pCosts.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.pCosts.Location = new System.Drawing.Point(766, 0);
 			this.pCosts.Name = "pCosts";
-			this.pCosts.Size = new System.Drawing.Size(403, 195);
+			this.pCosts.Size = new System.Drawing.Size(551, 195);
 			this.pCosts.TabIndex = 7;
 			// 
 			// indgvCosts
@@ -2050,7 +2065,7 @@ namespace FREditor
 			dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
 			this.indgvCosts.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
 			this.indgvCosts.RowHeadersWidth = 40;
-			this.indgvCosts.Size = new System.Drawing.Size(310, 147);
+			this.indgvCosts.Size = new System.Drawing.Size(458, 147);
 			this.indgvCosts.TabIndex = 6;
 			this.indgvCosts.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.indgvCosts_CellBeginEdit);
 			this.indgvCosts.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.indgvCosts_CellDoubleClick);
@@ -2105,7 +2120,7 @@ namespace FREditor
 			this.pCostFind.Dock = System.Windows.Forms.DockStyle.Top;
 			this.pCostFind.Location = new System.Drawing.Point(0, 0);
 			this.pCostFind.Name = "pCostFind";
-			this.pCostFind.Size = new System.Drawing.Size(310, 31);
+			this.pCostFind.Size = new System.Drawing.Size(458, 31);
 			this.pCostFind.TabIndex = 9;
 			// 
 			// tbCostFind
@@ -2114,7 +2129,7 @@ namespace FREditor
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbCostFind.Location = new System.Drawing.Point(4, 4);
 			this.tbCostFind.Name = "tbCostFind";
-			this.tbCostFind.Size = new System.Drawing.Size(300, 20);
+			this.tbCostFind.Size = new System.Drawing.Size(448, 20);
 			this.tbCostFind.TabIndex = 0;
 			this.tbCostFind.TextChanged += new System.EventHandler(this.tbCostFind_TextChanged);
 			this.tbCostFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbCostFind_KeyDown);
@@ -2125,7 +2140,7 @@ namespace FREditor
 			this.lCostCount.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.lCostCount.Location = new System.Drawing.Point(0, 178);
 			this.lCostCount.Name = "lCostCount";
-			this.lCostCount.Size = new System.Drawing.Size(310, 17);
+			this.lCostCount.Size = new System.Drawing.Size(458, 17);
 			this.lCostCount.TabIndex = 8;
 			this.lCostCount.Text = "lCostCount";
 			this.lCostCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -2133,18 +2148,28 @@ namespace FREditor
 			// 
 			// gbCostLegends
 			// 
-			this.gbCostLegends.Controls.Add(this.button1);
+			this.gbCostLegends.Controls.Add(this.createNewPriceCollumn);
 			this.gbCostLegends.Controls.Add(this.btnDeletedCostColor);
 			this.gbCostLegends.Controls.Add(this.btnChangedCostColor);
 			this.gbCostLegends.Controls.Add(this.btnNewCostColor);
 			this.gbCostLegends.Controls.Add(this.btnBaseCostColor);
 			this.gbCostLegends.Dock = System.Windows.Forms.DockStyle.Right;
-			this.gbCostLegends.Location = new System.Drawing.Point(310, 0);
+			this.gbCostLegends.Location = new System.Drawing.Point(458, 0);
 			this.gbCostLegends.Name = "gbCostLegends";
 			this.gbCostLegends.Size = new System.Drawing.Size(93, 195);
 			this.gbCostLegends.TabIndex = 7;
 			this.gbCostLegends.TabStop = false;
 			this.gbCostLegends.Text = "Легенда";
+			// 
+			// createNewPriceCollumn
+			// 
+			this.createNewPriceCollumn.Location = new System.Drawing.Point(6, 133);
+			this.createNewPriceCollumn.Name = "createNewPriceCollumn";
+			this.createNewPriceCollumn.Size = new System.Drawing.Size(81, 54);
+			this.createNewPriceCollumn.TabIndex = 4;
+			this.createNewPriceCollumn.Text = "Создать ценовую колонку";
+			this.createNewPriceCollumn.UseVisualStyleBackColor = true;
+			this.createNewPriceCollumn.Click += new System.EventHandler(this.createNewPriceCollumn_Click);
 			// 
 			// btnDeletedCostColor
 			// 
@@ -3844,13 +3869,13 @@ namespace FREditor
 			// tscMain.ContentPanel
 			// 
 			this.tscMain.ContentPanel.Controls.Add(this.tbControl);
-			this.tscMain.ContentPanel.Size = new System.Drawing.Size(1177, 728);
+			this.tscMain.ContentPanel.Size = new System.Drawing.Size(1325, 728);
 			this.tscMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tscMain.LeftToolStripPanelVisible = false;
 			this.tscMain.Location = new System.Drawing.Point(0, 0);
 			this.tscMain.Name = "tscMain";
 			this.tscMain.RightToolStripPanelVisible = false;
-			this.tscMain.Size = new System.Drawing.Size(1177, 753);
+			this.tscMain.Size = new System.Drawing.Size(1325, 753);
 			this.tscMain.TabIndex = 2;
 			this.tscMain.Text = "toolStripContainer1";
 			// 
@@ -3973,20 +3998,10 @@ namespace FREditor
 			this.label14.TabIndex = 5;
 			this.label14.Text = "Поиск";
 			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(6, 158);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(81, 23);
-			this.button1.TabIndex = 4;
-			this.button1.Text = "button1";
-			this.button1.UseVisualStyleBackColor = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
 			// frmFREMain
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(1177, 753);
+			this.ClientSize = new System.Drawing.Size(1325, 753);
 			this.Controls.Add(this.tscMain);
 			this.KeyPreview = true;
 			this.Name = "frmFREMain";
@@ -4374,10 +4389,6 @@ namespace FREditor
 		private System.Windows.Forms.Button btnNewCostColor;
 		private System.Windows.Forms.ColorDialog cdLegend;
 		private System.Windows.Forms.Label lCostCount;
-		private DataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
-		private DataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
-		private DataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
-		private DataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
 		private System.Windows.Forms.Panel pCostFind;
 		private System.Windows.Forms.TextBox tbCostFind;
 		private System.Windows.Forms.Timer tmrCostSearch;
@@ -4423,6 +4434,11 @@ namespace FREditor
 		private DataGridViewTextBoxColumn cShortNameDataGridViewTextBoxColumn;
 		private DataGridViewTextBoxColumn cRegionDataGridViewTextBoxColumn;
 		private DataGridViewTextBoxColumn CSourceIndexViewTextBoxColumn;
-		private Button button1;		
+		private Button createNewPriceCollumn;
+		private DataGridViewTextBoxColumn cFRCostNameDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn cFRFieldNameDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn cFRTextBeginDataGridViewTextBoxColumn;
+		private DataGridViewTextBoxColumn cFRTextEndDataGridViewTextBoxColumn;
+		private Button createCostCollumnInManyFilesPrice;		
     }
 }
