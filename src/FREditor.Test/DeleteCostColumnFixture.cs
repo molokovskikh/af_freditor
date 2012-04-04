@@ -94,12 +94,11 @@ FROM
   usersettings.pricesdata pd
   inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
   inner join usersettings.PriceItems pim on (pim.Id = pc.PriceItemId) 
-  inner join usersettings.clientsdata cd on cd.FirmCode = pd.FirmCode
+  inner join Customers.suppliers s on s.Id = pd.FirmCode
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
-  inner join farm.regions r on r.regioncode=cd.regioncode
+  inner join farm.regions r on r.regioncode=s.HomeRegion
 where 
-    cd.FirmType = 0
-and ((pd.CostType = 1) or (pc.BaseCost = 1))";
+(pd.CostType = 1) or (pc.BaseCost = 1)";
 			command.CommandText += @" 
 group by pim.Id
 order by PPriceName";
