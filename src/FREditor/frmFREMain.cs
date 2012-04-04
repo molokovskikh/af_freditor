@@ -2173,14 +2173,14 @@ and c.Type = ?ContactType;",
 
 								Mailer.SendNotificationLetter(connection, body.ToString(), 
 									_priceName, _firmName, _regionName);
-
-								// Перепроводим прайс
-								RetrancePrice.Go(indgvPrice, indgvFirm, connection, _priceProcessor, PPriceItemId);
 							}
 							dtSet.AcceptChanges();
 							//Обновляе цены и правила формализации цен для того, чтобы загрузить корректные ID новых цен
 							FillCosts(shortNameFilter, regionCodeFilter);
 							tr.Commit();
+
+							// Перепроводим прайс
+							RetrancePrice.Go(indgvPrice, indgvFirm, connection, _priceProcessor, PPriceItemId);
 						}
 						catch (Exception ex)
 						{
@@ -2191,7 +2191,8 @@ and c.Type = ?ContactType;",
 					}
 					finally
 					{
-						connection.Close();
+						if (connection.State != ConnectionState.Closed)
+							connection.Close();
 					}
 					
 					btnPutToBase.Enabled = !Convert.IsDBNull(((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
