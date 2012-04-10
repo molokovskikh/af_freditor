@@ -1120,7 +1120,7 @@ order by PriceName
 				indgv.MouseDown += indgvPriceData_MouseDown;
 				indgv.KeyPress += indgvPriceData_KeyPress;
 				foreach (DataGridViewTextBoxColumn dc in indgv.Columns)
-					dc.Width = 300;
+					dc.Width = 350;
 				gds.Add(indgv);
 				((INDataGridView) gds[i]).Columns.Clear();
 				((INDataGridView) gds[i]).DataSource = dtables[i];
