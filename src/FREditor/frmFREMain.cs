@@ -1075,6 +1075,7 @@ order by PriceName
 		{
 			try
 			{
+#if !DEBUG
 				// Берем файл из Base
 				using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
 				{
@@ -1092,6 +1093,9 @@ order by PriceName
 						return false;
 					}
 				}
+#else
+				return true;
+#endif
 			}
 			catch (Exception ex)
 			{
@@ -1120,7 +1124,7 @@ order by PriceName
 				indgv.MouseDown += indgvPriceData_MouseDown;
 				indgv.KeyPress += indgvPriceData_KeyPress;
 				foreach (DataGridViewTextBoxColumn dc in indgv.Columns)
-					dc.Width = 350;
+					dc.Width = 300;
 				gds.Add(indgv);
 				((INDataGridView) gds[i]).Columns.Clear();
 				((INDataGridView) gds[i]).DataSource = dtables[i];
@@ -2887,6 +2891,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void indgvPrice_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
+			BindingContext[indgvPrice.DataSource].EndCurrentEdit();
 			//Если рассматриваются колонки с ComboBox и строки с данными
 			if ((e.RowIndex >= 0) && (((INDataGridView)sender).Columns[e.ColumnIndex].CellTemplate is DataGridViewComboBoxCell))
 			{
