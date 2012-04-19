@@ -84,13 +84,13 @@ namespace FREditor.Helpers
 					return OpenXlsFile(filePath);
 				}
 				if ((priceFormat.Value == PriceFormat.DelimDOS) || (priceFormat.Value == PriceFormat.DelimWIN) ||
-                    (priceFormat.Value == PriceFormat.NativeDelimWIN) || (priceFormat.Value == PriceFormat.NativeDelimDOS))
+					(priceFormat.Value == PriceFormat.NativeDelimWIN) || (priceFormat.Value == PriceFormat.NativeDelimDOS))
 				{										
-                    tables.Add(OpenTextDelimiterFile(filePath, priceFormat, delimiter));
+					tables.Add(OpenTextDelimiterFile(filePath, priceFormat, delimiter));
 					return tables;
 				}
 				if ((priceFormat.Value == PriceFormat.FixedDOS) || (priceFormat.Value == PriceFormat.FixedWIN) ||
-                    (priceFormat.Value == PriceFormat.NativeFixedDOS) || (priceFormat.Value == PriceFormat.NativeFixedWIN))
+					(priceFormat.Value == PriceFormat.NativeFixedDOS) || (priceFormat.Value == PriceFormat.NativeFixedWIN))
 				{
 					tables.Add(OpenTextFixedFile(filePath, priceFormat, dataTableMarking));
 					return tables;
@@ -123,15 +123,15 @@ namespace FREditor.Helpers
 			string oldpath = Path.GetDirectoryName(filePath);
 			string oldfile = Path.GetFileNameWithoutExtension(filePath);
 			string ext = Path.GetExtension(filePath);			
-            string newfile = oldfile;
-		    var forbiddenChars = "!#$%^&*()-=+|<>,. \\/@\"`~?{}[]";
-		    
+			string newfile = oldfile;
+			var forbiddenChars = "!#$%^&*()-=+|<>,. \\/@\"`~?{}[]";
+			
 			if (oldfile != null)
 			{
-                foreach (var forbiddenChar in forbiddenChars)
-                {
-                    newfile = newfile.Replace(forbiddenChar, '_');
-                }
+				foreach (var forbiddenChar in forbiddenChars)
+				{
+					newfile = newfile.Replace(forbiddenChar, '_');
+				}
 				if (newfile != String.Empty)
 				{
 					newfile = String.Concat(newfile, ext);					
@@ -151,8 +151,8 @@ namespace FREditor.Helpers
 			{
 				w.WriteLine("[" + Path.GetFileName(filePath) + "]");
 				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN)))
-				            	? "CharacterSet=ANSI"
-				            	: "CharacterSet=OEM");
+								? "CharacterSet=ANSI"
+								: "CharacterSet=OEM");
 				w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
 				w.WriteLine("ColNameHeader=False");
 				w.WriteLine("MaxScanRows=300");
@@ -180,18 +180,18 @@ namespace FREditor.Helpers
 			Application.DoEvents();
 			connection.Open();
 			DataTable ColumnNames = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Columns,
-			                                                       new object[] {null, null, tableName, null});
+																   new object[] {null, null, tableName, null});
 			maxColCount = (ColumnNames.Rows.Count >= 256) ? 255 : ColumnNames.Rows.Count;
 			connection.Close();
 			Application.DoEvents();
 
 			using (var w = new StreamWriter(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini",
-			                                false, Encoding.GetEncoding(1251)))
+											false, Encoding.GetEncoding(1251)))
 			{
 				w.WriteLine("[" + Path.GetFileName(filePath) + "]");
 				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN)))
-				            	? "CharacterSet=ANSI"
-				            	: "CharacterSet=OEM");
+								? "CharacterSet=ANSI"
+								: "CharacterSet=OEM");
 				w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
 				w.WriteLine("ColNameHeader=False");
 				w.WriteLine("MaxScanRows=300");
@@ -205,8 +205,8 @@ namespace FREditor.Helpers
 			connection.ConnectionString = String.Format(connectionFormatString, Path.GetDirectoryName(filePath));
 			connection.Open();
 			var dataAdapter = new OleDbDataAdapter(String.Format(
-			                                       	"select * from {0}", Path.GetFileName(filePath).Replace(".", "#")),
-			                                       connection);
+													"select * from {0}", Path.GetFileName(filePath).Replace(".", "#")),
+												   connection);
 			var	dataTablePrice = new DataTable();
 			dataAdapter.SyncFill(dataTablePrice);
 			if (dataTablePrice.Rows.Count == 0)
@@ -316,7 +316,7 @@ namespace FREditor.Helpers
 	{
 		public static List<DataTable> LoadTables(string file)
 		{
-            StringDecoder.DefaultEncoding = Encoding.GetEncoding(1251);
+			StringDecoder.DefaultEncoding = Encoding.GetEncoding(1251);
 			var workbook = Workbook.Load(file);
 			var worksheets = workbook.Worksheets;
 			var excelTables = worksheets.Select(worksheet => LoadTable(worksheet)).ToList();
@@ -331,16 +331,16 @@ namespace FREditor.Helpers
 			{				
 				var cells = worksheet.Cells;
 				if (cells.FirstRowIndex != Int32.MaxValue && cells.LastRowIndex != Int32.MaxValue &&
-				    cells.FirstColIndex != Int32.MaxValue && cells.LastColIndex != Int32.MaxValue)
+					cells.FirstColIndex != Int32.MaxValue && cells.LastColIndex != Int32.MaxValue)
 				{
 					var maxColCount = (cells.LastColIndex - cells.FirstColIndex + 1 >= 256)
-					                  	? 255
-					                  	: cells.LastColIndex - cells.FirstColIndex + 1;
+										? 255
+										: cells.LastColIndex - cells.FirstColIndex + 1;
 
 					dataTable.Columns
 						.AddRange(Enumerable.Range(cells.FirstColIndex + 1, /*cells.LastColIndex - cells.FirstColIndex + 1*/maxColCount)
-						          	.Select(i => new DataColumn("F" + i))
-						          	.ToArray());
+									.Select(i => new DataColumn("F" + i))
+									.ToArray());
 
 					for (var i = Math.Max(cells.FirstRowIndex, startLine); i <= cells.LastRowIndex; i++)
 					{

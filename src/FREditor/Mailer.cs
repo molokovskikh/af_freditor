@@ -24,7 +24,7 @@ namespace FREditor
 			try
 			{
 				//Получаем e-mail оператора
-				string operatorMail = (string)MySqlHelper.ExecuteScalar(
+				var operatorMail = (string)MySqlHelper.ExecuteScalar(
 					connection,
 @"SELECT 
   regionaladmins.email 
@@ -34,9 +34,9 @@ WHERE
   username = ?UserName", new MySqlParameter("?UserName", Environment.UserName));
 
 				//Формируем сообщение
-				MailMessage m = new MailMessage("register@analit.net",
+				var m = new MailMessage("register@analit.net",
 #if DEBUG
- "KvasovTest@analit.net", 
+					"KvasovTest@analit.net", 
 #else
 					"RegisterList@subscribe.analit.net",
 #endif
@@ -58,7 +58,7 @@ WHERE
 						body));
 				if (!String.IsNullOrEmpty(operatorMail))
 					m.Bcc.Add(operatorMail);
-				SmtpClient sm = new SmtpClient(SmtpServerName);
+				var sm = new SmtpClient(SmtpServerName);
 				sm.Send(m);
 			}
 			catch (Exception ex)
@@ -95,7 +95,7 @@ WHERE
 			try
 			{
 				messageBody = String.Format("{0}\nВерсия программы: {1}\nКомпьютер: {2}\nОператор: {3}\nОшибка: {4}",
-                    messageBody, Application.ProductVersion, Environment.MachineName, Environment.UserName, exception.ToString());
+					messageBody, Application.ProductVersion, Environment.MachineName, Environment.UserName, exception.ToString());
 				var mailMessage = new MailMessage(EmailService, EmailService, "Ошибка в FREditor", messageBody);
 				var smtpClient = new SmtpClient(SmtpServerName);
 				smtpClient.Send(mailMessage);
@@ -103,8 +103,8 @@ WHERE
 			catch (Exception)
 			{
 				MessageBox.Show(@"Не удалось отправить разработчику сообщение об ошибке. Свяжитесь с разработчиком",
-				                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);				
-			}			
+					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
 		}
 	}
 }

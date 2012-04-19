@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbHelper.cs" />
+    <Compile Include="Fields.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="frmMatchProgress.cs">
       <SubType>Form</SubType>
@@ -312,9 +313,4 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_BuildVersioningStyle="None.None.None.Increment" />
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>

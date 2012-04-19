@@ -14,15 +14,14 @@ namespace FREditor.Helpers
 		private DataColumn _endColumn;
 
 		public DataTableMarking()
-			: base()
 		{
 			_nameFieldColumn = new DataColumn("MNameField");
 			_beginColumn = new DataColumn("MBeginField", typeof(int));
 			_endColumn = new DataColumn("MEndField", typeof(int));
 			
-			Columns.AddRange(new DataColumn[] { _nameFieldColumn, _beginColumn, _endColumn });
+			Columns.AddRange(new[] { _nameFieldColumn, _beginColumn, _endColumn });
 			Constraints.AddRange(new Constraint[] {
-				new UniqueConstraint("UniqueNameConstraint", new DataColumn[] { _nameFieldColumn }, false)
+				new UniqueConstraint("UniqueNameConstraint", new[] { _nameFieldColumn }, false)
 			});
 			TableName = "Разметка";
 		}

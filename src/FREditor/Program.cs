@@ -19,8 +19,8 @@ namespace FREditor
 		static void Main()
 		{
 			XmlConfigurator.Configure();
-			Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(OnThreadException);
-			Application.ApplicationExit += new EventHandler(ApplicationExit);
+			Application.ThreadException += OnThreadException;
+			Application.ApplicationExit += ApplicationExit;
 
 			//Эти две строчки есть в StatViewer'е, возможно, из-за одной из них не работает "корректное" отображение 
 			//значений столбца "Сегмент" в фильтрах компонентов DevExpress
@@ -49,7 +49,7 @@ namespace FREditor
 		}
 
 		// Handles the exception event.
-		public static void OnThreadException(object sender, System.Threading.ThreadExceptionEventArgs t)
+		public static void OnThreadException(object sender, ThreadExceptionEventArgs t)
 		{
 			SendMessageOnException(sender, t.Exception);
 			MessageBox.Show("В приложении возникла необработанная ошибка.\r\nИнформация об ошибке была отправлена разработчику.");
