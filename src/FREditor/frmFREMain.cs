@@ -19,6 +19,7 @@ using FREditor.Properties;
 using Inforoom.WinForms;
 using MySql.Data.MySqlClient;
 using RemotePriceProcessor;
+using log4net;
 using MySqlHelper = MySql.Data.MySqlClient.MySqlHelper;
 
 namespace FREditor
@@ -32,6 +33,8 @@ namespace FREditor
 	public partial class frmFREMain : Form
 	{
 		private bool _isFormatChanged;
+
+		private ILog _logger = LogManager.GetLogger(typeof(frmFREMain));
 
 		ArrayList gds = new ArrayList();
 		List<DataTable> dtables = new List<DataTable>();
@@ -173,7 +176,7 @@ WHERE c.CostCode = ?CostCode;";
 			this.mcmdUpdateCostRules.Parameters.Add("?TxtBegin", MySqlDbType.VarString, 0, "CFRTextBegin");
 			this.mcmdUpdateCostRules.Parameters.Add("?TxtEnd", MySqlDbType.VarString, 0, "CFRTextEnd");
 
-			var sql = Fields.Columnds().Implode(f => String.Format("{0} = ?FR{0},", f));
+			var sql = Fields.Columnds().Implode(f => String.Format("{0} = ?FR{0}", f));
 
 			this.mcmdUpdateFormRules.CommandText = String.Format(@"
 UPDATE formrules
@@ -371,6 +374,65 @@ where
 			_priceProcessor = new PriceProcessorWcfHelper(Settings.Default.WCFServiceUrl);
 
 			matcher = new SynonymMatcher(this);
+
+			var y = 5;
+			var lineHeight = 23;
+			var labelWidth = 100;
+			var labelPadding = 7;
+			var inputWidth = 27;
+			foreach (var field in Fields.AdditionalFields()) {
+				var x = (labelWidth +  labelPadding + inputWidth + inputWidth) * 3;
+				var controls = pnlTxtFields.Controls;
+				var controls2 = pnlGeneralFields.Controls;
+
+				var text = String.Format("{0} :", field.Item2);
+				controls.Add(new Label {
+					Text = text,
+					Size = new Size(labelWidth, lineHeight),
+					TextAlign = ContentAlignment.MiddleRight,
+					Location = new Point(x, y)
+				});
+
+				controls2.Add(new Label {
+					Text = text,
+					Size = new Size(labelWidth, lineHeight),
+					TextAlign = ContentAlignment.MiddleRight,
+					Location = new Point(x, y)
+				});
+				
+				x += labelWidth + labelPadding;
+				var column = "FR" + Fields.BeginColumn(field.Item1);
+				controls.Add(BuildInput(x, y, inputWidth, field.Item1, column));
+
+				column = "FR" + Fields.GeneralColumn(field.Item1);
+				controls2.Add(BuildInput(x, y, inputWidth*2, field.Item1, column));
+
+				x += inputWidth;
+
+				column = "FR" + Fields.EndColumn(field.Item1);
+				controls.Add(BuildInput(x, y, inputWidth, field.Item1, column));
+				y += lineHeight;
+			}
+		}
+
+		private TextBox BuildInput(int x, int y, int inputWidth, string field, string column)
+		{
+			var input = new TextBox {
+				AccessibleName = field,
+				Name = column,
+				AllowDrop = true,
+				ReadOnly = true,
+				DataBindings = {
+					new Binding("Text", bsFormRules, column, true),
+				},
+
+				Width = inputWidth,
+				Location = new Point(x, y)
+			};
+			input.DragDrop += txtBoxCode_DragDrop;
+			input.DragEnter += txtBoxCode_DragEnter;
+			input.DoubleClick += txtBoxCode_DoubleClick;
+			return input;
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
@@ -775,8 +837,7 @@ order by CFRCostName";
 			if (showOnlyEnabled)
 				sqlPart += @"and (datediff(curdate(), date(pim.pricedate)) < 200)";
 
-			var fields = Fields.Additional();
-			var sql = Fields.Columnds(fields).Implode();
+			var sql = Fields.Columnds().Implode(f => String.Format("PFR.{0} as FR{0}", f));
 
 			command.CommandText = String.Format(@"
 SELECT
@@ -939,12 +1000,11 @@ where
 		{
 			ClearPrice();
 			Application.DoEvents();
-			DataRow[] drFR;
 			// Выбираем правила для текущего priceItemId
-			drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
-			DataRow drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
+			var drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName]);
+			var drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
 			frmCaption = String.Format("{0}; {1}", drC["CShortName"], drC["CRegion"]);
-			string shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
+			var shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
 			fmt = _priceFileFormatHelper.NewFormat;
 			//Делаем фильтрацию по форматам прайс-листа
 			var cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);			
@@ -1029,7 +1089,7 @@ order by PriceName
 				try
 				{
 					fileExist = true;
-					string filePath = EndPath + Convert.ToString(currentPriceItemId) + Path.DirectorySeparatorChar + takeFile;
+					var filePath = EndPath + Convert.ToString(currentPriceItemId) + Path.DirectorySeparatorChar + takeFile;
 
 					if (!_isFormatChanged)
 					{
@@ -1039,7 +1099,7 @@ order by PriceName
 					}
 					Application.DoEvents();
 					_currentFilename = filePath;
-					_dataTableMarking.Fill(drFR[0], dtCostsFormRules.Select("CFRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString()));
+					_dataTableMarking.Fill(drFR[0], dtCostsFormRules.Select("CFRPriceItemId = " + drP[PPriceItemId.ColumnName]));
 					var tables = PriceFileHelper.OpenPriceFile(filePath, fmt, delimiter, _dataTableMarking);
 					if (tables == null)
 					{
@@ -1058,11 +1118,11 @@ order by PriceName
 					Application.DoEvents();
 					ShowTab(fmt);
 					Application.DoEvents();
-					this.Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
+					Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
 					Application.DoEvents();
 
 				}
-				catch (RemotePriceProcessor.PriceProcessorException priceProcessorException)
+				catch (PriceProcessorException priceProcessorException)
 				{
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
@@ -1092,12 +1152,20 @@ order by PriceName
 					}
 				}
 #else
-				return true;
+				var dataDir = @"..\..\..\..\FREditor.Test\Data\prices";
+				var extention = Path.GetExtension(filePath);
+				var files = Directory.GetFiles(dataDir, "*" + extention);
+				if (files.Length > 0)
+				{
+					File.Copy(files[0], filePath, true);
+					return true;
+				}
+				return false;
 #endif
 			}
 			catch (Exception ex)
 			{
-				Mailer.SendErrorMessageToService("Ошибка при попытке получить файл из Base", ex);
+				_logger.Error("Ошибка при попытке получить файл из Base", ex);
 				return false;
 			}
 		}
@@ -1681,11 +1749,11 @@ order by PriceName
 					return;
 				var priceCode = Convert.ToInt64(((DataRowView) bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
 				var firmCode = GetFirmCodeByPriceCode(priceCode);
-				System.Diagnostics.Process.Start(String.Format("mailto:{0}", GetContactText(firmCode, 2, 0)));
+				Process.Start(String.Format("mailto:{0}", GetContactText(firmCode, 2, 0)));
 			}
 			catch (Exception ex)
 			{
-				Mailer.SendErrorMessageToService("Ошибка при попытке создать письмо ответственному за прайс лист из вкладки 'Прайс'", ex);
+				_logger.Error("Ошибка при попытке создать письмо ответственному за прайс лист из вкладки 'Прайс'", ex);
 			}
 		}
 
@@ -2263,7 +2331,7 @@ and fr.Id = pim.FormRuleId;
 							daPrice.TableMappings.Add("Table", dtPrices.TableName);
 
 							//Формируем тело письма с изменениями в колонках
-							StringBuilder body = new StringBuilder();
+							var body = new StringBuilder();
 							string _priceName = "";
 							foreach (DataRow changeRow in chg.Tables[dtPrices.TableName].Rows)
 							{
@@ -2282,9 +2350,9 @@ and fr.Id = pim.FormRuleId;
 								//Получаем информацию о поставщике, регионе и прайс-листе
 								if (indgvFirm.CurrentRow != null)
 								{
-									DataRowView firm = (DataRowView) indgvFirm.CurrentRow.DataBoundItem;
-									string _firmName = firm[CShortName.ColumnName].ToString();
-									string _regionName = firm[CRegion.ColumnName].ToString();
+									var firm = (DataRowView) indgvFirm.CurrentRow.DataBoundItem;
+									var _firmName = firm[CShortName.ColumnName].ToString();
+									var _regionName = firm[CRegion.ColumnName].ToString();
 									Mailer.SendNotificationLetter(connection, body.ToString(), _priceName, _firmName, _regionName);
 								}
 							}
@@ -3511,8 +3579,8 @@ order by PriceName
 			}
 			catch (Exception ex)
 			{
+				_logger.Error("Ошибка при попытке создать письмо ответственному за прайс-лист из вкладки 'Фирмы'", ex);
 				MessageBox.Show("Ошибка при попытке создать письмо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				Mailer.SendErrorMessageToService("Ошибка при попытке создать письмо ответственному за прайс-лист из вкладки 'Фирмы'", ex);
 			}
 		}
 
@@ -3530,7 +3598,7 @@ order by PriceName
 			}
 			catch (Exception ex)
 			{
-				Mailer.SendErrorMessageToService("Ошибка при попытке получить FirmCode по коду прайса", ex);
+				_logger.Error("Ошибка при попытке получить FirmCode по коду прайса", ex);
 				return -1;
 			}
 			finally

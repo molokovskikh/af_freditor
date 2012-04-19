@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using log4net;
 
 namespace FREditor
 {
@@ -61,6 +62,8 @@ namespace FREditor
 
 		private int iterCount;
 		private bool matching;
+
+		private ILog _logger = LogManager.GetLogger(typeof(SynonymMatcher));
 
 		public Dictionary<uint, FirmSummary> Firms
 		{
@@ -141,7 +144,7 @@ namespace FREditor
 			}
 			catch (Exception ex)
 			{
-				Mailer.SendErrorMessageToService("Ошибка при остановке задачи сопоставления", ex);
+				_logger.Error("Ошибка при остановке задачи сопоставления", ex);
 			}
 		}
 
@@ -153,7 +156,7 @@ namespace FREditor
 			}
 			catch(Exception ex)
 			{
-				Mailer.SendErrorMessageToService("Ошибка при добавлении индексов", ex);
+				_logger.Error("Ошибка при добавлении индексов", ex);
 			}
 		}
 		

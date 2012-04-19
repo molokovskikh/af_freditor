@@ -21,6 +21,8 @@ namespace FREditor
 			XmlConfigurator.Configure();
 			Application.ThreadException += OnThreadException;
 			Application.ApplicationExit += ApplicationExit;
+			GlobalContext.Properties["GlobalContext"] = Application.ProductVersion;
+
 
 			//Эти две строчки есть в StatViewer'е, возможно, из-за одной из них не работает "корректное" отображение 
 			//значений столбца "Сегмент" в фильтрах компонентов DevExpress

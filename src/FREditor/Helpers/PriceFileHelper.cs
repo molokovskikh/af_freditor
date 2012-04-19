@@ -12,6 +12,7 @@ using Inforoom.WinForms;
 using System.Threading;
 using ExcelLibrary.BinaryFileFormat;
 using ExcelLibrary.SpreadSheet;
+using log4net;
 
 namespace FREditor.Helpers
 {	
@@ -60,6 +61,8 @@ namespace FREditor.Helpers
 
 	public static class PriceFileHelper
 	{
+		public static ILog _logger = LogManager.GetLogger(typeof(PriceFileHelper));
+
 		public static List<DataTable> AsyncOpenPriceFile(string filePath, PriceFormat? priceFormat, string delimiter, DataTableMarking dataTableMarking)
 		{
 			var openPriceThread = new OpenPriceFileThread(filePath, priceFormat, delimiter, dataTableMarking);
@@ -99,8 +102,8 @@ namespace FREditor.Helpers
 			}
 			catch (Exception ex)
 			{
-				Mailer.SendErrorMessageToService(String.Format(
-					"Ошибка при открытии файла\nЛокальный путь:{0}\nФормат:{1}\nРазделитель:{2}", filePath, priceFormat, delimiter), ex);
+				var error = String.Format("Ошибка при открытии файла\nЛокальный путь:{0}\nФормат:{1}\nРазделитель:{2}", filePath, priceFormat, delimiter);
+				_logger.Error(error, ex);
 				return null;
 			}
 		}

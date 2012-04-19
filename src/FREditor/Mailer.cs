@@ -89,22 +89,5 @@ WHERE
 				Program.SendMessageOnException(null, new Exception("Ошибка при отправке уведомления.", ex));
 			}
 		}
-
-		public static void SendErrorMessageToService(string messageBody, Exception exception)
-		{
-			try
-			{
-				messageBody = String.Format("{0}\nВерсия программы: {1}\nКомпьютер: {2}\nОператор: {3}\nОшибка: {4}",
-					messageBody, Application.ProductVersion, Environment.MachineName, Environment.UserName, exception.ToString());
-				var mailMessage = new MailMessage(EmailService, EmailService, "Ошибка в FREditor", messageBody);
-				var smtpClient = new SmtpClient(SmtpServerName);
-				smtpClient.Send(mailMessage);
-			}
-			catch (Exception)
-			{
-				MessageBox.Show(@"Не удалось отправить разработчику сообщение об ошибке. Свяжитесь с разработчиком",
-					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
 	}
 }
