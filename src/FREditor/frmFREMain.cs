@@ -952,6 +952,7 @@ SELECT
 	PFR.FOrderCost as FRFOrderCost,
 	PFR.FMinOrderCount as FRFMinOrderCount,
 	PFR.FProducerCost as FRFProducerCost,
+	PFR.FNds as FRFNds,
 	{0}
 FROM 
   UserSettings.PricesData AS PD
