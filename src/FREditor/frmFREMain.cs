@@ -1141,7 +1141,7 @@ order by PriceName
 					{
 						using (var fileStream = File.Create(filePath))
 						{
-							CopyStreams(openFile, fileStream);
+							openFile.CopyTo(fileStream);
 							return true;
 						}
 					}
