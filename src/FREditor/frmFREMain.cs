@@ -2399,10 +2399,7 @@ and fr.Id = pim.FormRuleId;
 					}
 					catch (Exception ex)
 					{
-#if !DEBUG
-						Mailer.SendErrorMessageToService(
-							"Ошибка при применении изменений после смены формата файла (или разделителя). Невозможно положить файл в Inbound", ex);
-#endif
+						_logger.Error("Ошибка при применении изменений после смены формата файла (или разделителя). Невозможно положить файл в Inbound", ex);
 					}
 				}
 				else
@@ -3290,11 +3287,9 @@ order by PriceName
 				}
 				catch (Exception ex)
 				{
+					_logger.Error("Ошибка при попытке положить файл в Base", ex);
 					MessageBox.Show("Не удалось положить файл в Base. Сообщение об ошибке отправлено разработчику",
 									"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#if !DEBUG
-					Mailer.SendErrorMessageToService("Ошибка при попытке положить файл в Base", ex);
-#endif
 				}
 			}
 		}

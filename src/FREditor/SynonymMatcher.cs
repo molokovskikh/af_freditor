@@ -125,13 +125,11 @@ namespace FREditor
 			}
 			catch (Exception ex)
 			{
+				_logger.Error("Ошибка при старте сопоставления", ex);
 				iterCount = 0;
 				timer.Stop();
 				MessageBox.Show("Не удалось произвести сопоставление синонимов. Сообщение об ошибке отправлено разработчику",
 					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#if !DEBUG
-				Mailer.SendErrorMessageToService("Ошибка при старте сопоставления", ex);
-#endif
 			}
 			return ret;
 		}
@@ -225,18 +223,15 @@ namespace FREditor
 					iterCount = 0;
 					timer.Stop();
 					CloseProgressBar();
-					return;
 				}
 			}
 			catch (Exception ex)
 			{
+				_logger.Error("Ошибка при сопоставлении", ex);
 				timer.Stop();
 				CloseProgressBar();
 				MessageBox.Show("Ошибка в процессе сопоставления синонимов. Сообщение об ошибке отправлено разработчику",
 					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-#if !DEBUG
-				Mailer.SendErrorMessageToService("Ошибка при сопоставлении", ex);
-#endif
 			}
 		}
 
@@ -266,10 +261,10 @@ namespace FREditor
 		}
 
 		public void CreateSynonyms(uint firmcode)
-		{        	
+		{
 			if (firmcode != 0)
 			{
-				IList<SynonymInfo> infoList = firms[firmcode].Summary();
+				var infoList = firms[firmcode].Summary();
 				connection.Open();
 				try
 				{
@@ -285,15 +280,13 @@ namespace FREditor
 								new MySqlParameter("?Synonym", firmInfo.Synonym),
 								new MySqlParameter("?ProductId", firmInfo.ProductId),
 								new MySqlParameter("?Junk", Convert.ToUInt32(firmInfo.Junk)));
-							int lastId = Convert.ToInt32(MySqlHelper.ExecuteScalar(connection, "select last_insert_id();"));
+							var lastId = Convert.ToInt32(MySqlHelper.ExecuteScalar(connection, "select last_insert_id();"));
 							ids.Add(lastId);
 						}
 						catch (MySqlException ex)
 						{
-							if (ex.Number == 1062) continue;
-#if !DEBUG
-					Mailer.SendErrorMessageToService("Ошибка при создании синонимов", ex);
-#endif
+							if (ex.Number == 1062)
+								continue;
 							throw;
 						}
 					}
