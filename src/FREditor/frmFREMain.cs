@@ -2839,7 +2839,8 @@ and fr.Id = pim.FormRuleId;
 		private void PrepareCreateNewPriceCollumn()
 		{
 			var item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
-			var cost_type = (int)item[PCostType.ColumnName];
+			var cost_type = 0;
+			Int32.TryParse(item[PCostType.ColumnName].ToString(), out cost_type);
 			if (cost_type == 0)
 				createNewPriceCollumn.Enabled = true;
 			else
@@ -3693,7 +3694,8 @@ order by PriceName
 		private void indgvFirm_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
 			var item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
-			var cost_type = (int)item[PCostType.ColumnName];
+			var cost_type = 0;
+			Int32.TryParse(item[PCostType.ColumnName].ToString(), out cost_type);
 			if (cost_type > 0)
 				createCostCollumnInManyFilesPrice.Enabled = true;
 			else
