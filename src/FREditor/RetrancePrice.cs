@@ -24,7 +24,7 @@ namespace FREditor
 				var selectedPrice = ((DataRowView) indgvPrice.CurrentRow.DataBoundItem).Row;
 				try
 				{
-					if (!_priceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId])))
+					if (!_priceProcessor.RetransPrice(Convert.ToUInt32(selectedPrice[PPriceItemId]), true))
 					{
 						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка",
 										MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -371,7 +371,7 @@ where
 
 			dtSet.Tables.Add(_dataTableMarking);
 
-			_priceProcessor = new PriceProcessorWcfHelper(Settings.Default.WCFServiceUrl);
+			_priceProcessor = new PriceProcessorWcfHelper(Settings.Default.WCFServiceUrl, Settings.Default.WCFQueueName);
 
 			matcher = new SynonymMatcher(this);
 
