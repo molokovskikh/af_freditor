@@ -98,6 +98,8 @@ namespace FREditor.Helpers
 					tables.Add(OpenTextFixedFile(filePath, priceFormat, dataTableMarking));
 					return tables;
 				}
+				if(priceFormat.Value == PriceFormat.UniversalFormalizer)
+					return new List<DataTable>();
 				throw new Exception(String.Format("Неизвестный формат {0}", priceFormat));
 			}
 			catch (Exception ex)

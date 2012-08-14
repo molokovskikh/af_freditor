@@ -15,6 +15,7 @@
 		NativeDelimWIN,
 		NativeDelimDOS,
 		NativeFixedWIN,
-		NativeFixedDOS
+		NativeFixedDOS,
+		UniversalFormalizer = 16
 	}
 }
