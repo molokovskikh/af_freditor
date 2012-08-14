@@ -3693,13 +3693,15 @@ order by PriceName
 
 		private void indgvFirm_CellClick(object sender, DataGridViewCellEventArgs e)
 		{
-			var item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
-			var cost_type = 0;
-			Int32.TryParse(item[PCostType.ColumnName].ToString(), out cost_type);
-			if (cost_type > 0)
-				createCostCollumnInManyFilesPrice.Enabled = true;
-			else
-				createCostCollumnInManyFilesPrice.Enabled = false;
+			if (indgvPrice.CurrentRow != null) {
+				var item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
+				var cost_type = 0;
+				Int32.TryParse(item[PCostType.ColumnName].ToString(), out cost_type);
+				if (cost_type > 0)
+					createCostCollumnInManyFilesPrice.Enabled = true;
+				else
+					createCostCollumnInManyFilesPrice.Enabled = false;
+			}
 		}
 	}
 
