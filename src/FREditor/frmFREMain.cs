@@ -3310,7 +3310,7 @@ order by PriceName
 			_inactivityTime += tmrSearchInPrice.Interval;
 			if (_inactivityTime > 2000)
 			{
-				tmrSearchInPrice.Enabled = false;			
+				tmrSearchInPrice.Enabled = false;
 			}
 		}
 
@@ -3318,42 +3318,38 @@ order by PriceName
 		{
 			if (grid == null)
 				grid = indgvPriceData;
-			// Сначала ищем по заголовкам столбцов
-			foreach (DataGridViewColumn column in grid.Columns)
-			{
-				if (column.HeaderText.ToUpper().Contains(text.ToUpper()))
-				{
-					var rowIndex = grid.CurrentRow.Index;
-					grid.CurrentCell = grid.Rows[rowIndex].Cells[column.Index];
-					return true;
+			if (grid.CurrentRow != null) {
+				// Сначала ищем по заголовкам столбцов
+				foreach (DataGridViewColumn column in grid.Columns) {
+					if (column.HeaderText.ToUpper().Contains(text.ToUpper())) {
+						var rowIndex = grid.CurrentRow.Index;
+						grid.CurrentCell = grid.Rows[rowIndex].Cells[column.Index];
+						return true;
+					}
 				}
-			}
-			// Потом ищем по ячейкам. Сначала по тем, которые ниже текущей
-			var indexColumn = moveToNextResult ? (grid.CurrentCell.ColumnIndex + 1) : 0;
-			var indexRow = enterPressed ? (grid.CurrentRow.Index - 1) : grid.CurrentRow.Index;
-			for (var i = indexRow; i < grid.Rows.Count; i++)
-			{
-				for (var j = indexColumn; j < grid.Columns.Count; j++)
-				{
-					var cell = grid.Rows[i].Cells[j];
-					if (cell.Value != null)
-						if (cell.Value.ToString().ToUpper().Contains(text.ToUpper()))
-						{
-							grid.CurrentCell = grid.Rows[i].Cells[cell.ColumnIndex];
-							return true;
-						}
+				// Потом ищем по ячейкам. Сначала по тем, которые ниже текущей
+				var indexColumn = moveToNextResult ? (grid.CurrentCell.ColumnIndex + 1) : 0;
+				var indexRow = enterPressed ? (grid.CurrentRow.Index - 1) : grid.CurrentRow.Index;
+				for (var i = indexRow; i < grid.Rows.Count; i++) {
+					for (var j = indexColumn; j < grid.Columns.Count; j++) {
+						var cell = grid.Rows[i].Cells[j];
+						if (cell.Value != null)
+							if (cell.Value.ToString().ToUpper().Contains(text.ToUpper())) {
+								grid.CurrentCell = grid.Rows[i].Cells[cell.ColumnIndex];
+								return true;
+							}
+					}
+					indexColumn = 0;
 				}
-				indexColumn = 0;
+				// Затем сначала и до текущей строки 
+				for (var i = 0; i < grid.CurrentRow.Index; i++)
+					foreach (DataGridViewCell cell in grid.Rows[i].Cells)
+						if (cell.Value != null)
+							if (cell.Value.ToString().ToUpper().Contains(text.ToUpper())) {
+								grid.CurrentCell = grid.Rows[i].Cells[cell.ColumnIndex];
+								return true;
+							}
 			}
-			// Затем сначала и до текущей строки 
-			for (var i = 0; i < grid.CurrentRow.Index; i++)
-				foreach (DataGridViewCell cell in grid.Rows[i].Cells)
-					if (cell.Value != null)
-						if (cell.Value.ToString().ToUpper().Contains(text.ToUpper()))
-						{
-							grid.CurrentCell = grid.Rows[i].Cells[cell.ColumnIndex];
-							return true;
-						}
 			return false;
 		}
 
