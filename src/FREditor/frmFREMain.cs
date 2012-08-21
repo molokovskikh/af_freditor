@@ -3314,7 +3314,7 @@ order by PriceName
 			}
 		}
 
-		private bool SearchTextInGridView(string text, DataGridView grid, bool moveToNextResult, bool enterPressed)
+		public bool SearchTextInGridView(string text, DataGridView grid, bool moveToNextResult, bool enterPressed)
 		{
 			if (grid == null)
 				grid = indgvPriceData;
