@@ -1407,7 +1407,6 @@ namespace FREditor
 			this.indgvFirm.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
 			this.indgvFirm.Size = new System.Drawing.Size(1317, 389);
 			this.indgvFirm.TabIndex = 2;
-			this.indgvFirm.SelectionChanged += new System.EventHandler(this.CurrentPriceChanged);
 			this.indgvFirm.DoubleClick += new System.EventHandler(this.indgvFirm_DoubleClick);
 			this.indgvFirm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvFirm_KeyDown);
 			this.indgvFirm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvFirm_KeyPress);
