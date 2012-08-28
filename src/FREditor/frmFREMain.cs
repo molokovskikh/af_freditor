@@ -413,6 +413,8 @@ where
 				controls.Add(BuildInput(x, y, inputWidth, field.Item1, column));
 				y += lineHeight;
 			}
+
+			BindingContext[indgvPrice.DataSource, indgvPrice.DataMember].CurrentChanged += CurrentPriceChanged;
 		}
 
 		private TextBox BuildInput(int x, int y, int inputWidth, string field, string column)
@@ -435,7 +437,7 @@ where
 			return input;
 		}
 
-		private void Form1_Load(object sender, EventArgs e)
+		public void Form1_Load(object sender, EventArgs e)
 		{
 			connection.Open();
 
@@ -2726,7 +2728,7 @@ and fr.Id = pim.FormRuleId;
 			}
 		}
 
-		private void tmrSearch_Tick(object sender, EventArgs e)
+		public void tmrSearch_Tick(object sender, EventArgs e)
 		{
 			InSearch = true;
 			try
@@ -3687,10 +3689,11 @@ order by PriceName
 			}
 		}
 
-		private void indgvFirm_CellClick(object sender, DataGridViewCellEventArgs e)
+		private void CurrentPriceChanged(object sender, EventArgs eventArgs)
 		{
-			if (indgvPrice.CurrentRow != null) {
-				var item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
+			var binding = BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+			if (binding.Position >= 0) {
+				var item = (DataRowView)binding.Current;
 				var cost_type = 0;
 				Int32.TryParse(item[PCostType.ColumnName].ToString(), out cost_type);
 				if (cost_type > 0)
