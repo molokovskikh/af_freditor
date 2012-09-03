@@ -3667,7 +3667,7 @@ order by PriceName
 				smtp.Send(message);
 			});
 
-			collumnCreator.CreateCost(priceCode, connection, "FREditor");
+			collumnCreator.CreateCost(priceCode, "FREditor");
 
 			RefreshDataBind();
 		}
