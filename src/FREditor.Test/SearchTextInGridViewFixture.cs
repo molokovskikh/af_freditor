@@ -29,7 +29,7 @@ namespace FREditor.Test
 		public void SearchTextInGridView()
 		{
 			Assert.IsNull(grid.CurrentRow);
-			Assert.DoesNotThrow(() => form.SearchTextInGridView(text, grid, false, false));
+			form.SearchTextInGridView(text, grid, false, false);
 		}
 	}
 }
