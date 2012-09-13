@@ -787,7 +787,7 @@ order by PCCostName";
 				throw new CustomConstraintException(message, ex);
 			}
 		}
-		
+
 		private void dtCostsFormRulesFill(string param, bool showOnlyEnabled)
 		{
 			string sqlPart = String.Empty;
@@ -809,7 +809,8 @@ select
   cfr.FieldName AS CFRFieldName,
   cfr.TxtBegin as CFRTextBegin,
   cfr.TxtEnd as CFRTextEnd,
-  pc.BaseCost as CFRBaseCost
+  pc.BaseCost as CFRBaseCost,
+  exists (select * from usersettings.PricesRegionalData prd where prd.BaseCost = cfr.CostCode) as CFRRegionBaseCost
 FROM 
   farm.costformrules cfr
   inner join usersettings.pricescosts pc on (pc.CostCode = cfr.costcode) 
@@ -3110,7 +3111,10 @@ order by PriceName
 
 		private void indgvCosts_KeyDown(object sender, KeyEventArgs e)
 		{
-			if ((e.KeyCode == Keys.Delete) && bsCostsFormRules.AllowNew && !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName])
+			if ((e.KeyCode == Keys.Delete)
+				&& bsCostsFormRules.AllowNew
+				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName]
+				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRRegionBaseCost.ColumnName])
 			{
 				if (((DataRowView)bsCostsFormRules.Current).Row.RowState == DataRowState.Added)
 					((DataRowView)bsCostsFormRules.Current).Delete();
@@ -3145,7 +3149,7 @@ order by PriceName
 
 					if (drv != null)
 					{
-						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && (bool)drv[CFRBaseCost.ColumnName])
+						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && ((bool)drv[CFRBaseCost.ColumnName] || (bool)drv[CFRRegionBaseCost.ColumnName]))
 							e.CellStyle.BackColor = btnBaseCostColor.BackColor;
 
 						if (drv.Row.RowState == DataRowState.Added)

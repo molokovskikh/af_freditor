@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Common.MySql;
 using log4net;
 using System.Windows.Forms;
 using System.Threading;
@@ -19,6 +20,8 @@ namespace FREditor
 		static void Main()
 		{
 			XmlConfigurator.Configure();
+			ConnectionHelper.DefaultConnectionStringName = "Main";
+			With.DefaultConnectionStringName = ConnectionHelper.GetConnectionName();
 			Application.ThreadException += OnThreadException;
 			Application.ApplicationExit += ApplicationExit;
 			GlobalContext.Properties["GlobalContext"] = Application.ProductVersion;
