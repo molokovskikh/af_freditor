@@ -1386,10 +1386,12 @@ order by PriceName
 			if (tcInnerSheets.SelectedTab == tbpSheet1)
 			{
 				indgvPriceData.DataSource = dtPrice;
+				_searchGrid = indgvPriceData;
 			}
 			else
 			{
 				((INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]).DataSource = ((DataTable)dtables[tcInnerSheets.SelectedIndex - 1]);
+				_searchGrid = (INDataGridView)gds[tcInnerSheets.SelectedIndex - 1];
 			}
 		}
 
@@ -3377,7 +3379,7 @@ order by PriceName
 			{
 				if (!String.IsNullOrEmpty(tbSearchInPrice.Text))
 				{
-					if (SearchTextInGridView(tbSearchInPrice.Text, indgvPriceData, true, true))
+					if (SearchTextInGridView(tbSearchInPrice.Text, _searchGrid, true, true))
 						tbSearchInPrice.BackColor = Color.Green;
 					else
 						tbSearchInPrice.BackColor = Color.Red;
@@ -3395,6 +3397,8 @@ order by PriceName
 
 		private void tbSearchInPrice_TextChanged(object sender, EventArgs e)
 		{
+			if(_searchGrid == null)
+				_searchGrid = indgvPriceData;
 			if (tbSearchInPrice.Text.Length > 0)
 			{
 				tbSearchInPrice.ForeColor = Color.White;
@@ -3536,7 +3540,9 @@ order by PriceName
 		{
 			if (!String.IsNullOrEmpty(tbSearchInPrice.Text))
 			{
-				if (SearchTextInGridView(tbSearchInPrice.Text, indgvPriceData, true, false))
+				if(_searchGrid == null)
+					_searchGrid = indgvPriceData;
+				if (SearchTextInGridView(tbSearchInPrice.Text, _searchGrid, true, false))
 					tbSearchInPrice.BackColor = Color.Green;
 				else
 					tbSearchInPrice.BackColor = Color.Red;
