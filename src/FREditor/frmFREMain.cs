@@ -32,12 +32,37 @@ namespace FREditor
 
 	public partial class frmFREMain : Form
 	{
+		/// <summary>
+		/// для тестов
+		/// </summary>
+		public TabControl TCInnerSheets { get { return tcInnerSheets; }
+		set { tcInnerSheets = value; }}
+
+		/// <summary>
+		/// для тестов
+		/// </summary>
+		public DataGridView SearchGrid
+		{
+			get { return _searchGrid; }
+		}
+
+		/// <summary>
+		/// для тестов
+		/// </summary>
+		public ArrayList GDS
+		{
+			get { return gds; }
+			set { gds = value; }
+		}
+
+
+
 		private bool _isFormatChanged;
 
 		private ILog _logger = LogManager.GetLogger(typeof(frmFREMain));
 
 		ArrayList gds = new ArrayList();
-		List<DataTable> dtables = new List<DataTable>();
+		public List<DataTable> dtables = new List<DataTable>();
 		ArrayList tblstyles = new ArrayList();
 		DataTable dtPrice = new DataTable();
 		
@@ -1381,7 +1406,7 @@ order by PriceName
 			return ansi.GetString(ansiBytes);
 		}
 
-		private void tcInnerSheets_SelectedIndexChanged(object sender, System.EventArgs e)
+		public void tcInnerSheets_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
 			if (tcInnerSheets.SelectedTab == tbpSheet1)
 			{
