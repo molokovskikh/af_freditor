@@ -54,24 +54,24 @@ namespace FREditor
 			this.lblWait = new System.Windows.Forms.Label();
 			this.tmrWait = new System.Windows.Forms.Timer(this.components);
 			this.SuspendLayout();
-			// 
+			//
 			// lblWait
-			// 
+			//
 			this.lblWait.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.lblWait.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(204)));
 			this.lblWait.Location = new System.Drawing.Point(0, 0);
 			this.lblWait.Name = "lblWait";
 			this.lblWait.Size = new System.Drawing.Size(442, 130);
 			this.lblWait.TabIndex = 0;
-			this.lblWait.Text = "Пожалуйста, подождите...";
+			this.lblWait.Text = "РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РїРѕРґРѕР¶РґРёС‚Рµ...";
 			this.lblWait.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
+			//
 			// tmrWait
-			// 
+			//
 			this.tmrWait.Tick += new System.EventHandler(this.tmrWait_Tick);
-			// 
+			//
 			// frmWait
-			// 
+			//
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(442, 130);
 			this.ControlBox = false;
@@ -95,8 +95,8 @@ namespace FREditor
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show("Не удалось открыть прайс-лист. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					Program.SendMessageOnException(null, new Exception("Ошибка при открытии прайс-листа.", ex));
+					MessageBox.Show("РќРµ СѓРґР°Р»РѕСЃСЊ РѕС‚РєСЂС‹С‚СЊ РїСЂР°Р№СЃ-Р»РёСЃС‚. РЎРѕРѕР±С‰РµРЅРёРµ Р±С‹Р»Рѕ РѕС‚РїСЂР°РІР»РµРЅРѕ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєСѓ.", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					Program.SendMessageOnException(null, new Exception("РћС€РёР±РєР° РїСЂРё РѕС‚РєСЂС‹С‚РёРё РїСЂР°Р№СЃ-Р»РёСЃС‚Р°.", ex));
 				}
 				finally
 				{

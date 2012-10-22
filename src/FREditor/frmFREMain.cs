@@ -33,13 +33,13 @@ namespace FREditor
 	public partial class frmFREMain : Form
 	{
 		/// <summary>
-		/// для тестов
+		/// РґР»СЏ С‚РµСЃС‚РѕРІ
 		/// </summary>
 		public TabControl TCInnerSheets { get { return tcInnerSheets; }
 		set { tcInnerSheets = value; }}
 
 		/// <summary>
-		/// для тестов
+		/// РґР»СЏ С‚РµСЃС‚РѕРІ
 		/// </summary>
 		public DataGridView SearchGrid
 		{
@@ -47,7 +47,7 @@ namespace FREditor
 		}
 
 		/// <summary>
-		/// для тестов
+		/// РґР»СЏ С‚РµСЃС‚РѕРІ
 		/// </summary>
 		public ArrayList GDS
 		{
@@ -65,7 +65,7 @@ namespace FREditor
 		public List<DataTable> dtables = new List<DataTable>();
 		ArrayList tblstyles = new ArrayList();
 		DataTable dtPrice = new DataTable();
-		
+
 		private MySqlConnection connection = new MySqlConnection(Literals.ConnectionString());
 
 		private MySqlCommand command = new MySqlCommand();
@@ -79,7 +79,7 @@ namespace FREditor
 		string delimiter = String.Empty;
 		PriceFormat? fmt;
 
-		//Текущий клиент, с которым происходит работа и текущий прайс
+		//РўРµРєСѓС‰РёР№ РєР»РёРµРЅС‚, СЃ РєРѕС‚РѕСЂС‹Рј РїСЂРѕРёСЃС…РѕРґРёС‚ СЂР°Р±РѕС‚Р° Рё С‚РµРєСѓС‰РёР№ РїСЂР°Р№СЃ
 		long currentPriceItemId;
 		long currentClientCode;
 
@@ -105,28 +105,28 @@ namespace FREditor
 
 		public PriceProcessorWcfHelper _priceProcessor;
 
-		// Поле для хранения текста, который нужно найти 
-		// внутри колонок прайса (или среди заголовков колонок)
-		// (вкладка "Прайс")
+		// РџРѕР»Рµ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ С‚РµРєСЃС‚Р°, РєРѕС‚РѕСЂС‹Р№ РЅСѓР¶РЅРѕ РЅР°Р№С‚Рё
+		// РІРЅСѓС‚СЂРё РєРѕР»РѕРЅРѕРє РїСЂР°Р№СЃР° (РёР»Рё СЃСЂРµРґРё Р·Р°РіРѕР»РѕРІРєРѕРІ РєРѕР»РѕРЅРѕРє)
+		// (РІРєР»Р°РґРєР° "РџСЂР°Р№СЃ")
 		private string _searchTextInPrice = String.Empty;
 
-		// Поле для подсчета времени бездействия пользователя 
-		// при поиске внутри колонок прайс-листа
+		// РџРѕР»Рµ РґР»СЏ РїРѕРґСЃС‡РµС‚Р° РІСЂРµРјРµРЅРё Р±РµР·РґРµР№СЃС‚РІРёСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
+		// РїСЂРё РїРѕРёСЃРєРµ РІРЅСѓС‚СЂРё РєРѕР»РѕРЅРѕРє РїСЂР°Р№СЃ-Р»РёСЃС‚Р°
 		private int _inactivityTime;
 
 		private DataGridView _searchGrid;
 
-		// Флаг, который показывает, зарегистрирован ли обработчик 
-		// для cmbFormat (выпадающий список с форматами)
+		// Р¤Р»Р°Рі, РєРѕС‚РѕСЂС‹Р№ РїРѕРєР°Р·С‹РІР°РµС‚, Р·Р°СЂРµРіРёСЃС‚СЂРёСЂРѕРІР°РЅ Р»Рё РѕР±СЂР°Р±РѕС‚С‡РёРє
+		// РґР»СЏ cmbFormat (РІС‹РїР°РґР°СЋС‰РёР№ СЃРїРёСЃРѕРє СЃ С„РѕСЂРјР°С‚Р°РјРё)
 		private bool _isComboBoxFormatHandlerRegistered;
 
-		// Флаг показывает нужно выбирать только действующих поставщиков (true)
-		// или же всех подряд (false)
+		// Р¤Р»Р°Рі РїРѕРєР°Р·С‹РІР°РµС‚ РЅСѓР¶РЅРѕ РІС‹Р±РёСЂР°С‚СЊ С‚РѕР»СЊРєРѕ РґРµР№СЃС‚РІСѓСЋС‰РёС… РїРѕСЃС‚Р°РІС‰РёРєРѕРІ (true)
+		// РёР»Рё Р¶Рµ РІСЃРµС… РїРѕРґСЂСЏРґ (false)
 		private bool _showDisabledFirm = false;
 
 		private PriceFileFormatHelper _priceFileFormatHelper;
 
-		// Полный путь к текущему открытому файлу прайс-листа
+		// РџРѕР»РЅС‹Р№ РїСѓС‚СЊ Рє С‚РµРєСѓС‰РµРјСѓ РѕС‚РєСЂС‹С‚РѕРјСѓ С„Р°Р№Р»Сѓ РїСЂР°Р№СЃ-Р»РёСЃС‚Р°
 		private string _currentFilename;
 
 		private DataTableMarking _dataTableMarking = new DataTableMarking();
@@ -143,9 +143,9 @@ namespace FREditor
 			dtCostTypes = new DataTable("CostTypes");
 			dtCostTypes.Columns.Add("ID", typeof(int));
 			dtCostTypes.Columns.Add("Name", typeof(string));
-			dtCostTypes.Rows.Add(new object[] { DBNull.Value, "<не указан>" });
-			dtCostTypes.Rows.Add(new object[] { 0, "мультиколоночный" });
-			dtCostTypes.Rows.Add(new object[] { 1, "многофайловый" });
+			dtCostTypes.Rows.Add(new object[] { DBNull.Value, "<РЅРµ СѓРєР°Р·Р°РЅ>" });
+			dtCostTypes.Rows.Add(new object[] { 0, "РјСѓР»СЊС‚РёРєРѕР»РѕРЅРѕС‡РЅС‹Р№" });
+			dtCostTypes.Rows.Add(new object[] { 1, "РјРЅРѕРіРѕС„Р°Р№Р»РѕРІС‹Р№" });
 
 			pCostTypeDataGridViewComboBoxColumn.DataSource = dtCostTypes;
 			pCostTypeDataGridViewComboBoxColumn.DisplayMember = "Name";
@@ -154,9 +154,9 @@ namespace FREditor
 			dtPriceTypes = new DataTable("PriceTypes");
 			dtPriceTypes.Columns.Add("ID", typeof(int));
 			dtPriceTypes.Columns.Add("Name", typeof(string));
-			dtPriceTypes.Rows.Add(new object[] { DBNull.Value, "<не указан>" });
-			dtPriceTypes.Rows.Add(new object[] { 0, "обычный" });
-			dtPriceTypes.Rows.Add(new object[] { 1, "ассортиментный" });
+			dtPriceTypes.Rows.Add(new object[] { DBNull.Value, "<РЅРµ СѓРєР°Р·Р°РЅ>" });
+			dtPriceTypes.Rows.Add(new object[] { 0, "РѕР±С‹С‡РЅС‹Р№" });
+			dtPriceTypes.Rows.Add(new object[] { 1, "Р°СЃСЃРѕСЂС‚РёРјРµРЅС‚РЅС‹Р№" });
 			dtPriceTypes.Rows.Add(new object[] { 2, "vip" });
 
 			pPriceTypeDataGridViewComboBoxColumn.DataSource = dtPriceTypes;
@@ -282,7 +282,7 @@ SET
   FMaxBoundCost = ?FRFMaxBoundCost,
   FOrderCost = ?FRFOrderCost,
   FMinOrderCount = ?FRFMinOrderCount,
-  FProducerCost = ?FRFProducerCost,	
+  FProducerCost = ?FRFProducerCost,
   FNds = ?FRFNds,
 
   Memo = ?FRMemo,
@@ -424,7 +424,7 @@ where
 					TextAlign = ContentAlignment.MiddleRight,
 					Location = new Point(x, y)
 				});
-				
+
 				x += labelWidth + labelPadding;
 				var column = "FR" + Fields.BeginColumn(field.Item1);
 				controls.Add(BuildInput(x, y, inputWidth, field.Item1, column));
@@ -494,12 +494,12 @@ where
 			dtPriceFMTs.Clear();
 
 			command.CommandText = @"
-SELECT 
+SELECT
   id as FMTId,
   Format as FMTFormat,
   FileExtention  as FMTExt
-FROM 
-  farm.PriceFmts 
+FROM
+  farm.PriceFmts
 order by Format";
 
 			dataAdapter.Fill(dtPriceFMTs);
@@ -559,8 +559,8 @@ order by Format";
 			var showOnlyEnabled = !_showDisabledFirm;
 			if (showOnlyEnabled)
 			{
-				// Если галочка "Показывать недействующие" НЕ выделена
-				// тогда мы добавляем параметры для выборки только действующих
+				// Р•СЃР»Рё РіР°Р»РѕС‡РєР° "РџРѕРєР°Р·С‹РІР°С‚СЊ РЅРµРґРµР№СЃС‚РІСѓСЋС‰РёРµ" РќР• РІС‹РґРµР»РµРЅР°
+				// С‚РѕРіРґР° РјС‹ РґРѕР±Р°РІР»СЏРµРј РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ РІС‹Р±РѕСЂРєРё С‚РѕР»СЊРєРѕ РґРµР№СЃС‚РІСѓСЋС‰РёС…
 				command.Parameters.AddWithValue("?AgencyEnabled", 1);
 				command.Parameters.AddWithValue("?Enabled", 1);
 				command.Parameters.AddWithValue("?FirmStatus", 0);
@@ -604,8 +604,8 @@ order by Format";
 				bool showOnlyEnabled = !_showDisabledFirm;
 				if (showOnlyEnabled)
 				{
-					// Если галочка "Показывать недействующие" НЕ выделена
-					// тогда мы добавляем параметры для выборки только действующих
+					// Р•СЃР»Рё РіР°Р»РѕС‡РєР° "РџРѕРєР°Р·С‹РІР°С‚СЊ РЅРµРґРµР№СЃС‚РІСѓСЋС‰РёРµ" РќР• РІС‹РґРµР»РµРЅР°
+					// С‚РѕРіРґР° РјС‹ РґРѕР±Р°РІР»СЏРµРј РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ РІС‹Р±РѕСЂРєРё С‚РѕР»СЊРєРѕ РґРµР№СЃС‚РІСѓСЋС‰РёС…
 					command.Parameters.AddWithValue("?AgencyEnabled", 1);
 					command.Parameters.AddWithValue("?Enabled", 1);
 					command.Parameters.AddWithValue("?FirmStatus", 0);
@@ -619,7 +619,7 @@ order by Format";
 				dtCostsFormRulesFill(FilterParams, !_showDisabledFirm);
 			}
 		}
-		
+
 		private void dtClientsFill(string param, bool showOnlyEnabled)
 		{
 			if (showOnlyEnabled)
@@ -638,7 +638,7 @@ join usersettings.priceitems pi on pc.priceitemid = pi.id
 join Farm.Sources so on so.id = pi.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
 WHERE datediff(curdate(), date(pi.pricedate)) < 200 AND (PD.Enabled = 1)
-AND (PD.AgencyEnabled = 1) 
+AND (PD.AgencyEnabled = 1)
  ";
 			}
 			else
@@ -662,13 +662,13 @@ WHERE 1=1 ";
 			command.CommandText += " group by s.id ORDER BY s.Name";
 			dataAdapter.Fill(dtClients);
 		}
-		
+
 		private void dtPricesFill(string param, bool showOnlyEnabled)
 		{
 			var sqlPart = String.Empty;
 			if (showOnlyEnabled)
 				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) ";
-			// Выбираем прайс-листы с мультиколоночными ценами
+			// Р’С‹Р±РёСЂР°РµРј РїСЂР°Р№СЃ-Р»РёСЃС‚С‹ СЃ РјСѓР»СЊС‚РёРєРѕР»РѕРЅРѕС‡РЅС‹РјРё С†РµРЅР°РјРё
 
 			command.CommandText =
 @"
@@ -676,33 +676,33 @@ SELECT
   pd.FirmCode as PFirmCode,
   pim.Id as PPriceItemId,
   pd.PriceCode as PPriceCode,
-  if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName) as PPriceName,
+  if(pd.CostType = 1, concat(pd.PriceName, ' [РљРѕР»РѕРЅРєР°] ', pc.CostName), pd.PriceName) as PPriceName,
   pim.PriceDate as PPriceDate,
   pim.LastFormalization as PDateLastForm,
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
   pd.CostType as PCostType,
   pim.WaitingDownloadInterval as PWaitingDownloadInterval,
-  -- редактировать тип ценовой колонки и тип прайс-листа можно только относительно базовой ценовой колонки
+  -- СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ С‚РёРї С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё Рё С‚РёРї РїСЂР°Р№СЃ-Р»РёСЃС‚Р° РјРѕР¶РЅРѕ С‚РѕР»СЊРєРѕ РѕС‚РЅРѕСЃРёС‚РµР»СЊРЅРѕ Р±Р°Р·РѕРІРѕР№ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё
   if(pc.BaseCost = 1, 1, 0) PIsParent,
   pc.BaseCost as PBaseCost,
-  pc.CostCode as PCostCode	
+  pc.CostCode as PCostCode
 FROM
   usersettings.pricesdata pd
   inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
-  inner join usersettings.PriceItems pim on (pim.Id = pc.PriceItemId) 
+  inner join usersettings.PriceItems pim on (pim.Id = pc.PriceItemId)
 "
 + sqlPart +
-@"	
+@"
   inner join Customers.suppliers s on s.Id = pd.FirmCode
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
   inner join farm.regions r on r.regioncode=s.HomeRegion
 	join Farm.Sources so on so.id = pim.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
-where     
+where
  ((pd.CostType = 1) or (pc.BaseCost = 1)) ";
 			command.CommandText += param;
-			command.CommandText += @" 
+			command.CommandText += @"
 group by pim.Id
 order by PPriceName";
 			dataAdapter.Fill(dtPrices);
@@ -714,7 +714,7 @@ order by PPriceName";
 			dtRegions.Columns.Add("RegionCode", typeof(ulong));
 			dtRegions.Columns.Add("Region", typeof(string));
 			dtRegions.Clear();
-			dtRegions.Rows.Add(new object[] { 0, "Все" });
+			dtRegions.Rows.Add(new object[] { 0, "Р’СЃРµ" });
 			command.CommandText = @"
 SELECT
 	RegionCode,
@@ -738,7 +738,7 @@ Order By Region
 			dtSource.Columns.Add("Id", typeof(ulong));
 			dtSource.Columns.Add("Type", typeof(string));
 			dtSource.Clear();
-			dtSource.Rows.Add(new object[] { 0, "Все" });
+			dtSource.Rows.Add(new object[] { 0, "Р’СЃРµ" });
 			command.CommandText = @"
 SELECT
 	Id,
@@ -752,7 +752,7 @@ FROM
 		}
 
 
-		
+
 		private void dtPricesCostFill(string param, bool showOnlyEnabled)
 		{
 			string sqlPart = String.Empty;
@@ -783,10 +783,10 @@ from
   inner join Customers.suppliers s on s.Id = pd.firmcode
   inner join farm.regions r on r.regioncode=s.HomeRegion
 where
-	  (1=1) 
+	  (1=1)
 " + sqlPart;
 			command.CommandText += param;
-			command.CommandText += @"  
+			command.CommandText += @"
 order by PCCostName";
 			try
 			{
@@ -807,7 +807,7 @@ order by PCCostName";
 						sqlparam.ParameterName, sqlparam.Value);
 				}
 				string message = String.Format(@"
-Ошибка при применении изменений в правилах формализации. dtPricesCostFill(). Параметры SQL запроса: '{0}'. Ограничения: '{1}'",
+РћС€РёР±РєР° РїСЂРё РїСЂРёРјРµРЅРµРЅРёРё РёР·РјРµРЅРµРЅРёР№ РІ РїСЂР°РІРёР»Р°С… С„РѕСЂРјР°Р»РёР·Р°С†РёРё. dtPricesCostFill(). РџР°СЂР°РјРµС‚СЂС‹ SQL Р·Р°РїСЂРѕСЃР°: '{0}'. РћРіСЂР°РЅРёС‡РµРЅРёСЏ: '{1}'",
 					parameters, constraints);
 				throw new CustomConstraintException(message, ex);
 			}
@@ -820,9 +820,9 @@ order by PCCostName";
 				sqlPart +=
 @"
 	and pc.PriceItemId in (
-		SELECT Id 
-		FROM usersettings.PriceItems 
-		WHERE (datediff(curdate(), date(pricedate)) < 200))		
+		SELECT Id
+		FROM usersettings.PriceItems
+		WHERE (datediff(curdate(), date(pricedate)) < 200))
 ";
 
 			command.CommandText =
@@ -836,9 +836,9 @@ select
   cfr.TxtEnd as CFRTextEnd,
   pc.BaseCost as CFRBaseCost,
   exists (select * from usersettings.PricesRegionalData prd where prd.BaseCost = cfr.CostCode) as CFRRegionBaseCost
-FROM 
+FROM
   farm.costformrules cfr
-  inner join usersettings.pricescosts pc on (pc.CostCode = cfr.costcode) 
+  inner join usersettings.pricescosts pc on (pc.CostCode = cfr.costcode)
 "
 + sqlPart +
 @"
@@ -848,12 +848,12 @@ FROM
   inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
   inner join Customers.suppliers s on s.Id = pd.firmcode
   inner join farm.regions r on r.regioncode=s.HomeRegion
-where 
+where
   pd.CostType is not null
 ";
 
 			command.CommandText += param;
-			command.CommandText += @"   
+			command.CommandText += @"
 order by CFRCostName";
 
 			dataAdapter.Fill(dtCostsFormRules);
@@ -872,14 +872,14 @@ SELECT
 	fr.Id as FRFormID,
 
 	pim.Id As FRPriceItemId,
-	
+
 	pd.PriceCode as FRSelfPriceCode,
 	pd.ParentSynonym AS FRSynonyms,
 
 	PFR.PriceFormatId as FRPriceFormatId,
 
 	FR.Memo As FRMemo,
-	if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), PD.PriceName) AS FRName,
+	if(pd.CostType = 1, concat(pd.PriceName, ' [РљРѕР»РѕРЅРєР°] ', pc.CostName), PD.PriceName) AS FRName,
 	FR.JunkPos AS FRSelfJunkPos,
 	FR.AwaitPos AS FRSelfAwaitPos,
 	FR.VitallyImportantMask as FRSelfVitallyImportantMask,
@@ -982,15 +982,15 @@ SELECT
 	PFR.FProducerCost as FRFProducerCost,
 	PFR.FNds as FRFNds,
 	{0}
-FROM 
+FROM
   UserSettings.PricesData AS PD
   INNER JOIN Customers.suppliers s on s.Id = pd.FirmCode
   INNER JOIN farm.regions r on r.regioncode=s.HomeRegion
   inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode
-  inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId 
+  inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId
 "
 + sqlPart +
-@"	
+@"
 join Farm.Sources so on so.id = pim.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
   inner join Farm.formrules AS FR ON FR.Id = pim.FormRuleId
@@ -1024,19 +1024,19 @@ where
 
 		public delegate void OpenPriceDelegate(DataRow drP);
 
-		// Открывает прайс
+		// РћС‚РєСЂС‹РІР°РµС‚ РїСЂР°Р№СЃ
 		private void OpenPrice(DataRow drP)
 		{
 			ClearPrice();
 			Application.DoEvents();
-			// Выбираем правила для текущего priceItemId
+			// Р’С‹Р±РёСЂР°РµРј РїСЂР°РІРёР»Р° РґР»СЏ С‚РµРєСѓС‰РµРіРѕ priceItemId
 			var drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName]);
 			var drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
 			frmCaption = String.Format("{0}; {1}", drC["CShortName"], drC["CRegion"]);
 			var shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
 			fmt = _priceFileFormatHelper.NewFormat;
-			//Делаем фильтрацию по форматам прайс-листа
-			var cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);			
+			//Р”РµР»Р°РµРј С„РёР»СЊС‚СЂР°С†РёСЋ РїРѕ С„РѕСЂРјР°С‚Р°Рј РїСЂР°Р№СЃ-Р»РёСЃС‚Р°
+			var cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Р¤РѕСЂРјР°С‚С‹ РїСЂР°Р№СЃР°"]);
 			if ((cm != null) && (cm.List is DataView))
 				if (fmt.HasValue)
 				{
@@ -1044,31 +1044,31 @@ where
 					switch (fmt)
 					{
 						case PriceFormat.DBF:
-							//Запрещаем устаревшие текстовые форматы, NativeDBF и XLS
+							//Р—Р°РїСЂРµС‰Р°РµРј СѓСЃС‚Р°СЂРµРІС€РёРµ С‚РµРєСЃС‚РѕРІС‹Рµ С„РѕСЂРјР°С‚С‹, NativeDBF Рё XLS
 							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 6, 7, 8))";
 							break;
 
 						case PriceFormat.NativeXls:
-							//Запрещаем устаревшие текстовые форматы, DBF и XLS
+							//Р—Р°РїСЂРµС‰Р°РµРј СѓСЃС‚Р°СЂРµРІС€РёРµ С‚РµРєСЃС‚РѕРІС‹Рµ С„РѕСЂРјР°С‚С‹, DBF Рё XLS
 							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 4, 6, 7))";
 							break;
 
 						case PriceFormat.XLS:
-								//Запрещаем устаревшие текстовые форматы, DBF и NativeXls								
-								((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 10, 4, 6, 7))";								
+								//Р—Р°РїСЂРµС‰Р°РµРј СѓСЃС‚Р°СЂРµРІС€РёРµ С‚РµРєСЃС‚РѕРІС‹Рµ С„РѕСЂРјР°С‚С‹, DBF Рё NativeXls
+								((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 10, 4, 6, 7))";
 								break;
 
 						case PriceFormat.DelimDOS:
 						case PriceFormat.DelimWIN:
 						case PriceFormat.FixedWIN:
 						case PriceFormat.FixedDOS:
-							//Запрещаем новые текстовые форматы, DBF и XLS
+							//Р—Р°РїСЂРµС‰Р°РµРј РЅРѕРІС‹Рµ С‚РµРєСЃС‚РѕРІС‹Рµ С„РѕСЂРјР°С‚С‹, DBF Рё XLS
 							((DataView)cm.List).RowFilter = "not (FmtId in (3, 4, 11, 12, 13, 14))";
 							break;
 
 						default:
 							{
-								//Запрещаем устаревшие текстовые форматы, DBF и XLS
+								//Р—Р°РїСЂРµС‰Р°РµРј СѓСЃС‚Р°СЂРµРІС€РёРµ С‚РµРєСЃС‚РѕРІС‹Рµ С„РѕСЂРјР°С‚С‹, DBF Рё XLS
 								((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 4, 6, 7))";
 								break;
 							}
@@ -1078,7 +1078,7 @@ where
 				else
 				{
 					bsFormRules.SuspendBinding();
-					//Запрещаем устаревшие текстовые форматы, DBF и XLS
+					//Р—Р°РїСЂРµС‰Р°РµРј СѓСЃС‚Р°СЂРµРІС€РёРµ С‚РµРєСЃС‚РѕРІС‹Рµ С„РѕСЂРјР°С‚С‹, DBF Рё XLS
 					((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 3))";
 					bsFormRules.SuspendBinding();
 				}
@@ -1102,9 +1102,9 @@ order by PriceName
 ",
 				drFR[0]["FRSynonyms"],
 				"PriceCode",
-				"PriceName");            
+				"PriceName");
 
-			delimiter = _priceFileFormatHelper.NewDelimiter; 
+			delimiter = _priceFileFormatHelper.NewDelimiter;
 
 			string takeFile = _priceFileFormatHelper.NewShortFileName;
 
@@ -1112,7 +1112,7 @@ order by PriceName
 
 			fileExist = false;
 
-			// Если формат не установлен, то больше ничего не делаем
+			// Р•СЃР»Рё С„РѕСЂРјР°С‚ РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅ, С‚Рѕ Р±РѕР»СЊС€Рµ РЅРёС‡РµРіРѕ РЅРµ РґРµР»Р°РµРј
 			if (fmt != null)
 			{
 				try
@@ -1132,28 +1132,28 @@ order by PriceName
 					var tables = PriceFileHelper.OpenPriceFile(filePath, fmt, delimiter, _dataTableMarking);
 					if (tables == null)
 					{
-						MessageBox.Show("Неправильный формат или файл поврежден", "Ошибка открытия файла", MessageBoxButtons.OK,
+						MessageBox.Show("РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ С„РѕСЂРјР°С‚ РёР»Рё С„Р°Р№Р» РїРѕРІСЂРµР¶РґРµРЅ", "РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°", MessageBoxButtons.OK,
 										MessageBoxIcon.Error);
 						return;
 					}
-					dtPrice = tables[0]; 
+					dtPrice = tables[0];
 					if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls))
 					{
-						tbpSheet1.Text = tables[0].TableName;						
+						tbpSheet1.Text = tables[0].TableName;
 						tables.RemoveAt(0);
 						dtables = tables;
 						SetupXlsPriceView();
-					}						
+					}
 					Application.DoEvents();
 					ShowTab(fmt);
 					Application.DoEvents();
-					Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
+					Text = String.Format("Р РµРґР°РєС‚РѕСЂ РџСЂР°РІРёР» Р¤РѕСЂРјР°Р»РёР·Р°С†РёРё ({0})", frmCaption);
 					Application.DoEvents();
 
 				}
 				catch (PriceProcessorException priceProcessorException)
 				{
-					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(priceProcessorException.Message, "РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
 		}
@@ -1163,7 +1163,7 @@ order by PriceName
 			try
 			{
 #if !DEBUG
-				// Берем файл из Base
+				// Р‘РµСЂРµРј С„Р°Р№Р» РёР· Base
 				using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
 				{
 					if (openFile != null)
@@ -1176,7 +1176,7 @@ order by PriceName
 					}
 					else
 					{
-						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show(_priceProcessor.LastErrorMessage, "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return false;
 					}
 				}
@@ -1194,7 +1194,7 @@ order by PriceName
 			}
 			catch (Exception ex)
 			{
-				_logger.Error("Ошибка при попытке получить файл из Base", ex);
+				_logger.Error("РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ РїРѕР»СѓС‡РёС‚СЊ С„Р°Р№Р» РёР· Base", ex);
 				return false;
 			}
 		}
@@ -1205,7 +1205,7 @@ order by PriceName
 			{
 				var table = dtables[i];
 				var tabPage = new TabPage(table.TableName);
-				tabPage.Name = "tbpSheet" + (i + 1);			
+				tabPage.Name = "tbpSheet" + (i + 1);
 				tcInnerSheets.TabPages.Add(tabPage);
 
 				var indgv = new INDataGridView();
@@ -1234,7 +1234,7 @@ order by PriceName
 				case PriceFormat.DelimWIN:
 				case PriceFormat.NativeDelimWIN:
 				case PriceFormat.NativeDelimDOS:
-					
+
 					lBoxSheetName.Visible = false;
 					txtBoxSheetName.Visible = false;
 					pnlGeneralFields.Visible = true;
@@ -1265,7 +1265,7 @@ order by PriceName
 					break;
 
 				case PriceFormat.DBF:
-				case PriceFormat.NativeDbf:					
+				case PriceFormat.NativeDbf:
 
 					lBoxSheetName.Visible = false;
 					txtBoxSheetName.Visible = false;
@@ -1289,12 +1289,12 @@ order by PriceName
 
 		private void FillParentComboBoxBySearch(ComboBox cmbParent, string FillSQL, string IdField, string NameField)
 		{
-			//Возможно есть способ более проще получить значение биндинга
+			//Р’РѕР·РјРѕР¶РЅРѕ РµСЃС‚СЊ СЃРїРѕСЃРѕР± Р±РѕР»РµРµ РїСЂРѕС‰Рµ РїРѕР»СѓС‡РёС‚СЊ Р·РЅР°С‡РµРЅРёРµ Р±РёРЅРґРёРЅРіР°
 			object SelectedValue = ((DataRowView)bsFormRules.Current).Row[cmbParent.DataBindings["SelectedValue"].BindingMemberInfo.BindingField];
 			DataSet ParentDS = MySqlHelper.ExecuteDataset(
-				connection, 
-				FillSQL, 
-				new MySqlParameter("?PrevParentValue", SelectedValue), 
+				connection,
+				FillSQL,
+				new MySqlParameter("?PrevParentValue", SelectedValue),
 				new MySqlParameter("?SearchText", "%" + cmbParent.Text + "%"));
 			FillParentComboBoxFromTable(cmbParent, ParentDS.Tables[0], IdField, NameField);
 		}
@@ -1308,7 +1308,7 @@ order by PriceName
 				cmbParent.Items.Clear();
 				DataRow drNull = dtParent.NewRow();
 				drNull[IdField] = DBNull.Value;
-				drNull[NameField] = "<не установлены>";
+				drNull[NameField] = "<РЅРµ СѓСЃС‚Р°РЅРѕРІР»РµРЅС‹>";
 				dtParent.Rows.InsertAt(drNull, 0);
 				cmbParent.Items.Add(drNull);
 				cmbParent.DataSource = dtParent;
@@ -1324,7 +1324,7 @@ order by PriceName
 		private void ShowTab(PriceFormat? fmt)
 		{
 			tcInnerTable.Visible = true;
-			
+
 			indgvPriceData.DataSource = dtPrice;
 			switch (fmt)
 			{
@@ -1431,7 +1431,7 @@ order by PriceName
 					if (!_dataTableMarking.Check())
 					{
 						tcInnerTable.SelectedTab = tbpMarking;
-						MessageBox.Show("Неправильный ввод поля!", "Плохо, очень плохо", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						MessageBox.Show("РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ РІРІРѕРґ РїРѕР»СЏ!", "РџР»РѕС…Рѕ, РѕС‡РµРЅСЊ РїР»РѕС…Рѕ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					}
 					else
 					{
@@ -1520,7 +1520,7 @@ order by PriceName
 
 			tcInnerTable.Visible = false;
 		}
-		
+
 		public void RefreshDataSet()
 		{
 			dtSet.EnforceConstraints = false;
@@ -1535,8 +1535,8 @@ order by PriceName
 			bool showOnlyEnabled = !_showDisabledFirm;
 			if (showOnlyEnabled)
 			{
-				// Если галочка "Показывать недействующие" НЕ выделена
-				// тогда мы добавляем параметры для выборки только действующих
+				// Р•СЃР»Рё РіР°Р»РѕС‡РєР° "РџРѕРєР°Р·С‹РІР°С‚СЊ РЅРµРґРµР№СЃС‚РІСѓСЋС‰РёРµ" РќР• РІС‹РґРµР»РµРЅР°
+				// С‚РѕРіРґР° РјС‹ РґРѕР±Р°РІР»СЏРµРј РїР°СЂР°РјРµС‚СЂС‹ РґР»СЏ РІС‹Р±РѕСЂРєРё С‚РѕР»СЊРєРѕ РґРµР№СЃС‚РІСѓСЋС‰РёС…
 				command.Parameters.AddWithValue("?AgencyEnabled", 1);
 				command.Parameters.AddWithValue("?Enabled", 1);
 				command.Parameters.AddWithValue("?FirmStatus", 0);
@@ -1561,7 +1561,7 @@ order by PriceName
 		{
 			DataView dataView = (DataView)cm.List;
 			string query;
-			if (value is string)            
+			if (value is string)
 				query = string.Format("{0} = '{1}'", ColName, value);
 			else
 				query = string.Format("{0} = {1}", ColName, value);
@@ -1658,14 +1658,14 @@ order by PriceName
 					tbSearchInPrice.Text = String.Empty;
 					if (!_isComboBoxFormatHandlerRegistered)
 						_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
-				}        	
+				}
 		}
 
 		private void RefreshDataBind()
 		{
 			FillTables(shortNameFilter, regionCodeFilter, sourceIndex);
 
-			this.Text = "Редактор Правил Формализации";
+			this.Text = "Р РµРґР°РєС‚РѕСЂ РџСЂР°РІРёР» Р¤РѕСЂРјР°Р»РёР·Р°С†РёРё";
 			if (fcs == dgFocus.Firm)
 			{
 				indgvFirm.Focus();
@@ -1784,17 +1784,17 @@ order by PriceName
 			}
 			catch (Exception ex)
 			{
-				_logger.Error("Ошибка при попытке создать письмо ответственному за прайс лист из вкладки 'Прайс'", ex);
+				_logger.Error("РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ СЃРѕР·РґР°С‚СЊ РїРёСЃСЊРјРѕ РѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕРјСѓ Р·Р° РїСЂР°Р№СЃ Р»РёСЃС‚ РёР· РІРєР»Р°РґРєРё 'РџСЂР°Р№СЃ'", ex);
 			}
 		}
 
 		/// <summary>
-		/// Получить текст контактов из базы
+		/// РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСЃС‚ РєРѕРЅС‚Р°РєС‚РѕРІ РёР· Р±Р°Р·С‹
 		/// </summary>
-		/// <param name="FirmCode">Код поставщика</param>
-		/// <param name="ContactGroupType">Тип контактной группы: 0 - General, 1 - ClientManager, 2 - OrderManager, 3 - Accountant</param>
-		/// <param name="ContactType">Тип контакта: 0 - Email, 1 - Phone</param>
-		/// <returns>Текст контактов, разделенный ";"</returns>
+		/// <param name="FirmCode">РљРѕРґ РїРѕСЃС‚Р°РІС‰РёРєР°</param>
+		/// <param name="ContactGroupType">РўРёРї РєРѕРЅС‚Р°РєС‚РЅРѕР№ РіСЂСѓРїРїС‹: 0 - General, 1 - ClientManager, 2 - OrderManager, 3 - Accountant</param>
+		/// <param name="ContactType">РўРёРї РєРѕРЅС‚Р°РєС‚Р°: 0 - Email, 1 - Phone</param>
+		/// <returns>РўРµРєСЃС‚ РєРѕРЅС‚Р°РєС‚РѕРІ, СЂР°Р·РґРµР»РµРЅРЅС‹Р№ ";"</returns>
 		private string GetContactText(long FirmCode, byte ContactGroupType, byte ContactType)
 		{
 			DataSet dsContacts = MySqlHelper.ExecuteDataset(connection,@"
@@ -1875,7 +1875,7 @@ and c.Type = ?ContactType;",
 
 		private void btnFloatPanel_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
 		{
-			e.Graphics.DrawString("Настройки", btnFloatPanel.Font, Brushes.Black, 
+			e.Graphics.DrawString("РќР°СЃС‚СЂРѕР№РєРё", btnFloatPanel.Font, Brushes.Black,
 				btnFloatPanel.ClientRectangle, new System.Drawing.StringFormat(sf));
 		}
 
@@ -1929,7 +1929,7 @@ and c.Type = ?ContactType;",
 				{
 					erP.SetIconAlignment(txtMask, ErrorIconAlignment.MiddleLeft);
 
-					erP.SetError(txtMask, "Неправильно задана маска!");
+					erP.SetError(txtMask, "РќРµРїСЂР°РІРёР»СЊРЅРѕ Р·Р°РґР°РЅР° РјР°СЃРєР°!");
 				}
 			}
 		}
@@ -1958,7 +1958,7 @@ and c.Type = ?ContactType;",
 					if (m.Success)
 					{
 						indgv.RowHeadersVisible = true;
-						dr.RowError = "Маска совпала";
+						dr.RowError = "РњР°СЃРєР° СЃРѕРІРїР°Р»Р°";
 					}
 				}
 			}
@@ -2023,10 +2023,10 @@ and c.Type = ?ContactType;",
 					}
 				}
 				else
-					MessageBox.Show(String.Format("Строка разбора пуста!"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show(String.Format("РЎС‚СЂРѕРєР° СЂР°Р·Р±РѕСЂР° РїСѓСЃС‚Р°!"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 			else
-				MessageBox.Show(String.Format("Не указано поле наименования!"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(String.Format("РќРµ СѓРєР°Р·Р°РЅРѕ РїРѕР»Рµ РЅР°РёРјРµРЅРѕРІР°РЅРёСЏ!"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 		}
 
 		private void btnCheckAll_Click(object sender, EventArgs e)
@@ -2074,7 +2074,7 @@ and c.Type = ?ContactType;",
 					CheckErrorsInAllNames(r, groups, FindNameColumn(), dtPrice, indgvPriceData);
 			}
 			else
-				MessageBox.Show(String.Format("Не указана маска разбора товара!"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(String.Format("РќРµ СѓРєР°Р·Р°РЅР° РјР°СЃРєР° СЂР°Р·Р±РѕСЂР° С‚РѕРІР°СЂР°!"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
 		}
 
@@ -2108,7 +2108,7 @@ and c.Type = ?ContactType;",
 						if (!groupNotExists)
 						{
 							indgv.RowHeadersVisible = true;
-							dr.RowError = "Маска совпала";
+							dr.RowError = "РњР°СЃРєР° СЃРѕРІРїР°Р»Р°";
 						}
 					}
 				}
@@ -2119,18 +2119,18 @@ and c.Type = ?ContactType;",
 		private void CommitAllEdit()
 		{
 			if (tbControl.SelectedTab == tpFirms)
-				//Завершаем редактирование общих настроек прайс-листов
+				//Р—Р°РІРµСЂС€Р°РµРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РѕР±С‰РёС… РЅР°СЃС‚СЂРѕРµРє РїСЂР°Р№СЃ-Р»РёСЃС‚РѕРІ
 				BindingContext[indgvPrice.DataSource, indgvPrice.DataMember].EndCurrentEdit();
 			else
 			{
-				//Завершаем редактирование правил формализации цен
+				//Р—Р°РІРµСЂС€Р°РµРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїСЂР°РІРёР» С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ
 				if ((bsCostsFormRules.Current != null) && ((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
-					//Если создалась пустая строка в правилах формализации цен, то при сохранении отменяем ее
+					//Р•СЃР»Рё СЃРѕР·РґР°Р»Р°СЃСЊ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР° РІ РїСЂР°РІРёР»Р°С… С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ, С‚Рѕ РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё РѕС‚РјРµРЅСЏРµРј РµРµ
 					bsCostsFormRules.CancelEdit();
 				else
-					//иначе просто применяем изменения
+					//РёРЅР°С‡Рµ РїСЂРѕСЃС‚Рѕ РїСЂРёРјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ
 					bsCostsFormRules.EndEdit();
-				//Завершаем редактирование правил формализации
+				//Р—Р°РІРµСЂС€Р°РµРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїСЂР°РІРёР» С„РѕСЂРјР°Р»РёР·Р°С†РёРё
 				bsFormRules.EndEdit();
 			}
 		}
@@ -2157,9 +2157,9 @@ and c.Type = ?ContactType;",
 				{
 					int selectedRow = indgvPrice.SelectedCells[0].RowIndex;
 					TrySaveData();
-					// Если мы пытаемся перейти на вкладку "Прайс", а у нас нет 
-					// в списке прайсов, то делать это не нужно
-					CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, 
+					// Р•СЃР»Рё РјС‹ РїС‹С‚Р°РµРјСЃСЏ РїРµСЂРµР№С‚Рё РЅР° РІРєР»Р°РґРєСѓ "РџСЂР°Р№СЃ", Р° Сѓ РЅР°СЃ РЅРµС‚
+					// РІ СЃРїРёСЃРєРµ РїСЂР°Р№СЃРѕРІ, С‚Рѕ РґРµР»Р°С‚СЊ СЌС‚Рѕ РЅРµ РЅСѓР¶РЅРѕ
+					CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource,
 						indgvPrice.DataMember];
 					if (currencyManager.Count == 0)
 						e.Cancel = true;
@@ -2181,7 +2181,7 @@ and c.Type = ?ContactType;",
 				DataSet dsc = dtSet.GetChanges();
 				if (dsc != null)
 				{
-					if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+					if (MessageBox.Show("РРјРµРµСЋС‚СЃСЏ РЅРµ СЃРѕС…СЂР°РЅРµРЅС‹Рµ РґР°РЅРЅС‹Рµ. РЎРѕС…СЂР°РЅРёС‚СЊ?", "Р’РЅРёРјР°РЅРёРµ", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
 					{
 						tsbApply_Click(null, null);
 					}
@@ -2213,7 +2213,7 @@ and c.Type = ?ContactType;",
 					{
 						MySqlTransaction tr = connection.BeginTransaction();
 						try
-						{							
+						{
 							DbHelper.SetLogParameters(connection);
 
 							mcmdUpdateCostRules.Connection = connection;
@@ -2223,26 +2223,26 @@ and c.Type = ?ContactType;",
 							daCostRules.TableMappings.Clear();
 							daCostRules.TableMappings.Add("Table", dtCostsFormRules.TableName);
 
-							//Формируем тело письма с изменениями в колонках
+							//Р¤РѕСЂРјРёСЂСѓРµРј С‚РµР»Рѕ РїРёСЃСЊРјР° СЃ РёР·РјРµРЅРµРЅРёСЏРјРё РІ РєРѕР»РѕРЅРєР°С…
 							StringBuilder body = new StringBuilder();
 							foreach (DataRow changeRow in chg.Tables[dtCostsFormRules.TableName].Rows)
 							{
 								if (changeRow.RowState == DataRowState.Added)
-									body.AppendFormat("Добавлена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
+									body.AppendFormat("Р”РѕР±Р°РІР»РµРЅР° С†РµРЅРѕРІР°СЏ РєРѕР»РѕРЅРєР° \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
 								else
 									if ((bool)changeRow[CFRDeleted.ColumnName])
 									{
-										body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
+										body.AppendFormat("РЈРґР°Р»РµРЅР° С†РµРЅРѕРІР°СЏ РєРѕР»РѕРЅРєР° \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
 										changeRow.Delete();
 									}
 									else
 										if (!changeRow[CFRCostName.ColumnName, DataRowVersion.Original].Equals(changeRow[CFRCostName.ColumnName, DataRowVersion.Current]))
-											body.AppendFormat("Наименование ценовой колонки изменено с \"{0}\" на \"{1}\".\n",
+											body.AppendFormat("РќР°РёРјРµРЅРѕРІР°РЅРёРµ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё РёР·РјРµРЅРµРЅРѕ СЃ \"{0}\" РЅР° \"{1}\".\n",
 												changeRow[CFRCostName.ColumnName, DataRowVersion.Original],
 												changeRow[CFRCostName.ColumnName, DataRowVersion.Current]);
 							}
 
-							//Делается Copy для того, чтобы созданные записи (Added) при применении не помечались как неизмененные Unchanged
+							//Р”РµР»Р°РµС‚СЃСЏ Copy РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ СЃРѕР·РґР°РЅРЅС‹Рµ Р·Р°РїРёСЃРё (Added) РїСЂРё РїСЂРёРјРµРЅРµРЅРёРё РЅРµ РїРѕРјРµС‡Р°Р»РёСЃСЊ РєР°Рє РЅРµРёР·РјРµРЅРµРЅРЅС‹Рµ Unchanged
 							daCostRules.Update(chg.Tables[dtCostsFormRules.TableName].Copy());
 
 							mcmdUpdateFormRules.Connection = connection;
@@ -2252,7 +2252,7 @@ and c.Type = ?ContactType;",
 
 							if (body.Length > 0)
 							{
-								//Получаем информацию о поставщике, регионе и прайс-листе
+								//РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕСЃС‚Р°РІС‰РёРєРµ, СЂРµРіРёРѕРЅРµ Рё РїСЂР°Р№СЃ-Р»РёСЃС‚Рµ
 								long _selfPriceCode = (long)(((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
 								DataRow drPrice = dtPrices.Select("PPriceCode = " + _selfPriceCode)[0];
 								string _priceName = drPrice[PPriceName.ColumnName].ToString();
@@ -2262,22 +2262,22 @@ and c.Type = ?ContactType;",
 								string _firmName = drClient[CShortName.ColumnName].ToString();
 								string _regionName = drClient[CRegion.ColumnName].ToString();
 
-								Mailer.SendNotificationLetter(connection, body.ToString(), 
+								Mailer.SendNotificationLetter(connection, body.ToString(),
 									_priceName, _firmName, _regionName);
 							}
 							dtSet.AcceptChanges();
-							//Обновляе цены и правила формализации цен для того, чтобы загрузить корректные ID новых цен
+							//РћР±РЅРѕРІР»СЏРµ С†РµРЅС‹ Рё РїСЂР°РІРёР»Р° С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ РґР»СЏ С‚РѕРіРѕ, С‡С‚РѕР±С‹ Р·Р°РіСЂСѓР·РёС‚СЊ РєРѕСЂСЂРµРєС‚РЅС‹Рµ ID РЅРѕРІС‹С… С†РµРЅ
 							FillCosts(shortNameFilter, regionCodeFilter);
 							tr.Commit();
 
-							// Перепроводим прайс
+							// РџРµСЂРµРїСЂРѕРІРѕРґРёРј РїСЂР°Р№СЃ
 							RetrancePrice.Go(indgvPrice, indgvFirm, connection, _priceProcessor, PPriceItemId);
 						}
 						catch (Exception ex)
 						{
 							tr.Rollback();
-							MessageBox.Show("Не удалось применить изменения в правилах формализации прайс-листа. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в правилах формализации.", ex));
+							MessageBox.Show("РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРёРјРµРЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РІ РїСЂР°РІРёР»Р°С… С„РѕСЂРјР°Р»РёР·Р°С†РёРё РїСЂР°Р№СЃ-Р»РёСЃС‚Р°. РЎРѕРѕР±С‰РµРЅРёРµ Р±С‹Р»Рѕ РѕС‚РїСЂР°РІР»РµРЅРѕ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєСѓ.", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							Program.SendMessageOnException(null, new Exception("РћС€РёР±РєР° РїСЂРё РїСЂРёРјРµРЅРµРЅРёРё РёР·РјРµРЅРµРЅРёР№ РІ РїСЂР°РІРёР»Р°С… С„РѕСЂРјР°Р»РёР·Р°С†РёРё.", ex));
 						}
 					}
 					finally
@@ -2285,7 +2285,7 @@ and c.Type = ?ContactType;",
 						if (connection.State != ConnectionState.Closed)
 							connection.Close();
 					}
-					
+
 					btnPutToBase.Enabled = !Convert.IsDBNull(((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
 
 				}
@@ -2302,33 +2302,33 @@ and c.Type = ?ContactType;",
 						{
 							DbHelper.SetLogParameters(connection);
 
-							//todo: здесь надо переписать
+							//todo: Р·РґРµСЃСЊ РЅР°РґРѕ РїРµСЂРµРїРёСЃР°С‚СЊ
 							MySqlCommand mcmdUPrice = new MySqlCommand();
 							MySqlCommand mcmdDPrice = new MySqlCommand();
 							MySqlDataAdapter daPrice = new MySqlDataAdapter();
 							mcmdUPrice.CommandText = @"
 call usersettings.UpdateCostType(?PPriceCode, ?PCostType);
 
-UPDATE 
-  usersettings.PricesData pd 
+UPDATE
+  usersettings.PricesData pd
 SET
   PriceType = if(?PIsParent = 1, ?PPriceType, PriceType)
-WHERE 
+WHERE
 	pd.PriceCode = ?PPriceCode;
 
-UPDATE 
+UPDATE
   usersettings.priceitems pim
 SET
   pim.WaitingDownloadInterval = ?PWaitingDownloadInterval
-WHERE 
+WHERE
 	pim.Id = ?PPriceItemId;
 
-UPDATE 
+UPDATE
   usersettings.priceitems pim,
-  farm.FormRules fr 
+  farm.FormRules fr
 SET
   fr.MaxOld = ?PMaxOld
-WHERE 
+WHERE
 	pim.Id = ?PPriceItemId
 and fr.Id = pim.FormRuleId;
 ";
@@ -2352,7 +2352,7 @@ and fr.Id = pim.FormRuleId;
 							mcmdDPrice.Parameters.Clear();
 							mcmdDPrice.Parameters.Add("?inCostCode", MySqlDbType.Int64, 0, "PCostCode");
 							mcmdDPrice.Parameters["?inCostCode"].Direction = ParameterDirection.Input;
-													
+
 							mcmdUPrice.Connection = connection;
 							mcmdDPrice.Connection = connection;
 
@@ -2361,14 +2361,14 @@ and fr.Id = pim.FormRuleId;
 							daPrice.TableMappings.Clear();
 							daPrice.TableMappings.Add("Table", dtPrices.TableName);
 
-							//Формируем тело письма с изменениями в колонках
+							//Р¤РѕСЂРјРёСЂСѓРµРј С‚РµР»Рѕ РїРёСЃСЊРјР° СЃ РёР·РјРµРЅРµРЅРёСЏРјРё РІ РєРѕР»РѕРЅРєР°С…
 							var body = new StringBuilder();
 							string _priceName = "";
 							foreach (DataRow changeRow in chg.Tables[dtPrices.TableName].Rows)
 							{
 								if ((bool)changeRow[PDeleted.ColumnName])
 								{
-									body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[PPriceName.ColumnName]);
+									body.AppendFormat("РЈРґР°Р»РµРЅР° С†РµРЅРѕРІР°СЏ РєРѕР»РѕРЅРєР° \"{0}\".\n", changeRow[PPriceName.ColumnName]);
 									_priceName = changeRow[PPriceName.ColumnName].ToString();
 									changeRow.Delete();
 								}
@@ -2378,7 +2378,7 @@ and fr.Id = pim.FormRuleId;
 
 							if (body.Length > 0)
 							{
-								//Получаем информацию о поставщике, регионе и прайс-листе
+								//РџРѕР»СѓС‡Р°РµРј РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РїРѕСЃС‚Р°РІС‰РёРєРµ, СЂРµРіРёРѕРЅРµ Рё РїСЂР°Р№СЃ-Р»РёСЃС‚Рµ
 								if (indgvFirm.CurrentRow != null)
 								{
 									var firm = (DataRowView) indgvFirm.CurrentRow.DataBoundItem;
@@ -2394,8 +2394,8 @@ and fr.Id = pim.FormRuleId;
 						}
 						catch (Exception ex)
 						{
-							MessageBox.Show("Не удалось применить изменения в настройках прайс-листов. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в настройках прайс-листов.", ex));
+							MessageBox.Show("РќРµ СѓРґР°Р»РѕСЃСЊ РїСЂРёРјРµРЅРёС‚СЊ РёР·РјРµРЅРµРЅРёСЏ РІ РЅР°СЃС‚СЂРѕР№РєР°С… РїСЂР°Р№СЃ-Р»РёСЃС‚РѕРІ. РЎРѕРѕР±С‰РµРЅРёРµ Р±С‹Р»Рѕ РѕС‚РїСЂР°РІР»РµРЅРѕ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєСѓ.", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
+							Program.SendMessageOnException(null, new Exception("РћС€РёР±РєР° РїСЂРё РїСЂРёРјРµРЅРµРЅРёРё РёР·РјРµРЅРµРЅРёР№ РІ РЅР°СЃС‚СЂРѕР№РєР°С… РїСЂР°Р№СЃ-Р»РёСЃС‚РѕРІ.", ex));
 							tr.Rollback();
 						}
 					}
@@ -2424,21 +2424,21 @@ and fr.Id = pim.FormRuleId;
 					{
 						if (!_priceProcessor.PutFileToInbound(Convert.ToUInt32(currentPriceItemId), File.OpenRead(filePath)))
 						{
-							MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
+							MessageBox.Show(_priceProcessor.LastErrorMessage, "РћС€РёР±РєР°", MessageBoxButtons.OK,
 											MessageBoxIcon.Error);
 						}
 					}
 					catch (Exception ex)
 					{
-						_logger.Error("Ошибка при применении изменений после смены формата файла (или разделителя). Невозможно положить файл в Inbound", ex);
+						_logger.Error("РћС€РёР±РєР° РїСЂРё РїСЂРёРјРµРЅРµРЅРёРё РёР·РјРµРЅРµРЅРёР№ РїРѕСЃР»Рµ СЃРјРµРЅС‹ С„РѕСЂРјР°С‚Р° С„Р°Р№Р»Р° (РёР»Рё СЂР°Р·РґРµР»РёС‚РµР»СЏ). РќРµРІРѕР·РјРѕР¶РЅРѕ РїРѕР»РѕР¶РёС‚СЊ С„Р°Р№Р» РІ Inbound", ex);
 					}
 				}
 				else
 				{
 					Mailer.SendWarningLetter(String.Format(
-						"При применении изменений после смена формата файла (или разделителя) файл {0} не найден", filePath));
-					MessageBox.Show(String.Format("Невозможно изменить формат файла. Файл {0} не найден",
-						filePath), "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						"РџСЂРё РїСЂРёРјРµРЅРµРЅРёРё РёР·РјРµРЅРµРЅРёР№ РїРѕСЃР»Рµ СЃРјРµРЅР° С„РѕСЂРјР°С‚Р° С„Р°Р№Р»Р° (РёР»Рё СЂР°Р·РґРµР»РёС‚РµР»СЏ) С„Р°Р№Р» {0} РЅРµ РЅР°Р№РґРµРЅ", filePath));
+					MessageBox.Show(String.Format("РќРµРІРѕР·РјРѕР¶РЅРѕ РёР·РјРµРЅРёС‚СЊ С„РѕСЂРјР°С‚ С„Р°Р№Р»Р°. Р¤Р°Р№Р» {0} РЅРµ РЅР°Р№РґРµРЅ",
+						filePath), "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -2447,7 +2447,7 @@ and fr.Id = pim.FormRuleId;
 		{
 			if ((e.KeyCode == Keys.Escape) && (tbControl.SelectedTab == tpPrice))
 				tbControl.SelectedTab = tpFirms;
-		}        
+		}
 
 		private void tmrUpdateApply_Tick(object sender, EventArgs e)
 		{
@@ -2455,14 +2455,14 @@ and fr.Id = pim.FormRuleId;
 			int ss = rtbArticle.SelectionStart;
 
 			if (tbControl.SelectedTab == tpFirms)
-				//Завершаем редактирование общих настроек прайс-листов
+				//Р—Р°РІРµСЂС€Р°РµРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РѕР±С‰РёС… РЅР°СЃС‚СЂРѕРµРє РїСЂР°Р№СЃ-Р»РёСЃС‚РѕРІ
 				BindingContext[indgvPrice.DataSource, indgvPrice.DataMember].EndCurrentEdit();
 			else
 			{
-				//Раньше завершали редактирование bsCostsFormRules, но теперь в этом нет необходимости, 
-				//т.к. редактирование завершается гридом или после DragAndDrop
+				//Р Р°РЅСЊС€Рµ Р·Р°РІРµСЂС€Р°Р»Рё СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ bsCostsFormRules, РЅРѕ С‚РµРїРµСЂСЊ РІ СЌС‚РѕРј РЅРµС‚ РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё,
+				//С‚.Рє. СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Р·Р°РІРµСЂС€Р°РµС‚СЃСЏ РіСЂРёРґРѕРј РёР»Рё РїРѕСЃР»Рµ DragAndDrop
 
-				//Завершаем редактирование правил формализации
+				//Р—Р°РІРµСЂС€Р°РµРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїСЂР°РІРёР» С„РѕСЂРјР°Р»РёР·Р°С†РёРё
 				bsFormRules.EndEdit();
 			}
 
@@ -2476,7 +2476,7 @@ and fr.Id = pim.FormRuleId;
 				}
 			}
 			tmrUpdateApply.Start();
-		
+
 		}
 
 		private void frmFREMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -2499,8 +2499,8 @@ and fr.Id = pim.FormRuleId;
 					CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
 					DataRowView drv = (DataRowView)cm.Current;
 
-					//Если запись не является помеченной на удаление, то позволяем назначать поля
-					if (!(bool)drv[CFRDeleted.ColumnName]) 
+					//Р•СЃР»Рё Р·Р°РїРёСЃСЊ РЅРµ СЏРІР»СЏРµС‚СЃСЏ РїРѕРјРµС‡РµРЅРЅРѕР№ РЅР° СѓРґР°Р»РµРЅРёРµ, С‚Рѕ РїРѕР·РІРѕР»СЏРµРј РЅР°Р·РЅР°С‡Р°С‚СЊ РїРѕР»СЏ
+					if (!(bool)drv[CFRDeleted.ColumnName])
 					{
 						string _concurentCostName = String.Empty;
 
@@ -2534,13 +2534,13 @@ and fr.Id = pim.FormRuleId;
 						}
 
 						if (String.IsNullOrEmpty(_concurentCostName))
-							//Завершаем явно редактирование этой строчки, чтобы появились изменения в DataSet.GetChanges()
+							//Р—Р°РІРµСЂС€Р°РµРј СЏРІРЅРѕ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ СЌС‚РѕР№ СЃС‚СЂРѕС‡РєРё, С‡С‚РѕР±С‹ РїРѕСЏРІРёР»РёСЃСЊ РёР·РјРµРЅРµРЅРёСЏ РІ DataSet.GetChanges()
 							drv.EndEdit();
 						else
 							MessageBox.Show(
-								String.Format("Назначение не возможно, т.к. данное поле уже используется в ценовой колонке '{0}'.",
+								String.Format("РќР°Р·РЅР°С‡РµРЅРёРµ РЅРµ РІРѕР·РјРѕР¶РЅРѕ, С‚.Рє. РґР°РЅРЅРѕРµ РїРѕР»Рµ СѓР¶Рµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРµ '{0}'.",
 									_concurentCostName),
-								"Предупреждение",
+								"РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ",
 								MessageBoxButtons.OK,
 								MessageBoxIcon.Warning);
 					}
@@ -2591,7 +2591,7 @@ and fr.Id = pim.FormRuleId;
 			CregKey = BaseRegKey + "\\PriceDataGrid";
 			indgvPrice.SaveSettings(CregKey);
 		}
-		
+
 		private void LoadFirmAndPriceSettings()
 		{
 			CregKey = BaseRegKey + "\\FirmDataGrid";
@@ -2649,10 +2649,10 @@ and fr.Id = pim.FormRuleId;
 				return;
 			dataGridView.Rows[e.RowIndex].ErrorText = String.Empty;
 			if (testString.Contains(" "))
-			{				
+			{
 				e.Cancel = true;
-				dataGridView.Rows[e.RowIndex].ErrorText = "Строка не должна содержать пробелов";
-			}			
+				dataGridView.Rows[e.RowIndex].ErrorText = "РЎС‚СЂРѕРєР° РЅРµ РґРѕР»Р¶РЅР° СЃРѕРґРµСЂР¶Р°С‚СЊ РїСЂРѕР±РµР»РѕРІ";
+			}
 		}
 
 		private void SaveMarkingSettings()
@@ -2740,7 +2740,7 @@ and fr.Id = pim.FormRuleId;
 		private void tbFirmName_TextChanged(object sender, EventArgs e)
 		{
 			if (!InSearch)
-			{				
+			{
 				tmrSearch.Stop();
 				TrySaveData();
 				tmrSearch.Start();
@@ -2790,7 +2790,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void indgvFirm_DoubleClick(object sender, EventArgs e)
 		{
-			var currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, 
+			var currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource,
 				indgvFirm.DataMember];
 			CheckOnePrice(currencyManager);
 		}
@@ -2803,7 +2803,7 @@ and fr.Id = pim.FormRuleId;
 					((indgvPrice.CurrentRow.DataBoundItem != null) &&
 					 (((DataRowView) indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)))
 				{
-					MessageBox.Show("Необходимо указать тип цены!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show("РќРµРѕР±С…РѕРґРёРјРѕ СѓРєР°Р·Р°С‚СЊ С‚РёРї С†РµРЅС‹!", "Р’РЅРёРјР°РЅРёРµ!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return false;
 				}
 				else
@@ -2831,38 +2831,38 @@ and fr.Id = pim.FormRuleId;
 			if (e.KeyCode == Keys.Enter)
 			{
 				e.Handled = true;
-				
-				if(CostIsValid())                
+
+				if(CostIsValid())
 				{
 					fcs = dgFocus.Price;
 					tbControl.SelectedTab = tpPrice;
 					PrepareCreateNewPriceCollumn();
 				}
 			}
-			if (e.KeyCode == Keys.Delete) // удаление ценовой колонки для многофайлового ПЛ
+			if (e.KeyCode == Keys.Delete) // СѓРґР°Р»РµРЅРёРµ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё РґР»СЏ РјРЅРѕРіРѕС„Р°Р№Р»РѕРІРѕРіРѕ РџР›
 			{
 				if(CostIsValid())
 				{
 					DataRowView item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
 					int cost_type = (int)item[PCostType.ColumnName];
-					if (cost_type == 0) return;	// для удаления цен из мультиколоночных прайсов используется другой механизм
+					if (cost_type == 0) return;	// РґР»СЏ СѓРґР°Р»РµРЅРёСЏ С†РµРЅ РёР· РјСѓР»СЊС‚РёРєРѕР»РѕРЅРѕС‡РЅС‹С… РїСЂР°Р№СЃРѕРІ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґСЂСѓРіРѕР№ РјРµС…Р°РЅРёР·Рј
 					if ((bool)item[PDeleted.ColumnName] == true) return;
-					byte isBaseCost = (byte) item[PBaseCost.ColumnName];		
+					byte isBaseCost = (byte) item[PBaseCost.ColumnName];
 					if (isBaseCost == 1)
 					{
-						MessageBox.Show("Нельзя удалить базовую ценовую колонку", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-						return;	
+						MessageBox.Show("РќРµР»СЊР·СЏ СѓРґР°Р»РёС‚СЊ Р±Р°Р·РѕРІСѓСЋ С†РµРЅРѕРІСѓСЋ РєРѕР»РѕРЅРєСѓ", "Р’РЅРёРјР°РЅРёРµ!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						return;
 					}
 
-					if (MessageBox.Show("Вы уверены в удалении ценовой колонки?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
+					if (MessageBox.Show("Р’С‹ СѓРІРµСЂРµРЅС‹ РІ СѓРґР°Р»РµРЅРёРё С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё?", "Р’РЅРёРјР°РЅРёРµ!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
 					{
-						item[PDeleted.ColumnName] = true; // помечаем запись на удаление
-						item.EndEdit();						
+						item[PDeleted.ColumnName] = true; // РїРѕРјРµС‡Р°РµРј Р·Р°РїРёСЃСЊ РЅР° СѓРґР°Р»РµРЅРёРµ
+						item.EndEdit();
 						indgvPrice.Refresh();
 					}
 					else
-						return;					
-				}				
+						return;
+				}
 			}
 		}
 
@@ -2899,7 +2899,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void indgvPrice_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
 		{
-			//Если отображается ComboBox, то привязываемся на его событие: изменение текущего элемента
+			//Р•СЃР»Рё РѕС‚РѕР±СЂР°Р¶Р°РµС‚СЃСЏ ComboBox, С‚Рѕ РїСЂРёРІСЏР·С‹РІР°РµРјСЃСЏ РЅР° РµРіРѕ СЃРѕР±С‹С‚РёРµ: РёР·РјРµРЅРµРЅРёРµ С‚РµРєСѓС‰РµРіРѕ СЌР»РµРјРµРЅС‚Р°
 			if (e.Control is ComboBox)
 			{
 				indgvPrice.CurrentCell.ReadOnly = !Convert.ToBoolean(((DataRowView)indgvPrice.CurrentCell.OwningRow.DataBoundItem)["PIsParent"]);
@@ -2907,10 +2907,10 @@ and fr.Id = pim.FormRuleId;
 				if (e.Control.Enabled)
 					((ComboBox)e.Control).SelectionChangeCommitted += frmFREMain_SelectionChangeCommitted;
 
-				// Если была первоначальная настройка прайс-листа, тогда
-				// не позволяем редактировать тип колонок (с мультифайловых на мультиколоночные)
+				// Р•СЃР»Рё Р±С‹Р»Р° РїРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅР°СЏ РЅР°СЃС‚СЂРѕР№РєР° РїСЂР°Р№СЃ-Р»РёСЃС‚Р°, С‚РѕРіРґР°
+				// РЅРµ РїРѕР·РІРѕР»СЏРµРј СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ С‚РёРї РєРѕР»РѕРЅРѕРє (СЃ РјСѓР»СЊС‚РёС„Р°Р№Р»РѕРІС‹С… РЅР° РјСѓР»СЊС‚РёРєРѕР»РѕРЅРѕС‡РЅС‹Рµ)
 				var grid = (sender as INDataGridView);
-				bool isCostTypeColumn = (grid.CurrentCell.ColumnIndex == 
+				bool isCostTypeColumn = (grid.CurrentCell.ColumnIndex ==
 					pCostTypeDataGridViewComboBoxColumn.Index);
 				if (isCostTypeColumn)
 				{
@@ -2923,9 +2923,9 @@ and fr.Id = pim.FormRuleId;
 			}
 		}
 
-		// Проверяет, была ли уже настройка прайса
+		// РџСЂРѕРІРµСЂСЏРµС‚, Р±С‹Р»Р° Р»Рё СѓР¶Рµ РЅР°СЃС‚СЂРѕР№РєР° РїСЂР°Р№СЃР°
 		private bool PriceWasEdited(string priceItemId)
-		{			
+		{
 			var drPrice = dtPrices.Select("PPriceItemId = " + priceItemId);
 			string format;
 			string costType;
@@ -2944,8 +2944,8 @@ and fr.Id = pim.FormRuleId;
 
 		void frmFREMain_SelectionChangeCommitted(object sender, EventArgs e)
 		{
-			//После изменения элемента сразу сохраняем его в ячейке, чтобы возникло событие CellValueChanged
-			//Позволяем изменять на одно из корректных значений, а не на DBNull
+			//РџРѕСЃР»Рµ РёР·РјРµРЅРµРЅРёСЏ СЌР»РµРјРµРЅС‚Р° СЃСЂР°Р·Сѓ СЃРѕС…СЂР°РЅСЏРµРј РµРіРѕ РІ СЏС‡РµР№РєРµ, С‡С‚РѕР±С‹ РІРѕР·РЅРёРєР»Рѕ СЃРѕР±С‹С‚РёРµ CellValueChanged
+			//РџРѕР·РІРѕР»СЏРµРј РёР·РјРµРЅСЏС‚СЊ РЅР° РѕРґРЅРѕ РёР· РєРѕСЂСЂРµРєС‚РЅС‹С… Р·РЅР°С‡РµРЅРёР№, Р° РЅРµ РЅР° DBNull
 			if (!(((ComboBox)sender).SelectedValue is DBNull))
 				indgvPrice.CurrentCell.Value = ((ComboBox)sender).SelectedValue;
 			else
@@ -2965,15 +2965,15 @@ and fr.Id = pim.FormRuleId;
 		private void indgvPrice_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
 			BindingContext[indgvPrice.DataSource].EndCurrentEdit();
-			//Если рассматриваются колонки с ComboBox и строки с данными
+			//Р•СЃР»Рё СЂР°СЃСЃРјР°С‚СЂРёРІР°СЋС‚СЃСЏ РєРѕР»РѕРЅРєРё СЃ ComboBox Рё СЃС‚СЂРѕРєРё СЃ РґР°РЅРЅС‹РјРё
 			if ((e.RowIndex >= 0) && (((INDataGridView)sender).Columns[e.ColumnIndex].CellTemplate is DataGridViewComboBoxCell))
 			{
-				//Если это не родительский прайс-лист, то это ценовая колонка многофайлового прайс-листа и изменять ее нельзя
+				//Р•СЃР»Рё СЌС‚Рѕ РЅРµ СЂРѕРґРёС‚РµР»СЊСЃРєРёР№ РїСЂР°Р№СЃ-Р»РёСЃС‚, С‚Рѕ СЌС‚Рѕ С†РµРЅРѕРІР°СЏ РєРѕР»РѕРЅРєР° РјРЅРѕРіРѕС„Р°Р№Р»РѕРІРѕРіРѕ РїСЂР°Р№СЃ-Р»РёСЃС‚Р° Рё РёР·РјРµРЅСЏС‚СЊ РµРµ РЅРµР»СЊР·СЏ
 				if (!Convert.ToBoolean(((DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem)[PIsParent.ColumnName]))
 					e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
 
-				// Проверяем, если была первоначальная настройка прайс-листа,
-				// то не выделяем колонки серым цветом (неактивные)
+				// РџСЂРѕРІРµСЂСЏРµРј, РµСЃР»Рё Р±С‹Р»Р° РїРµСЂРІРѕРЅР°С‡Р°Р»СЊРЅР°СЏ РЅР°СЃС‚СЂРѕР№РєР° РїСЂР°Р№СЃ-Р»РёСЃС‚Р°,
+				// С‚Рѕ РЅРµ РІС‹РґРµР»СЏРµРј РєРѕР»РѕРЅРєРё СЃРµСЂС‹Рј С†РІРµС‚РѕРј (РЅРµР°РєС‚РёРІРЅС‹Рµ)
 				INDataGridView inGridView = (sender as INDataGridView);
 				bool isCostTypeColumn = (e.ColumnIndex == pCostTypeDataGridViewComboBoxColumn.Index);
 				if (isCostTypeColumn)
@@ -2984,7 +2984,7 @@ and fr.Id = pim.FormRuleId;
 					{
 						e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
 					}
-				}				
+				}
 			}
 			DataRowView drv = (DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem;
 			if ((bool)drv[PDeleted.ColumnName])
@@ -3014,15 +3014,15 @@ and pd.ParentSynonym is null
 and ((pd.PriceCode = ?PrevParentValue) or (pd.PriceName like ?SearchText) or (s.Name like ?SearchText))
 order by PriceName
 ",
-	"PriceCode", 
+	"PriceCode",
 	"PriceName");
 			}
 		}
 
 		private void indgvCosts_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
-			//По двойному клику на ячейках FieldName, TextBegin, TextEnd в таблице настройки правил формализации цен
-			//очищаем данные поля
+			//РџРѕ РґРІРѕР№РЅРѕРјСѓ РєР»РёРєСѓ РЅР° СЏС‡РµР№РєР°С… FieldName, TextBegin, TextEnd РІ С‚Р°Р±Р»РёС†Рµ РЅР°СЃС‚СЂРѕР№РєРё РїСЂР°РІРёР» С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ
+			//РѕС‡РёС‰Р°РµРј РґР°РЅРЅС‹Рµ РїРѕР»СЏ
 			if (e.ColumnIndex > 0)
 			{
 				if ((indgvCosts.Columns[e.ColumnIndex] == cFRFieldNameDataGridViewTextBoxColumn)
@@ -3032,7 +3032,7 @@ order by PriceName
 					DataGridViewRow row = indgvCosts.Rows[e.RowIndex];
 					DataRowView drv = (DataRowView)row.DataBoundItem;
 
-					//Если запись не является помеченной на удаление, то позволяем редактировать
+					//Р•СЃР»Рё Р·Р°РїРёСЃСЊ РЅРµ СЏРІР»СЏРµС‚СЃСЏ РїРѕРјРµС‡РµРЅРЅРѕР№ РЅР° СѓРґР°Р»РµРЅРёРµ, С‚Рѕ РїРѕР·РІРѕР»СЏРµРј СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ
 					if (!(bool)drv[CFRDeleted.ColumnName])
 					{
 						drv.BeginEdit();
@@ -3056,8 +3056,8 @@ order by PriceName
 			DataGridViewRow r = indgvCosts.Rows[e.RowIndex];
 
 			DataRowView drv = null;
-			//Если при вводе новой ценовой колонке отменить создание, то при попытке получить доступ
-			//к DataBoundItem будет происходить IndexOutOfRangeException
+			//Р•СЃР»Рё РїСЂРё РІРІРѕРґРµ РЅРѕРІРѕР№ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРµ РѕС‚РјРµРЅРёС‚СЊ СЃРѕР·РґР°РЅРёРµ, С‚Рѕ РїСЂРё РїРѕРїС‹С‚РєРµ РїРѕР»СѓС‡РёС‚СЊ РґРѕСЃС‚СѓРї
+			//Рє DataBoundItem Р±СѓРґРµС‚ РїСЂРѕРёСЃС…РѕРґРёС‚СЊ IndexOutOfRangeException
 			try
 			{
 				if (r.DataBoundItem != null)
@@ -3069,12 +3069,12 @@ order by PriceName
 
 			if (drv != null)
 			{
-				//Если это новая запись и мы еще не установили поля PriceItemId и CostCode
+				//Р•СЃР»Рё СЌС‚Рѕ РЅРѕРІР°СЏ Р·Р°РїРёСЃСЊ Рё РјС‹ РµС‰Рµ РЅРµ СѓСЃС‚Р°РЅРѕРІРёР»Рё РїРѕР»СЏ PriceItemId Рё CostCode
 				if (drv.IsNew && Convert.IsDBNull(drv["CFRCost_Code"]))
 				{
-					long NewCostCode = (long)dtSet.Tables["Правила формализации цен"].Compute("Max(CFRCost_Code)", null);
+					long NewCostCode = (long)dtSet.Tables["РџСЂР°РІРёР»Р° С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ"].Compute("Max(CFRCost_Code)", null);
 					drv["CFRCost_Code"] = NewCostCode + 1;
-					//Если мы добавили новую ценовую колонку и есть фильтр, то сбрасываем фильтр
+					//Р•СЃР»Рё РјС‹ РґРѕР±Р°РІРёР»Рё РЅРѕРІСѓСЋ С†РµРЅРѕРІСѓСЋ РєРѕР»РѕРЅРєСѓ Рё РµСЃС‚СЊ С„РёР»СЊС‚СЂ, С‚Рѕ СЃР±СЂР°СЃС‹РІР°РµРј С„РёР»СЊС‚СЂ
 					if (!String.IsNullOrEmpty(tbCostFind.Text))
 					{
 						tbCostFind.Text = String.Empty;
@@ -3088,19 +3088,19 @@ order by PriceName
 		{
 			indgvCosts.Rows[e.RowIndex].ErrorText = "";
 
-			// Don't try to validate the 'new row' until finished 
+			// Don't try to validate the 'new row' until finished
 			// editing since there
 			// is not any point in validating its initial value.
 			if (indgvCosts.Rows[e.RowIndex].IsNewRow) { return; }
 
-			//Если мы редактировали или ввели название ценовой колонки пустым, то выдать соответствующее предупреждение
+			//Р•СЃР»Рё РјС‹ СЂРµРґР°РєС‚РёСЂРѕРІР°Р»Рё РёР»Рё РІРІРµР»Рё РЅР°Р·РІР°РЅРёРµ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё РїСѓСЃС‚С‹Рј, С‚Рѕ РІС‹РґР°С‚СЊ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРµ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ
 			if ((indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) && String.IsNullOrEmpty(e.FormattedValue.ToString()))
 			{
 				e.Cancel = true;
-				indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки не может быть пустой строкой";
+				indgvCosts.Rows[e.RowIndex].ErrorText = "РќР°Р·РІР°РЅРёРµ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚РѕР№ СЃС‚СЂРѕРєРѕР№";
 			}
 			else
-				//Если мы ввели новое название ценовой колонки, то проверяем на несовпадение с существующими ценовыми колонками
+				//Р•СЃР»Рё РјС‹ РІРІРµР»Рё РЅРѕРІРѕРµ РЅР°Р·РІР°РЅРёРµ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё, С‚Рѕ РїСЂРѕРІРµСЂСЏРµРј РЅР° РЅРµСЃРѕРІРїР°РґРµРЅРёРµ СЃ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёРјРё С†РµРЅРѕРІС‹РјРё РєРѕР»РѕРЅРєР°РјРё
 				if ((indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) && !String.IsNullOrEmpty(e.FormattedValue.ToString()))
 				{
 					DataRowView _checkedRow = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
@@ -3115,7 +3115,7 @@ order by PriceName
 							if (drs.Length > 0)
 							{
 								e.Cancel = true;
-								indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки совпадает с существующей ценовой колонкой";
+								indgvCosts.Rows[e.RowIndex].ErrorText = "РќР°Р·РІР°РЅРёРµ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё СЃРѕРІРїР°РґР°РµС‚ СЃ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРѕР№";
 							}
 						}
 						else
@@ -3128,7 +3128,7 @@ order by PriceName
 							if (drs.Length > 0)
 							{
 								e.Cancel = true;
-								indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки совпадает с существующей ценовой колонкой";
+								indgvCosts.Rows[e.RowIndex].ErrorText = "РќР°Р·РІР°РЅРёРµ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё СЃРѕРІРїР°РґР°РµС‚ СЃ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРѕР№";
 							}
 						}
 					}
@@ -3157,7 +3157,7 @@ order by PriceName
 			DataGridViewRow r = indgvCosts.Rows[e.RowIndex];
 			if (r.IsNewRow) return;
 
-			//Если мы пытаемся отредактировать название ценовой колонки, помечанной на удаление, то не позволяем это сделать
+			//Р•СЃР»Рё РјС‹ РїС‹С‚Р°РµРјСЃСЏ РѕС‚СЂРµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РЅР°Р·РІР°РЅРёРµ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё, РїРѕРјРµС‡Р°РЅРЅРѕР№ РЅР° СѓРґР°Р»РµРЅРёРµ, С‚Рѕ РЅРµ РїРѕР·РІРѕР»СЏРµРј СЌС‚Рѕ СЃРґРµР»Р°С‚СЊ
 			if (indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn)
 			{
 				DataRowView drv = (DataRowView)r.DataBoundItem;
@@ -3216,11 +3216,11 @@ order by PriceName
 
 				object count = ((DataView)bsCostsFormRules.List).ToTable().Compute(
 					String.Format("count({0})", selectFieldName),
-					String.Format("({0} is not null) and ({0} <> '')", selectFieldName));				
-				lCostCount.Text = String.Format("Общее кол-во цен: {0}   Кол-во настроенных цен: {1}", bsCostsFormRules.Count, count);
+					String.Format("({0} is not null) and ({0} <> '')", selectFieldName));
+				lCostCount.Text = String.Format("РћР±С‰РµРµ РєРѕР»-РІРѕ С†РµРЅ: {0}   РљРѕР»-РІРѕ РЅР°СЃС‚СЂРѕРµРЅРЅС‹С… С†РµРЅ: {1}", bsCostsFormRules.Count, count);
 			}
 			else
-				lCostCount.Text = String.Format("Общее кол-во цен: {0}", bsCostsFormRules.Count);
+				lCostCount.Text = String.Format("РћР±С‰РµРµ РєРѕР»-РІРѕ С†РµРЅ: {0}", bsCostsFormRules.Count);
 		}
 
 		private void lCostCount_TextChanged(object sender, EventArgs e)
@@ -3232,15 +3232,15 @@ order by PriceName
 		{
 			tmrCostSearch.Stop();
 
-			//Завершаем редактирование правил формализации цен
+			//Р—Р°РІРµСЂС€Р°РµРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїСЂР°РІРёР» С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ
 			if ((bsCostsFormRules.Current != null) && ((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
-				//Если создалась пустая строка в правилах формализации цен, то при сохранении отменяем ее
+				//Р•СЃР»Рё СЃРѕР·РґР°Р»Р°СЃСЊ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР° РІ РїСЂР°РІРёР»Р°С… С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ, С‚Рѕ РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё РѕС‚РјРµРЅСЏРµРј РµРµ
 				bsCostsFormRules.CancelEdit();
 			else
-				//иначе просто применяем изменения
+				//РёРЅР°С‡Рµ РїСЂРѕСЃС‚Рѕ РїСЂРёРјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ
 				bsCostsFormRules.EndEdit();
 
-			bsCostsFormRules.Filter = 
+			bsCostsFormRules.Filter =
 				String.Format("CFRPriceItemId = {0} and CFRCostName like '*{1}*'", currentPriceItemId, tbCostFind.Text);
 
 			indgvCosts.Refresh();
@@ -3254,15 +3254,15 @@ order by PriceName
 				tmrCostSearch.Start();
 			else
 			{
-				//Завершаем редактирование правил формализации цен
+				//Р—Р°РІРµСЂС€Р°РµРј СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ РїСЂР°РІРёР» С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ
 				if ((bsCostsFormRules.Current != null) && ((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
-					//Если создалась пустая строка в правилах формализации цен, то при сохранении отменяем ее
+					//Р•СЃР»Рё СЃРѕР·РґР°Р»Р°СЃСЊ РїСѓСЃС‚Р°СЏ СЃС‚СЂРѕРєР° РІ РїСЂР°РІРёР»Р°С… С„РѕСЂРјР°Р»РёР·Р°С†РёРё С†РµРЅ, С‚Рѕ РїСЂРё СЃРѕС…СЂР°РЅРµРЅРёРё РѕС‚РјРµРЅСЏРµРј РµРµ
 					bsCostsFormRules.CancelEdit();
 				else
-					//иначе просто применяем изменения
+					//РёРЅР°С‡Рµ РїСЂРѕСЃС‚Рѕ РїСЂРёРјРµРЅСЏРµРј РёР·РјРµРЅРµРЅРёСЏ
 					bsCostsFormRules.EndEdit();
 
-				//Сбросили фильтр
+				//РЎР±СЂРѕСЃРёР»Рё С„РёР»СЊС‚СЂ
 				bsCostsFormRules.Filter =
 					String.Format("CFRPriceItemId = {0}", currentPriceItemId);
 			}
@@ -3287,13 +3287,13 @@ order by PriceName
 			dialog.RestoreDirectory = true;
 			_priceFileFormatHelper.SetNewFormat((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue), tbDevider.Text);
 			if (PriceFileFormatHelper.IsTextFormat(_priceFileFormatHelper.NewFormat))
-				dialog.Filter = String.Format("Все файлы|*.*|{0}|*{1}", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
+				dialog.Filter = String.Format("Р’СЃРµ С„Р°Р№Р»С‹|*.*|{0}|*{1}", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
 			else
-				dialog.Filter = String.Format("{0}|*{1}|Все файлы|*.*", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
+				dialog.Filter = String.Format("{0}|*{1}|Р’СЃРµ С„Р°Р№Р»С‹|*.*", _priceFileFormatHelper.NewFormat, _priceFileFormatHelper.NewFileExtension);
 			dialog.FilterIndex = 0;
-			dialog.Title = String.Format("Выберите файл в формате {0}. ", _priceFileFormatHelper.NewFormat.ToString());
+			dialog.Title = String.Format("Р’С‹Р±РµСЂРёС‚Рµ С„Р°Р№Р» РІ С„РѕСЂРјР°С‚Рµ {0}. ", _priceFileFormatHelper.NewFormat.ToString());
 			if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
-				dialog.Title += String.Format("Разделитель '{0}'", _priceFileFormatHelper.NewDelimiter);
+				dialog.Title += String.Format("Р Р°Р·РґРµР»РёС‚РµР»СЊ '{0}'", _priceFileFormatHelper.NewDelimiter);
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				var fileName = dialog.FileName;
@@ -3301,7 +3301,7 @@ order by PriceName
 					_priceFileFormatHelper.NewDelimiter, _dataTableMarking);
 				if ((tables == null) || (tables.Count == 0) || (tables[0].Rows.Count == 0))
 				{
-					MessageBox.Show("Неправильный формат или файл поврежден", "Ошибка открытия файла", MessageBoxButtons.OK,
+					MessageBox.Show("РќРµРїСЂР°РІРёР»СЊРЅС‹Р№ С„РѕСЂРјР°С‚ РёР»Рё С„Р°Р№Р» РїРѕРІСЂРµР¶РґРµРЅ", "РћС€РёР±РєР° РѕС‚РєСЂС‹С‚РёСЏ С„Р°Р№Р»Р°", MessageBoxButtons.OK,
 									MessageBoxIcon.Error);
 					return;
 				}
@@ -3310,21 +3310,21 @@ order by PriceName
 					currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
 					if (!_priceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), File.OpenRead(fileName)))
 					{
-						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
+						MessageBox.Show(_priceProcessor.LastErrorMessage, "РћС€РёР±РєР°", MessageBoxButtons.OK,
 										MessageBoxIcon.Error);
 					}
 					else
 					{
-						MessageBox.Show("Прайс-лист успешно положен в Base.", "Информация", MessageBoxButtons.OK,
+						MessageBox.Show("РџСЂР°Р№СЃ-Р»РёСЃС‚ СѓСЃРїРµС€РЅРѕ РїРѕР»РѕР¶РµРЅ РІ Base.", "РРЅС„РѕСЂРјР°С†РёСЏ", MessageBoxButtons.OK,
 										MessageBoxIcon.Information);
 						tbControl_SelectedIndexChanged(sender, e);
 					}
 				}
 				catch (Exception ex)
 				{
-					_logger.Error("Ошибка при попытке положить файл в Base", ex);
-					MessageBox.Show("Не удалось положить файл в Base. Сообщение об ошибке отправлено разработчику",
-									"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					_logger.Error("РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ РїРѕР»РѕР¶РёС‚СЊ С„Р°Р№Р» РІ Base", ex);
+					MessageBox.Show("РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»РѕР¶РёС‚СЊ С„Р°Р№Р» РІ Base. РЎРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ РѕС‚РїСЂР°РІР»РµРЅРѕ СЂР°Р·СЂР°Р±РѕС‚С‡РёРєСѓ",
+									"РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -3336,8 +3336,8 @@ order by PriceName
 			indgvFirm.Focus();
 		}
 
-		// Обработчик для таймера, использующегося для поиска 
-		// по колонкам прайс-листа (вкладка "Прайс")
+		// РћР±СЂР°Р±РѕС‚С‡РёРє РґР»СЏ С‚Р°Р№РјРµСЂР°, РёСЃРїРѕР»СЊР·СѓСЋС‰РµРіРѕСЃСЏ РґР»СЏ РїРѕРёСЃРєР°
+		// РїРѕ РєРѕР»РѕРЅРєР°Рј РїСЂР°Р№СЃ-Р»РёСЃС‚Р° (РІРєР»Р°РґРєР° "РџСЂР°Р№СЃ")
 		private void tmrSearchInPrice_Tick(object sender, EventArgs e)
 		{
 			_inactivityTime += tmrSearchInPrice.Interval;
@@ -3352,7 +3352,7 @@ order by PriceName
 			if (grid == null)
 				grid = indgvPriceData;
 			if (grid.CurrentRow != null) {
-				// Сначала ищем по заголовкам столбцов
+				// РЎРЅР°С‡Р°Р»Р° РёС‰РµРј РїРѕ Р·Р°РіРѕР»РѕРІРєР°Рј СЃС‚РѕР»Р±С†РѕРІ
 				foreach (DataGridViewColumn column in grid.Columns) {
 					if (column.HeaderText.ToUpper().Contains(text.ToUpper())) {
 						var rowIndex = grid.CurrentRow.Index;
@@ -3360,7 +3360,7 @@ order by PriceName
 						return true;
 					}
 				}
-				// Потом ищем по ячейкам. Сначала по тем, которые ниже текущей
+				// РџРѕС‚РѕРј РёС‰РµРј РїРѕ СЏС‡РµР№РєР°Рј. РЎРЅР°С‡Р°Р»Р° РїРѕ С‚РµРј, РєРѕС‚РѕСЂС‹Рµ РЅРёР¶Рµ С‚РµРєСѓС‰РµР№
 				var indexColumn = moveToNextResult ? (grid.CurrentCell.ColumnIndex + 1) : 0;
 				var indexRow = enterPressed ? (grid.CurrentRow.Index - 1) : grid.CurrentRow.Index;
 				for (var i = indexRow; i < grid.Rows.Count; i++) {
@@ -3374,7 +3374,7 @@ order by PriceName
 					}
 					indexColumn = 0;
 				}
-				// Затем сначала и до текущей строки 
+				// Р—Р°С‚РµРј СЃРЅР°С‡Р°Р»Р° Рё РґРѕ С‚РµРєСѓС‰РµР№ СЃС‚СЂРѕРєРё
 				for (var i = 0; i < grid.CurrentRow.Index; i++)
 					foreach (DataGridViewCell cell in grid.Rows[i].Cells)
 						if (cell.Value != null)
@@ -3453,13 +3453,13 @@ order by PriceName
 				{
 					var newFormatFileExtension = _priceFileFormatHelper.NewFileExtension;
 					if (PriceFileFormatHelper.IsTextFormat(_priceFileFormatHelper.NewFormat))
-						ofdNewFormat.Filter = String.Format("Все файлы|*.*|{0}|*{1}", _priceFileFormatHelper.NewFormat, newFormatFileExtension);
+						ofdNewFormat.Filter = String.Format("Р’СЃРµ С„Р°Р№Р»С‹|*.*|{0}|*{1}", _priceFileFormatHelper.NewFormat, newFormatFileExtension);
 					else
-						ofdNewFormat.Filter = _priceFileFormatHelper.NewFormat + "|*" + newFormatFileExtension + "|Все файлы|*.*";
+						ofdNewFormat.Filter = _priceFileFormatHelper.NewFormat + "|*" + newFormatFileExtension + "|Р’СЃРµ С„Р°Р№Р»С‹|*.*";
 					ofdNewFormat.FilterIndex = 0;
-					ofdNewFormat.Title = "Выберите файл в новом формате (" + _priceFileFormatHelper.NewFormat + ").";
+					ofdNewFormat.Title = "Р’С‹Р±РµСЂРёС‚Рµ С„Р°Р№Р» РІ РЅРѕРІРѕРј С„РѕСЂРјР°С‚Рµ (" + _priceFileFormatHelper.NewFormat + ").";
 					if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
-						ofdNewFormat.Title += " Разделитель: '" + tbDevider.Text + "'";
+						ofdNewFormat.Title += " Р Р°Р·РґРµР»РёС‚РµР»СЊ: '" + tbDevider.Text + "'";
 
 					if (ofdNewFormat.ShowDialog() == DialogResult.OK)
 					{
@@ -3479,10 +3479,10 @@ order by PriceName
 								catch (Exception)
 								{
 									ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
-									_priceFileFormatHelper.ResetNewFormat();									
+									_priceFileFormatHelper.ResetNewFormat();
 									Mailer.SendWarningLetter(
 										String.Format(
-											@"Изменение формата прайс-листа. Невозможно записать указанный файл в новом формате в локальную веременную директорию. Файл {0}",
+											@"РР·РјРµРЅРµРЅРёРµ С„РѕСЂРјР°С‚Р° РїСЂР°Р№СЃ-Р»РёСЃС‚Р°. РќРµРІРѕР·РјРѕР¶РЅРѕ Р·Р°РїРёСЃР°С‚СЊ СѓРєР°Р·Р°РЅРЅС‹Р№ С„Р°Р№Р» РІ РЅРѕРІРѕРј С„РѕСЂРјР°С‚Рµ РІ Р»РѕРєР°Р»СЊРЅСѓСЋ РІРµСЂРµРјРµРЅРЅСѓСЋ РґРёСЂРµРєС‚РѕСЂРёСЋ. Р¤Р°Р№Р» {0}",
 											destinationFilePath));
 								}
 							}
@@ -3494,29 +3494,29 @@ order by PriceName
 						else
 						{
 							ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
-							_priceFileFormatHelper.ResetNewFormat();							
+							_priceFileFormatHelper.ResetNewFormat();
 							dtSet.RejectChanges();
-							// TODO: выставить в comboBox старый формат
+							// TODO: РІС‹СЃС‚Р°РІРёС‚СЊ РІ comboBox СЃС‚Р°СЂС‹Р№ С„РѕСЂРјР°С‚
 							Mailer.SendWarningLetter(
 								String.Format(
-									@"Изменение формата прайс-листа. Пользователь выбрал файл в новом формате, однако этот файл не был найден. Файл {0}",
+									@"РР·РјРµРЅРµРЅРёРµ С„РѕСЂРјР°С‚Р° РїСЂР°Р№СЃ-Р»РёСЃС‚Р°. РџРѕР»СЊР·РѕРІР°С‚РµР»СЊ РІС‹Р±СЂР°Р» С„Р°Р№Р» РІ РЅРѕРІРѕРј С„РѕСЂРјР°С‚Рµ, РѕРґРЅР°РєРѕ СЌС‚РѕС‚ С„Р°Р№Р» РЅРµ Р±С‹Р» РЅР°Р№РґРµРЅ. Р¤Р°Р№Р» {0}",
 									ofdNewFormat.FileName));
-							MessageBox.Show("Выбранный вами файл был переименован, перемещен или удален. Выберите другой файл", "Ошибка",
+							MessageBox.Show("Р’С‹Р±СЂР°РЅРЅС‹Р№ РІР°РјРё С„Р°Р№Р» Р±С‹Р» РїРµСЂРµРёРјРµРЅРѕРІР°РЅ, РїРµСЂРµРјРµС‰РµРЅ РёР»Рё СѓРґР°Р»РµРЅ. Р’С‹Р±РµСЂРёС‚Рµ РґСЂСѓРіРѕР№ С„Р°Р№Р»", "РћС€РёР±РєР°",
 											MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}
 					}
 					else
 					{
 						ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
-						_priceFileFormatHelper.ResetNewFormat();						
+						_priceFileFormatHelper.ResetNewFormat();
 					}
 				}
 				else
 				{
 					ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
-					_priceFileFormatHelper.ResetNewFormat();					
+					_priceFileFormatHelper.ResetNewFormat();
 					if (!String.IsNullOrEmpty(_priceFileFormatHelper.LastErrorMessage))
-						MessageBox.Show(_priceFileFormatHelper.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+						MessageBox.Show(_priceFileFormatHelper.LastErrorMessage, "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 				_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 			}
@@ -3593,7 +3593,7 @@ order by PriceName
 			{
 				if (indgvPrice.CurrentRow == null)
 				{
-					MessageBox.Show("Выберите прайс-лист", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show("Р’С‹Р±РµСЂРёС‚Рµ РїСЂР°Р№СЃ-Р»РёСЃС‚", "РџСЂРµРґСѓРїСЂРµР¶РґРµРЅРёРµ", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return;
 				}
 				var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
@@ -3605,12 +3605,12 @@ order by PriceName
 				if (firmCode > 0)
 					System.Diagnostics.Process.Start(String.Format("mailto:{0}", GetContactText(firmCode, 2, 0)));
 				else
-					MessageBox.Show("Ошибка при попытке создать письмо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show("РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ СЃРѕР·РґР°С‚СЊ РїРёСЃСЊРјРѕ", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 			catch (Exception ex)
 			{
-				_logger.Error("Ошибка при попытке создать письмо ответственному за прайс-лист из вкладки 'Фирмы'", ex);
-				MessageBox.Show("Ошибка при попытке создать письмо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				_logger.Error("РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ СЃРѕР·РґР°С‚СЊ РїРёСЃСЊРјРѕ РѕС‚РІРµС‚СЃС‚РІРµРЅРЅРѕРјСѓ Р·Р° РїСЂР°Р№СЃ-Р»РёСЃС‚ РёР· РІРєР»Р°РґРєРё 'Р¤РёСЂРјС‹'", ex);
+				MessageBox.Show("РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ СЃРѕР·РґР°С‚СЊ РїРёСЃСЊРјРѕ", "РћС€РёР±РєР°", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -3628,7 +3628,7 @@ order by PriceName
 			}
 			catch (Exception ex)
 			{
-				_logger.Error("Ошибка при попытке получить FirmCode по коду прайса", ex);
+				_logger.Error("РћС€РёР±РєР° РїСЂРё РїРѕРїС‹С‚РєРµ РїРѕР»СѓС‡РёС‚СЊ FirmCode РїРѕ РєРѕРґСѓ РїСЂР°Р№СЃР°", ex);
 				return -1;
 			}
 			finally
@@ -3646,7 +3646,7 @@ order by PriceName
 			{
 				file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), file);
 				if (LoadFileFromBase(id, file))
-					MessageBox.Show(String.Format("Прайс сохранен на рабочий стол, файл {0}", Path.GetFileName(file)));
+					MessageBox.Show(String.Format("РџСЂР°Р№СЃ СЃРѕС…СЂР°РЅРµРЅ РЅР° СЂР°Р±РѕС‡РёР№ СЃС‚РѕР», С„Р°Р№Р» {0}", Path.GetFileName(file)));
 			}
 		}
 
@@ -3691,13 +3691,13 @@ order by PriceName
 #endif
 				var message = new MailMessage();
 				message.To.Add(mailToAdress);
-				message.Subject = String.Format("\"{0}\" - регистрация ценовой колонки", field.ShortName);
+				message.Subject = String.Format("\"{0}\" - СЂРµРіРёСЃС‚СЂР°С†РёСЏ С†РµРЅРѕРІРѕР№ РєРѕР»РѕРЅРєРё", field.ShortName);
 				message.From = new MailAddress("register@analit.net");
 				message.Body = String.Format(
-@"Оператор: {0} 
-Поставщик: {1}
-Регион: {2}
-Прайс-лист: {3}
+@"РћРїРµСЂР°С‚РѕСЂ: {0}
+РџРѕСЃС‚Р°РІС‰РёРє: {1}
+Р РµРіРёРѕРЅ: {2}
+РџСЂР°Р№СЃ-Р»РёСЃС‚: {3}
 ", field.OperatorName, field.ShortName, field.Region, field.PriceName);
 				smtp.Send(message);
 			});
@@ -3713,7 +3713,7 @@ order by PriceName
 
 			createNewPriceCollumn_Click(null, null);
 			checkBoxShowDisabled.Checked = true;
-			
+
 			var currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
 			var count = 0;
 			foreach (var row in indgvFirm.Rows) {

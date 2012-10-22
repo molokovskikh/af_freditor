@@ -87,9 +87,9 @@ namespace FREditor
 			((System.ComponentModel.ISupportInitialize)(this.dtGroups)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.indgvGroups)).BeginInit();
 			this.SuspendLayout();
-			// 
+			//
 			// pnlMask
-			// 
+			//
 			this.pnlMask.Controls.Add(this.txtBoxName);
 			this.pnlMask.Controls.Add(this.txtBoxNameMaskNM);
 			this.pnlMask.Controls.Add(this.label2);
@@ -99,40 +99,40 @@ namespace FREditor
 			this.pnlMask.Name = "pnlMask";
 			this.pnlMask.Size = new System.Drawing.Size(504, 93);
 			this.pnlMask.TabIndex = 8;
-			// 
+			//
 			// txtBoxName
-			// 
+			//
 			this.txtBoxName.Location = new System.Drawing.Point(126, 48);
 			this.txtBoxName.Name = "txtBoxName";
 			this.txtBoxName.Size = new System.Drawing.Size(362, 20);
 			this.txtBoxName.TabIndex = 7;
-			// 
+			//
 			// txtBoxNameMaskNM
-			// 
+			//
 			this.txtBoxNameMaskNM.Location = new System.Drawing.Point(126, 24);
 			this.txtBoxNameMaskNM.Name = "txtBoxNameMaskNM";
 			this.txtBoxNameMaskNM.Size = new System.Drawing.Size(362, 20);
 			this.txtBoxNameMaskNM.TabIndex = 6;
 			this.txtBoxNameMaskNM.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBoxNameMaskNM_KeyDown);
-			// 
+			//
 			// label2
-			// 
+			//
 			this.label2.Location = new System.Drawing.Point(22, 48);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100, 23);
 			this.label2.TabIndex = 5;
-			this.label2.Text = "Наименование :";
-			// 
+			this.label2.Text = "РќР°РёРјРµРЅРѕРІР°РЅРёРµ :";
+			//
 			// label1
-			// 
+			//
 			this.label1.Location = new System.Drawing.Point(22, 24);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100, 23);
 			this.label1.TabIndex = 4;
-			this.label1.Text = "Маска :";
-			// 
+			this.label1.Text = "РњР°СЃРєР° :";
+			//
 			// pnlButtons
-			// 
+			//
 			this.pnlButtons.Controls.Add(this.btnCheck);
 			this.pnlButtons.Controls.Add(this.btnCancel);
 			this.pnlButtons.Controls.Add(this.btnOK);
@@ -141,58 +141,58 @@ namespace FREditor
 			this.pnlButtons.Name = "pnlButtons";
 			this.pnlButtons.Size = new System.Drawing.Size(104, 216);
 			this.pnlButtons.TabIndex = 9;
-			// 
+			//
 			// btnCheck
-			// 
+			//
 			this.btnCheck.Location = new System.Drawing.Point(16, 80);
 			this.btnCheck.Name = "btnCheck";
 			this.btnCheck.Size = new System.Drawing.Size(75, 23);
 			this.btnCheck.TabIndex = 10;
 			this.btnCheck.Text = "Check";
 			this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
-			// 
+			//
 			// btnCancel
-			// 
+			//
 			this.btnCancel.Location = new System.Drawing.Point(16, 48);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
 			this.btnCancel.TabIndex = 9;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-			// 
+			//
 			// btnOK
-			// 
+			//
 			this.btnOK.Location = new System.Drawing.Point(16, 16);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(75, 23);
 			this.btnOK.TabIndex = 8;
 			this.btnOK.Text = "OK";
 			this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
-			// 
+			//
 			// dtSet
-			// 
+			//
 			this.dtSet.DataSetName = "NewDataSet";
 			this.dtSet.Locale = new System.Globalization.CultureInfo("ru-RU");
 			this.dtSet.Tables.AddRange(new System.Data.DataTable[] {
 			this.dtGroups});
-			// 
+			//
 			// dtGroups
-			// 
+			//
 			this.dtGroups.Columns.AddRange(new System.Data.DataColumn[] {
 			this.GName,
 			this.GValue});
 			this.dtGroups.TableName = "dtGroups";
-			// 
+			//
 			// GName
-			// 
+			//
 			this.GName.ColumnName = "GName";
-			// 
+			//
 			// GValue
-			// 
+			//
 			this.GValue.ColumnName = "GValue";
-			// 
+			//
 			// indgvGroups
-			// 
+			//
 			this.indgvGroups.AllowUserToAddRows = false;
 			this.indgvGroups.AllowUserToDeleteRows = false;
 			this.indgvGroups.AllowUserToResizeRows = false;
@@ -219,32 +219,32 @@ namespace FREditor
 			this.indgvGroups.RowHeadersVisible = false;
 			this.indgvGroups.Size = new System.Drawing.Size(400, 216);
 			this.indgvGroups.TabIndex = 11;
-			// 
+			//
 			// gNameDataGridViewTextBoxColumn
-			// 
+			//
 			this.gNameDataGridViewTextBoxColumn.DataPropertyName = "GName";
-			this.gNameDataGridViewTextBoxColumn.HeaderText = "Группа";
+			this.gNameDataGridViewTextBoxColumn.HeaderText = "Р“СЂСѓРїРїР°";
 			this.gNameDataGridViewTextBoxColumn.Name = "gNameDataGridViewTextBoxColumn";
 			this.gNameDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
+			//
 			// gValueDataGridViewTextBoxColumn
-			// 
+			//
 			this.gValueDataGridViewTextBoxColumn.DataPropertyName = "GValue";
-			dataGridViewCellStyle1.NullValue = "Значение не задано";
+			dataGridViewCellStyle1.NullValue = "Р—РЅР°С‡РµРЅРёРµ РЅРµ Р·Р°РґР°РЅРѕ";
 			this.gValueDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle1;
-			this.gValueDataGridViewTextBoxColumn.HeaderText = "Значение";
+			this.gValueDataGridViewTextBoxColumn.HeaderText = "Р—РЅР°С‡РµРЅРёРµ";
 			this.gValueDataGridViewTextBoxColumn.Name = "gValueDataGridViewTextBoxColumn";
 			this.gValueDataGridViewTextBoxColumn.ReadOnly = true;
-			// 
+			//
 			// frmNameMask
-			// 
+			//
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(504, 309);
 			this.Controls.Add(this.indgvGroups);
 			this.Controls.Add(this.pnlButtons);
 			this.Controls.Add(this.pnlMask);
 			this.Name = "frmNameMask";
-			this.Text = "Маска разбора товара";
+			this.Text = "РњР°СЃРєР° СЂР°Р·Р±РѕСЂР° С‚РѕРІР°СЂР°";
 			this.Load += new System.EventHandler(this.frmNameMask_Load);
 			this.pnlMask.ResumeLayout(false);
 			this.pnlMask.PerformLayout();
@@ -259,7 +259,7 @@ namespace FREditor
 
 		private void frmNameMask_Load(object sender, System.EventArgs e)
 		{
-			Check();	
+			Check();
 		}
 
 		private void btnOK_Click(object sender, System.EventArgs e)
@@ -294,7 +294,7 @@ namespace FREditor
 								if(m.Groups["Name"].Value != String.Empty)
 									newDR[GValue] = m.Groups["Name"].Value;
 								else
-									newDR[GValue] = "Значение не определено";
+									newDR[GValue] = "Р—РЅР°С‡РµРЅРёРµ РЅРµ РѕРїСЂРµРґРµР»РµРЅРѕ";
 								dtGroups.Rows.Add(newDR);
 							}
 						}
@@ -305,7 +305,7 @@ namespace FREditor
 							if(m.Groups["Name"].Value != String.Empty)
 								newDR[GValue] = m.Groups["Name"].Value;
 							else
-								newDR[GValue] = "Значение не определено";
+								newDR[GValue] = "Р—РЅР°С‡РµРЅРёРµ РЅРµ РѕРїСЂРµРґРµР»РµРЅРѕ";
 							dtGroups.Rows.Add(newDR);
 						}
 					}
