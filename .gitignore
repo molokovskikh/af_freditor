@@ -1,4 +1,5 @@
 output/
+packages/
 AssemblyInfo.cs
 _ReSharper.*
 _resharper.*

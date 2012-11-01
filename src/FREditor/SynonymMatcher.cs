@@ -77,8 +77,8 @@ namespace FREditor
 			timer.Tick += OnTimedEvent;
 			timer.Interval = 3000;
 			timer.Stop();
-			frmMatchRes = new frmMatchResult {Owner = owner, Matcher = this};
-			frmMatchProgr = new frmMatchProgress {Owner = owner, Matcher = this};
+			frmMatchRes = new frmMatchResult { Owner = owner, Matcher = this };
+			frmMatchProgr = new frmMatchProgress { Owner = owner, Matcher = this };
 			firms = new Dictionary<uint, FirmSummary>();
 		}
 
@@ -101,30 +101,26 @@ namespace FREditor
 			CreateSynonyms(Firms.First().Key);
 			iterCount = 5;
 			matching = true;
-			timer.Start();        	
+			timer.Start();
 		}
 
 		private bool StartMatching(uint priceItemId, uint priceCode)
 		{
 			bool ret = false;
-			try
-			{
+			try {
 				string[] res = owner._priceProcessor.FindSynonyms(Convert.ToUInt32(priceItemId));
-				if (res[0] == "Error")
-				{
+				if (res[0] == "Error") {
 					iterCount = 0;
 					timer.Stop();
 					MessageBox.Show(res[1], "Ошибка сопоставления синонимов", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
-				if (res[0] == "Success")
-				{					
+				if (res[0] == "Success") {
 					currentTask = Convert.ToInt64(res[1]);
 					timer.Start();
 					ret = true;
 				}
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				_logger.Error("Ошибка при старте сопоставления", ex);
 				iterCount = 0;
 				timer.Stop();
@@ -135,37 +131,30 @@ namespace FREditor
 		}
 
 		public void StopMatching()
-		{			
-			try
-			{
+		{
+			try {
 				owner._priceProcessor.StopFindSynonyms(currentTask.ToString());
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				_logger.Error("Ошибка при остановке задачи сопоставления", ex);
 			}
 		}
 
 		public void AppendToIndex(IList<int> ids)
 		{
-			try
-			{
+			try {
 				owner._priceProcessor.AppendToIndex(ids.Select(id => id.ToString()).ToArray());
 			}
-			catch(Exception ex)
-			{
+			catch (Exception ex) {
 				_logger.Error("Ошибка при добавлении индексов", ex);
 			}
 		}
-		
+
 		private void OnTimedEvent(object sender, System.EventArgs e)
 		{
-			try
-			{
-				if(matching)
-				{
-					if (StartMatching(currentPriceItemId, currentPriceCode))
-					{
+			try {
+				if (matching) {
+					if (StartMatching(currentPriceItemId, currentPriceCode)) {
 						matching = false;
 						if (!frmMatchProgr.Modal) frmMatchProgr.ShowDialog();
 					}
@@ -175,58 +164,48 @@ namespace FREditor
 				}
 
 				string[] res = owner._priceProcessor.FindSynonymsResult(currentTask.ToString());
-				if (res[0] == "Running")
-				{
-					frmMatchProgr.SetValue(Convert.ToUInt32(res[1]));										
+				if (res[0] == "Running") {
+					frmMatchProgr.SetValue(Convert.ToUInt32(res[1]));
 					owner.EnableMatchBtn();
 					return;
 				}
-				if (res[0] == "Success")
-				{
+				if (res[0] == "Success") {
 					timer.Stop();
 					FillSummary(res); // заполняем информацию о совпадениях по поставщикам
-					if (iterCount == 0)
-					{						
+					if (iterCount == 0) {
 						frmMatchRes.Fill(firms); // выводим окно со списком совпадений
 						CloseProgressBar();
 					}
-					else
-					{
-						if (firms.Count > 0 && iterCount > 0)
-						{
-							iterCount--;
-							CreateSynonyms(firms.First().Key);
-							if (iterCount == 0) {
-								CloseProgressBar();
-								return;
-							}
-							StartMatching(currentPriceItemId, currentPriceCode);
-						}
-						else
-						{
-							iterCount = 0;
+					else if (firms.Count > 0 && iterCount > 0) {
+						iterCount--;
+						CreateSynonyms(firms.First().Key);
+						if (iterCount == 0) {
 							CloseProgressBar();
+							return;
 						}
+						StartMatching(currentPriceItemId, currentPriceCode);
 					}
+					else {
+						iterCount = 0;
+						CloseProgressBar();
+					}
+
 					return;
 				}
-				if (res[0] == "Error")
-				{
+				if (res[0] == "Error") {
 					iterCount = 0;
 					timer.Stop();
 					CloseProgressBar();
 					MessageBox.Show(res[1], "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-				if (res[0] == "Canceled")
-				{
+				if (res[0] == "Canceled") {
 					iterCount = 0;
 					timer.Stop();
 					CloseProgressBar();
 				}
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				_logger.Error("Ошибка при сопоставлении", ex);
 				timer.Stop();
 				CloseProgressBar();
@@ -239,14 +218,12 @@ namespace FREditor
 		{
 			firms.Clear();
 			int matchCnt = 0;
-			foreach (var res in result)
-			{
+			foreach (var res in result) {
 				string[] info = res.Split(';');
 				if (info.Length <= 1) continue;
 				int firmCnt = Convert.ToInt32(info[0]);
 				string synonym = info[info.Length - 1];
-				for (int i = 0; i < firmCnt; i++)
-				{
+				for (int i = 0; i < firmCnt; i++) {
 					uint firmCode = Convert.ToUInt32(info[i * 4 + 1]);
 					string firmName = info[i * 4 + 2];
 					uint productId = Convert.ToUInt32(info[i * 4 + 3]);
@@ -262,17 +239,13 @@ namespace FREditor
 
 		public void CreateSynonyms(uint firmcode)
 		{
-			if (firmcode != 0)
-			{
+			if (firmcode != 0) {
 				var infoList = firms[firmcode].Summary();
 				connection.Open();
-				try
-				{
+				try {
 					IList<int> ids = new List<int>();
-					foreach (var firmInfo in infoList)
-					{
-						try
-						{
+					foreach (var firmInfo in infoList) {
+						try {
 							MySqlHelper.ExecuteNonQuery(
 								connection,
 								"insert into farm.synonym (PriceCode, Synonym, ProductId, Junk) values (?PriceCode, ?Synonym, ?ProductId, ?Junk)",
@@ -283,8 +256,7 @@ namespace FREditor
 							var lastId = Convert.ToInt32(MySqlHelper.ExecuteScalar(connection, "select last_insert_id();"));
 							ids.Add(lastId);
 						}
-						catch (MySqlException ex)
-						{
+						catch (MySqlException ex) {
 							if (ex.Number == 1062)
 								continue;
 							throw;
@@ -292,9 +264,8 @@ namespace FREditor
 					}
 					AppendToIndex(ids);
 				}
-				finally
-				{
-					connection.Close();                    
+				finally {
+					connection.Close();
 				}
 			}
 		}

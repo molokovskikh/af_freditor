@@ -18,26 +18,23 @@ namespace FREditor.Test
 		{
 			var pricesDirectory = "prices";
 			var invalidPricesDirectory = "invalid_prices";
-			var pricesFiles = new string[3] {"1.txt", "2.xls", "3.dbf"};
+			var pricesFiles = new string[3] { "1.txt", "2.xls", "3.dbf" };
 			var countsTables = new int[3] { 1, 2, 1 };
-			var pricesFormats = new PriceFormat[4] { PriceFormat.DelimWIN, PriceFormat.XLS, PriceFormat.NativeDbf, PriceFormat.UniversalFormalizer};
-			var indvalidPricesFiles = new string[3] {"1.xls", "2.xls", "3.txt"};
+			var pricesFormats = new PriceFormat[4] { PriceFormat.DelimWIN, PriceFormat.XLS, PriceFormat.NativeDbf, PriceFormat.UniversalFormalizer };
+			var indvalidPricesFiles = new string[3] { "1.xls", "2.xls", "3.txt" };
 			var index = 0;
-			
-			foreach (var filename in pricesFiles)
-			{
+
+			foreach (var filename in pricesFiles) {
 				var path = Settings.Default.TestDirectoryPath + pricesDirectory + Path.DirectorySeparatorChar + filename;
 				var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path), pricesFormats[index], "tab", null);
 				Assert.That(tables.Count, Is.EqualTo(countsTables[index++]));
 				Assert.That(tables[0].Rows.Count, Is.GreaterThan(0));
 			}
 			index = 0;
-			foreach (var filename in indvalidPricesFiles)
-			{
+			foreach (var filename in indvalidPricesFiles) {
 				var path = Settings.Default.TestDirectoryPath + invalidPricesDirectory + Path.DirectorySeparatorChar + filename;
 				var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path), pricesFormats[index++], "tab", null);
-				if (tables != null)
-				{
+				if (tables != null) {
 					Assert.That(tables.Count, Is.EqualTo(1));
 					Assert.That(tables[0].Rows.Count, Is.EqualTo(0));
 				}
@@ -64,17 +61,16 @@ namespace FREditor.Test
 			value = Convert.ToString(row[0]);
 			Assert.That(value, Is.EqualTo("Абитаксел - Тева д/инф. 100мг/16.7мл фл.№1"));
 			value = Convert.ToString(row[1]);
-			Assert.That(value, Is.EqualTo("11000="));		
+			Assert.That(value, Is.EqualTo("11000="));
 		}
 
 		[Test]
 		public void CreateCopyWithoutSpaces()
 		{
 			var path = Settings.Default.TestDirectoryPath + "Т#е$с т.о в ы й  ф а й-л.txt";
-            if(File.Exists(path))
-			    File.Delete(path);
-			using (var w = new StreamWriter(path, false, Encoding.GetEncoding(1251)))
-			{
+			if (File.Exists(path))
+				File.Delete(path);
+			using (var w = new StreamWriter(path, false, Encoding.GetEncoding(1251))) {
 				w.WriteLine("Тестовый файл");
 			}
 			string path2 = PriceFileHelper.CreateCopyWithoutSpacesAndDots(path);
@@ -89,5 +85,4 @@ namespace FREditor.Test
 			File.Delete(path2);
 		}
 	}
-
 }

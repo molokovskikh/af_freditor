@@ -53,11 +53,11 @@ namespace FREditor.Test
 			form.tmrSearch_Tick(null, null);
 
 			var dataGrid = (INDataGridView)form.Controls.Find("indgvFirm", true)[0];
-			var rows =  new DataGridViewRow[dataGrid.Rows.Count];
+			var rows = new DataGridViewRow[dataGrid.Rows.Count];
 			dataGrid.Rows.CopyTo(rows, 0);
 			Assert.That(dataGrid.Rows.Count, Is.GreaterThan(0));
 			var lanCell = dataGrid.Rows.Cast<DataGridViewRow>().Select(r => r.Cells[2].Value).ToList();
-			lanCell.ForEach( e => Assert.That(e, Is.EqualTo("LAN")));
+			lanCell.ForEach(e => Assert.That(e, Is.EqualTo("LAN")));
 		}
 	}
 }

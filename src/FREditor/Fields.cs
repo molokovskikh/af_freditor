@@ -25,11 +25,11 @@ namespace FREditor
 
 		public static IEnumerable<string> Columnds()
 		{
-			return Additional().Select(f => new [] {
-					GeneralColumn(f),
-					BeginColumn(f),
-					EndColumn(f),
-				})
+			return Additional().Select(f => new[] {
+				GeneralColumn(f),
+				BeginColumn(f),
+				EndColumn(f),
+			})
 				.SelectMany(i => i);
 		}
 

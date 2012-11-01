@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
@@ -22,28 +22,26 @@ namespace FREditor
 
 		public frmWait()
 		{
-			//
 			// Required for Windows Form Designer support
-			//
+
 			InitializeComponent();
 		}
 
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
-			{
-				if(components != null)
-				{
+			if (disposing) {
+				if (components != null) {
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -81,25 +79,22 @@ namespace FREditor
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Load += new System.EventHandler(this.frmWait_Load);
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
 
 		private void tmrWait_Tick(object sender, System.EventArgs e)
 		{
 			tmrWait.Enabled = false;
 			if ((openPrice != null) && (drP != null))
-				try
-				{
+				try {
 					openPrice(drP);
 				}
-				catch (Exception ex)
-				{
+				catch (Exception ex) {
 					MessageBox.Show("Не удалось открыть прайс-лист. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					Program.SendMessageOnException(null, new Exception("Ошибка при открытии прайс-листа.", ex));
 				}
-				finally
-				{
+				finally {
 					Close();
 				}
 		}
@@ -108,6 +103,5 @@ namespace FREditor
 		{
 			tmrWait.Enabled = true;
 		}
-
 	}
 }

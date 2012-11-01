@@ -7,16 +7,14 @@ namespace FREditor
 {
 	public class CustomConstraintException : Exception
 	{
-
 		public CustomConstraintException(string message)
-			:base(message)
+			: base(message)
 		{
 		}
 
 		public CustomConstraintException(string message, Exception innerException)
-			:base(message, innerException)
+			: base(message, innerException)
 		{
-			
 		}
 	}
 }

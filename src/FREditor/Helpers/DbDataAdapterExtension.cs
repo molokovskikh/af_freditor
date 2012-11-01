@@ -23,8 +23,7 @@ namespace FREditor.Helpers
 		{
 			var syncFill = new SyncFillAdapter(FillAdapter);
 			var asyncResult = syncFill.BeginInvoke(dataAdapter, dataTable, null, new object());
-			while (!asyncResult.IsCompleted)
-			{
+			while (!asyncResult.IsCompleted) {
 				Application.DoEvents();
 				Thread.Sleep(1000);
 			}

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Drawing;
 using System.Collections;
 using System.ComponentModel;
@@ -13,7 +13,6 @@ namespace FREditor
 	/// </summary>
 	public class frmNameMask : System.Windows.Forms.Form
 	{
-
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		public System.Windows.Forms.TextBox txtBoxNameMaskNM;
@@ -34,28 +33,26 @@ namespace FREditor
 
 		public frmNameMask()
 		{
-			//
 			// Required for Windows Form Designer support
-			//
+
 			InitializeComponent();
 		}
 
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
-		protected override void Dispose( bool disposing )
+		protected override void Dispose(bool disposing)
 		{
-			if( disposing )
-			{
-				if(components != null)
-				{
+			if (disposing) {
+				if (components != null) {
 					components.Dispose();
 				}
 			}
-			base.Dispose( disposing );
+			base.Dispose(disposing);
 		}
 
 		#region Windows Form Designer generated code
+
 		/// <summary>
 		/// Required method for Designer support - do not modify
 		/// the contents of this method with the code editor.
@@ -174,13 +171,15 @@ namespace FREditor
 			this.dtSet.DataSetName = "NewDataSet";
 			this.dtSet.Locale = new System.Globalization.CultureInfo("ru-RU");
 			this.dtSet.Tables.AddRange(new System.Data.DataTable[] {
-			this.dtGroups});
+				this.dtGroups
+			});
 			//
 			// dtGroups
 			//
 			this.dtGroups.Columns.AddRange(new System.Data.DataColumn[] {
-			this.GName,
-			this.GValue});
+				this.GName,
+				this.GValue
+			});
 			this.dtGroups.TableName = "dtGroups";
 			//
 			// GName
@@ -200,8 +199,9 @@ namespace FREditor
 			this.indgvGroups.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
 			this.indgvGroups.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.indgvGroups.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			this.gNameDataGridViewTextBoxColumn,
-			this.gValueDataGridViewTextBoxColumn});
+				this.gNameDataGridViewTextBoxColumn,
+				this.gValueDataGridViewTextBoxColumn
+			});
 			this.indgvGroups.DataMember = "dtGroups";
 			this.indgvGroups.DataSource = this.dtSet;
 			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -253,8 +253,8 @@ namespace FREditor
 			((System.ComponentModel.ISupportInitialize)(this.dtGroups)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.indgvGroups)).EndInit();
 			this.ResumeLayout(false);
-
 		}
+
 		#endregion
 
 		private void frmNameMask_Load(object sender, System.EventArgs e)
@@ -278,31 +278,25 @@ namespace FREditor
 			var r = new Regex(txtBoxNameMaskNM.Text);
 			var m = r.Match(txtBoxName.Text);
 
-			foreach(PriceFields pf in Enum.GetValues(typeof(PriceFields)))
-			{
-				if((pf.ToString() == PriceFields.Name1.ToString())||(pf.ToString() == PriceFields.Name2.ToString())||(pf.ToString() == PriceFields.Name3.ToString()))
-				{
-					if(m.Groups["Name"].Success)
-					{
-						if(dtGroups.Rows.Count>0)
-						{
-							DataRow dr = dtGroups.Rows[dtGroups.Rows.Count-1];
-							if(dr[GName].ToString() != "Name")
-							{
+			foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields))) {
+				if ((pf.ToString() == PriceFields.Name1.ToString()) || (pf.ToString() == PriceFields.Name2.ToString()) || (pf.ToString() == PriceFields.Name3.ToString())) {
+					if (m.Groups["Name"].Success) {
+						if (dtGroups.Rows.Count > 0) {
+							DataRow dr = dtGroups.Rows[dtGroups.Rows.Count - 1];
+							if (dr[GName].ToString() != "Name") {
 								DataRow newDR = dtGroups.NewRow();
 								newDR[GName] = "Name";
-								if(m.Groups["Name"].Value != String.Empty)
+								if (m.Groups["Name"].Value != String.Empty)
 									newDR[GValue] = m.Groups["Name"].Value;
 								else
 									newDR[GValue] = "Значение не определено";
 								dtGroups.Rows.Add(newDR);
 							}
 						}
-						else
-						{
+						else {
 							DataRow newDR = dtGroups.NewRow();
 							newDR[GName] = "Name";
-							if(m.Groups["Name"].Value != String.Empty)
+							if (m.Groups["Name"].Value != String.Empty)
 								newDR[GValue] = m.Groups["Name"].Value;
 							else
 								newDR[GValue] = "Значение не определено";
@@ -310,16 +304,11 @@ namespace FREditor
 						}
 					}
 				}
-				else
-				{
-					if(m.Groups[pf.ToString()].Success)
-					{
-						DataRow newDR = dtGroups.NewRow();
-						newDR[GName] = pf.ToString();
-						newDR[GValue] = m.Groups[pf.ToString()].Value;
-						dtGroups.Rows.Add(newDR);
-					}
-
+				else if (m.Groups[pf.ToString()].Success) {
+					DataRow newDR = dtGroups.NewRow();
+					newDR[GName] = pf.ToString();
+					newDR[GValue] = m.Groups[pf.ToString()].Value;
+					dtGroups.Rows.Add(newDR);
 				}
 			}
 		}
@@ -332,7 +321,7 @@ namespace FREditor
 		private void txtBoxNameMaskNM_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Enter)
-			   this.DialogResult = DialogResult.OK;
+				this.DialogResult = DialogResult.OK;
 		}
 	}
 }

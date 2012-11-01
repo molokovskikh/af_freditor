@@ -13,11 +13,10 @@ namespace FREditor.Helpers
 	{
 		public static bool CanLoadSettings(this INDataGridView gridView, string RegKey)
 		{
-			using (RegistryKey k = Registry.CurrentUser.OpenSubKey(RegKey, true))
-			{				
+			using (RegistryKey k = Registry.CurrentUser.OpenSubKey(RegKey, true)) {
 				if (k == null) return true;
-				return k.SubKeyCount == gridView.ColumnCount;				
-			}			
+				return k.SubKeyCount == gridView.ColumnCount;
+			}
 		}
 	}
 }

@@ -41,41 +41,40 @@ namespace FREditor.Test
 
 		[SetUp]
 		public void Setup()
-		{			
+		{
 			connection = new MySqlConnection(Literals.ConnectionString());
 			command = new MySqlCommand();
 			command.Connection = connection;
 			dataAdapter = new MySqlDataAdapter(command);
 			dtPrices = new System.Data.DataTable();
-			dtPrices.Columns.AddRange(new System.Data.DataColumn[]
-			    {
-			        PPriceCode = new System.Data.DataColumn(){AllowDBNull = false, ColumnName = "PPriceCode", DataType = typeof(long)},
-			        PFirmCode = new System.Data.DataColumn(){ColumnName = "PFirmCode", DataType = typeof(long)},
-			        PPriceName = new System.Data.DataColumn(){ColumnName = "PPriceName"},
-			        PDateCurPrice = new System.Data.DataColumn(){ColumnName = "PDateCurPrice", DataType = typeof(System.DateTime)},
-			        PDateLastForm = new System.Data.DataColumn(){ColumnName = "PDateLastForm", DataType = typeof(System.DateTime)},
-			        PMaxOld = new System.Data.DataColumn(){ColumnName = "PMaxOld", DataType = typeof(int)},
-			        PPriceType = new System.Data.DataColumn(){ColumnName = "PPriceType", DataType = typeof(int)},
-			        PCostType = new System.Data.DataColumn(){ColumnName = "PCostType", DataType = typeof(int)},
-			        PWaitingDownloadInterval = new System.Data.DataColumn(){ColumnName = "PWaitingDownloadInterval", DataType = typeof(int)},
-			        PIsParent = new System.Data.DataColumn(){ColumnName = "PIsParent", DataType = typeof(byte)},
-			        PBaseCost = new System.Data.DataColumn(){ColumnName = "PBaseCost", DataType = typeof(byte)},
-			        PCostCode = new System.Data.DataColumn(){ColumnName = "PCostCode", DataType = typeof(int)},
-			        PPriceDate = new System.Data.DataColumn(){ColumnName = "PPriceDate", DataType = typeof(System.DateTime)},
-			        PPriceItemId = new System.Data.DataColumn(){AllowDBNull = false, ColumnName = "PPriceItemId", DataType = typeof(long)},
-			        PDeleted = new System.Data.DataColumn(){AllowDBNull = false, ColumnName = "PDeleted", DataType = typeof(bool), DefaultValue = false}
-			    });		
-			dtPrices.PrimaryKey = new System.Data.DataColumn[] {PPriceItemId};
+			dtPrices.Columns.AddRange(new System.Data.DataColumn[] {
+				PPriceCode = new System.Data.DataColumn() { AllowDBNull = false, ColumnName = "PPriceCode", DataType = typeof(long) },
+				PFirmCode = new System.Data.DataColumn() { ColumnName = "PFirmCode", DataType = typeof(long) },
+				PPriceName = new System.Data.DataColumn() { ColumnName = "PPriceName" },
+				PDateCurPrice = new System.Data.DataColumn() { ColumnName = "PDateCurPrice", DataType = typeof(System.DateTime) },
+				PDateLastForm = new System.Data.DataColumn() { ColumnName = "PDateLastForm", DataType = typeof(System.DateTime) },
+				PMaxOld = new System.Data.DataColumn() { ColumnName = "PMaxOld", DataType = typeof(int) },
+				PPriceType = new System.Data.DataColumn() { ColumnName = "PPriceType", DataType = typeof(int) },
+				PCostType = new System.Data.DataColumn() { ColumnName = "PCostType", DataType = typeof(int) },
+				PWaitingDownloadInterval = new System.Data.DataColumn() { ColumnName = "PWaitingDownloadInterval", DataType = typeof(int) },
+				PIsParent = new System.Data.DataColumn() { ColumnName = "PIsParent", DataType = typeof(byte) },
+				PBaseCost = new System.Data.DataColumn() { ColumnName = "PBaseCost", DataType = typeof(byte) },
+				PCostCode = new System.Data.DataColumn() { ColumnName = "PCostCode", DataType = typeof(int) },
+				PPriceDate = new System.Data.DataColumn() { ColumnName = "PPriceDate", DataType = typeof(System.DateTime) },
+				PPriceItemId = new System.Data.DataColumn() { AllowDBNull = false, ColumnName = "PPriceItemId", DataType = typeof(long) },
+				PDeleted = new System.Data.DataColumn() { AllowDBNull = false, ColumnName = "PDeleted", DataType = typeof(bool), DefaultValue = false }
+			});
+			dtPrices.PrimaryKey = new System.Data.DataColumn[] { PPriceItemId };
 			dtPrices.TableName = "Prices";
 			dtSet = new DataSet();
-			dtSet.Tables.Add(dtPrices);		
+			dtSet.Tables.Add(dtPrices);
 		}
 
 		private void FillPrices()
 		{
 			connection.Open();
 			command.CommandText =
-@"
+				@"
 SELECT
   pd.FirmCode as PFirmCode,
   pim.Id as PPriceItemId,
@@ -109,27 +108,22 @@ order by PPriceName";
 
 		public TestPrice CreateTestSupplierWithPrice()
 		{
-			var priceItem = new TestPriceItem
-			{
-				Source = new TestPriceSource
-				{
+			var priceItem = new TestPriceItem {
+				Source = new TestPriceSource {
 					SourceType = PriceSourceType.Email,
 				},
 				Format = new TestFormat(),
 			};
 
-			var priceItem2 = new TestPriceItem
-			{
-				Source = new TestPriceSource
-				{
+			var priceItem2 = new TestPriceItem {
+				Source = new TestPriceSource {
 					SourceType = PriceSourceType.Email,
 				},
 				Format = new TestFormat(),
 			};
-			
-			var price = new TestPrice
-			{
-				CostType = CostType.MultiFile,				
+
+			var price = new TestPrice {
+				CostType = CostType.MultiFile,
 				Supplier = TestSupplier.Create(),
 				PriceName = "test"
 			};
@@ -137,21 +131,20 @@ order by PPriceName";
 			cost.Name = "test base";
 			costForDelete = price.NewPriceCost(priceItem2, "");
 			costForDelete.Name = "test";
-						
+
 			price.Costs[0].PriceItem.Format.PriceFormat = PriceFormatType.NativeDbf;
 			price.Costs[1].PriceItem.Format.PriceFormat = PriceFormatType.NativeDbf;
 
 			price.SaveAndFlush();
 			return price;
-		} 
+		}
 
 		[Test]
 		public void DeleteCostColumn()
 		{
 			TestPrice price;
-			using (var scope = new TransactionScope(OnDispose.Rollback))
-			{
-				price = CreateTestSupplierWithPrice();				
+			using (var scope = new TransactionScope(OnDispose.Rollback)) {
+				price = CreateTestSupplierWithPrice();
 				scope.VoteCommit();
 			}
 			FillPrices();
@@ -183,8 +176,7 @@ order by PPriceName";
 			tr.Commit();
 			connection.Close();
 
-			using (var scope = new TransactionScope(OnDispose.Rollback))
-			{
+			using (var scope = new TransactionScope(OnDispose.Rollback)) {
 				TestPrice resprice = TestPrice.Find(price.Id);
 				Assert.That(resprice.Costs.Count, Is.EqualTo(1));
 

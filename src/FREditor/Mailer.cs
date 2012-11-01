@@ -8,7 +8,7 @@ using System.Net.Mail;
 using FREditor.Properties;
 
 namespace FREditor
-{	
+{
 	/// <summary>
 	/// Класс, который умеет отправлять письма
 	/// </summary>
@@ -21,12 +21,11 @@ namespace FREditor
 		public static void SendNotificationLetter(MySqlConnection connection,
 			string body, string priceName, string providerName, string regionName)
 		{
-			try
-			{
+			try {
 				//Получаем e-mail оператора
 				var operatorMail = (string)MySqlHelper.ExecuteScalar(
 					connection,
-@"SELECT 
+					@"SELECT
   regionaladmins.email 
 FROM 
   accessright.regionaladmins
@@ -36,11 +35,11 @@ WHERE
 				//Формируем сообщение
 				var m = new MailMessage("register@analit.net",
 #if DEBUG
-					"KvasovTest@analit.net", 
+					"KvasovTest@analit.net",
 #else
 					"RegisterList@subscribe.analit.net",
 #endif
- String.Format("\"{0}\" - изменения в списке ценовых колонок", providerName),
+					String.Format("\"{0}\" - изменения в списке ценовых колонок", providerName),
 					String.Format(@"
 Оператор   : {0} 
 Поставщик  : {1}
@@ -61,8 +60,7 @@ WHERE
 				var sm = new SmtpClient(SmtpServerName);
 				sm.Send(m);
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				MessageBox.Show(
 					"Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.",
 					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -72,8 +70,7 @@ WHERE
 
 		public static void SendWarningLetter(string body)
 		{
-			try
-			{
+			try {
 				string messageBody = String.Format("Оператор: {0}\nТекст сообщения:{1}\n",
 					Environment.UserName, body);
 				//Формируем сообщение
@@ -81,8 +78,7 @@ WHERE
 				var sm = new SmtpClient(SmtpServerName);
 				sm.Send(m);
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				MessageBox.Show(
 					@"Не удалось отправить уведомление об изменениях. Сообщение было отправлено разработчику.",
 					"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);

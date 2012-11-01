@@ -32,11 +32,11 @@ namespace FREditor.Helpers
 		private const string MessageFormatNotSet = "Не указан формат (null)";
 
 		public PriceFileFormatHelper(MySqlConnection connection)
-		{            
+		{
 			_dataTableFormats.Columns.AddRange(new DataColumn[] {
 				new DataColumn("FormatName"),
 				new DataColumn("FormatFileExtension"),
-				new DataColumn("FormatId"), 
+				new DataColumn("FormatId"),
 			});
 
 			var querySelectFormats = @"
@@ -71,27 +71,22 @@ FROM
 
 		public bool SetNewFormat(PriceFormat? newFormat, string newDelimiter)
 		{
-			if (_priceItemId != 0)
-			{
+			if (_priceItemId != 0) {
 				_errorMessage = String.Empty;
 				if ((newFormat == PriceFormat.NativeDelimWIN) ||
-				    (newFormat == PriceFormat.NativeDelimDOS))
-				{
-					if (String.IsNullOrEmpty(newDelimiter))
-					{
+					(newFormat == PriceFormat.NativeDelimDOS)) {
+					if (String.IsNullOrEmpty(newDelimiter)) {
 						_errorMessage = "Для данного формата необходимо сначала задать разделитель";
 						return false;
 					}
 				}
-				if ((_newPriceFormat != newFormat) || (_newDelimiter != newDelimiter))
-				{
+				if ((_newPriceFormat != newFormat) || (_newDelimiter != newDelimiter)) {
 					_newPriceFormat = newFormat;
 					_newDelimiter = newDelimiter;
 					return true;
 				}
 			}
-			else
-			{
+			else {
 				_errorMessage = MessageFormatNotLoaded;
 			}
 			return false;
@@ -105,26 +100,22 @@ FROM
 
 		public bool ChangeFormat()
 		{
-			if (_priceItemId != 0)
-			{
+			if (_priceItemId != 0) {
 				var result = false;
 				_errorMessage = String.Empty;
 
-				if (_currentPriceFormat != _newPriceFormat)
-				{
+				if (_currentPriceFormat != _newPriceFormat) {
 					_currentPriceFormat = _newPriceFormat;
 					result = true;
 				}
 
-				if (_currentDelimiter != _newDelimiter)
-				{
+				if (_currentDelimiter != _newDelimiter) {
 					_currentDelimiter = _newDelimiter;
 					result = true;
 				}
 				return result;
 			}
-			else
-			{
+			else {
 				_errorMessage = MessageFormatNotLoaded;
 			}
 			return false;
@@ -158,22 +149,18 @@ FROM
 
 		private string GetShortFileName(PriceFormat? priceFormat)
 		{
-            if (_priceItemId != 0)
-            {
-            	if (priceFormat != null)
-            	{
-            		var shortFileName = Convert.ToString(_priceItemId);
-            		return shortFileName + GetFileExtension(priceFormat);
-            	}
-            	else
-            	{
-            		_errorMessage = MessageFormatNotSet;
-            	}
+			if (_priceItemId != 0) {
+				if (priceFormat != null) {
+					var shortFileName = Convert.ToString(_priceItemId);
+					return shortFileName + GetFileExtension(priceFormat);
+				}
+				else {
+					_errorMessage = MessageFormatNotSet;
+				}
 			}
-            else
-            {
-            	_errorMessage = MessageFormatNotLoaded;
-            }
+			else {
+				_errorMessage = MessageFormatNotLoaded;
+			}
 			return String.Empty;
 		}
 
@@ -208,25 +195,20 @@ FROM
 
 		private string GetFileExtension(PriceFormat? priceFormat)
 		{
-			if (_priceItemId != 0)
-			{
-				if (priceFormat != null)
-				{
+			if (_priceItemId != 0) {
+				if (priceFormat != null) {
 					var extension = _dataTableFormats.Select("FormatName = '" + priceFormat + "'");
-					if (extension.Length != 1)
-					{
+					if (extension.Length != 1) {
 						_errorMessage = "Для данного формата задано более одного расширения";
 						return String.Empty;
 					}
 					return Convert.ToString(extension[0]["FormatFileExtension"]);
 				}
-				else
-				{
+				else {
 					_errorMessage = MessageFormatNotSet;
 				}
 			}
-			else
-			{
+			else {
 				_errorMessage = MessageFormatNotLoaded;
 			}
 			return String.Empty;
@@ -275,13 +257,11 @@ FROM
 
 		public void ResetNewFormat()
 		{
-			if (_priceItemId != 0)
-			{
+			if (_priceItemId != 0) {
 				_newPriceFormat = _currentOpenedFileFormat;
 				_newDelimiter = _currentOpenedFileDelimiter;
 			}
-			else
-			{
+			else {
 				_errorMessage = MessageFormatNotLoaded;
 			}
 		}
@@ -289,14 +269,13 @@ FROM
 		public static bool IsTextFormat(PriceFormat? priceFormat)
 		{
 			return ((priceFormat == PriceFormat.FixedDOS) ||
-			        (priceFormat == PriceFormat.FixedWIN) ||
-			        (priceFormat == PriceFormat.NativeDelimDOS) ||
-			        (priceFormat == PriceFormat.NativeDelimWIN) ||
-			        (priceFormat == PriceFormat.NativeFixedDOS) ||
-			        (priceFormat == PriceFormat.NativeFixedWIN) ||
-			        (priceFormat == PriceFormat.DelimWIN) ||
-			        (priceFormat == PriceFormat.DelimDOS));
-
+				(priceFormat == PriceFormat.FixedWIN) ||
+				(priceFormat == PriceFormat.NativeDelimDOS) ||
+				(priceFormat == PriceFormat.NativeDelimWIN) ||
+				(priceFormat == PriceFormat.NativeFixedDOS) ||
+				(priceFormat == PriceFormat.NativeFixedWIN) ||
+				(priceFormat == PriceFormat.DelimWIN) ||
+				(priceFormat == PriceFormat.DelimDOS));
 		}
 	}
 }

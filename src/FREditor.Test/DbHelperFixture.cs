@@ -9,8 +9,7 @@ namespace FREditor.Test
 		[Test]
 		public void Set_parameters()
 		{
-			using(var connection = new MySqlConnection(Literals.ConnectionString()))
-			{
+			using (var connection = new MySqlConnection(Literals.ConnectionString())) {
 				connection.Open();
 				DbHelper.SetLogParameters(connection);
 			}

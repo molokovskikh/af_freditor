@@ -18,7 +18,7 @@ namespace FREditor.Helpers
 			_nameFieldColumn = new DataColumn("MNameField");
 			_beginColumn = new DataColumn("MBeginField", typeof(int));
 			_endColumn = new DataColumn("MEndField", typeof(int));
-			
+
 			Columns.AddRange(new[] { _nameFieldColumn, _beginColumn, _endColumn });
 			Constraints.AddRange(new Constraint[] {
 				new UniqueConstraint("UniqueNameConstraint", new[] { _nameFieldColumn }, false)
@@ -28,11 +28,9 @@ namespace FREditor.Helpers
 
 		public bool Check()
 		{
-			if (Rows.Count > 2)
-			{
+			if (Rows.Count > 2) {
 				var newMarking = DefaultView.ToTable();
-				for (var i = 1; i < newMarking.Rows.Count; i++)
-				{
+				for (var i = 1; i < newMarking.Rows.Count; i++) {
 					var previousRow = newMarking.Rows[i - 1];
 					var currentRow = newMarking.Rows[i];
 					if ((previousRow[_beginColumn.ColumnName] is DBNull) && (previousRow[_endColumn.ColumnName] is DBNull))
@@ -49,8 +47,7 @@ namespace FREditor.Helpers
 						return false;
 				}
 			}
-			else
-			{
+			else {
 				var begin = Convert.ToInt32(Rows[0][_beginColumn.ColumnName]);
 				int end = Convert.ToInt32(Rows[0][_endColumn.ColumnName]);
 				if (begin - end > 0)
@@ -67,38 +64,32 @@ namespace FREditor.Helpers
 			var suffixFieldNameEnd = "End";
 
 			var markingFields = new ArrayList();
-			foreach (PriceFields priceField in Enum.GetValues(typeof(PriceFields)))
-			{
+			foreach (PriceFields priceField in Enum.GetValues(typeof(PriceFields))) {
 				var fieldName = priceField.ToString();
 				if (PriceFields.OriginalName == priceField || PriceFields.Name1 == priceField)
 					fieldName = "Name";
-				try
-				{
+				try {
 					index = formRulesRow.Table.Columns.IndexOf(prefixFieldName + fieldName + suffixFieldNameBegin);
 				}
-				catch
-				{
+				catch {
 					index = -1;
 				}
 				var name = ((index > -1) && !(formRulesRow[prefixFieldName + fieldName + suffixFieldNameBegin] is DBNull)) ? fieldName : String.Empty;
-				
-				if ((PriceFields.OriginalName != priceField) && (!String.IsNullOrEmpty(name)))
-				{
-					try
-					{
+
+				if ((PriceFields.OriginalName != priceField) && (!String.IsNullOrEmpty(name))) {
+					try {
 						var begin = Convert.ToInt32(formRulesRow[prefixFieldName + name + suffixFieldNameBegin]);
 						var end = Convert.ToInt32(formRulesRow[prefixFieldName + name + suffixFieldNameEnd]);
 						markingFields.Add(new TxtFieldDef(name, begin, end));
 					}
-					catch {}
+					catch {
+					}
 				}
 			}
-			
+
 			//Добавляем в список цены, если у них выставлены границы
-			foreach (var row in costFormRulesRows)
-			{
-				if (!(row["CFRTextBegin"] is DBNull) && !(row["CFRTextEnd"] is DBNull))
-				{
+			foreach (var row in costFormRulesRows) {
+				if (!(row["CFRTextBegin"] is DBNull) && !(row["CFRTextEnd"] is DBNull)) {
 					var name = "Cost" + row["CFRCost_Code"].ToString();
 					var begin = Convert.ToInt32(row["CFRTextBegin"]);
 					var end = Convert.ToInt32(row["CFRTextEnd"]);
@@ -111,17 +102,14 @@ namespace FREditor.Helpers
 			// установлены неправильные значения для начала и конца (конец больше начала) или
 			// есть перекрывающийся индекс
 			var lastPosition = 0;
-			for (var i = 0; i < markingFields.Count; i++)
-			{
+			for (var i = 0; i < markingFields.Count; i++) {
 				var field = (TxtFieldDef)markingFields[i];
 				if (((field.posBegin == 0) && (field.posEnd == 0)) ||
 					(field.posBegin >= field.posEnd) ||
-					(lastPosition >= field.posBegin))
-				{
+					(lastPosition >= field.posBegin)) {
 					markingFields.RemoveAt(i--);
 				}
-				else
-				{
+				else {
 					lastPosition = field.posEnd;
 				}
 			}
@@ -132,35 +120,30 @@ namespace FREditor.Helpers
 		private void FillRows(IList markingFields)
 		{
 			int countx = 1;
-			if (markingFields.Count > 0)
-			{
+			if (markingFields.Count > 0) {
 				TxtFieldDef prevTFD, currTFD = (TxtFieldDef)markingFields[0];
 
 				if (1 == currTFD.posBegin)
 					AddRow(currTFD.fieldName, 1, currTFD.posEnd);
-				else
-				{
+				else {
 					AddRow(String.Format("x{0}", countx), 1, currTFD.posBegin - 1);
 					countx++;
 					AddRow(currTFD.fieldName, currTFD.posBegin, currTFD.posEnd);
 				}
 				var i = 1;
-				for (i = 1; i <= markingFields.Count - 1; i++)
-				{
+				for (i = 1; i <= markingFields.Count - 1; i++) {
 					prevTFD = (TxtFieldDef)markingFields[i - 1];
 					currTFD = (TxtFieldDef)markingFields[i];
 					if (currTFD.posBegin == prevTFD.posEnd + 1)
 						AddRow(currTFD.fieldName, currTFD.posBegin, currTFD.posEnd);
-					else
-					{
+					else {
 						AddRow(String.Format("x{0}", countx), prevTFD.posEnd + 1, currTFD.posBegin - 1);
 						countx++;
 						AddRow(currTFD.fieldName, currTFD.posBegin, currTFD.posEnd);
 					}
 				}
 				var lastTFD = (TxtFieldDef)markingFields[i - 1];
-				if (lastTFD.posEnd < 255)
-				{
+				if (lastTFD.posEnd < 255) {
 					AddRow(String.Format("x{0}", countx), lastTFD.posEnd + 1, 255);
 				}
 			}

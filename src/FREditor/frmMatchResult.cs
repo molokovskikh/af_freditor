@@ -22,23 +22,21 @@ namespace FREditor
 
 			var matchCnt = firms.Sum(firm => firm.Value.SynonymCount()); // общее количество найденых совпадений
 
-			if(matchCnt == 0)
-			{
+			if (matchCnt == 0) {
 				MessageBox.Show("Не найдено совпадений с имеющимися синонимами", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
 				return;
 			}
 
-			foreach (var firm in firms)
-			{
+			foreach (var firm in firms) {
 				var idx = matchResGV.Rows.Add();
 				decimal cnt = firm.Value.SynonymCount();
-				var val = Math.Round(cnt*100/matchCnt, 2);
+				var val = Math.Round(cnt * 100 / matchCnt, 2);
 				matchResGV[0, idx].Value = firm.Value.FullName();
 				matchResGV[1, idx].Value = val.ToString();
 			}
 
 			Text = String.Format("Результат сопоставления (сопоставлено позиций: {0})", matchCnt);
-			if(!Modal) ShowDialog();
+			if (!Modal) ShowDialog();
 		}
 
 		private void matchResGV_DoubleClick(object sender, EventArgs e)

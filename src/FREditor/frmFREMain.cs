@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,8 +35,11 @@ namespace FREditor
 		/// <summary>
 		/// для тестов
 		/// </summary>
-		public TabControl TCInnerSheets { get { return tcInnerSheets; }
-		set { tcInnerSheets = value; }}
+		public TabControl TCInnerSheets
+		{
+			get { return tcInnerSheets; }
+			set { tcInnerSheets = value; }
+		}
 
 		/// <summary>
 		/// для тестов
@@ -56,15 +59,14 @@ namespace FREditor
 		}
 
 
-
 		private bool _isFormatChanged;
 
 		private ILog _logger = LogManager.GetLogger(typeof(frmFREMain));
 
-		ArrayList gds = new ArrayList();
+		private ArrayList gds = new ArrayList();
 		public List<DataTable> dtables = new List<DataTable>();
-		ArrayList tblstyles = new ArrayList();
-		DataTable dtPrice = new DataTable();
+		private ArrayList tblstyles = new ArrayList();
+		private DataTable dtPrice = new DataTable();
 
 		private MySqlConnection connection = new MySqlConnection(Literals.ConnectionString());
 
@@ -73,27 +75,27 @@ namespace FREditor
 		private string BaseRegKey = "Software\\Inforoom\\FREditor";
 		private string CregKey;
 
-		string EndPath = Path.GetTempPath();
-		string frmCaption = String.Empty;
+		private string EndPath = Path.GetTempPath();
+		private string frmCaption = String.Empty;
 
-		string delimiter = String.Empty;
-		PriceFormat? fmt;
+		private string delimiter = String.Empty;
+		private PriceFormat? fmt;
 
 		//Текущий клиент, с которым происходит работа и текущий прайс
-		long currentPriceItemId;
-		long currentClientCode;
+		private long currentPriceItemId;
+		private long currentClientCode;
 
-		string nameR = String.Empty;
-		string FilterParams = String.Empty;
+		private string nameR = String.Empty;
+		private string FilterParams = String.Empty;
 
 		private string shortNameFilter = String.Empty;
 		private ulong regionCodeFilter = 0;
 		private int sourceIndex = 0;
 
-		bool fileExist;
-		bool InSearch;
+		private bool fileExist;
+		private bool InSearch;
 
-		StringFormat sf = new StringFormat();
+		private StringFormat sf = new StringFormat();
 
 		public frmWait fW;
 		public frmNameMask frmNM;
@@ -135,9 +137,8 @@ namespace FREditor
 
 		public frmFREMain()
 		{
-			//
 			// Required for Windows Form Designer support
-			//
+
 			InitializeComponent();
 
 			dtCostTypes = new DataTable("CostTypes");
@@ -406,7 +407,7 @@ where
 			var labelPadding = 7;
 			var inputWidth = 27;
 			foreach (var field in Fields.AdditionalFields()) {
-				var x = (labelWidth +  labelPadding + inputWidth + inputWidth) * 3;
+				var x = (labelWidth + labelPadding + inputWidth + inputWidth) * 3;
 				var controls = pnlTxtFields.Controls;
 				var controls2 = pnlGeneralFields.Controls;
 
@@ -430,7 +431,7 @@ where
 				controls.Add(BuildInput(x, y, inputWidth, field.Item1, column));
 
 				column = "FR" + Fields.GeneralColumn(field.Item1);
-				controls2.Add(BuildInput(x, y, inputWidth*2, field.Item1, column));
+				controls2.Add(BuildInput(x, y, inputWidth * 2, field.Item1, column));
 
 				x += inputWidth;
 
@@ -452,7 +453,6 @@ where
 				DataBindings = {
 					new Binding("Text", bsFormRules, column, true),
 				},
-
 				Width = inputWidth,
 				Location = new Point(x, y)
 			};
@@ -531,16 +531,14 @@ order by Format";
 			var filter = new Filter(shname, regcode, _sourceIndex);
 
 			dtSet.EnforceConstraints = false;
-			try
-			{
+			try {
 				dtClients.Clear();
 				dtPrices.Clear();
 				dtPricesCost.Clear();
 				dtFormRules.Clear();
 				dtCostsFormRules.Clear();
 			}
-			finally
-			{
+			finally {
 				dtSet.EnforceConstraints = true;
 			}
 			dtSet.AcceptChanges();
@@ -557,8 +555,7 @@ order by Format";
 				command.Parameters.AddWithValue("?sourceIndex", _sourceIndex);
 
 			var showOnlyEnabled = !_showDisabledFirm;
-			if (showOnlyEnabled)
-			{
+			if (showOnlyEnabled) {
 				// Если галочка "Показывать недействующие" НЕ выделена
 				// тогда мы добавляем параметры для выборки только действующих
 				command.Parameters.AddWithValue("?AgencyEnabled", 1);
@@ -580,20 +577,16 @@ order by Format";
 		private void FillCosts(string shname, ulong regcode)
 		{
 			dtSet.EnforceConstraints = false;
-			try
-			{
+			try {
 				dtCostsFormRules.Clear();
 				dtPricesCost.Clear();
 			}
-			finally
-			{
+			finally {
 				dtSet.EnforceConstraints = true;
 			}
 			dtSet.AcceptChanges();
 
-			if (shname != String.Empty)
-			{
-
+			if (shname != String.Empty) {
 				command.Parameters.Clear();
 
 				if (shname != String.Empty)
@@ -602,8 +595,7 @@ order by Format";
 					command.Parameters.AddWithValue("?RegionCode", regcode);
 
 				bool showOnlyEnabled = !_showDisabledFirm;
-				if (showOnlyEnabled)
-				{
+				if (showOnlyEnabled) {
 					// Если галочка "Показывать недействующие" НЕ выделена
 					// тогда мы добавляем параметры для выборки только действующих
 					command.Parameters.AddWithValue("?AgencyEnabled", 1);
@@ -622,8 +614,7 @@ order by Format";
 
 		private void dtClientsFill(string param, bool showOnlyEnabled)
 		{
-			if (showOnlyEnabled)
-			{
+			if (showOnlyEnabled) {
 				command.CommandText = @"
 SELECT s.Id AS CCode,
 s.Name AS CShortName,
@@ -641,8 +632,7 @@ WHERE datediff(curdate(), date(pi.pricedate)) < 200 AND (PD.Enabled = 1)
 AND (PD.AgencyEnabled = 1)
  ";
 			}
-			else
-			{
+			else {
 				command.CommandText = @"
 SELECT s.Id AS CCode,
 s.Name AS CShortName,
@@ -671,7 +661,7 @@ WHERE 1=1 ";
 			// Выбираем прайс-листы с мультиколоночными ценами
 
 			command.CommandText =
-@"
+				@"
 SELECT
   pd.FirmCode as PFirmCode,
   pim.Id as PPriceItemId,
@@ -692,8 +682,8 @@ FROM
   inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
   inner join usersettings.PriceItems pim on (pim.Id = pc.PriceItemId)
 "
-+ sqlPart +
-@"
+					+ sqlPart +
+					@"
   inner join Customers.suppliers s on s.Id = pd.FirmCode
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
   inner join farm.regions r on r.regioncode=s.HomeRegion
@@ -729,7 +719,6 @@ Order By Region
 			cbRegions.DataSource = dtRegions;
 			cbRegions.DisplayMember = "Region";
 			cbRegions.ValueMember = "RegionCode";
-
 		}
 
 		private void cbSourceFill()
@@ -752,20 +741,19 @@ FROM
 		}
 
 
-
 		private void dtPricesCostFill(string param, bool showOnlyEnabled)
 		{
 			string sqlPart = String.Empty;
 			if (showOnlyEnabled)
 				sqlPart +=
-@"
+					@"
 and pc.PriceItemId in (
 		SELECT Id FROM usersettings.priceitems
 		WHERE (datediff(curdate(), date(pricedate)) < 200))
 ";
 
 			command.CommandText =
-@"
+				@"
 select
   pc.PriceItemId as PCPriceItemId,
   pc.PriceCode as PCPriceCode,
@@ -788,21 +776,17 @@ where
 			command.CommandText += param;
 			command.CommandText += @"
 order by PCCostName";
-			try
-			{
+			try {
 				dataAdapter.Fill(dtPricesCost);
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				var constraints = "";
-				foreach (Constraint constr in dtPricesCost.Constraints)
-				{
+				foreach (Constraint constr in dtPricesCost.Constraints) {
 					constraints += String.Format("Constraint Name: {0}, Type: {1};",
 						constr.ConstraintName, constr.GetType().ToString());
 				}
 				var parameters = "";
-				foreach (MySqlParameter sqlparam in command.Parameters)
-				{
+				foreach (MySqlParameter sqlparam in command.Parameters) {
 					parameters += String.Format("SQL ParamName: {0}, Value: {1};",
 						sqlparam.ParameterName, sqlparam.Value);
 				}
@@ -818,7 +802,7 @@ order by PCCostName";
 			string sqlPart = String.Empty;
 			if (showOnlyEnabled)
 				sqlPart +=
-@"
+					@"
 	and pc.PriceItemId in (
 		SELECT Id
 		FROM usersettings.PriceItems
@@ -826,7 +810,7 @@ order by PCCostName";
 ";
 
 			command.CommandText =
-@"
+				@"
 select
   pc.PriceItemId as CFRPriceItemId,
   pc.CostName as CFRCostName,
@@ -840,8 +824,8 @@ FROM
   farm.costformrules cfr
   inner join usersettings.pricescosts pc on (pc.CostCode = cfr.costcode)
 "
-+ sqlPart +
-@"
+					+ sqlPart +
+					@"
   inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
 	join Farm.Sources so on so.id = pim.SourceId
 	join farm.sourcetypes st on st.id = so.SourceTypeId
@@ -989,15 +973,16 @@ FROM
   inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode
   inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId
 "
-+ sqlPart +
-@"
+				+ sqlPart +
+				@"
 join Farm.Sources so on so.id = pim.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
   inner join Farm.formrules AS FR ON FR.Id = pim.FormRuleId
   left join Farm.FormRules AS PFR ON PFR.id = FR.Id
   left join Farm.PriceFMTs as pfmt on pfmt.id = PFR.PriceFormatId
 where
-  ((pd.CostType = 1) or (pc.BaseCost = 1)) ", sql);
+  ((pd.CostType = 1) or (pc.BaseCost = 1)) ",
+				sql);
 			command.CommandText += param;
 			dataAdapter.Fill(dtFormRules);
 		}
@@ -1010,14 +995,12 @@ where
 		private void DoOpenPrice(DataRow drP)
 		{
 			fW = new frmWait();
-			try
-			{
+			try {
 				fW.openPrice += OpenPrice;
 				fW.drP = drP;
 				fW.ShowDialog();
 			}
-			finally
-			{
+			finally {
 				fW = null;
 			}
 		}
@@ -1038,11 +1021,9 @@ where
 			//Делаем фильтрацию по форматам прайс-листа
 			var cm = ((CurrencyManager)cmbFormat.BindingContext[dtSet, "Форматы прайса"]);
 			if ((cm != null) && (cm.List is DataView))
-				if (fmt.HasValue)
-				{
+				if (fmt.HasValue) {
 					bsFormRules.SuspendBinding();
-					switch (fmt)
-					{
+					switch (fmt) {
 						case PriceFormat.DBF:
 							//Запрещаем устаревшие текстовые форматы, NativeDBF и XLS
 							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 6, 7, 8))";
@@ -1054,9 +1035,9 @@ where
 							break;
 
 						case PriceFormat.XLS:
-								//Запрещаем устаревшие текстовые форматы, DBF и NativeXls
-								((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 10, 4, 6, 7))";
-								break;
+							//Запрещаем устаревшие текстовые форматы, DBF и NativeXls
+							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 10, 4, 6, 7))";
+							break;
 
 						case PriceFormat.DelimDOS:
 						case PriceFormat.DelimWIN:
@@ -1066,20 +1047,18 @@ where
 							((DataView)cm.List).RowFilter = "not (FmtId in (3, 4, 11, 12, 13, 14))";
 							break;
 
-						default:
-							{
-								//Запрещаем устаревшие текстовые форматы, DBF и XLS
-								((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 4, 6, 7))";
-								break;
-							}
+						default: {
+							//Запрещаем устаревшие текстовые форматы, DBF и XLS
+							((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 3, 4, 6, 7))";
+							break;
+						}
 					}
 					bsFormRules.ResumeBinding();
 				}
-				else
-				{
+				else {
 					bsFormRules.SuspendBinding();
 					//Запрещаем устаревшие текстовые форматы, DBF и XLS
-					((DataView) cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 3))";
+					((DataView)cm.List).RowFilter = "not (FmtId in (1, 2, 4, 6, 7, 3))";
 					bsFormRules.SuspendBinding();
 				}
 
@@ -1113,15 +1092,12 @@ order by PriceName
 			fileExist = false;
 
 			// Если формат не установлен, то больше ничего не делаем
-			if (fmt != null)
-			{
-				try
-				{
+			if (fmt != null) {
+				try {
 					fileExist = true;
 					var filePath = EndPath + Convert.ToString(currentPriceItemId) + Path.DirectorySeparatorChar + takeFile;
 
-					if (!_isFormatChanged)
-					{
+					if (!_isFormatChanged) {
 						Directory.CreateDirectory(EndPath + shortFileNameByPriceItemId);
 						if (!LoadFileFromBase(shortFileNameByPriceItemId, filePath))
 							return;
@@ -1130,15 +1106,13 @@ order by PriceName
 					_currentFilename = filePath;
 					_dataTableMarking.Fill(drFR[0], dtCostsFormRules.Select("CFRPriceItemId = " + drP[PPriceItemId.ColumnName]));
 					var tables = PriceFileHelper.OpenPriceFile(filePath, fmt, delimiter, _dataTableMarking);
-					if (tables == null)
-					{
+					if (tables == null) {
 						MessageBox.Show("Неправильный формат или файл поврежден", "Ошибка открытия файла", MessageBoxButtons.OK,
-										MessageBoxIcon.Error);
+							MessageBoxIcon.Error);
 						return;
 					}
 					dtPrice = tables[0];
-					if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls))
-					{
+					if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls)) {
 						tbpSheet1.Text = tables[0].TableName;
 						tables.RemoveAt(0);
 						dtables = tables;
@@ -1149,10 +1123,8 @@ order by PriceName
 					Application.DoEvents();
 					Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
 					Application.DoEvents();
-
 				}
-				catch (PriceProcessorException priceProcessorException)
-				{
+				catch (PriceProcessorException priceProcessorException) {
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
@@ -1160,10 +1132,9 @@ order by PriceName
 
 		private bool LoadFileFromBase(string shortFileNameByPriceItemId, string filePath)
 		{
-			try
-			{
+			try {
 #if !DEBUG
-				// Берем файл из Base
+	// Берем файл из Base
 				using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
 				{
 					if (openFile != null)
@@ -1184,16 +1155,14 @@ order by PriceName
 				var dataDir = @"..\..\..\..\FREditor.Test\Data\prices";
 				var extention = Path.GetExtension(filePath);
 				var files = Directory.GetFiles(dataDir, "*" + extention);
-				if (files.Length > 0)
-				{
+				if (files.Length > 0) {
 					File.Copy(files[0], filePath, true);
 					return true;
 				}
 				return false;
 #endif
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				_logger.Error("Ошибка при попытке получить файл из Base", ex);
 				return false;
 			}
@@ -1201,8 +1170,7 @@ order by PriceName
 
 		private void SetupXlsPriceView()
 		{
-			for (var i = 0; i < dtables.Count; i++)
-			{
+			for (var i = 0; i < dtables.Count; i++) {
 				var table = dtables[i];
 				var tabPage = new TabPage(table.TableName);
 				tabPage.Name = "tbpSheet" + (i + 1);
@@ -1221,15 +1189,14 @@ order by PriceName
 				foreach (DataGridViewTextBoxColumn dc in indgv.Columns)
 					dc.Width = 300;
 				gds.Add(indgv);
-				((INDataGridView) gds[i]).Columns.Clear();
-				((INDataGridView) gds[i]).DataSource = dtables[i];
+				((INDataGridView)gds[i]).Columns.Clear();
+				((INDataGridView)gds[i]).DataSource = dtables[i];
 			}
 		}
 
 		private void PrepareShowTab(PriceFormat? fmt)
 		{
-			switch (fmt)
-			{
+			switch (fmt) {
 				case PriceFormat.DelimDOS:
 				case PriceFormat.DelimWIN:
 				case PriceFormat.NativeDelimWIN:
@@ -1302,8 +1269,7 @@ order by PriceName
 		private void FillParentComboBoxFromTable(ComboBox cmbParent, DataTable dtParent, string IdField, string NameField)
 		{
 			bsFormRules.SuspendBinding();
-			try
-			{
+			try {
 				cmbParent.DataSource = null;
 				cmbParent.Items.Clear();
 				DataRow drNull = dtParent.NewRow();
@@ -1315,8 +1281,7 @@ order by PriceName
 				cmbParent.DisplayMember = NameField;
 				cmbParent.ValueMember = IdField;
 			}
-			finally
-			{
+			finally {
 				bsFormRules.ResumeBinding();
 			}
 		}
@@ -1326,8 +1291,7 @@ order by PriceName
 			tcInnerTable.Visible = true;
 
 			indgvPriceData.DataSource = dtPrice;
-			switch (fmt)
-			{
+			switch (fmt) {
 				case PriceFormat.DelimDOS:
 				case PriceFormat.DelimWIN:
 				case PriceFormat.NativeDelimWIN:
@@ -1408,13 +1372,11 @@ order by PriceName
 
 		public void tcInnerSheets_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			if (tcInnerSheets.SelectedTab == tbpSheet1)
-			{
+			if (tcInnerSheets.SelectedTab == tbpSheet1) {
 				indgvPriceData.DataSource = dtPrice;
 				_searchGrid = indgvPriceData;
 			}
-			else
-			{
+			else {
 				((INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]).DataSource = ((DataTable)dtables[tcInnerSheets.SelectedIndex - 1]);
 				_searchGrid = (INDataGridView)gds[tcInnerSheets.SelectedIndex - 1];
 			}
@@ -1422,39 +1384,30 @@ order by PriceName
 
 		private void tcInnerTable_SelectedIndexChanged(object sender, System.EventArgs e)
 		{
-			if (tcInnerTable.SelectedTab == tbpTable)
-			{
+			if (tcInnerTable.SelectedTab == tbpTable) {
 				SaveMarkingSettings();
 				DataTable dtTemp = _dataTableMarking.GetChanges();
-				if (dtTemp != null)
-				{
-					if (!_dataTableMarking.Check())
-					{
+				if (dtTemp != null) {
+					if (!_dataTableMarking.Check()) {
 						tcInnerTable.SelectedTab = tbpMarking;
 						MessageBox.Show("Неправильный ввод поля!", "Плохо, очень плохо", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					}
-					else
-					{
+					else {
 						fW = new frmWait();
 
-						try
-						{
+						try {
 							fW.openPrice += DoOpenTable;
-							fW.drP = dtTemp.Rows[0];// new DataRow();
+							fW.drP = dtTemp.Rows[0]; // new DataRow();
 
 							fW.ShowDialog();
 						}
-						finally
-						{
+						finally {
 							fW = null;
 						}
-
-
 					}
 				}
 			}
-			else if (tcInnerTable.SelectedTab == tbpMarking)
-			{
+			else if (tcInnerTable.SelectedTab == tbpMarking) {
 				LoadMarkingSettings();
 			}
 		}
@@ -1466,7 +1419,7 @@ order by PriceName
 			indgvPriceData.DataSource = null;
 			Application.DoEvents();
 
-			dtPrice = PriceFileHelper.OpenPriceTable(_currentFilename, _dataTableMarking, _priceFileFormatHelper.NewFormat);// OpenTable(fmt);
+			dtPrice = PriceFileHelper.OpenPriceTable(_currentFilename, _dataTableMarking, _priceFileFormatHelper.NewFormat); // OpenTable(fmt);
 			Application.DoEvents();
 
 			indgvPriceData.DataSource = dtPrice;
@@ -1484,15 +1437,13 @@ order by PriceName
 
 			tcInnerTable.SizeMode = TabSizeMode.Normal;
 			tcInnerTable.ItemSize = new Size(0, 1);
-			tcInnerTable.Appearance = TabAppearance.Normal;//
+			tcInnerTable.Appearance = TabAppearance.Normal;
 
 			tcInnerSheets.SelectedTab = tbpSheet1;
 			tcInnerTable.SelectedTab = tbpTable;
 
-			foreach (TabPage tp in tcInnerSheets.TabPages)
-			{
-				if (!(tp.Equals(tbpSheet1)))
-				{
+			foreach (TabPage tp in tcInnerSheets.TabPages) {
+				if (!(tp.Equals(tbpSheet1))) {
 					tcInnerSheets.TabPages.Remove(tp);
 				}
 			}
@@ -1524,17 +1475,14 @@ order by PriceName
 		public void RefreshDataSet()
 		{
 			dtSet.EnforceConstraints = false;
-			try
-			{
+			try {
 				dtSet.Clear();
 			}
-			finally
-			{
+			finally {
 				dtSet.EnforceConstraints = true;
 			}
 			bool showOnlyEnabled = !_showDisabledFirm;
-			if (showOnlyEnabled)
-			{
+			if (showOnlyEnabled) {
 				// Если галочка "Показывать недействующие" НЕ выделена
 				// тогда мы добавляем параметры для выборки только действующих
 				command.Parameters.AddWithValue("?AgencyEnabled", 1);
@@ -1568,8 +1516,7 @@ order by PriceName
 
 			DataTable dataTable = dataView.ToTable();
 			DataRow[] rows = dataTable.Select(query);
-			if (rows.Length > 0)
-			{
+			if (rows.Length > 0) {
 				DataRow[] tempRows;
 				tempRows = new DataRow[dataTable.Rows.Count];
 				dataTable.Rows.CopyTo(tempRows, 0);
@@ -1581,8 +1528,7 @@ order by PriceName
 		private void tbControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			MatchPriceButton.Enabled = true;
-			if (tbControl.SelectedTab == tpFirms)
-			{
+			if (tbControl.SelectedTab == tpFirms) {
 				if (_isComboBoxFormatHandlerRegistered)
 					_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 				fmt = null;
@@ -1601,64 +1547,59 @@ order by PriceName
 //                tmrUpdateApply.Stop();
 				tmrUpdateApply.Start();
 			}
-			else
-				if (tbControl.SelectedTab == tpPrice)
-				{
-					CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-					DataRowView drv = (DataRowView)currencyManager.Current;
-					DataView dv = (DataView)currencyManager.List;
+			else if (tbControl.SelectedTab == tpPrice) {
+				CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+				DataRowView drv = (DataRowView)currencyManager.Current;
+				DataView dv = (DataView)currencyManager.List;
 
-					DataRow drP = drv.Row;
+				DataRow drP = drv.Row;
 
-					currentClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
-					currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
+				currentClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
+				currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
 
-					var row = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
-					var priceFormat = (row[0]["FRPriceFormatId"] is DBNull) ? null : (PriceFormat?)Convert.ToInt32(row[0]["FRPriceFormatId"]);
-					var delim = Convert.ToString(row[0]["FRDelimiter"]);
-					_priceFileFormatHelper.LoadPriceFormat((ulong)currentPriceItemId, priceFormat, delim);
+				var row = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
+				var priceFormat = (row[0]["FRPriceFormatId"] is DBNull) ? null : (PriceFormat?)Convert.ToInt32(row[0]["FRPriceFormatId"]);
+				var delim = Convert.ToString(row[0]["FRDelimiter"]);
+				_priceFileFormatHelper.LoadPriceFormat((ulong)currentPriceItemId, priceFormat, delim);
 
-					bsCostsFormRules.Filter = "CFRPriceItemId = " + currentPriceItemId.ToString();
-					bsFormRules.Filter = "FRPriceItemId = " + currentPriceItemId.ToString();
-					tbCostFind.Text = String.Empty;
-					bsCostsFormRules.ResumeBinding();
-					bsFormRules.ResumeBinding();
+				bsCostsFormRules.Filter = "CFRPriceItemId = " + currentPriceItemId.ToString();
+				bsFormRules.Filter = "FRPriceItemId = " + currentPriceItemId.ToString();
+				tbCostFind.Text = String.Empty;
+				bsCostsFormRules.ResumeBinding();
+				bsFormRules.ResumeBinding();
 
-					if (((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)
-						indgvCosts.AllowUserToAddRows = false;
+				if (((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)
+					indgvCosts.AllowUserToAddRows = false;
 
-					indgvCosts.ReadOnly = !indgvCosts.AllowUserToAddRows;
+				indgvCosts.ReadOnly = !indgvCosts.AllowUserToAddRows;
 
-					btnPutToBase.Enabled = !Convert.IsDBNull(
-						((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
+				btnPutToBase.Enabled = !Convert.IsDBNull(
+					((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
 
-					if (indgvCosts.AllowUserToAddRows)
-					{
-						(bsCostsFormRules.List as DataView).Table
-							.Columns[CFRPriceItemId.ColumnName]
-							.DefaultValue = ((DataRowView)bsFormRules.Current)["FRPriceItemId"];
-					}
-					else
-					{
-						(bsCostsFormRules.List as DataView).Table
-							.Columns[CFRPriceItemId.ColumnName]
-							.DefaultValue = DBNull.Value;
-					}
-					fmt = null;
-					//_prevFmt = null;
-					delimiter = String.Empty;
-					//_prevDelimiter = String.Empty;
-					DoOpenPrice(drP);
-					tmrUpdateApply.Start();
-					if (indgvPriceData.RowCount > 0)
-					{
-						indgvPriceData.CurrentCell = indgvPriceData.Rows[0].Cells[0];
-						indgvPriceData.Focus();
-					}
-					tbSearchInPrice.Text = String.Empty;
-					if (!_isComboBoxFormatHandlerRegistered)
-						_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
+				if (indgvCosts.AllowUserToAddRows) {
+					(bsCostsFormRules.List as DataView).Table
+						.Columns[CFRPriceItemId.ColumnName]
+						.DefaultValue = ((DataRowView)bsFormRules.Current)["FRPriceItemId"];
 				}
+				else {
+					(bsCostsFormRules.List as DataView).Table
+						.Columns[CFRPriceItemId.ColumnName]
+						.DefaultValue = DBNull.Value;
+				}
+				fmt = null;
+				//_prevFmt = null;
+				delimiter = String.Empty;
+				//_prevDelimiter = String.Empty;
+				DoOpenPrice(drP);
+				tmrUpdateApply.Start();
+				if (indgvPriceData.RowCount > 0) {
+					indgvPriceData.CurrentCell = indgvPriceData.Rows[0].Cells[0];
+					indgvPriceData.Focus();
+				}
+				tbSearchInPrice.Text = String.Empty;
+				if (!_isComboBoxFormatHandlerRegistered)
+					_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
+			}
 		}
 
 		private void RefreshDataBind()
@@ -1666,24 +1607,20 @@ order by PriceName
 			FillTables(shortNameFilter, regionCodeFilter, sourceIndex);
 
 			this.Text = "Редактор Правил Формализации";
-			if (fcs == dgFocus.Firm)
-			{
+			if (fcs == dgFocus.Firm) {
 				indgvFirm.Focus();
 				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentClientCode);
 			}
-			else
-				if (fcs == dgFocus.Price)
-				{
-					indgvPrice.Select();
-					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentClientCode);
-					CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceItemId.ColumnName, currentPriceItemId);
-				}
+			else if (fcs == dgFocus.Price) {
+				indgvPrice.Select();
+				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentClientCode);
+				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceItemId.ColumnName, currentPriceItemId);
+			}
 		}
 
 		private void txtBoxCode_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
 		{
-			if (e.Data.GetDataPresent(typeof(DropField)))
-			{
+			if (e.Data.GetDataPresent(typeof(DropField))) {
 				e.Effect = DragDropEffects.Copy;
 			}
 			else
@@ -1718,35 +1655,28 @@ order by PriceName
 
 		private void txtBoxCodeBegin_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
 		{
-			if (((TextBox)sender).AccessibleName.EndsWith("Begin"))
-			{
+			if (((TextBox)sender).AccessibleName.EndsWith("Begin")) {
 				string name = ((TextBox)sender).AccessibleName.Substring(0, ((TextBox)sender).AccessibleName.Length - 5);
 				TextBox pairtb = PairTextBox(name, "End");
-				if (pairtb != null)
-				{
+				if (pairtb != null) {
 					((TextBox)sender).Text = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
 					pairtb.Text = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
 				}
 			}
-			else
-				if (((TextBox)sender).AccessibleName.EndsWith("End"))
-				{
-					string name = ((TextBox)sender).AccessibleName.Substring(0, ((TextBox)sender).AccessibleName.Length - 3);
-					TextBox pairtb = PairTextBox(name, "Begin");
-					if (pairtb != null)
-					{
-						((TextBox)sender).Text = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
-						pairtb.Text = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
-					}
+			else if (((TextBox)sender).AccessibleName.EndsWith("End")) {
+				string name = ((TextBox)sender).AccessibleName.Substring(0, ((TextBox)sender).AccessibleName.Length - 3);
+				TextBox pairtb = PairTextBox(name, "Begin");
+				if (pairtb != null) {
+					((TextBox)sender).Text = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
+					pairtb.Text = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
 				}
+			}
 		}
 
 		private TextBox PairTextBox(string name, string tail)
 		{
-			foreach (Control c in pnlTxtFields.Controls)
-			{
-				if ((c.GetType().Equals(typeof(TextBox))) && (c.AccessibleName == name + tail))
-				{
+			foreach (Control c in pnlTxtFields.Controls) {
+				if ((c.GetType().Equals(typeof(TextBox))) && (c.AccessibleName == name + tail)) {
 					return (TextBox)c;
 				}
 			}
@@ -1774,16 +1704,14 @@ order by PriceName
 
 		private void lLblMaster_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-			try
-			{
+			try {
 				if (bsFormRules.Current == null)
 					return;
-				var priceCode = Convert.ToInt64(((DataRowView) bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
+				var priceCode = Convert.ToInt64(((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
 				var firmCode = GetFirmCodeByPriceCode(priceCode);
 				Process.Start(String.Format("mailto:{0}", GetContactText(firmCode, 2, 0)));
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				_logger.Error("Ошибка при попытке создать письмо ответственному за прайс лист из вкладки 'Прайс'", ex);
 			}
 		}
@@ -1797,7 +1725,7 @@ order by PriceName
 		/// <returns>Текст контактов, разделенный ";"</returns>
 		private string GetContactText(long FirmCode, byte ContactGroupType, byte ContactType)
 		{
-			DataSet dsContacts = MySqlHelper.ExecuteDataset(connection,@"
+			DataSet dsContacts = MySqlHelper.ExecuteDataset(connection, @"
 select distinct c.contactText
 from Customers.suppliers s
   join contacts.contact_groups cg on s.ContactGroupOwnerId = cg.ContactGroupOwnerId
@@ -1822,8 +1750,7 @@ and c.Type = ?ContactType;",
 				new MySqlParameter("?ContactGroupType", ContactGroupType),
 				new MySqlParameter("?ContactType", ContactType));
 			List<string> contacts = new List<string>();
-			foreach (DataRow drContact in dsContacts.Tables[0].Rows)
-			{
+			foreach (DataRow drContact in dsContacts.Tables[0].Rows) {
 				if (!contacts.Contains(drContact["contactText"].ToString()))
 					contacts.Add(drContact["contactText"].ToString());
 			}
@@ -1833,24 +1760,17 @@ and c.Type = ?ContactType;",
 
 		private void CheckOnePrice(CurrencyManager currencyManager)
 		{
-			if (currencyManager.Position > -1)
-			{
+			if (currencyManager.Position > -1) {
 				DataRowView drv = (DataRowView)currencyManager.Current;
 				DataView dv = (DataView)currencyManager.List;
 
-				if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length > 1)
-				{
+				if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length > 1) {
 					indgvPrice.Focus();
 				}
-				else
-				{
-					if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length == 1)
-					{
-						if (CostIsValid())
-						{
-							tbControl.SelectedTab = tpPrice;
-							fcs = dgFocus.Firm;
-						}
+				else if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length == 1) {
+					if (CostIsValid()) {
+						tbControl.SelectedTab = tpPrice;
+						fcs = dgFocus.Firm;
 					}
 				}
 			}
@@ -1858,16 +1778,13 @@ and c.Type = ?ContactType;",
 
 		private void btnFloatPanel_Click(object sender, System.EventArgs e)
 		{
-			if (pnlFloat.Visible)
-			{
+			if (pnlFloat.Visible) {
 				pnlFloat.Visible = false;
-				foreach (INDataGridView indg in gds)
-				{
+				foreach (INDataGridView indg in gds) {
 					indg.RowHeadersVisible = false;
 				}
 			}
-			else
-			{
+			else {
 				pnlFloat.Visible = true;
 				pnlFloat.BringToFront();
 			}
@@ -1893,40 +1810,29 @@ and c.Type = ?ContactType;",
 		{
 			Regex r;
 
-			if (txtMask.Text != String.Empty)
-			{
-				try
-				{
+			if (txtMask.Text != String.Empty) {
+				try {
 					erP.Clear();
-					var regexMask = txtMask.Text;//.Replace("*", "+?");
+					var regexMask = txtMask.Text; //.Replace("*", "+?");
 					r = new Regex(regexMask, RegexOptions.IgnoreCase);
 					if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
-						(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
-					{
-						if ((txtExistBegin.Text != String.Empty) && (txtExistEnd.Text != String.Empty))
-						{
-							foreach (DataRow dr in _dataTableMarking.Rows)
-							{
+						(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN)) {
+						if ((txtExistBegin.Text != String.Empty) && (txtExistEnd.Text != String.Empty)) {
+							foreach (DataRow dr in _dataTableMarking.Rows) {
 								if ((dr["MBeginField"].ToString() == txtExistBegin.Text) && (dr["MEndField"].ToString() == txtExistEnd.Text))
 									CheckErrors(r, dr["MNameField"].ToString(), dtPrice, indgvPriceData);
 							}
 						}
 					}
-					else
-					{
-						if (txtExist.Text != String.Empty)
-						{
-							if (tcInnerSheets.SelectedIndex > 0)
-							{
-								CheckErrors(r, txtExist.Text, (DataTable)dtables[tcInnerSheets.SelectedIndex - 1], (INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]);
-							}
-							else
-								CheckErrors(r, txtExist.Text, dtPrice, indgvPriceData);
+					else if (txtExist.Text != String.Empty) {
+						if (tcInnerSheets.SelectedIndex > 0) {
+							CheckErrors(r, txtExist.Text, (DataTable)dtables[tcInnerSheets.SelectedIndex - 1], (INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]);
 						}
+						else
+							CheckErrors(r, txtExist.Text, dtPrice, indgvPriceData);
 					}
 				}
-				catch
-				{
+				catch {
 					erP.SetIconAlignment(txtMask, ErrorIconAlignment.MiddleLeft);
 
 					erP.SetError(txtMask, "Неправильно задана маска!");
@@ -1939,24 +1845,19 @@ and c.Type = ?ContactType;",
 			dt.BeginLoadData();
 
 			bool colExist = false;
-			foreach (DataColumn c in dt.Columns)
-			{
-				if (c.ColumnName == FieldNameToSearch)
-				{
+			foreach (DataColumn c in dt.Columns) {
+				if (c.ColumnName == FieldNameToSearch) {
 					colExist = true;
 					break;
 				}
 			}
 
-			if (colExist)
-			{
-				foreach (DataRow dr in dt.Rows)
-				{
+			if (colExist) {
+				foreach (DataRow dr in dt.Rows) {
 					dr.RowError = String.Empty;
 					dr.ClearErrors();
 					Match m = r.Match(dr[FieldNameToSearch].ToString());
-					if (m.Success)
-					{
+					if (m.Success) {
 						indgv.RowHeadersVisible = true;
 						dr.RowError = "Маска совпала";
 					}
@@ -1968,48 +1869,36 @@ and c.Type = ?ContactType;",
 		private string FindNameColumn()
 		{
 			string col = String.Empty;
-			if (pnlGeneralFields.Visible)
-			{
+			if (pnlGeneralFields.Visible) {
 				if (txtBoxName1.Text != String.Empty)
 					col = txtBoxName1.Text;
-				else
-				{
-					if (txtBoxName2.Text != String.Empty)
-						col = txtBoxName2.Text;
-					else
-					{
-						if (txtBoxName3.Text != String.Empty)
-							col = txtBoxName3.Text;
-					}
-				}
-
+				else if (txtBoxName2.Text != String.Empty)
+					col = txtBoxName2.Text;
+				else if (txtBoxName3.Text != String.Empty)
+					col = txtBoxName3.Text;
 			}
-			else
-				if (pnlTxtFields.Visible)
-				{
-					if (txtBoxName1Begin.Text != String.Empty)
-					{
-						DataRow[] drcol = _dataTableMarking.Select("MBeginField = " + txtBoxName1Begin.Text);
-						col = drcol[0]["MNameField"].ToString();
-					}
+			else if (pnlTxtFields.Visible) {
+				if (txtBoxName1Begin.Text != String.Empty) {
+					DataRow[] drcol = _dataTableMarking.Select("MBeginField = " + txtBoxName1Begin.Text);
+					col = drcol[0]["MNameField"].ToString();
 				}
+			}
 
 			return col;
 		}
+
 		private void btnEditMask_Click(object sender, EventArgs e)
 		{
 			string col = FindNameColumn();
 
-			if (col != String.Empty)
-			{
+			if (col != String.Empty) {
 				DataRow dr;
 				if (tcInnerSheets.SelectedIndex > 0)
 					dr = dtables[tcInnerSheets.SelectedIndex - 1].Rows[((INDataGridView)gds[tcInnerSheets.SelectedIndex - 1]).CurrentRow.Index];
 				else
 					dr = dtPrice.Rows[indgvPriceData.CurrentRow.Index];
 
-				if (dr[col].ToString() != String.Empty)
-				{
+				if (dr[col].ToString() != String.Empty) {
 					nameR = dr[col].ToString();
 
 					frmNM = new frmNameMask();
@@ -2017,8 +1906,7 @@ and c.Type = ?ContactType;",
 					frmNM.txtBoxName.Text = nameR;
 
 					frmNM.ShowDialog();
-					if (frmNM.DialogResult == DialogResult.OK)
-					{
+					if (frmNM.DialogResult == DialogResult.OK) {
 						txtBoxNameMask.Text = frmNM.txtBoxNameMaskNM.Text;
 					}
 				}
@@ -2031,39 +1919,28 @@ and c.Type = ?ContactType;",
 
 		private void btnCheckAll_Click(object sender, EventArgs e)
 		{
-			if (txtBoxNameMask.Text != String.Empty)
-			{
-				var regexMask = txtBoxNameMask.Text;//.Replace("*", "+?");
+			if (txtBoxNameMask.Text != String.Empty) {
+				var regexMask = txtBoxNameMask.Text; //.Replace("*", "+?");
 				var r = new Regex(regexMask, RegexOptions.IgnoreCase);
 				var groups = new string[17];
 				var i = 0;
-				foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields)))
-				{
-					if ((pf.ToString() != PriceFields.Name1.ToString()) && (pf.ToString() != PriceFields.Name2.ToString()) && (pf.ToString() != PriceFields.Name3.ToString()))
-					{
-						if (txtBoxNameMask.Text.IndexOf(pf.ToString()) > -1)
-						{
+				foreach (PriceFields pf in Enum.GetValues(typeof(PriceFields))) {
+					if ((pf.ToString() != PriceFields.Name1.ToString()) && (pf.ToString() != PriceFields.Name2.ToString()) && (pf.ToString() != PriceFields.Name3.ToString())) {
+						if (txtBoxNameMask.Text.IndexOf(pf.ToString()) > -1) {
 							groups[i] = pf.ToString();
 							i++;
 						}
 					}
-					else
-					{
-						if (txtBoxNameMask.Text.IndexOf("Name") > -1)
-						{
-							if (i > 0)
-							{
-								if (groups[i - 1] != "Name")
-								{
-									groups[i] = "Name";
-									i++;
-								}
-							}
-							else
-							{
+					else if (txtBoxNameMask.Text.IndexOf("Name") > -1) {
+						if (i > 0) {
+							if (groups[i - 1] != "Name") {
 								groups[i] = "Name";
 								i++;
 							}
+						}
+						else {
+							groups[i] = "Name";
+							i++;
 						}
 					}
 				}
@@ -2075,7 +1952,6 @@ and c.Type = ?ContactType;",
 			}
 			else
 				MessageBox.Show(String.Format("Не указана маска разбора товара!"), "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
 		}
 
 		private void CheckErrorsInAllNames(Regex r, string[] GroupsToFind, string ColumnNameToSearchIn, DataTable dt, INDataGridView indgv)
@@ -2083,30 +1959,23 @@ and c.Type = ?ContactType;",
 			dt.BeginLoadData();
 			var colExist = dt.Columns.Cast<DataColumn>().Any(c => c.ColumnName == ColumnNameToSearchIn);
 
-			if (colExist)
-			{
-				foreach (DataRow dr in dt.Rows)
-				{
+			if (colExist) {
+				foreach (DataRow dr in dt.Rows) {
 					dr.RowError = String.Empty;
 					dr.ClearErrors();
 					var m = r.Match(dr[ColumnNameToSearchIn].ToString());
-					if (m.Success)
-					{
+					if (m.Success) {
 						var groupNotExists = false;
-						for (int i = 0; i < GroupsToFind.Length; i++)
-						{
-							if (GroupsToFind[i] != null)
-							{
-								if (!m.Groups[GroupsToFind[i]].Success)
-								{
+						for (int i = 0; i < GroupsToFind.Length; i++) {
+							if (GroupsToFind[i] != null) {
+								if (!m.Groups[GroupsToFind[i]].Success) {
 									groupNotExists = true;
 									break;
 								}
 							}
 						}
 
-						if (!groupNotExists)
-						{
+						if (!groupNotExists) {
 							indgv.RowHeadersVisible = true;
 							dr.RowError = "Маска совпала";
 						}
@@ -2121,8 +1990,7 @@ and c.Type = ?ContactType;",
 			if (tbControl.SelectedTab == tpFirms)
 				//Завершаем редактирование общих настроек прайс-листов
 				BindingContext[indgvPrice.DataSource, indgvPrice.DataMember].EndCurrentEdit();
-			else
-			{
+			else {
 				//Завершаем редактирование правил формализации цен
 				if ((bsCostsFormRules.Current != null) && ((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
 					//Если создалась пустая строка в правилах формализации цен, то при сохранении отменяем ее
@@ -2145,16 +2013,13 @@ and c.Type = ?ContactType;",
 
 		private void tbControl_Deselecting(object sender, TabControlCancelEventArgs e)
 		{
-			if (e.TabPage == tpPrice)
-			{
+			if (e.TabPage == tpPrice) {
 				TrySaveData();
 			}
-			if (e.TabPage == tpFirms)
-			{
+			if (e.TabPage == tpFirms) {
 				if (!CostIsValid())
 					e.Cancel = true;
-				else
-				{
+				else {
 					int selectedRow = indgvPrice.SelectedCells[0].RowIndex;
 					TrySaveData();
 					// Если мы пытаемся перейти на вкладку "Прайс", а у нас нет
@@ -2163,12 +2028,11 @@ and c.Type = ?ContactType;",
 						indgvPrice.DataMember];
 					if (currencyManager.Count == 0)
 						e.Cancel = true;
-					try
-					{
+					try {
 						indgvPrice.CurrentCell = indgvPrice.Rows[selectedRow].Cells[0];
 					}
-					catch(Exception)
-					{}
+					catch (Exception) {
+					}
 				}
 			}
 		}
@@ -2176,17 +2040,13 @@ and c.Type = ?ContactType;",
 		private void TrySaveData()
 		{
 			CommitAllEdit();
-			if (dtSet.HasChanges())
-			{
+			if (dtSet.HasChanges()) {
 				DataSet dsc = dtSet.GetChanges();
-				if (dsc != null)
-				{
-					if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-					{
+				if (dsc != null) {
+					if (MessageBox.Show("Имееются не сохраненые данные. Сохранить?", "Внимание", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1) == DialogResult.Yes) {
 						tsbApply_Click(null, null);
 					}
-					else
-					{
+					else {
 						tsbCancel_Click(null, null);
 					}
 				}
@@ -2199,21 +2059,17 @@ and c.Type = ?ContactType;",
 			Point selectedPriceCell = new Point(indgvPrice.SelectedCells[0].RowIndex, indgvPrice.SelectedCells[0].ColumnIndex);
 			string filePath = String.Empty;
 			filePath = EndPath + Path.GetFileNameWithoutExtension(_priceFileFormatHelper.NewShortFileName) +
-					   Path.DirectorySeparatorChar + _priceFileFormatHelper.NewShortFileName;
+				Path.DirectorySeparatorChar + _priceFileFormatHelper.NewShortFileName;
 
 			CommitAllEdit();
 			DataSet chg = dtSet.GetChanges();
-			if (chg != null)
-			{
-				if (tbControl.SelectedTab == tpPrice)
-				{
+			if (chg != null) {
+				if (tbControl.SelectedTab == tpPrice) {
 					if (connection.State == ConnectionState.Closed)
 						connection.Open();
-					try
-					{
+					try {
 						MySqlTransaction tr = connection.BeginTransaction();
-						try
-						{
+						try {
 							DbHelper.SetLogParameters(connection);
 
 							mcmdUpdateCostRules.Connection = connection;
@@ -2225,21 +2081,17 @@ and c.Type = ?ContactType;",
 
 							//Формируем тело письма с изменениями в колонках
 							StringBuilder body = new StringBuilder();
-							foreach (DataRow changeRow in chg.Tables[dtCostsFormRules.TableName].Rows)
-							{
+							foreach (DataRow changeRow in chg.Tables[dtCostsFormRules.TableName].Rows) {
 								if (changeRow.RowState == DataRowState.Added)
 									body.AppendFormat("Добавлена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
-								else
-									if ((bool)changeRow[CFRDeleted.ColumnName])
-									{
-										body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
-										changeRow.Delete();
-									}
-									else
-										if (!changeRow[CFRCostName.ColumnName, DataRowVersion.Original].Equals(changeRow[CFRCostName.ColumnName, DataRowVersion.Current]))
-											body.AppendFormat("Наименование ценовой колонки изменено с \"{0}\" на \"{1}\".\n",
-												changeRow[CFRCostName.ColumnName, DataRowVersion.Original],
-												changeRow[CFRCostName.ColumnName, DataRowVersion.Current]);
+								else if ((bool)changeRow[CFRDeleted.ColumnName]) {
+									body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
+									changeRow.Delete();
+								}
+								else if (!changeRow[CFRCostName.ColumnName, DataRowVersion.Original].Equals(changeRow[CFRCostName.ColumnName, DataRowVersion.Current]))
+									body.AppendFormat("Наименование ценовой колонки изменено с \"{0}\" на \"{1}\".\n",
+										changeRow[CFRCostName.ColumnName, DataRowVersion.Original],
+										changeRow[CFRCostName.ColumnName, DataRowVersion.Current]);
 							}
 
 							//Делается Copy для того, чтобы созданные записи (Added) при применении не помечались как неизмененные Unchanged
@@ -2250,8 +2102,7 @@ and c.Type = ?ContactType;",
 							daFormRules.TableMappings.Add("Table", dtFormRules.TableName);
 							daFormRules.Update(chg.Tables[dtFormRules.TableName].Copy());
 
-							if (body.Length > 0)
-							{
+							if (body.Length > 0) {
 								//Получаем информацию о поставщике, регионе и прайс-листе
 								long _selfPriceCode = (long)(((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
 								DataRow drPrice = dtPrices.Select("PPriceCode = " + _selfPriceCode)[0];
@@ -2273,33 +2124,27 @@ and c.Type = ?ContactType;",
 							// Перепроводим прайс
 							RetrancePrice.Go(indgvPrice, indgvFirm, connection, _priceProcessor, PPriceItemId);
 						}
-						catch (Exception ex)
-						{
+						catch (Exception ex) {
 							tr.Rollback();
 							MessageBox.Show("Не удалось применить изменения в правилах формализации прайс-листа. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в правилах формализации.", ex));
 						}
 					}
-					finally
-					{
+					finally {
 						if (connection.State != ConnectionState.Closed)
 							connection.Close();
 					}
 
 					btnPutToBase.Enabled = !Convert.IsDBNull(((DataRowView)bsFormRules.Current).Row[FRPriceFormatId.ColumnName, DataRowVersion.Original]);
-
 				}
-				else if (tbControl.SelectedTab == tpFirms)
-				{
+				else if (tbControl.SelectedTab == tpFirms) {
 					BindingContext[indgvPrice.DataSource, indgvPrice.DataMember].EndCurrentEdit();
 
 					if (connection.State == ConnectionState.Closed)
 						connection.Open();
-					try
-					{
+					try {
 						MySqlTransaction tr = connection.BeginTransaction();
-						try
-						{
+						try {
 							DbHelper.SetLogParameters(connection);
 
 							//todo: здесь надо переписать
@@ -2342,8 +2187,7 @@ and fr.Id = pim.FormRuleId;
 							mcmdUPrice.Parameters.Add("?PPriceItemId", MySqlDbType.Int64);
 							mcmdUPrice.Parameters.Add("?PIsParent", MySqlDbType.Int32);
 
-							foreach (MySqlParameter ms in mcmdUPrice.Parameters)
-							{
+							foreach (MySqlParameter ms in mcmdUPrice.Parameters) {
 								ms.SourceColumn = ms.ParameterName.Substring(1);
 							}
 
@@ -2364,10 +2208,8 @@ and fr.Id = pim.FormRuleId;
 							//Формируем тело письма с изменениями в колонках
 							var body = new StringBuilder();
 							string _priceName = "";
-							foreach (DataRow changeRow in chg.Tables[dtPrices.TableName].Rows)
-							{
-								if ((bool)changeRow[PDeleted.ColumnName])
-								{
+							foreach (DataRow changeRow in chg.Tables[dtPrices.TableName].Rows) {
+								if ((bool)changeRow[PDeleted.ColumnName]) {
 									body.AppendFormat("Удалена ценовая колонка \"{0}\".\n", changeRow[PPriceName.ColumnName]);
 									_priceName = changeRow[PPriceName.ColumnName].ToString();
 									changeRow.Delete();
@@ -2376,12 +2218,10 @@ and fr.Id = pim.FormRuleId;
 
 							daPrice.Update(chg.Tables[dtPrices.TableName]);
 
-							if (body.Length > 0)
-							{
+							if (body.Length > 0) {
 								//Получаем информацию о поставщике, регионе и прайс-листе
-								if (indgvFirm.CurrentRow != null)
-								{
-									var firm = (DataRowView) indgvFirm.CurrentRow.DataBoundItem;
+								if (indgvFirm.CurrentRow != null) {
+									var firm = (DataRowView)indgvFirm.CurrentRow.DataBoundItem;
 									var _firmName = firm[CShortName.ColumnName].ToString();
 									var _regionName = firm[CRegion.ColumnName].ToString();
 									Mailer.SendNotificationLetter(connection, body.ToString(), _priceName, _firmName, _regionName);
@@ -2392,15 +2232,13 @@ and fr.Id = pim.FormRuleId;
 							RefreshDataBind();
 							tr.Commit();
 						}
-						catch (Exception ex)
-						{
+						catch (Exception ex) {
 							MessageBox.Show("Не удалось применить изменения в настройках прайс-листов. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в настройках прайс-листов.", ex));
 							tr.Rollback();
 						}
 					}
-					finally
-					{
+					finally {
 						connection.Close();
 					}
 				}
@@ -2408,33 +2246,26 @@ and fr.Id = pim.FormRuleId;
 			tsbApply.Enabled = false;
 			tsbCancel.Enabled = false;
 
-			try
-			{
+			try {
 				indgvFirm.CurrentCell = indgvFirm.Rows[selectedFirmCell.X].Cells[selectedFirmCell.Y];
 				indgvPrice.CurrentCell = indgvPrice.Rows[selectedPriceCell.X].Cells[selectedPriceCell.Y];
 			}
-			catch (Exception)
-			{ }
+			catch (Exception) {
+			}
 
-			if (_priceFileFormatHelper.ChangeFormat())
-			{
-				if (File.Exists(filePath))
-				{
-					try
-					{
-						if (!_priceProcessor.PutFileToInbound(Convert.ToUInt32(currentPriceItemId), File.OpenRead(filePath)))
-						{
+			if (_priceFileFormatHelper.ChangeFormat()) {
+				if (File.Exists(filePath)) {
+					try {
+						if (!_priceProcessor.PutFileToInbound(Convert.ToUInt32(currentPriceItemId), File.OpenRead(filePath))) {
 							MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
-											MessageBoxIcon.Error);
+								MessageBoxIcon.Error);
 						}
 					}
-					catch (Exception ex)
-					{
+					catch (Exception ex) {
 						_logger.Error("Ошибка при применении изменений после смены формата файла (или разделителя). Невозможно положить файл в Inbound", ex);
 					}
 				}
-				else
-				{
+				else {
 					Mailer.SendWarningLetter(String.Format(
 						"При применении изменений после смена формата файла (или разделителя) файл {0} не найден", filePath));
 					MessageBox.Show(String.Format("Невозможно изменить формат файла. Файл {0} не найден",
@@ -2457,8 +2288,7 @@ and fr.Id = pim.FormRuleId;
 			if (tbControl.SelectedTab == tpFirms)
 				//Завершаем редактирование общих настроек прайс-листов
 				BindingContext[indgvPrice.DataSource, indgvPrice.DataMember].EndCurrentEdit();
-			else
-			{
+			else {
 				//Раньше завершали редактирование bsCostsFormRules, но теперь в этом нет необходимости,
 				//т.к. редактирование завершается гридом или после DragAndDrop
 
@@ -2466,17 +2296,14 @@ and fr.Id = pim.FormRuleId;
 				bsFormRules.EndEdit();
 			}
 
-			if (dtSet.HasChanges())
-			{
+			if (dtSet.HasChanges()) {
 				tsbApply.Enabled = true;
 				tsbCancel.Enabled = true;
-				if (rtbArticle.Focused)
-				{
+				if (rtbArticle.Focused) {
 					rtbArticle.SelectionStart = ss;
 				}
 			}
 			tmrUpdateApply.Start();
-
 		}
 
 		private void frmFREMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -2492,20 +2319,16 @@ and fr.Id = pim.FormRuleId;
 		{
 			Point p = indgvCosts.PointToClient(new Point(e.X, e.Y));
 			DataGridView.HitTestInfo costsHitTestInfo = indgvCosts.HitTest(p.X, p.Y);
-			if (costsHitTestInfo.Type == DataGridViewHitTestType.Cell)
-			{
-				if (costsHitTestInfo.RowIndex > -1)
-				{
+			if (costsHitTestInfo.Type == DataGridViewHitTestType.Cell) {
+				if (costsHitTestInfo.RowIndex > -1) {
 					CurrencyManager cm = (CurrencyManager)BindingContext[indgvCosts.DataSource, indgvCosts.DataMember];
 					DataRowView drv = (DataRowView)cm.Current;
 
 					//Если запись не является помеченной на удаление, то позволяем назначать поля
-					if (!(bool)drv[CFRDeleted.ColumnName])
-					{
+					if (!(bool)drv[CFRDeleted.ColumnName]) {
 						string _concurentCostName = String.Empty;
 
-						if (pnlGeneralFields.Visible)
-						{
+						if (pnlGeneralFields.Visible) {
 							DataRow[] drs = dtCostsFormRules.Select(
 								String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRFieldName = '{2}'",
 									drv[CFRCost_Code.ColumnName],
@@ -2516,16 +2339,14 @@ and fr.Id = pim.FormRuleId;
 							else
 								_concurentCostName = drs[0][CFRCostName.ColumnName].ToString();
 						}
-						else
-						{
+						else {
 							DataRow[] drs = dtCostsFormRules.Select(
 								String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRTextBegin = '{2}' and CFRTextEnd = '{3}'",
 									drv[CFRCost_Code.ColumnName],
 									drv[CFRPriceItemId.ColumnName],
 									((DropField)e.Data.GetData(typeof(DropField))).FieldBegin,
 									((DropField)e.Data.GetData(typeof(DropField))).FieldEnd));
-							if (drs.Length == 0)
-							{
+							if (drs.Length == 0) {
 								indgvCosts[cFRTextBeginDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldBegin;
 								indgvCosts[cFRTextEndDataGridViewTextBoxColumn.Name, costsHitTestInfo.RowIndex].Value = ((DropField)e.Data.GetData(typeof(DropField))).FieldEnd;
 							}
@@ -2550,8 +2371,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void indgvCosts_DragEnter(object sender, DragEventArgs e)
 		{
-			if (e.Data.GetDataPresent(typeof(DropField)))
-			{
+			if (e.Data.GetDataPresent(typeof(DropField))) {
 				if (dtCostsFormRules.Rows.Count > 0)
 					e.Effect = DragDropEffects.Copy;
 				else
@@ -2581,7 +2401,6 @@ and fr.Id = pim.FormRuleId;
 		{
 			tmrUpdateApply.Stop();
 			tmrUpdateApply.Start();
-
 		}
 
 		private void SaveFirmAndPriceSettings()
@@ -2603,15 +2422,12 @@ and fr.Id = pim.FormRuleId;
 
 		private void SaveCostsSettings()
 		{
-			if (fileExist)
-			{
+			if (fileExist) {
 				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
-					(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
-				{
+					(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN)) {
 					CregKey = BaseRegKey + "\\CostsDataGridFixed";
 				}
-				else
-				{
+				else {
 					CregKey = BaseRegKey + "\\CostsDataGrid";
 				}
 				indgvCosts.SaveSettings(CregKey);
@@ -2621,14 +2437,12 @@ and fr.Id = pim.FormRuleId;
 		private void LoadCostsSettings()
 		{
 			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
-				(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
-			{
+				(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN)) {
 				indgvCosts.Columns[cFRCostNameDataGridViewTextBoxColumn.Name].Visible = true;
 				indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
 				indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
 			}
-			else
-			{
+			else {
 				indgvCosts.Columns[cFRCostNameDataGridViewTextBoxColumn.Name].Visible = true;
 				indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
 			}
@@ -2648,8 +2462,7 @@ and fr.Id = pim.FormRuleId;
 			if (dataGridView == null)
 				return;
 			dataGridView.Rows[e.RowIndex].ErrorText = String.Empty;
-			if (testString.Contains(" "))
-			{
+			if (testString.Contains(" ")) {
 				e.Cancel = true;
 				dataGridView.Rows[e.RowIndex].ErrorText = "Строка не должна содержать пробелов";
 			}
@@ -2657,8 +2470,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void SaveMarkingSettings()
 		{
-			if (fileExist)
-			{
+			if (fileExist) {
 				indgvMarking.SaveSettings(BaseRegKey + "\\MarkingDataGrid");
 			}
 		}
@@ -2674,28 +2486,23 @@ and fr.Id = pim.FormRuleId;
 			INDataGridView dgv = (INDataGridView)sender;
 			Point p = indgvPriceData.PointToClient(Control.MousePosition);
 			DataGridView.HitTestInfo hitTestInfo = dgv.HitTest(p.X, p.Y);
-			if (hitTestInfo.Type == DataGridViewHitTestType.Cell)
-			{
+			if (hitTestInfo.Type == DataGridViewHitTestType.Cell) {
 				string FieldText = String.Empty;
 
 				FieldText = dgv.Columns[hitTestInfo.ColumnIndex].HeaderText;
 				int RowText = hitTestInfo.RowIndex;
-				if (pnlGeneralFields.Visible)
-				{
+				if (pnlGeneralFields.Visible) {
 					dgv.DoDragDrop(new DropField(FieldText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
 				}
-				else
-				{
+				else {
 					string beginText = String.Empty;
 					string endText = String.Empty;
 					int i = 0;
 					bool findField = false;
 					DataRow dr;
-					while ((i < _dataTableMarking.Rows.Count) && (!findField))
-					{
+					while ((i < _dataTableMarking.Rows.Count) && (!findField)) {
 						dr = _dataTableMarking.Rows[i];
-						if (dr["MNameField"].ToString() == FieldText)
-						{
+						if (dr["MNameField"].ToString() == FieldText) {
 							findField = true;
 							beginText = dr["MBeginField"].ToString();
 							endText = dr["MEndField"].ToString();
@@ -2714,33 +2521,27 @@ and fr.Id = pim.FormRuleId;
 
 		private void txtBoxCodeBegin_DoubleClick(object sender, EventArgs e)
 		{
-			if (((TextBox)sender).AccessibleName.EndsWith("Begin"))
-			{
+			if (((TextBox)sender).AccessibleName.EndsWith("Begin")) {
 				string name = ((TextBox)sender).AccessibleName.Substring(0, ((TextBox)sender).AccessibleName.Length - 5);
 				TextBox pairtb = PairTextBox(name, "End");
-				if (pairtb != null)
-				{
+				if (pairtb != null) {
 					((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
 					((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[pairtb.DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
 				}
 			}
-			else
-				if (((TextBox)sender).AccessibleName.EndsWith("End"))
-				{
-					string name = ((TextBox)sender).AccessibleName.Substring(0, ((TextBox)sender).AccessibleName.Length - 3);
-					TextBox pairtb = PairTextBox(name, "Begin");
-					if (pairtb != null)
-					{
-						((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
-						((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[pairtb.DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
-					}
+			else if (((TextBox)sender).AccessibleName.EndsWith("End")) {
+				string name = ((TextBox)sender).AccessibleName.Substring(0, ((TextBox)sender).AccessibleName.Length - 3);
+				TextBox pairtb = PairTextBox(name, "Begin");
+				if (pairtb != null) {
+					((DataRowView)((TextBox)sender).DataBindings[0].BindingManagerBase.Current)[((TextBox)sender).DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
+					((DataRowView)pairtb.DataBindings[0].BindingManagerBase.Current)[pairtb.DataBindings[0].BindingMemberInfo.BindingField] = ((TextBox)sender).DataBindings[0].DataSourceNullValue;
 				}
+			}
 		}
 
 		private void tbFirmName_TextChanged(object sender, EventArgs e)
 		{
-			if (!InSearch)
-			{
+			if (!InSearch) {
 				tmrSearch.Stop();
 				TrySaveData();
 				tmrSearch.Start();
@@ -2749,8 +2550,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void cbRegions_SelectedValueChanged(object sender, EventArgs e)
 		{
-			if (!InSearch)
-			{
+			if (!InSearch) {
 				tmrSearch.Stop();
 				tmrSearch.Start();
 			}
@@ -2759,8 +2559,7 @@ and fr.Id = pim.FormRuleId;
 		public void tmrSearch_Tick(object sender, EventArgs e)
 		{
 			InSearch = true;
-			try
-			{
+			try {
 				tmrSearch.Stop();
 
 				ulong regcode = 0;
@@ -2775,11 +2574,9 @@ and fr.Id = pim.FormRuleId;
 				regionCodeFilter = regcode;
 				indgvFirm.Focus();
 			}
-			finally
-			{
+			finally {
 				InSearch = false;
 			}
-
 		}
 
 		private void indgvPrice_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -2797,12 +2594,10 @@ and fr.Id = pim.FormRuleId;
 
 		private bool CostIsValid()
 		{
-			if (indgvPrice.CurrentRow != null)
-			{
+			if (indgvPrice.CurrentRow != null) {
 				if ((indgvPrice.CurrentRow.DataBoundItem == null) ||
 					((indgvPrice.CurrentRow.DataBoundItem != null) &&
-					 (((DataRowView) indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)))
-				{
+						(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull))) {
 					MessageBox.Show("Необходимо указать тип цены!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return false;
 				}
@@ -2814,8 +2609,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void indgvFirm_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter)
-			{
+			if (e.KeyCode == Keys.Enter) {
 				e.Handled = true;
 				CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember];
 				CheckOnePrice(currencyManager);
@@ -2824,38 +2618,32 @@ and fr.Id = pim.FormRuleId;
 
 		private void indgvPrice_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Escape)
-			{
+			if (e.KeyCode == Keys.Escape) {
 				indgvFirm.Focus();
 			}
-			if (e.KeyCode == Keys.Enter)
-			{
+			if (e.KeyCode == Keys.Enter) {
 				e.Handled = true;
 
-				if(CostIsValid())
-				{
+				if (CostIsValid()) {
 					fcs = dgFocus.Price;
 					tbControl.SelectedTab = tpPrice;
 					PrepareCreateNewPriceCollumn();
 				}
 			}
-			if (e.KeyCode == Keys.Delete) // удаление ценовой колонки для многофайлового ПЛ
-			{
-				if(CostIsValid())
-				{
+			if (e.KeyCode == Keys.Delete) {
+				// удаление ценовой колонки для многофайлового ПЛ
+				if (CostIsValid()) {
 					DataRowView item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
 					int cost_type = (int)item[PCostType.ColumnName];
-					if (cost_type == 0) return;	// для удаления цен из мультиколоночных прайсов используется другой механизм
+					if (cost_type == 0) return; // для удаления цен из мультиколоночных прайсов используется другой механизм
 					if ((bool)item[PDeleted.ColumnName] == true) return;
-					byte isBaseCost = (byte) item[PBaseCost.ColumnName];
-					if (isBaseCost == 1)
-					{
+					byte isBaseCost = (byte)item[PBaseCost.ColumnName];
+					if (isBaseCost == 1) {
 						MessageBox.Show("Нельзя удалить базовую ценовую колонку", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 						return;
 					}
 
-					if (MessageBox.Show("Вы уверены в удалении ценовой колонки?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
-					{
+					if (MessageBox.Show("Вы уверены в удалении ценовой колонки?", "Внимание!", MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2) == DialogResult.Yes) {
 						item[PDeleted.ColumnName] = true; // помечаем запись на удаление
 						item.EndEdit();
 						indgvPrice.Refresh();
@@ -2879,8 +2667,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void indgvPrice_DoubleClick(object sender, EventArgs e)
 		{
-			if (CostIsValid())
-			{
+			if (CostIsValid()) {
 				fcs = dgFocus.Price;
 				tbControl.SelectedTab = tpPrice;
 				PrepareCreateNewPriceCollumn();
@@ -2889,8 +2676,7 @@ and fr.Id = pim.FormRuleId;
 
 		private void indgvFirm_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if(char.IsLetter(e.KeyChar))
-			{
+			if (char.IsLetter(e.KeyChar)) {
 				tbFirmName.Focus();
 				tbFirmName.Text = e.KeyChar.ToString();
 				tbFirmName.SelectionStart = 1;
@@ -2900,8 +2686,7 @@ and fr.Id = pim.FormRuleId;
 		private void indgvPrice_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
 		{
 			//Если отображается ComboBox, то привязываемся на его событие: изменение текущего элемента
-			if (e.Control is ComboBox)
-			{
+			if (e.Control is ComboBox) {
 				indgvPrice.CurrentCell.ReadOnly = !Convert.ToBoolean(((DataRowView)indgvPrice.CurrentCell.OwningRow.DataBoundItem)["PIsParent"]);
 				e.Control.Enabled = !indgvPrice.CurrentCell.ReadOnly;
 				if (e.Control.Enabled)
@@ -2912,8 +2697,7 @@ and fr.Id = pim.FormRuleId;
 				var grid = (sender as INDataGridView);
 				bool isCostTypeColumn = (grid.CurrentCell.ColumnIndex ==
 					pCostTypeDataGridViewComboBoxColumn.Index);
-				if (isCostTypeColumn)
-				{
+				if (isCostTypeColumn) {
 					string priceItemId = Convert.ToString(((DataRowView)indgvPrice.CurrentCell
 						.OwningRow.DataBoundItem)["PPriceItemId"]);
 					bool priceEdited = PriceWasEdited(priceItemId);
@@ -2929,20 +2713,18 @@ and fr.Id = pim.FormRuleId;
 			var drPrice = dtPrices.Select("PPriceItemId = " + priceItemId);
 			string format;
 			string costType;
-			try
-			{
+			try {
 				costType = Convert.ToString(drPrice[0]["PCostType"]);
 				var rowPriceItems = drPrice[0].GetChildRows(dtPrices.ChildRelations[2]);
 				format = Convert.ToString(rowPriceItems[0]["FRPriceFormatId"]);
 			}
-			catch (Exception)
-			{
+			catch (Exception) {
 				return false;
 			}
 			return (format.Length != 0) && (costType.Length != 0);
 		}
 
-		void frmFREMain_SelectionChangeCommitted(object sender, EventArgs e)
+		private void frmFREMain_SelectionChangeCommitted(object sender, EventArgs e)
 		{
 			//После изменения элемента сразу сохраняем его в ячейке, чтобы возникло событие CellValueChanged
 			//Позволяем изменять на одно из корректных значений, а не на DBNull
@@ -2966,8 +2748,7 @@ and fr.Id = pim.FormRuleId;
 		{
 			BindingContext[indgvPrice.DataSource].EndCurrentEdit();
 			//Если рассматриваются колонки с ComboBox и строки с данными
-			if ((e.RowIndex >= 0) && (((INDataGridView)sender).Columns[e.ColumnIndex].CellTemplate is DataGridViewComboBoxCell))
-			{
+			if ((e.RowIndex >= 0) && (((INDataGridView)sender).Columns[e.ColumnIndex].CellTemplate is DataGridViewComboBoxCell)) {
 				//Если это не родительский прайс-лист, то это ценовая колонка многофайлового прайс-листа и изменять ее нельзя
 				if (!Convert.ToBoolean(((DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem)[PIsParent.ColumnName]))
 					e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
@@ -2976,30 +2757,26 @@ and fr.Id = pim.FormRuleId;
 				// то не выделяем колонки серым цветом (неактивные)
 				INDataGridView inGridView = (sender as INDataGridView);
 				bool isCostTypeColumn = (e.ColumnIndex == pCostTypeDataGridViewComboBoxColumn.Index);
-				if (isCostTypeColumn)
-				{
+				if (isCostTypeColumn) {
 					string priceItemId = Convert.ToString(((DataRowView)indgvPrice
 						.Rows[e.RowIndex].DataBoundItem)["PPriceItemId"]);
-					if (PriceWasEdited(priceItemId))
-					{
+					if (PriceWasEdited(priceItemId)) {
 						e.CellStyle.ForeColor = SystemColors.InactiveCaptionText;
 					}
 				}
 			}
 			DataRowView drv = (DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem;
-			if ((bool)drv[PDeleted.ColumnName])
-			{
+			if ((bool)drv[PDeleted.ColumnName]) {
 				e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
 			}
 		}
 
 		private void cmbParentSynonyms_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter)
-			{
+			if (e.KeyCode == Keys.Enter) {
 				FillParentComboBoxBySearch(
 					(ComboBox)sender,
-@"select
+					@"select
   pd.PriceCode,
   concat(s.Name, ' (', pd.PriceName, ') - ', r.Region) PriceName
 from
@@ -3014,8 +2791,8 @@ and pd.ParentSynonym is null
 and ((pd.PriceCode = ?PrevParentValue) or (pd.PriceName like ?SearchText) or (s.Name like ?SearchText))
 order by PriceName
 ",
-	"PriceCode",
-	"PriceName");
+					"PriceCode",
+					"PriceName");
 			}
 		}
 
@@ -3023,25 +2800,20 @@ order by PriceName
 		{
 			//По двойному клику на ячейках FieldName, TextBegin, TextEnd в таблице настройки правил формализации цен
 			//очищаем данные поля
-			if (e.ColumnIndex > 0)
-			{
+			if (e.ColumnIndex > 0) {
 				if ((indgvCosts.Columns[e.ColumnIndex] == cFRFieldNameDataGridViewTextBoxColumn)
 					|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextBeginDataGridViewTextBoxColumn)
-					|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextEndDataGridViewTextBoxColumn))
-				{
+					|| (indgvCosts.Columns[e.ColumnIndex] == cFRTextEndDataGridViewTextBoxColumn)) {
 					DataGridViewRow row = indgvCosts.Rows[e.RowIndex];
 					DataRowView drv = (DataRowView)row.DataBoundItem;
 
 					//Если запись не является помеченной на удаление, то позволяем редактировать
-					if (!(bool)drv[CFRDeleted.ColumnName])
-					{
+					if (!(bool)drv[CFRDeleted.ColumnName]) {
 						drv.BeginEdit();
-						if (pnlGeneralFields.Visible)
-						{
+						if (pnlGeneralFields.Visible) {
 							drv[cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
 						}
-						else
-						{
+						else {
 							drv[cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
 							drv[cFRTextEndDataGridViewTextBoxColumn.DataPropertyName] = String.Empty;
 						}
@@ -3058,25 +2830,20 @@ order by PriceName
 			DataRowView drv = null;
 			//Если при вводе новой ценовой колонке отменить создание, то при попытке получить доступ
 			//к DataBoundItem будет происходить IndexOutOfRangeException
-			try
-			{
+			try {
 				if (r.DataBoundItem != null)
 					drv = (DataRowView)r.DataBoundItem;
 			}
-			catch (IndexOutOfRangeException)
-			{
+			catch (IndexOutOfRangeException) {
 			}
 
-			if (drv != null)
-			{
+			if (drv != null) {
 				//Если это новая запись и мы еще не установили поля PriceItemId и CostCode
-				if (drv.IsNew && Convert.IsDBNull(drv["CFRCost_Code"]))
-				{
+				if (drv.IsNew && Convert.IsDBNull(drv["CFRCost_Code"])) {
 					long NewCostCode = (long)dtSet.Tables["Правила формализации цен"].Compute("Max(CFRCost_Code)", null);
 					drv["CFRCost_Code"] = NewCostCode + 1;
 					//Если мы добавили новую ценовую колонку и есть фильтр, то сбрасываем фильтр
-					if (!String.IsNullOrEmpty(tbCostFind.Text))
-					{
+					if (!String.IsNullOrEmpty(tbCostFind.Text)) {
 						tbCostFind.Text = String.Empty;
 						tmrSetNewCost.Start();
 					}
@@ -3091,49 +2858,42 @@ order by PriceName
 			// Don't try to validate the 'new row' until finished
 			// editing since there
 			// is not any point in validating its initial value.
-			if (indgvCosts.Rows[e.RowIndex].IsNewRow) { return; }
+			if (indgvCosts.Rows[e.RowIndex].IsNewRow) {
+				return;
+			}
 
 			//Если мы редактировали или ввели название ценовой колонки пустым, то выдать соответствующее предупреждение
-			if ((indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) && String.IsNullOrEmpty(e.FormattedValue.ToString()))
-			{
+			if ((indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) && String.IsNullOrEmpty(e.FormattedValue.ToString())) {
 				e.Cancel = true;
 				indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки не может быть пустой строкой";
 			}
-			else
+			else if ((indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) && !String.IsNullOrEmpty(e.FormattedValue.ToString())) {
 				//Если мы ввели новое название ценовой колонки, то проверяем на несовпадение с существующими ценовыми колонками
-				if ((indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) && !String.IsNullOrEmpty(e.FormattedValue.ToString()))
-				{
-					DataRowView _checkedRow = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
-					if (_checkedRow.IsEdit)
-					{
-						if (_checkedRow.IsNew)
-						{
-							DataRow[] drs = dtCostsFormRules.Select(
-								String.Format("CFRCost_Code is not NULL and CFRPriceItemId = {0} and CFRCostName = '{1}'",
-									_checkedRow[CFRPriceItemId.ColumnName],
-									e.FormattedValue));
-							if (drs.Length > 0)
-							{
-								e.Cancel = true;
-								indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки совпадает с существующей ценовой колонкой";
-							}
+				DataRowView _checkedRow = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
+				if (_checkedRow.IsEdit) {
+					if (_checkedRow.IsNew) {
+						DataRow[] drs = dtCostsFormRules.Select(
+							String.Format("CFRCost_Code is not NULL and CFRPriceItemId = {0} and CFRCostName = '{1}'",
+								_checkedRow[CFRPriceItemId.ColumnName],
+								e.FormattedValue));
+						if (drs.Length > 0) {
+							e.Cancel = true;
+							indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки совпадает с существующей ценовой колонкой";
 						}
-						else
-						{
-							DataRow[] drs = dtCostsFormRules.Select(
-								String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRCostName = '{2}'",
-									_checkedRow[CFRCost_Code.ColumnName],
-									_checkedRow[CFRPriceItemId.ColumnName],
-									e.FormattedValue));
-							if (drs.Length > 0)
-							{
-								e.Cancel = true;
-								indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки совпадает с существующей ценовой колонкой";
-							}
+					}
+					else {
+						DataRow[] drs = dtCostsFormRules.Select(
+							String.Format("CFRCost_Code <> {0} and CFRPriceItemId = {1} and CFRCostName = '{2}'",
+								_checkedRow[CFRCost_Code.ColumnName],
+								_checkedRow[CFRPriceItemId.ColumnName],
+								e.FormattedValue));
+						if (drs.Length > 0) {
+							e.Cancel = true;
+							indgvCosts.Rows[e.RowIndex].ErrorText = "Название ценовой колонки совпадает с существующей ценовой колонкой";
 						}
 					}
 				}
-
+			}
 		}
 
 		private void indgvCosts_KeyDown(object sender, KeyEventArgs e)
@@ -3141,8 +2901,7 @@ order by PriceName
 			if ((e.KeyCode == Keys.Delete)
 				&& bsCostsFormRules.AllowNew
 				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName]
-				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRRegionBaseCost.ColumnName])
-			{
+				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRRegionBaseCost.ColumnName]) {
 				if (((DataRowView)bsCostsFormRules.Current).Row.RowState == DataRowState.Added)
 					((DataRowView)bsCostsFormRules.Current).Delete();
 				else
@@ -3158,8 +2917,7 @@ order by PriceName
 			if (r.IsNewRow) return;
 
 			//Если мы пытаемся отредактировать название ценовой колонки, помечанной на удаление, то не позволяем это сделать
-			if (indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn)
-			{
+			if (indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) {
 				DataRowView drv = (DataRowView)r.DataBoundItem;
 				if ((bool)drv[CFRDeleted.ColumnName])
 					e.Cancel = true;
@@ -3168,22 +2926,18 @@ order by PriceName
 
 		private void indgvCosts_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
 		{
-			if ((e.ColumnIndex > -1) && (e.RowIndex > -1))
-			{
-				if (!indgvCosts.Rows[e.RowIndex].IsNewRow)
-				{
+			if ((e.ColumnIndex > -1) && (e.RowIndex > -1)) {
+				if (!indgvCosts.Rows[e.RowIndex].IsNewRow) {
 					DataRowView drv = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
 
-					if (drv != null)
-					{
+					if (drv != null) {
 						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && ((bool)drv[CFRBaseCost.ColumnName] || (bool)drv[CFRRegionBaseCost.ColumnName]))
 							e.CellStyle.BackColor = btnBaseCostColor.BackColor;
 
 						if (drv.Row.RowState == DataRowState.Added)
 							e.CellStyle.BackColor = btnNewCostColor.BackColor;
-						else
-							if ((drv.Row.RowState == DataRowState.Modified) && !drv.Row[CFRCostName.ColumnName, DataRowVersion.Original].Equals(drv.Row[CFRCostName.ColumnName, DataRowVersion.Current]))
-								e.CellStyle.BackColor = btnChangedCostColor.BackColor;
+						else if ((drv.Row.RowState == DataRowState.Modified) && !drv.Row[CFRCostName.ColumnName, DataRowVersion.Original].Equals(drv.Row[CFRCostName.ColumnName, DataRowVersion.Current]))
+							e.CellStyle.BackColor = btnChangedCostColor.BackColor;
 
 						if ((bool)drv[CFRDeleted.ColumnName])
 							e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
@@ -3195,8 +2949,7 @@ order by PriceName
 		private void ColorChange(object sender, EventArgs e)
 		{
 			cdLegend.Color = ((Button)sender).BackColor;
-			if (cdLegend.ShowDialog((Button)sender) == DialogResult.OK)
-			{
+			if (cdLegend.ShowDialog((Button)sender) == DialogResult.OK) {
 				((Button)sender).BackColor = cdLegend.Color;
 				indgvCosts.Refresh();
 			}
@@ -3204,8 +2957,7 @@ order by PriceName
 
 		private void bsCostsFormRules_ListChanged(object sender, ListChangedEventArgs e)
 		{
-			if ((bsCostsFormRules.List != null) && (bsCostsFormRules.List is DataView))
-			{
+			if ((bsCostsFormRules.List != null) && (bsCostsFormRules.List is DataView)) {
 				string selectFieldName;
 
 				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
@@ -3252,8 +3004,7 @@ order by PriceName
 			tmrCostSearch.Stop();
 			if (!String.IsNullOrEmpty(tbCostFind.Text))
 				tmrCostSearch.Start();
-			else
-			{
+			else {
 				//Завершаем редактирование правил формализации цен
 				if ((bsCostsFormRules.Current != null) && ((DataRowView)bsCostsFormRules.Current).IsNew && Convert.IsDBNull(((DataRowView)bsCostsFormRules.Current)[CFRCostName.ColumnName]))
 					//Если создалась пустая строка в правилах формализации цен, то при сохранении отменяем ее
@@ -3294,37 +3045,31 @@ order by PriceName
 			dialog.Title = String.Format("Выберите файл в формате {0}. ", _priceFileFormatHelper.NewFormat.ToString());
 			if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
 				dialog.Title += String.Format("Разделитель '{0}'", _priceFileFormatHelper.NewDelimiter);
-			if (dialog.ShowDialog() == DialogResult.OK)
-			{
+			if (dialog.ShowDialog() == DialogResult.OK) {
 				var fileName = dialog.FileName;
 				var tables = PriceFileHelper.AsyncOpenPriceFile(fileName, _priceFileFormatHelper.NewFormat,
 					_priceFileFormatHelper.NewDelimiter, _dataTableMarking);
-				if ((tables == null) || (tables.Count == 0) || (tables[0].Rows.Count == 0))
-				{
+				if ((tables == null) || (tables.Count == 0) || (tables[0].Rows.Count == 0)) {
 					MessageBox.Show("Неправильный формат или файл поврежден", "Ошибка открытия файла", MessageBoxButtons.OK,
-									MessageBoxIcon.Error);
+						MessageBoxIcon.Error);
 					return;
 				}
-				try
-				{
+				try {
 					currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
-					if (!_priceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), File.OpenRead(fileName)))
-					{
+					if (!_priceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), File.OpenRead(fileName))) {
 						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
-										MessageBoxIcon.Error);
+							MessageBoxIcon.Error);
 					}
-					else
-					{
+					else {
 						MessageBox.Show("Прайс-лист успешно положен в Base.", "Информация", MessageBoxButtons.OK,
-										MessageBoxIcon.Information);
+							MessageBoxIcon.Information);
 						tbControl_SelectedIndexChanged(sender, e);
 					}
 				}
-				catch (Exception ex)
-				{
+				catch (Exception ex) {
 					_logger.Error("Ошибка при попытке положить файл в Base", ex);
 					MessageBox.Show("Не удалось положить файл в Base. Сообщение об ошибке отправлено разработчику",
-									"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -3341,8 +3086,7 @@ order by PriceName
 		private void tmrSearchInPrice_Tick(object sender, EventArgs e)
 		{
 			_inactivityTime += tmrSearchInPrice.Interval;
-			if (_inactivityTime > 2000)
-			{
+			if (_inactivityTime > 2000) {
 				tmrSearchInPrice.Enabled = false;
 			}
 		}
@@ -3389,28 +3133,24 @@ order by PriceName
 		private void indgvPriceData_KeyPress(object sender, KeyPressEventArgs e)
 		{
 			_searchGrid = (sender as DataGridView);
-			if (!tmrSearchInPrice.Enabled)
-			{
+			if (!tmrSearchInPrice.Enabled) {
 				tmrSearchInPrice.Enabled = true;
 				_searchTextInPrice = String.Empty;
 				tbSearchInPrice.Text = _searchTextInPrice;
 			}
-			if (e.KeyChar.Equals('\b'))
-			{
+			if (e.KeyChar.Equals('\b')) {
 				if (tbSearchInPrice.Text.Length > 0)
 					tbSearchInPrice.Text = tbSearchInPrice.Text.Remove(
 						tbSearchInPrice.Text.Length - 1, 1);
-			} else if (e.KeyChar.Equals('\r'))
-			{
-				if (!String.IsNullOrEmpty(tbSearchInPrice.Text))
-				{
+			}
+			else if (e.KeyChar.Equals('\r')) {
+				if (!String.IsNullOrEmpty(tbSearchInPrice.Text)) {
 					if (SearchTextInGridView(tbSearchInPrice.Text, _searchGrid, true, true))
 						tbSearchInPrice.BackColor = Color.Green;
 					else
 						tbSearchInPrice.BackColor = Color.Red;
 				}
-				else
-				{
+				else {
 					tbSearchInPrice.BackColor = Color.White;
 					tbSearchInPrice.ForeColor = Color.Black;
 				}
@@ -3422,18 +3162,16 @@ order by PriceName
 
 		private void tbSearchInPrice_TextChanged(object sender, EventArgs e)
 		{
-			if(_searchGrid == null)
+			if (_searchGrid == null)
 				_searchGrid = indgvPriceData;
-			if (tbSearchInPrice.Text.Length > 0)
-			{
+			if (tbSearchInPrice.Text.Length > 0) {
 				tbSearchInPrice.ForeColor = Color.White;
 				if (SearchTextInGridView(tbSearchInPrice.Text, _searchGrid, false, false))
 					tbSearchInPrice.BackColor = Color.Green;
 				else
 					tbSearchInPrice.BackColor = Color.Red;
 			}
-			else
-			{
+			else {
 				tbSearchInPrice.ForeColor = Color.Black;
 				tbSearchInPrice.BackColor = Color.White;
 			}
@@ -3441,16 +3179,14 @@ order by PriceName
 
 		private void cmbFormat_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			if (_isComboBoxFormatHandlerRegistered)
-			{
+			if (_isComboBoxFormatHandlerRegistered) {
 				_isComboBoxFormatHandlerRegistered = !_isComboBoxFormatHandlerRegistered;
 
 				var tempDirectory = EndPath + Convert.ToString(currentPriceItemId) + Path.DirectorySeparatorChar;
 				if (!Directory.Exists(tempDirectory))
 					Directory.CreateDirectory(tempDirectory);
 
-				if (_priceFileFormatHelper.SetNewFormat((PriceFormat?) Convert.ToInt32(cmbFormat.SelectedValue), tbDevider.Text))
-				{
+				if (_priceFileFormatHelper.SetNewFormat((PriceFormat?)Convert.ToInt32(cmbFormat.SelectedValue), tbDevider.Text)) {
 					var newFormatFileExtension = _priceFileFormatHelper.NewFileExtension;
 					if (PriceFileFormatHelper.IsTextFormat(_priceFileFormatHelper.NewFormat))
 						ofdNewFormat.Filter = String.Format("Все файлы|*.*|{0}|*{1}", _priceFileFormatHelper.NewFormat, newFormatFileExtension);
@@ -3461,23 +3197,17 @@ order by PriceName
 					if (!String.IsNullOrEmpty(_priceFileFormatHelper.NewDelimiter))
 						ofdNewFormat.Title += " Разделитель: '" + tbDevider.Text + "'";
 
-					if (ofdNewFormat.ShowDialog() == DialogResult.OK)
-					{
-						if (File.Exists(ofdNewFormat.FileName))
-						{
-							using (var newSourceFile = File.OpenRead(ofdNewFormat.FileName))
-							{
+					if (ofdNewFormat.ShowDialog() == DialogResult.OK) {
+						if (File.Exists(ofdNewFormat.FileName)) {
+							using (var newSourceFile = File.OpenRead(ofdNewFormat.FileName)) {
 								var destinationFilePath = tempDirectory + _priceFileFormatHelper.NewShortFileName;
-								try
-								{
-									using (var newDestinationFile = File.Create(destinationFilePath))
-									{
+								try {
+									using (var newDestinationFile = File.Create(destinationFilePath)) {
 										newSourceFile.CopyTo(newDestinationFile, 102400);
 										_isFormatChanged = true;
 									}
 								}
-								catch (Exception)
-								{
+								catch (Exception) {
 									ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
 									_priceFileFormatHelper.ResetNewFormat();
 									Mailer.SendWarningLetter(
@@ -3491,8 +3221,7 @@ order by PriceName
 							_isFormatChanged = false;
 							_priceFileFormatHelper.OpenFileInNewFormat();
 						}
-						else
-						{
+						else {
 							ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
 							_priceFileFormatHelper.ResetNewFormat();
 							dtSet.RejectChanges();
@@ -3502,17 +3231,15 @@ order by PriceName
 									@"Изменение формата прайс-листа. Пользователь выбрал файл в новом формате, однако этот файл не был найден. Файл {0}",
 									ofdNewFormat.FileName));
 							MessageBox.Show("Выбранный вами файл был переименован, перемещен или удален. Выберите другой файл", "Ошибка",
-											MessageBoxButtons.OK, MessageBoxIcon.Error);
+								MessageBoxButtons.OK, MessageBoxIcon.Error);
 						}
 					}
-					else
-					{
+					else {
 						ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
 						_priceFileFormatHelper.ResetNewFormat();
 					}
 				}
-				else
-				{
+				else {
 					ComboBoxFormatSetSelectedText(_priceFileFormatHelper.CurrentOpenedFileFormat.ToString());
 					_priceFileFormatHelper.ResetNewFormat();
 					if (!String.IsNullOrEmpty(_priceFileFormatHelper.LastErrorMessage))
@@ -3524,19 +3251,14 @@ order by PriceName
 
 		private void ComboBoxFormatSetSelectedText(string text)
 		{
-			try
-			{
-				foreach (var item in cmbFormat.Items)
-				{
+			try {
+				foreach (var item in cmbFormat.Items) {
 					var rowView = (item as DataRowView);
-					if (rowView != null)
-					{
+					if (rowView != null) {
 						var dataRow = rowView.Row;
-						if (dataRow != null)
-						{
+						if (dataRow != null) {
 							var formatText = dataRow[FMTFormat.ColumnName].ToString();
-							if (String.Equals(formatText.ToUpper(), text.ToUpper()))
-							{
+							if (String.Equals(formatText.ToUpper(), text.ToUpper())) {
 								cmbFormat.SelectedItem = item;
 								return;
 							}
@@ -3544,14 +3266,13 @@ order by PriceName
 					}
 				}
 			}
-			catch (Exception)
-			{}
+			catch (Exception) {
+			}
 		}
 
 		private void tbDevider_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter)
-			{
+			if (e.KeyCode == Keys.Enter) {
 				cmbFormat_SelectedIndexChanged(sender, e);
 			}
 		}
@@ -3563,17 +3284,15 @@ order by PriceName
 
 		private void buttonSearchNext_Click(object sender, EventArgs e)
 		{
-			if (!String.IsNullOrEmpty(tbSearchInPrice.Text))
-			{
-				if(_searchGrid == null)
+			if (!String.IsNullOrEmpty(tbSearchInPrice.Text)) {
+				if (_searchGrid == null)
 					_searchGrid = indgvPriceData;
 				if (SearchTextInGridView(tbSearchInPrice.Text, _searchGrid, true, false))
 					tbSearchInPrice.BackColor = Color.Green;
 				else
 					tbSearchInPrice.BackColor = Color.Red;
 			}
-			else
-			{
+			else {
 				tbSearchInPrice.BackColor = Color.White;
 				tbSearchInPrice.ForeColor = Color.Black;
 			}
@@ -3581,23 +3300,20 @@ order by PriceName
 
 		private void tbSearchInPrice_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyCode == Keys.Enter)
-			{
+			if (e.KeyCode == Keys.Enter) {
 				buttonSearchNext_Click(sender, e);
 			}
 		}
 
 		private void buttonCreateMail_Click(object sender, EventArgs e)
 		{
-			try
-			{
-				if (indgvPrice.CurrentRow == null)
-				{
+			try {
+				if (indgvPrice.CurrentRow == null) {
 					MessageBox.Show("Выберите прайс-лист", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return;
 				}
 				var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-				var dataRowView = (DataRowView) currencyManager.Current;
+				var dataRowView = (DataRowView)currencyManager.Current;
 				var row = dataRowView.Row;
 
 				var priceCode = Convert.ToInt64(row[PPriceCode.ColumnName]);
@@ -3607,8 +3323,7 @@ order by PriceName
 				else
 					MessageBox.Show("Ошибка при попытке создать письмо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				_logger.Error("Ошибка при попытке создать письмо ответственному за прайс-лист из вкладки 'Фирмы'", ex);
 				MessageBox.Show("Ошибка при попытке создать письмо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -3618,21 +3333,18 @@ order by PriceName
 		{
 			if (connection.State == ConnectionState.Closed)
 				connection.Open();
-			try
-			{
+			try {
 				var firmCode = Convert.ToInt64(
 					MySqlHelper.ExecuteScalar(connection,
-					"select FirmCode from usersettings.pricesdata where PriceCode = ?SelfPriceCode",
-					new MySqlParameter("?SelfPriceCode", priceCode)));
+						"select FirmCode from usersettings.pricesdata where PriceCode = ?SelfPriceCode",
+						new MySqlParameter("?SelfPriceCode", priceCode)));
 				return firmCode;
 			}
-			catch (Exception ex)
-			{
+			catch (Exception ex) {
 				_logger.Error("Ошибка при попытке получить FirmCode по коду прайса", ex);
 				return -1;
 			}
-			finally
-			{
+			finally {
 				connection.Close();
 			}
 		}
@@ -3642,8 +3354,7 @@ order by PriceName
 			var row = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
 			var id = row[PPriceItemId.ColumnName].ToString();
 			var file = _priceFileFormatHelper.CurrentShortFileName;
-			if (!String.IsNullOrEmpty(file))
-			{
+			if (!String.IsNullOrEmpty(file)) {
 				file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), file);
 				if (LoadFileFromBase(id, file))
 					MessageBox.Show(String.Format("Прайс сохранен на рабочий стол, файл {0}", Path.GetFileName(file)));
@@ -3661,14 +3372,13 @@ order by PriceName
 
 		public void EnableMatchBtn()
 		{
-			if(!MatchPriceButton.Enabled)
+			if (!MatchPriceButton.Enabled)
 				MatchPriceButton.Enabled = true;
 		}
 
 		private void cbSource_SelectedValueChanged(object sender, EventArgs e)
 		{
-			if (!InSearch)
-			{
+			if (!InSearch) {
 				tmrSearch.Stop();
 				tmrSearch.Start();
 			}
@@ -3677,7 +3387,7 @@ order by PriceName
 		private void createNewPriceCollumn_Click(object sender, EventArgs e)
 		{
 			var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-			var dataRowView = (DataRowView) currencyManager.Current;
+			var dataRowView = (DataRowView)currencyManager.Current;
 			var row = dataRowView.Row;
 
 			var priceCode = Convert.ToUInt32(row[PPriceCode.ColumnName]);
@@ -3694,7 +3404,7 @@ order by PriceName
 				message.Subject = String.Format("\"{0}\" - регистрация ценовой колонки", field.ShortName);
 				message.From = new MailAddress("register@analit.net");
 				message.Body = String.Format(
-@"Оператор: {0}
+					@"Оператор: {0}
 Поставщик: {1}
 Регион: {2}
 Прайс-лист: {3}
@@ -3782,6 +3492,7 @@ order by PriceName
 			return (((TxtFieldDef)x).posBegin - ((TxtFieldDef)y).posBegin);
 		}
 	}
+
 	public class CoreCost
 	{
 		public Int64 costCode = -1;
@@ -3802,7 +3513,8 @@ order by PriceName
 			txtEnd = ATxtEnd;
 		}
 	}
-	class DropField
+
+	internal class DropField
 	{
 		public string FieldName;
 		public string FieldBegin;
@@ -3825,7 +3537,7 @@ order by PriceName
 		}
 	}
 
-	class DropSheet
+	internal class DropSheet
 	{
 		public string SheetName;
 

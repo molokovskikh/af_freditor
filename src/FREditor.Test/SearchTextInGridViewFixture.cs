@@ -10,13 +10,12 @@ using NUnit.Framework;
 using System.Windows.Forms;
 
 
-
 namespace FREditor.Test
 {
 	[TestFixture, RequiresSTA]
-	class SearchTextInGridViewFixture
+	internal class SearchTextInGridViewFixture
 	{
-		private DataGridView grid ;
+		private DataGridView grid;
 		private string text;
 		private frmFREMain form;
 

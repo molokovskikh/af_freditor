@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using  TestSupport = Test.Support;
+using TestSupport = Test.Support;
 
 namespace FREditor.Test
 {
@@ -12,7 +12,7 @@ namespace FREditor.Test
 	{
 		[SetUp]
 		public void Setup()
-		{	
+		{
 			TestSupport.Setup.Initialize();
 		}
 	}
