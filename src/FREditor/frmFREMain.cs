@@ -57,6 +57,13 @@ namespace FREditor
 			get { return gds; }
 			set { gds = value; }
 		}
+		/// <summary>
+		/// для тестов
+		/// </summary>
+		public DataTable DTPrices
+		{
+			get { return dtPrices; }
+		}
 
 
 		private bool _isFormatChanged;
@@ -612,7 +619,7 @@ order by Format";
 			}
 		}
 
-		private void dtClientsFill(string param, bool showOnlyEnabled)
+		public void dtClientsFill(string param, bool showOnlyEnabled)
 		{
 			if (showOnlyEnabled) {
 				command.CommandText = @"
@@ -653,7 +660,7 @@ WHERE 1=1 ";
 			dataAdapter.Fill(dtClients);
 		}
 
-		private void dtPricesFill(string param, bool showOnlyEnabled)
+		public void dtPricesFill(string param, bool showOnlyEnabled)
 		{
 			var sqlPart = String.Empty;
 			if (showOnlyEnabled)
@@ -668,6 +675,7 @@ SELECT
   pd.PriceCode as PPriceCode,
   if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName) as PPriceName,
   pim.PriceDate as PPriceDate,
+	DATE_ADD(pim.PriceDate, INTERVAL r.MoscowBias HOUR) as PPriceDateWithBias,
   pim.LastFormalization as PDateLastForm,
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
