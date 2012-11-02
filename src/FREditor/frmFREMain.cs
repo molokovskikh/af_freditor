@@ -1143,18 +1143,14 @@ order by PriceName
 			try {
 #if !DEBUG
 	// Берем файл из Base
-				using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId)))
-				{
-					if (openFile != null)
-					{
-						using (var fileStream = File.Create(filePath))
-						{
+				using (var openFile = _priceProcessor.BaseFile(Convert.ToUInt32(shortFileNameByPriceItemId))) {
+					if (openFile != null) {
+						using (var fileStream = File.Create(filePath)) {
 							openFile.CopyTo(fileStream);
 							return true;
 						}
 					}
-					else
-					{
+					else {
 						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 						return false;
 					}
