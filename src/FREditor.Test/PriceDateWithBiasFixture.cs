@@ -35,9 +35,11 @@ namespace FREditor.Test
 			int i = 0;
 			foreach (DataRow dataRow in form.DTPrices.Rows) {
 				var supplier = session.Query<TestSupplier>().SingleOrDefault(s => s.Id == Convert.ToUInt32(dataRow["PFirmCode"]));
-				var time = DateTime.Parse(dataRow["PPriceDate"].ToString());
-				var biasTime = DateTime.Parse(dataRow["PPriceDateWithBias"].ToString());
-				Assert.That(time.AddHours(supplier.HomeRegion.MoscowBias), Is.EqualTo(biasTime));
+				if(!String.IsNullOrEmpty(dataRow["PPriceDate"].ToString())) {
+					var time = DateTime.Parse(dataRow["PPriceDate"].ToString());
+					var biasTime = DateTime.Parse(dataRow["PPriceDateWithBias"].ToString());
+					Assert.That(time.AddHours(supplier.HomeRegion.MoscowBias), Is.EqualTo(biasTime));
+				}
 				if(i++ > 30)
 					break;
 			}

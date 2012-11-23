@@ -3984,7 +3984,7 @@ namespace FREditor
 			//
 			this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PPriceDate";
 			this.pDateCurPriceDataGridViewTextBoxColumn.FillWeight = 76.57723F;
-			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата текущего прайс-листа";
+			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата загрузки прайс-листа";
 			this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
 			this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
 			//
@@ -3992,7 +3992,7 @@ namespace FREditor
 			//
 			this.dataGridViewTextBoxColumn1.DataPropertyName = "PPriceDateWithBias";
 			this.dataGridViewTextBoxColumn1.FillWeight = 76.57723F;
-			this.dataGridViewTextBoxColumn1.HeaderText = "Дата текущего прайс-листа по местному времени";
+			this.dataGridViewTextBoxColumn1.HeaderText = "Дата загрузки прайс-листа по местному времени";
 			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
 			this.dataGridViewTextBoxColumn1.ReadOnly = true;
 			//
