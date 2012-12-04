@@ -410,9 +410,6 @@ namespace FREditor
 			this.ofdNewFormat = new System.Windows.Forms.OpenFileDialog();
 			this.pPriceNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.pBaseCostDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.pDateCurPriceDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.pDateLastFormDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.pMaxOldDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.pPriceTypeDataGridViewComboBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -516,9 +513,6 @@ namespace FREditor
 			this.indgvPrice.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.pPriceNameDataGridViewTextBoxColumn,
             this.pBaseCostDataGridViewCheckBoxColumn,
-            this.pDateCurPriceDataGridViewTextBoxColumn,
-            this.dataGridViewTextBoxColumn1,
-            this.pDateLastFormDataGridViewTextBoxColumn,
             this.pMaxOldDataGridViewTextBoxColumn,
             this.dataGridViewTextBoxColumn2,
             this.pPriceTypeDataGridViewComboBoxColumn,
@@ -1580,7 +1574,7 @@ namespace FREditor
 			//groupBox1
 			//
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox1.Controls.Add(this.rtbArticle);
 			this.groupBox1.Controls.Add(this.lblArticle);
 			this.groupBox1.Controls.Add(this.lLblMaster);
@@ -1594,7 +1588,7 @@ namespace FREditor
 			//rtbArticle
 			//
 			this.rtbArticle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.rtbArticle.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRMemo", true));
 			this.rtbArticle.Location = new System.Drawing.Point(2, 74);
 			this.rtbArticle.Name = "rtbArticle";
@@ -2082,7 +2076,7 @@ namespace FREditor
 			//tbCostFind
 			//
 			this.tbCostFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbCostFind.Location = new System.Drawing.Point(4, 4);
 			this.tbCostFind.Name = "tbCostFind";
 			this.tbCostFind.Size = new System.Drawing.Size(300, 20);
@@ -3965,7 +3959,7 @@ namespace FREditor
 			//pPriceNameDataGridViewTextBoxColumn
 			//
 			this.pPriceNameDataGridViewTextBoxColumn.DataPropertyName = "PPriceName";
-			this.pPriceNameDataGridViewTextBoxColumn.FillWeight = 76.57723F;
+			this.pPriceNameDataGridViewTextBoxColumn.FillWeight = 200F;
 			this.pPriceNameDataGridViewTextBoxColumn.HeaderText = "Название прайс-листа";
 			this.pPriceNameDataGridViewTextBoxColumn.Name = "pPriceNameDataGridViewTextBoxColumn";
 			this.pPriceNameDataGridViewTextBoxColumn.ReadOnly = true;
@@ -3974,35 +3968,11 @@ namespace FREditor
 			//
 			this.pBaseCostDataGridViewCheckBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
 			this.pBaseCostDataGridViewCheckBoxColumn.DataPropertyName = "PBaseCost";
-			this.pBaseCostDataGridViewCheckBoxColumn.FillWeight = 263.9594F;
+			this.pBaseCostDataGridViewCheckBoxColumn.FillWeight = 76.57723F;
 			this.pBaseCostDataGridViewCheckBoxColumn.HeaderText = "Базовая";
 			this.pBaseCostDataGridViewCheckBoxColumn.Name = "pBaseCostDataGridViewCheckBoxColumn";
 			this.pBaseCostDataGridViewCheckBoxColumn.ReadOnly = true;
-			this.pBaseCostDataGridViewCheckBoxColumn.Width = 65;
-			//
-			//pDateCurPriceDataGridViewTextBoxColumn
-			//
-			this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PPriceDate";
-			this.pDateCurPriceDataGridViewTextBoxColumn.FillWeight = 76.57723F;
-			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата загрузки прайс-листа";
-			this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
-			this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
-			//
-			//dataGridViewTextBoxColumn1
-			//
-			this.dataGridViewTextBoxColumn1.DataPropertyName = "PPriceDateWithBias";
-			this.dataGridViewTextBoxColumn1.FillWeight = 76.57723F;
-			this.dataGridViewTextBoxColumn1.HeaderText = "Дата загрузки прайс-листа по местному времени";
-			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
-			this.dataGridViewTextBoxColumn1.ReadOnly = true;
-			//
-			//pDateLastFormDataGridViewTextBoxColumn
-			//
-			this.pDateLastFormDataGridViewTextBoxColumn.DataPropertyName = "PDateLastForm";
-			this.pDateLastFormDataGridViewTextBoxColumn.FillWeight = 76.57723F;
-			this.pDateLastFormDataGridViewTextBoxColumn.HeaderText = "Дата последней формализации";
-			this.pDateLastFormDataGridViewTextBoxColumn.Name = "pDateLastFormDataGridViewTextBoxColumn";
-			this.pDateLastFormDataGridViewTextBoxColumn.ReadOnly = true;
+			this.pBaseCostDataGridViewCheckBoxColumn.Width = 189;
 			//
 			//pMaxOldDataGridViewTextBoxColumn
 			//
@@ -4470,9 +4440,6 @@ namespace FREditor
 		private System.Data.DataColumn PPriceDateWithBias;
 		private DataGridViewTextBoxColumn pPriceNameDataGridViewTextBoxColumn;
 		private DataGridViewCheckBoxColumn pBaseCostDataGridViewCheckBoxColumn;
-		private DataGridViewTextBoxColumn pDateCurPriceDataGridViewTextBoxColumn;
-		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-		private DataGridViewTextBoxColumn pDateLastFormDataGridViewTextBoxColumn;
 		private DataGridViewTextBoxColumn pMaxOldDataGridViewTextBoxColumn;
 		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
 		private DataGridViewComboBoxColumn pPriceTypeDataGridViewComboBoxColumn;
