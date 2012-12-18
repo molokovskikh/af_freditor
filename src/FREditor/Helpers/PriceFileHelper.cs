@@ -94,7 +94,7 @@ namespace FREditor.Helpers
 					tables.Add(OpenTextFixedFile(filePath, priceFormat, dataTableMarking));
 					return tables;
 				}
-				if (priceFormat.Value == PriceFormat.UniversalFormalizer)
+				if (priceFormat.Value == PriceFormat.UniversalFormalizer || priceFormat.Value == PriceFormat.FarmaimpeksOKPFormalizer)
 					return new List<DataTable>();
 				throw new Exception(String.Format("Неизвестный формат {0}", priceFormat));
 			}

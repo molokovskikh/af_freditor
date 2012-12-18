@@ -42,6 +42,17 @@ namespace FREditor.Test
 		}
 
 		[Test]
+		public void OpenOKPPriceTest()
+		{
+			var pricesDirectory = "prices";
+			var priceFile = "okp.xml";
+
+			var path = Settings.Default.TestDirectoryPath + pricesDirectory + Path.DirectorySeparatorChar + priceFile;
+			var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path), PriceFormat.FarmaimpeksOKPFormalizer, "tab", null);
+			Assert.That(tables, Is.Not.Null);
+		}
+
+		[Test]
 		public void OpenXlsFile()
 		{
 			var pricesDirectory = "prices";
