@@ -1098,7 +1098,6 @@ order by PriceName
 			PrepareShowTab(fmt);
 
 			fileExist = false;
-
 			// Если формат не установлен, то больше ничего не делаем
 			if (fmt != null) {
 				try {
@@ -3450,6 +3449,12 @@ order by PriceName
 				else
 					createCostCollumnInManyFilesPrice.Enabled = false;
 			}
+		}
+
+		private void cmbFormat_SelectedValueChanged(object sender, EventArgs e)
+		{
+			var toolTip1 = new ToolTip();
+			toolTip1.SetToolTip(cmbFormat, cmbFormat.Text);
 		}
 	}
 
