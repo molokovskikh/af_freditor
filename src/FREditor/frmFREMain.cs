@@ -3450,11 +3450,10 @@ order by PriceName
 					createCostCollumnInManyFilesPrice.Enabled = false;
 			}
 		}
-
+		private ToolTip _toolTip1 = new ToolTip();
 		private void cmbFormat_MouseEnter(object sender, EventArgs e)
 		{
-			var toolTip1 = new ToolTip();
-			toolTip1.SetToolTip(cmbFormat, cmbFormat.Text);
+			_toolTip1.SetToolTip(cmbFormat, cmbFormat.Text);
 		}
 	}
 
