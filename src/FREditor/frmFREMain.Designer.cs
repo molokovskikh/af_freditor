@@ -1797,7 +1797,7 @@ namespace FREditor
 			this.cmbFormat.Size = new System.Drawing.Size(92, 21);
 			this.cmbFormat.TabIndex = 8;
 			this.cmbFormat.ValueMember = "Форматы прайса.FMTId";
-			this.cmbFormat.SelectedValueChanged += new System.EventHandler(this.cmbFormat_SelectedValueChanged);
+			this.cmbFormat.MouseEnter += new System.EventHandler(this.cmbFormat_MouseEnter);
 			//
 			//lblPriceName
 			//

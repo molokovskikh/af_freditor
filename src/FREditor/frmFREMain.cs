@@ -3451,7 +3451,7 @@ order by PriceName
 			}
 		}
 
-		private void cmbFormat_SelectedValueChanged(object sender, EventArgs e)
+		private void cmbFormat_MouseEnter(object sender, EventArgs e)
 		{
 			var toolTip1 = new ToolTip();
 			toolTip1.SetToolTip(cmbFormat, cmbFormat.Text);
