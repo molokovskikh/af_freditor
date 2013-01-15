@@ -698,7 +698,8 @@ FROM
 	join Farm.Sources so on so.id = pim.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
 where
- ((pd.CostType = 1) or (pc.BaseCost = 1)) ";
+ ((pd.CostType = 1) or (pc.BaseCost = 1)
+or (exists(select count(*) from userSettings.pricesregionaldata prd where prd.BaseCost=pc.BaseCost and prd.PriceCode=pd.PriceCode))) ";
 			command.CommandText += param;
 			command.CommandText += @"
 group by pim.Id
