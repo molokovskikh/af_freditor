@@ -59,5 +59,13 @@ namespace FREditor.Test
 			var lanCell = dataGrid.Rows.Cast<DataGridViewRow>().Select(r => r.Cells[2].Value).ToList();
 			lanCell.ForEach(e => Assert.That(e, Is.EqualTo("LAN")));
 		}
+
+		[Test, STAThread]
+		public void NotSaveIfPriceInInbound()
+		{
+			form.InboundPriceItemsForTests = new[] { "123" };
+			Assert.That(form.IsPriceInInbound("123", true), Is.True);
+			Assert.That(form.IsPriceInInbound("1234", true), Is.False);
+		}
 	}
 }

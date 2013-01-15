@@ -2056,6 +2056,23 @@ and c.Type = ?ContactType;",
 			}
 		}
 
+		public string[] InboundPriceItemsForTests { get; set; }
+
+		public bool IsPriceInInbound(string dataRowPrice, bool isTest = false)
+		{
+#if !DEBUG
+			var inboundPriceItems = _priceProcessor.InboundPriceItemIds();
+#else
+			var inboundPriceItems = InboundPriceItemsForTests ?? new[] { "1152" };
+#endif
+			if (inboundPriceItems.Contains(dataRowPrice)) {
+				if(!isTest)
+					MessageBox.Show("Данный прайс-лист находится в очереди на формализацию.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return true;
+			}
+			return false;
+		}
+
 		private void tsbApply_Click(object sender, EventArgs e)
 		{
 			Point selectedFirmCell = new Point(indgvFirm.SelectedCells[0].RowIndex, indgvFirm.SelectedCells[0].ColumnIndex);
@@ -2065,6 +2082,9 @@ and c.Type = ?ContactType;",
 				Path.DirectorySeparatorChar + _priceFileFormatHelper.NewShortFileName;
 
 			CommitAllEdit();
+			var dataRowPrice = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row[PPriceItemId.ColumnName];
+			if(IsPriceInInbound(dataRowPrice.ToString()))
+				return;
 			DataSet chg = dtSet.GetChanges();
 			if (chg != null) {
 				if (tbControl.SelectedTab == tpPrice) {
