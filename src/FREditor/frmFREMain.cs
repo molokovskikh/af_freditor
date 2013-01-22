@@ -8,6 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
+using System.ServiceModel;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -2285,6 +2286,9 @@ and fr.Id = pim.FormRuleId;
 								MessageBoxIcon.Error);
 						}
 					}
+					catch(EndpointNotFoundException ex) {
+						SynonymMatcher.ErrorOnConnectToPriceProcessor(_logger, ex);
+					}
 					catch (Exception ex) {
 						_logger.Error("Ошибка при применении изменений после смены формата файла (или разделителя). Невозможно положить файл в Inbound", ex);
 					}
@@ -3090,6 +3094,9 @@ order by PriceName
 						tbControl_SelectedIndexChanged(sender, e);
 					}
 				}
+				catch(EndpointNotFoundException ex) {
+					SynonymMatcher.ErrorOnConnectToPriceProcessor(_logger, ex);
+				}
 				catch (Exception ex) {
 					_logger.Error("Ошибка при попытке положить файл в Base", ex);
 					MessageBox.Show("Не удалось положить файл в Base. Сообщение об ошибке отправлено разработчику",
@@ -3097,6 +3104,7 @@ order by PriceName
 				}
 			}
 		}
+
 
 		private void checkBoxShowDisabled_CheckedChanged(object sender, EventArgs e)
 		{

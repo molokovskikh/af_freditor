@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Windows.Forms;
 using Inforoom.WinForms;
@@ -42,6 +43,9 @@ namespace FREditor
 					}
 
 					MessageBox.Show("Прайс-лист успешно переподложен.");
+				}
+				catch(EndpointNotFoundException ex) {
+					SynonymMatcher.ErrorOnConnectToPriceProcessor(_log, ex);
 				}
 				catch (Exception ex) {
 					_log.Error("Ошибка при попытке переподложить прайс-лист", ex);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using log4net;
@@ -120,6 +121,11 @@ namespace FREditor
 					ret = true;
 				}
 			}
+			catch(EndpointNotFoundException ex) {
+				iterCount = 0;
+				timer.Stop();
+				ErrorOnConnectToPriceProcessor(_logger, ex);
+			}
 			catch (Exception ex) {
 				_logger.Error("Ошибка при старте сопоставления", ex);
 				iterCount = 0;
@@ -205,6 +211,11 @@ namespace FREditor
 					CloseProgressBar();
 				}
 			}
+			catch(EndpointNotFoundException ex) {
+				timer.Stop();
+				CloseProgressBar();
+				ErrorOnConnectToPriceProcessor(_logger, ex);
+			}
 			catch (Exception ex) {
 				_logger.Error("Ошибка при сопоставлении", ex);
 				timer.Stop();
@@ -268,6 +279,13 @@ namespace FREditor
 					connection.Close();
 				}
 			}
+		}
+
+		public static void ErrorOnConnectToPriceProcessor(ILog logger, Exception ex)
+		{
+			logger.Error("Ошибка при подключении к PriceProcessor", ex);
+			MessageBox.Show("Не удалось подключиться к PriceProcessor, возможно он остановлен. Повторите операцию позднее.",
+				"Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 		}
 	}
 }
