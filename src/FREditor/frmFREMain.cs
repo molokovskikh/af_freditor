@@ -990,7 +990,7 @@ join farm.sourcetypes st on st.id = so.SourceTypeId
   left join Farm.FormRules AS PFR ON PFR.id = FR.Id
   left join Farm.PriceFMTs as pfmt on pfmt.id = PFR.PriceFormatId
 where
-  ((pd.CostType = 1) or (pc.BaseCost = 1)) ",
+  ((pd.CostType = 1) or (exists(select * from userSettings.pricesregionaldata prd where prd.PriceCode = PD.PriceCode and prd.BaseCost=pc.CostCode))) ",
 				sql);
 			command.CommandText += param;
 			dataAdapter.Fill(dtFormRules);
@@ -2924,7 +2924,6 @@ order by PriceName
 		{
 			if ((e.KeyCode == Keys.Delete)
 				&& bsCostsFormRules.AllowNew
-				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName]
 				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRRegionBaseCost.ColumnName]) {
 				if (((DataRowView)bsCostsFormRules.Current).Row.RowState == DataRowState.Added)
 					((DataRowView)bsCostsFormRules.Current).Delete();
@@ -2955,7 +2954,7 @@ order by PriceName
 					DataRowView drv = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
 
 					if (drv != null) {
-						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && ((bool)drv[CFRBaseCost.ColumnName] || (bool)drv[CFRRegionBaseCost.ColumnName]))
+						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && (bool)drv[CFRRegionBaseCost.ColumnName])
 							e.CellStyle.BackColor = btnBaseCostColor.BackColor;
 
 						if (drv.Row.RowState == DataRowState.Added)

@@ -1650,7 +1650,7 @@ namespace FREditor
 			//groupBox1
 			//
 			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				| System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox1.Controls.Add(this.rtbArticle);
 			this.groupBox1.Controls.Add(this.lblArticle);
 			this.groupBox1.Controls.Add(this.lLblMaster);
@@ -1664,7 +1664,7 @@ namespace FREditor
 			//rtbArticle
 			//
 			this.rtbArticle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-				| System.Windows.Forms.AnchorStyles.Left)));
+            | System.Windows.Forms.AnchorStyles.Left)));
 			this.rtbArticle.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRMemo", true));
 			this.rtbArticle.Location = new System.Drawing.Point(2, 74);
 			this.rtbArticle.Name = "rtbArticle";
@@ -2154,7 +2154,7 @@ namespace FREditor
 			//tbCostFind
 			//
 			this.tbCostFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-				| System.Windows.Forms.AnchorStyles.Right)));
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbCostFind.Location = new System.Drawing.Point(4, 4);
 			this.tbCostFind.Name = "tbCostFind";
 			this.tbCostFind.Size = new System.Drawing.Size(300, 20);
@@ -3919,7 +3919,7 @@ namespace FREditor
             this.tsbCancel});
 			this.tsApply.Location = new System.Drawing.Point(3, 0);
 			this.tsApply.Name = "tsApply";
-			this.tsApply.Size = new System.Drawing.Size(182, 25);
+			this.tsApply.Size = new System.Drawing.Size(151, 25);
 			this.tsApply.TabIndex = 0;
 			//
 			//tsbApply
