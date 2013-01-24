@@ -97,7 +97,7 @@ FROM
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
   inner join farm.regions r on r.regioncode=s.HomeRegion
 where 
-(pd.CostType = 1) or (pc.BaseCost = 1)";
+(pd.CostType = 1) or (exists(select * from userSettings.pricesregionaldata prd where prd.PriceCode = PD.PriceCode and prd.BaseCost=pc.CostCode))";
 			command.CommandText += @" 
 group by pim.Id
 order by PPriceName";
@@ -149,7 +149,7 @@ order by PPriceName";
 			}
 			FillPrices();
 			DataRow[] rows = dtPrices.Select(String.Format("PFirmCode = {0}", price.Supplier.Id));
-			Assert.That(rows.Count(), Is.EqualTo(3));
+			Assert.That(rows.Count(), Is.EqualTo(2));
 			rows = dtPrices.Select(String.Format("PFirmCode = {0} and PCostType = 1 and PIsParent = 0", price.Supplier.Id));
 			Assert.That(rows.Count(), Is.EqualTo(1));
 			rows[0].Delete();
