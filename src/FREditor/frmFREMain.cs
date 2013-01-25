@@ -2928,6 +2928,7 @@ order by PriceName
 		{
 			if ((e.KeyCode == Keys.Delete)
 				&& bsCostsFormRules.AllowNew
+				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName]
 				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRRegionBaseCost.ColumnName]) {
 				if (((DataRowView)bsCostsFormRules.Current).Row.RowState == DataRowState.Added)
 					((DataRowView)bsCostsFormRules.Current).Delete();
@@ -2958,7 +2959,7 @@ order by PriceName
 					DataRowView drv = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
 
 					if (drv != null) {
-						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && (bool)drv[CFRRegionBaseCost.ColumnName])
+						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && ((bool)drv[CFRBaseCost.ColumnName] || (bool)drv[CFRRegionBaseCost.ColumnName]))
 							e.CellStyle.BackColor = btnBaseCostColor.BackColor;
 
 						if (drv.Row.RowState == DataRowState.Added)
