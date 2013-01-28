@@ -1120,15 +1120,18 @@ order by PriceName
 							MessageBoxIcon.Error);
 						return;
 					}
-					dtPrice = tables[0];
-					if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls)) {
-						tbpSheet1.Text = tables[0].TableName;
-						tables.RemoveAt(0);
-						dtables = tables;
-						SetupXlsPriceView();
+					if(tables.Count > 0) {
+						dtPrice = tables[0];
+						if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls)) {
+							tbpSheet1.Text = tables[0].TableName;
+							tables.RemoveAt(0);
+							dtables = tables;
+							SetupXlsPriceView();
+						}
 					}
 					Application.DoEvents();
-					ShowTab(fmt);
+					if(tables.Count > 0)
+						ShowTab(fmt);
 					Application.DoEvents();
 					Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
 					Application.DoEvents();
