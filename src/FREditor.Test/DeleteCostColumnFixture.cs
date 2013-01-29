@@ -86,7 +86,7 @@ SELECT
   pd.PriceType as PPriceType,
   pd.CostType as PCostType,
   pim.WaitingDownloadInterval as PWaitingDownloadInterval,
-  if(pc.BaseCost = 1, 1, 0) PIsParent,
+  if(pc.BaseCost = 1 or (exists(select * from userSettings.pricesregionaldata prd where prd.BaseCost=pc.CostCode and prd.PriceCode=pd.PriceCode limit 1)), 1, 0) PIsParent,
   pc.BaseCost as PBaseCost,
   pc.CostCode as PCostCode	
 FROM
@@ -97,7 +97,7 @@ FROM
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
   inner join farm.regions r on r.regioncode=s.HomeRegion
 where 
-(pd.CostType = 1) or (exists(select * from userSettings.pricesregionaldata prd where prd.PriceCode = PD.PriceCode and prd.BaseCost=pc.CostCode))";
+(pd.CostType = 1) or (exists(select * from userSettings.pricesregionaldata prd where prd.PriceCode = PD.PriceCode and prd.BaseCost=pc.CostCode limit 1))";
 			command.CommandText += @" 
 group by pim.Id
 order by PPriceName";

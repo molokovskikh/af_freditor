@@ -683,7 +683,7 @@ SELECT
   pd.CostType as PCostType,
   pim.WaitingDownloadInterval as PWaitingDownloadInterval,
   -- редактировать тип ценовой колонки и тип прайс-листа можно только относительно базовой ценовой колонки
-  if(pc.BaseCost = 1, 1, 0) PIsParent,
+  if(pc.BaseCost = 1 or (exists(select * from userSettings.pricesregionaldata prd where prd.BaseCost=pc.CostCode and prd.PriceCode=pd.PriceCode limit 1)), 1, 0) PIsParent,
   pc.BaseCost as PBaseCost,
   pc.CostCode as PCostCode
 FROM
@@ -700,7 +700,7 @@ FROM
 join farm.sourcetypes st on st.id = so.SourceTypeId
 where
  ((pd.CostType = 1) or (pc.BaseCost = 1)
-or (exists(select count(*) from userSettings.pricesregionaldata prd where prd.BaseCost=pc.BaseCost and prd.PriceCode=pd.PriceCode))) ";
+or (exists(select * from userSettings.pricesregionaldata prd where prd.BaseCost=pc.CostCode and prd.PriceCode=pd.PriceCode limit 1))) ";
 			command.CommandText += param;
 			command.CommandText += @"
 group by pim.Id
