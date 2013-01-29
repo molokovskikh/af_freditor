@@ -1120,7 +1120,8 @@ order by PriceName
 							MessageBoxIcon.Error);
 						return;
 					}
-					if(tables.Count > 0) {
+					var tryOpenTable = tables.Count > 0;
+					if(tryOpenTable) {
 						dtPrice = tables[0];
 						if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls)) {
 							tbpSheet1.Text = tables[0].TableName;
@@ -1130,7 +1131,7 @@ order by PriceName
 						}
 					}
 					Application.DoEvents();
-					if(tables.Count > 0)
+					if(tryOpenTable)
 						ShowTab(fmt);
 					Application.DoEvents();
 					Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
