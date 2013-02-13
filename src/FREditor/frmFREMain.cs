@@ -2067,7 +2067,7 @@ and c.Type = ?ContactType;",
 		public bool IsPriceInInbound(string dataRowPrice, bool isTest = false)
 		{
 #if !DEBUG
-			var inboundPriceItems = _priceProcessor.InboundPriceItemIds();
+			var inboundPriceItems = _priceProcessor.GetPriceItemList().Select(i => i.PriceItemId.ToString());
 #else
 			var inboundPriceItems = InboundPriceItemsForTests ?? new[] { "1152" };
 #endif
