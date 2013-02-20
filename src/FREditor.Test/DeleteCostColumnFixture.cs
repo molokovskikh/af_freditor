@@ -122,11 +122,13 @@ order by PPriceName";
 				Format = new TestFormat(),
 			};
 
-			var price = new TestPrice {
-				CostType = CostType.MultiFile,
-				Supplier = TestSupplier.Create(),
-				PriceName = "test"
-			};
+			var supplier = TestSupplier.CreateNaked();
+			var price = supplier.Prices[0];
+
+			price.CostType = CostType.MultiFile;
+			price.PriceName = "test";
+			price.Costs.Clear();
+
 			var cost = price.NewPriceCost(priceItem, "");
 			cost.Name = "test base";
 			costForDelete = price.NewPriceCost(priceItem2, "");
@@ -136,6 +138,7 @@ order by PPriceName";
 			price.Costs[1].PriceItem.Format.PriceFormat = PriceFormatType.NativeDbf;
 
 			price.SaveAndFlush();
+
 			return price;
 		}
 
