@@ -173,7 +173,7 @@ namespace FREditor
 			pPriceTypeDataGridViewComboBoxColumn.ValueMember = "ID";
 
 			this.mcmdInsertCostRules.CommandText = @"
-INSERT INTO usersettings.PricesCosts (PriceCode, BaseCost, PriceItemId, CostName) values (?PriceCode, 0, ?PriceItemId, ?CostName);
+INSERT INTO usersettings.PricesCosts (PriceCode, PriceItemId, CostName) values (?PriceCode, ?PriceItemId, ?CostName);
 SET @NewPriceCostId:=Last_Insert_ID();
 INSERT INTO farm.costformrules (CostCode, FieldName, TxtBegin, TxtEnd) values (@NewPriceCostId, ?FieldName, ?TxtBegin, ?TxtEnd);
 ";
@@ -577,7 +577,6 @@ order by Format";
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 			dtPricesFill(FilterParams, showOnlyEnabled);
-			dtPricesCostFill(FilterParams, showOnlyEnabled);
 			dtFormRulesFill(FilterParams, showOnlyEnabled);
 			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
 		}
@@ -615,7 +614,6 @@ order by Format";
 				if (showOnlyEnabled)
 					FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 
-				dtPricesCostFill(FilterParams, !_showDisabledFirm);
 				dtCostsFormRulesFill(FilterParams, !_showDisabledFirm);
 			}
 		}
@@ -663,49 +661,8 @@ WHERE 1=1 ";
 
 		public void dtPricesFill(string param, bool showOnlyEnabled)
 		{
-			var sqlPart = String.Empty;
-			if (showOnlyEnabled)
-				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) ";
-			// Выбираем прайс-листы с мультиколоночными ценами
-
-			command.CommandText =
-				@"
-SELECT
-  pd.FirmCode as PFirmCode,
-  pim.Id as PPriceItemId,
-  pd.PriceCode as PPriceCode,
-  if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName) as PPriceName,
-  pim.LastDownload as PPriceDate,
-	DATE_ADD(pim.LastDownload, INTERVAL r.MoscowBias HOUR) as PPriceDateWithBias,
-  pim.LastFormalization as PDateLastForm,
-  fr.MaxOld as PMaxOld,
-  pd.PriceType as PPriceType,
-  pd.CostType as PCostType,
-  pim.WaitingDownloadInterval as PWaitingDownloadInterval,
-  -- редактировать тип ценовой колонки и тип прайс-листа можно только относительно базовой ценовой колонки
-  if(pc.BaseCost = 1 or (exists(select * from userSettings.pricesregionaldata prd where prd.BaseCost=pc.CostCode and prd.PriceCode=pd.PriceCode limit 1)), 1, 0) PIsParent,
-  pc.BaseCost as PBaseCost,
-  pc.CostCode as PCostCode
-FROM
-  usersettings.pricesdata pd
-  inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
-  inner join usersettings.PriceItems pim on (pim.Id = pc.PriceItemId)
-"
-					+ sqlPart +
-					@"
-  inner join Customers.suppliers s on s.Id = pd.FirmCode
-  inner join farm.formrules fr on fr.Id = pim.FormRuleId
-  inner join farm.regions r on r.regioncode=s.HomeRegion
-	join Farm.Sources so on so.id = pim.SourceId
-join farm.sourcetypes st on st.id = so.SourceTypeId
-where
- ((pd.CostType = 1) or (pc.BaseCost = 1)
-or (exists(select * from userSettings.pricesregionaldata prd where prd.BaseCost=pc.CostCode and prd.PriceCode=pd.PriceCode limit 1))) ";
-			command.CommandText += param;
-			command.CommandText += @"
-group by pim.Id
-order by PPriceName";
-			dataAdapter.Fill(dtPrices);
+			var parameters = dataAdapter.SelectCommand.Parameters.Cast<MySqlParameter>().ToArray();
+			DbHelper.PricesFill(dtPrices, param, showOnlyEnabled, parameters);
 		}
 
 		private void cbRegionsFill()
@@ -750,63 +707,6 @@ FROM
 			cbSource.ValueMember = "Id";
 		}
 
-
-		private void dtPricesCostFill(string param, bool showOnlyEnabled)
-		{
-			string sqlPart = String.Empty;
-			if (showOnlyEnabled)
-				sqlPart +=
-					@"
-and pc.PriceItemId in (
-		SELECT Id FROM usersettings.priceitems
-		WHERE (datediff(curdate(), date(pricedate)) < 200))
-";
-
-			command.CommandText =
-				@"
-select
-  pc.PriceItemId as PCPriceItemId,
-  pc.PriceCode as PCPriceCode,
-  pc.CostCode as PCCostCode,
-  pc.BaseCost as PCBaseCost,
-  pc.CostName as PCCostName
-from
-  usersettings.pricescosts pc
-  inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
-
-  inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
-	join Farm.Sources so on so.id = pim.SourceId
-	join farm.sourcetypes st on st.id = so.SourceTypeId
-
-  inner join Customers.suppliers s on s.Id = pd.firmcode
-  inner join farm.regions r on r.regioncode=s.HomeRegion
-where
-	  (1=1)
-" + sqlPart;
-			command.CommandText += param;
-			command.CommandText += @"
-order by PCCostName";
-			try {
-				dataAdapter.Fill(dtPricesCost);
-			}
-			catch (Exception ex) {
-				var constraints = "";
-				foreach (Constraint constr in dtPricesCost.Constraints) {
-					constraints += String.Format("Constraint Name: {0}, Type: {1};",
-						constr.ConstraintName, constr.GetType().ToString());
-				}
-				var parameters = "";
-				foreach (MySqlParameter sqlparam in command.Parameters) {
-					parameters += String.Format("SQL ParamName: {0}, Value: {1};",
-						sqlparam.ParameterName, sqlparam.Value);
-				}
-				string message = String.Format(@"
-Ошибка при применении изменений в правилах формализации. dtPricesCostFill(). Параметры SQL запроса: '{0}'. Ограничения: '{1}'",
-					parameters, constraints);
-				throw new CustomConstraintException(message, ex);
-			}
-		}
-
 		private void dtCostsFormRulesFill(string param, bool showOnlyEnabled)
 		{
 			string sqlPart = String.Empty;
@@ -828,7 +728,6 @@ select
   cfr.FieldName AS CFRFieldName,
   cfr.TxtBegin as CFRTextBegin,
   cfr.TxtEnd as CFRTextEnd,
-  pc.BaseCost as CFRBaseCost,
   exists (select * from usersettings.PricesRegionalData prd where prd.BaseCost = cfr.CostCode) as CFRRegionBaseCost
 FROM
   farm.costformrules cfr
@@ -1505,7 +1404,6 @@ order by PriceName
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 			dtPricesFill(FilterParams, showOnlyEnabled);
-			dtPricesCostFill(FilterParams, showOnlyEnabled);
 			dtFormRulesFill(FilterParams, showOnlyEnabled);
 			dtPriceFMTsFill();
 			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
@@ -1553,7 +1451,6 @@ order by PriceName
 				currentPriceItemId = 0;
 				tsbApply.Enabled = false;
 				tsbCancel.Enabled = false;
-//                tmrUpdateApply.Stop();
 				tmrUpdateApply.Start();
 			}
 			else if (tbControl.SelectedTab == tpPrice) {
@@ -2932,7 +2829,6 @@ order by PriceName
 		{
 			if ((e.KeyCode == Keys.Delete)
 				&& bsCostsFormRules.AllowNew
-				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRBaseCost.ColumnName]
 				&& !(bool)((DataRowView)bsCostsFormRules.Current)[CFRRegionBaseCost.ColumnName]) {
 				if (((DataRowView)bsCostsFormRules.Current).Row.RowState == DataRowState.Added)
 					((DataRowView)bsCostsFormRules.Current).Delete();
@@ -2963,7 +2859,7 @@ order by PriceName
 					DataRowView drv = (DataRowView)indgvCosts.Rows[e.RowIndex].DataBoundItem;
 
 					if (drv != null) {
-						if (!Convert.IsDBNull(drv[CFRBaseCost.ColumnName]) && ((bool)drv[CFRBaseCost.ColumnName] || (bool)drv[CFRRegionBaseCost.ColumnName]))
+						if ((bool)drv[CFRRegionBaseCost.ColumnName])
 							e.CellStyle.BackColor = btnBaseCostColor.BackColor;
 
 						if (drv.Row.RowState == DataRowState.Added)
@@ -3531,27 +3427,6 @@ order by PriceName
 		int IComparer.Compare(Object x, Object y)
 		{
 			return (((TxtFieldDef)x).posBegin - ((TxtFieldDef)y).posBegin);
-		}
-	}
-
-	public class CoreCost
-	{
-		public Int64 costCode = -1;
-		public bool baseCost;
-		public string costName = String.Empty;
-		public string fieldName = String.Empty;
-		public int txtBegin = -1;
-		public int txtEnd = -1;
-		public decimal cost;
-
-		public CoreCost(Int64 ACostCode, string ACostName, bool ABaseCost, string AFieldName, int ATxtBegin, int ATxtEnd)
-		{
-			costCode = ACostCode;
-			baseCost = ABaseCost;
-			costName = ACostName;
-			fieldName = AFieldName;
-			txtBegin = ATxtBegin;
-			txtEnd = ATxtEnd;
 		}
 	}
 

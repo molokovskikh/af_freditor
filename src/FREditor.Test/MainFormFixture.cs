@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using Common.Tools;
 using Inforoom.WinForms;
 using NUnit.Framework;
 using Test.Support;
@@ -16,12 +17,15 @@ namespace FREditor.Test
 	public class MainFormFixture
 	{
 		private frmFREMain form;
+		private TestSupplier supplier;
 
 		[SetUp]
 		public void Setup()
 		{
-			var supplier = TestSupplier.Create();
-			supplier.Prices[0].CostType = CostType.MultiFile;
+			supplier = TestSupplier.Create();
+			var price = supplier.Prices[0];
+			price.CostType = CostType.MultiFile;
+			price.Costs[0].PriceItem.Source.SourceType = PriceSourceType.Lan;
 			supplier.Save();
 
 			form = new frmFREMain();
@@ -34,6 +38,10 @@ namespace FREditor.Test
 			((TextBox)form.Controls.Find("tbFirmName", true)[0]).Text = "Тест";
 			((CheckBox)form.Controls.Find("checkBoxShowDisabled", true)[0]).Checked = true;
 			form.tmrSearch_Tick(null, null);
+			var grid = Grid("indgvFirm");
+			var index = grid.Rows.Cast<DataGridViewRow>().IndexOf(r => Convert.ToUInt32(((DataRowView)r.DataBoundItem)["CCode"]) == supplier.Id);
+			grid.CurrentCell = grid[0, index];
+
 			var button = form.Controls.Find("createCostCollumnInManyFilesPrice", true)[0];
 			Assert.That(button.Enabled, Is.True);
 		}
@@ -52,7 +60,7 @@ namespace FREditor.Test
 
 			form.tmrSearch_Tick(null, null);
 
-			var dataGrid = (INDataGridView)form.Controls.Find("indgvFirm", true)[0];
+			var dataGrid = Grid("indgvFirm");
 			var rows = new DataGridViewRow[dataGrid.Rows.Count];
 			dataGrid.Rows.CopyTo(rows, 0);
 			Assert.That(dataGrid.Rows.Count, Is.GreaterThan(0));
@@ -66,6 +74,11 @@ namespace FREditor.Test
 			form.InboundPriceItemsForTests = new[] { "123" };
 			Assert.That(form.IsPriceInInbound("123", true), Is.True);
 			Assert.That(form.IsPriceInInbound("1234", true), Is.False);
+		}
+
+		private INDataGridView Grid(string indgvfirm)
+		{
+			return (INDataGridView)form.Controls.Find(indgvfirm, true)[0];
 		}
 	}
 }

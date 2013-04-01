@@ -189,7 +189,6 @@ namespace FREditor
 			this.CFRCostName = new System.Data.DataColumn();
 			this.CFRPriceItemId = new System.Data.DataColumn();
 			this.CFRDeleted = new System.Data.DataColumn();
-			this.CFRBaseCost = new System.Data.DataColumn();
 			this.CFRRegionBaseCost = new System.Data.DataColumn();
 			this.splitter1 = new System.Windows.Forms.Splitter();
 			this.pnlGrid = new System.Windows.Forms.Panel();
@@ -1309,7 +1308,6 @@ namespace FREditor
             this.CFRCostName,
             this.CFRPriceItemId,
             this.CFRDeleted,
-            this.CFRBaseCost,
             this.CFRRegionBaseCost});
 			this.dtCostsFormRules.Constraints.AddRange(new System.Data.Constraint[] {
             new System.Data.ForeignKeyConstraint("Прайсы-Правила формализации цен", "Прайсы", new string[] {
@@ -1352,13 +1350,6 @@ namespace FREditor
 			this.CFRDeleted.ColumnName = "CFRDeleted";
 			this.CFRDeleted.DataType = typeof(bool);
 			this.CFRDeleted.DefaultValue = false;
-			//
-			//CFRBaseCost
-			//
-			this.CFRBaseCost.AllowDBNull = false;
-			this.CFRBaseCost.ColumnName = "CFRBaseCost";
-			this.CFRBaseCost.DataType = typeof(bool);
-			this.CFRBaseCost.DefaultValue = false;
 			//
 			//CFRRegionBaseCost
 			//
@@ -4415,7 +4406,6 @@ namespace FREditor
 		private System.Data.DataColumn FMTId;
 		private MySql.Data.MySqlClient.MySqlCommand mcmdInsertCostRules;
 		private System.Data.DataColumn CFRDeleted;
-		private System.Data.DataColumn CFRBaseCost;
 		private System.Windows.Forms.Panel pCosts;
 		private MySql.Data.MySqlClient.MySqlCommand mcmdDeleteCostRules;
 		private System.Windows.Forms.GroupBox gbCostLegends;
