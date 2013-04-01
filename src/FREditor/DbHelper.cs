@@ -61,8 +61,6 @@ where 1 = 1 ";
 group by pim.Id
 order by PPriceName";
 
-			Console.WriteLine(sql);
-			Console.WriteLine(parameters.Implode(p => Tuple.Create(p.ParameterName, p.Value)));
 			With.Connection(c => {
 				var dataAdapter = new MySqlDataAdapter(sql, c);
 				dataAdapter.SelectCommand.Parameters.AddRange(parameters);
