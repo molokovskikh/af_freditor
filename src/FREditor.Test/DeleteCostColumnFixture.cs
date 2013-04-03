@@ -26,7 +26,9 @@ namespace FREditor.Test
 		private DataTable FillPrices()
 		{
 			var table = new DataTable();
-			DbHelper.PricesFill(table, "", false);
+			With.Connection(c => {
+				DbHelper.PricesFill(c, table, "", false);
+			});
 			return table;
 		}
 

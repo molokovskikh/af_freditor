@@ -13,7 +13,7 @@ using Test.Support.Suppliers;
 
 namespace FREditor.Test
 {
-	[TestFixture]
+	[TestFixture, RequiresSTA]
 	public class MainFormFixture
 	{
 		private frmFREMain form;
@@ -29,24 +29,20 @@ namespace FREditor.Test
 			supplier.Save();
 
 			form = new frmFREMain();
+			form.Testing = true;
 			form.Form1_Load(form, null);
 		}
 
-		[Test, STAThread]
+		[Test]
 		public void Update_button_state()
 		{
-			((TextBox)form.Controls.Find("tbFirmName", true)[0]).Text = "Тест";
-			((CheckBox)form.Controls.Find("checkBoxShowDisabled", true)[0]).Checked = true;
-			form.tmrSearch_Tick(null, null);
-			var grid = Grid("indgvFirm");
-			var index = grid.Rows.Cast<DataGridViewRow>().IndexOf(r => Convert.ToUInt32(((DataRowView)r.DataBoundItem)["CCode"]) == supplier.Id);
-			grid.CurrentCell = grid[0, index];
+			SearchAndSelect();
 
 			var button = form.Controls.Find("createCostCollumnInManyFilesPrice", true)[0];
 			Assert.That(button.Enabled, Is.True);
 		}
 
-		[Test, STAThread]
+		[Test]
 		public void Source_base_test()
 		{
 			var cbSource = (ComboBox)form.Controls.Find("cbSource", true)[0];
@@ -68,7 +64,7 @@ namespace FREditor.Test
 			lanCell.ForEach(e => Assert.That(e, Is.EqualTo("LAN")));
 		}
 
-		[Test, STAThread]
+		[Test]
 		public void NotSaveIfPriceInInbound()
 		{
 			form.InboundPriceItemsForTests = new[] { "123" };
@@ -76,9 +72,42 @@ namespace FREditor.Test
 			Assert.That(form.IsPriceInInbound("1234", true), Is.False);
 		}
 
-		private INDataGridView Grid(string indgvfirm)
+		[Test]
+		public void Update_cost_type()
 		{
-			return (INDataGridView)form.Controls.Find(indgvfirm, true)[0];
+			supplier.Prices[0].CostType = CostType.MultiColumn;
+			supplier.Prices[0].NewPriceCost();
+			supplier.Save();
+
+			SearchAndSelect();
+
+			var grid = Grid("indgvPrice");
+			var views = grid.Rows.Cast<DataGridViewRow>().Select(r => r.DataBoundItem).Cast<DataRowView>().ToList();
+			var dataGridViewRow = views.First();
+			dataGridViewRow["PCostType"] = 1;
+
+			form.tsbApply_Click(null, null);
+		}
+
+		private void SearchAndSelect()
+		{
+			((CheckBox)form.Controls.Find("checkBoxShowDisabled", true)[0]).Checked = true;
+			((TextBox)form.Controls.Find("tbFirmName", true)[0]).Text = "Тест";
+			form.tmrSearch_Tick(null, null);
+
+			SelectSupplier();
+		}
+
+		private void SelectSupplier()
+		{
+			var grid = Grid("indgvFirm");
+			var index = grid.Rows.Cast<DataGridViewRow>().IndexOf(r => Convert.ToUInt32(((DataRowView)r.DataBoundItem)["CCode"]) == supplier.Id);
+			grid.CurrentCell = grid[0, index];
+		}
+
+		private INDataGridView Grid(string name)
+		{
+			return (INDataGridView)form.Controls.Find(name, true)[0];
 		}
 	}
 }

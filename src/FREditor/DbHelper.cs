@@ -18,7 +18,7 @@ namespace FREditor
 			command.ExecuteNonQuery();
 		}
 
-		public static void PricesFill(DataTable prices, string param, bool showOnlyEnabled, params MySqlParameter[] parameters)
+		public static void PricesFill(MySqlConnection connection, DataTable prices, string param, bool showOnlyEnabled, params MySqlParameter[] parameters)
 		{
 			var sqlPart = String.Empty;
 			if (showOnlyEnabled)
@@ -61,11 +61,9 @@ where 1 = 1 ";
 group by pim.Id
 order by PPriceName";
 
-			With.Connection(c => {
-				var dataAdapter = new MySqlDataAdapter(sql, c);
-				dataAdapter.SelectCommand.Parameters.AddRange(parameters);
-				dataAdapter.Fill(prices);
-			});
+			var dataAdapter = new MySqlDataAdapter(sql, connection);
+			dataAdapter.SelectCommand.Parameters.AddRange(parameters);
+			dataAdapter.Fill(prices);
 		}
 	}
 }

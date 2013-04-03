@@ -66,6 +66,8 @@ namespace FREditor
 			get { return dtPrices; }
 		}
 
+		public bool Testing;
+
 
 		private bool _isFormatChanged;
 
@@ -662,7 +664,7 @@ WHERE 1=1 ";
 		public void dtPricesFill(string param, bool showOnlyEnabled)
 		{
 			var parameters = dataAdapter.SelectCommand.Parameters.Cast<MySqlParameter>().ToArray();
-			DbHelper.PricesFill(dtPrices, param, showOnlyEnabled, parameters);
+			DbHelper.PricesFill(connection, dtPrices, param, showOnlyEnabled, parameters);
 		}
 
 		private void cbRegionsFill()
@@ -884,15 +886,14 @@ FROM
 "
 				+ sqlPart +
 				@"
-join Farm.Sources so on so.id = pim.SourceId
-join farm.sourcetypes st on st.id = so.SourceTypeId
+  join Farm.Sources so on so.id = pim.SourceId
+  join farm.sourcetypes st on st.id = so.SourceTypeId
   inner join Farm.formrules AS FR ON FR.Id = pim.FormRuleId
   left join Farm.FormRules AS PFR ON PFR.id = FR.Id
   left join Farm.PriceFMTs as pfmt on pfmt.id = PFR.PriceFormatId
-where
-  ((pd.CostType = 1) or (exists(select * from userSettings.pricesregionaldata prd where prd.PriceCode = PD.PriceCode and prd.BaseCost=pc.CostCode))) ",
-				sql);
-			command.CommandText += param;
+where 1=1 {1}
+group by pim.Id",
+				sql, param);
 			dataAdapter.Fill(dtFormRules);
 		}
 
@@ -1976,7 +1977,7 @@ and c.Type = ?ContactType;",
 			return false;
 		}
 
-		private void tsbApply_Click(object sender, EventArgs e)
+		public void tsbApply_Click(object sender, EventArgs e)
 		{
 			Point selectedFirmCell = new Point(indgvFirm.SelectedCells[0].RowIndex, indgvFirm.SelectedCells[0].ColumnIndex);
 			Point selectedPriceCell = new Point(indgvPrice.SelectedCells[0].RowIndex, indgvPrice.SelectedCells[0].ColumnIndex);
@@ -2052,6 +2053,10 @@ and c.Type = ?ContactType;",
 						}
 						catch (Exception ex) {
 							tr.Rollback();
+
+							if (Testing)
+								throw;
+
 							MessageBox.Show("Не удалось применить изменения в правилах формализации прайс-листа. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в правилах формализации.", ex));
 						}
@@ -2159,9 +2164,11 @@ and fr.Id = pim.FormRuleId;
 							tr.Commit();
 						}
 						catch (Exception ex) {
+							tr.Rollback();
+							if (Testing)
+								throw;
 							MessageBox.Show("Не удалось применить изменения в настройках прайс-листов. Сообщение было отправлено разработчику.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							Program.SendMessageOnException(null, new Exception("Ошибка при применении изменений в настройках прайс-листов.", ex));
-							tr.Rollback();
 						}
 					}
 					finally {
