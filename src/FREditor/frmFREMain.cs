@@ -3351,7 +3351,11 @@ order by PriceName
 				smtp.Send(message);
 			});
 
-			collumnCreator.CreateCost(priceCode, "FREditor");
+
+			var operatorName = With.Connection(c => MySqlHelper.ExecuteScalar(c,
+				"SELECT ManagerName FROM accessright.regionaladmins where UserName = ?UserName",
+				new MySqlParameter("?UserName", Environment.UserName)).ToString());
+			collumnCreator.CreateCost(priceCode, string.IsNullOrEmpty(operatorName) ? Environment.UserName : operatorName);
 
 			RefreshDataBind();
 		}
