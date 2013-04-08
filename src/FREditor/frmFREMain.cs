@@ -101,6 +101,7 @@ namespace FREditor
 		private string shortNameFilter = String.Empty;
 		private ulong regionCodeFilter = 0;
 		private int sourceIndex = 0;
+		private int synonymSupplierIndex = 0;
 
 		private bool fileExist;
 		private bool InSearch;
@@ -484,6 +485,7 @@ where
 			dtPriceFMTsFill();
 			cbRegionsFill();
 			cbSourceFill();
+			cbSynonymFill();
 			connection.Close();
 
 			bsCostsFormRules.SuspendBinding();
@@ -536,9 +538,9 @@ order by Format";
 			return cmnd;
 		}
 
-		private void FillTables(string shname, ulong regcode, int _sourceIndex)
+		private void FillTables(string shname, ulong regcode, int _sourceIndex, int synonymSupplier)
 		{
-			var filter = new Filter(shname, regcode, _sourceIndex);
+			var filter = new Filter(shname, regcode, _sourceIndex, synonymSupplier);
 
 			dtSet.EnforceConstraints = false;
 			try {
@@ -563,6 +565,8 @@ order by Format";
 				command.Parameters.AddWithValue("?RegionCode", regcode);
 			if (_sourceIndex > 0)
 				command.Parameters.AddWithValue("?sourceIndex", _sourceIndex);
+			if (synonymSupplier > 0)
+				command.Parameters.AddWithValue("?synonymSupplier", synonymSupplier);
 
 			var showOnlyEnabled = !_showDisabledFirm;
 			if (showOnlyEnabled) {
@@ -575,10 +579,10 @@ order by Format";
 
 			FilterParams = AddParams(shname, regcode, showOnlyEnabled, _sourceIndex);
 
-			dtClientsFill(FilterParams, showOnlyEnabled);
+			dtClientsFill(FilterParams, showOnlyEnabled, synonymSupplier);
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
-			dtPricesFill(FilterParams, showOnlyEnabled);
+			dtPricesFill(FilterParams, showOnlyEnabled, synonymSupplier);
 			dtFormRulesFill(FilterParams, showOnlyEnabled);
 			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
 		}
@@ -620,9 +624,25 @@ order by Format";
 			}
 		}
 
-		public void dtClientsFill(string param, bool showOnlyEnabled)
+		public void dtClientsFill(string param, bool showOnlyEnabled, int synonymSupplier)
 		{
-			if (showOnlyEnabled) {
+			if (synonymSupplier > 0)
+				command.CommandText = @"
+SELECT s.Id AS CCode,
+s.Name AS CShortName,
+s.FullName AS CFullName,
+r.Region AS CRegion,
+st.Type AS CSourceIndex
+FROM usersettings.pricesdata PD
+join usersettings.pricesdata PD2 on PD2.ParentSynonym = PD.PriceCode
+join Customers.suppliers s on s.id = PD2.FirmCode
+join usersettings.pricescosts PC on pc.pricecode = pd.pricecode
+join usersettings.priceitems pi on pc.priceitemid = pi.id
+join Farm.Sources so on so.id = pi.SourceId
+join farm.sourcetypes st on st.id = so.SourceTypeId
+INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
+where s.Disabled = false and PD.FirmCode = ?synonymSupplier and s.id <> ?synonymSupplier";
+			else if (showOnlyEnabled) {
 				command.CommandText = @"
 SELECT s.Id AS CCode,
 s.Name AS CShortName,
@@ -661,10 +681,10 @@ WHERE 1=1 ";
 			dataAdapter.Fill(dtClients);
 		}
 
-		public void dtPricesFill(string param, bool showOnlyEnabled)
+		public void dtPricesFill(string param, bool showOnlyEnabled, int synonymSupplier)
 		{
 			var parameters = dataAdapter.SelectCommand.Parameters.Cast<MySqlParameter>().ToArray();
-			DbHelper.PricesFill(connection, dtPrices, param, showOnlyEnabled, parameters);
+			DbHelper.PricesFill(connection, dtPrices, param, showOnlyEnabled, synonymSupplier, parameters);
 		}
 
 		private void cbRegionsFill()
@@ -707,6 +727,26 @@ FROM
 			cbSource.DataSource = dtSource;
 			cbSource.DisplayMember = "Type";
 			cbSource.ValueMember = "Id";
+		}
+
+		private void cbSynonymFill()
+		{
+			var dtSource = new DataTable("Source");
+			dtSource.Columns.Add("FirmCode", typeof(ulong));
+			dtSource.Columns.Add("Name", typeof(string));
+			dtSource.Clear();
+			dtSource.Rows.Add(new object[] { 0, "Все" });
+			command.CommandText = @"
+SELECT pd.FirmCode, s.Name FROM userSettings.PricesData P
+join userSettings.PricesData pd on p.ParentSynonym = pd.PriceCode
+join customers.Suppliers s on s.id = pd.FirmCode
+where s.disabled= false
+group by p.parentsynonym
+order by s.Name;";
+			dataAdapter.Fill(dtSource);
+			cbSynonym.DataSource = dtSource;
+			cbSynonym.DisplayMember = "Name";
+			cbSynonym.ValueMember = "FirmCode";
 		}
 
 		private void dtCostsFormRulesFill(string param, bool showOnlyEnabled)
@@ -1401,15 +1441,16 @@ order by PriceName
 
 			FilterParams = AddParams(String.Empty, 0, showOnlyEnabled, sourceIndex);
 
-			dtClientsFill(FilterParams, showOnlyEnabled);
+			dtClientsFill(FilterParams, showOnlyEnabled, synonymSupplierIndex);
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
-			dtPricesFill(FilterParams, showOnlyEnabled);
+			dtPricesFill(FilterParams, showOnlyEnabled, synonymSupplierIndex);
 			dtFormRulesFill(FilterParams, showOnlyEnabled);
 			dtPriceFMTsFill();
 			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
 			cbRegionsFill();
 			cbSourceFill();
+			cbSynonymFill();
 			dtSet.AcceptChanges();
 		}
 
@@ -1511,7 +1552,7 @@ order by PriceName
 
 		private void RefreshDataBind()
 		{
-			FillTables(shortNameFilter, regionCodeFilter, sourceIndex);
+			FillTables(shortNameFilter, regionCodeFilter, sourceIndex, synonymSupplierIndex);
 
 			this.Text = "Редактор Правил Формализации";
 			if (fcs == dgFocus.Firm) {
@@ -2505,9 +2546,13 @@ and fr.Id = pim.FormRuleId;
 				if (cbSource.SelectedItem != null)
 					_sourceIndex = Convert.ToInt32(cbSource.SelectedValue);
 				string shname = tbFirmName.Text;
-				FillTables(shname, regcode, _sourceIndex);
+				var synonymSupplier = 0;
+				if (cbSynonym.SelectedItem != null)
+					synonymSupplier = Convert.ToInt32(cbSynonym.SelectedValue);
+				FillTables(shname, regcode, _sourceIndex, synonymSupplier);
 				shortNameFilter = shname;
 				regionCodeFilter = regcode;
+				synonymSupplierIndex = synonymSupplier;
 				indgvFirm.Focus();
 			}
 			finally {
@@ -3016,7 +3061,7 @@ order by PriceName
 		private void checkBoxShowDisabled_CheckedChanged(object sender, EventArgs e)
 		{
 			_showDisabledFirm = checkBoxShowDisabled.Checked;
-			FillTables(shortNameFilter, regionCodeFilter, sourceIndex);
+			FillTables(shortNameFilter, regionCodeFilter, sourceIndex, synonymSupplierIndex);
 			indgvFirm.Focus();
 		}
 
@@ -3394,6 +3439,14 @@ order by PriceName
 		private void cmbFormat_MouseEnter(object sender, EventArgs e)
 		{
 			_toolTip1.SetToolTip(cmbFormat, cmbFormat.Text);
+		}
+
+		private void cbSynonym_SelectedValueChanged(object sender, EventArgs e)
+		{
+			if (!InSearch) {
+				tmrSearch.Stop();
+				tmrSearch.Start();
+			}
 		}
 	}
 

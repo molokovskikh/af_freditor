@@ -197,6 +197,8 @@ namespace FREditor
 			this.cRegionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.CSourceIndexViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.cbSynonym = new System.Windows.Forms.ComboBox();
+			this.synonymLabel = new System.Windows.Forms.Label();
 			this.createCostCollumnInManyFilesPrice = new System.Windows.Forms.Button();
 			this.cbSource = new System.Windows.Forms.ComboBox();
 			this.label27 = new System.Windows.Forms.Label();
@@ -462,9 +464,9 @@ namespace FREditor
 			this.tscMain.SuspendLayout();
 			this.tsApply.SuspendLayout();
 			this.SuspendLayout();
-			//
-			//tbControl
-			//
+			// 
+			// tbControl
+			// 
 			this.tbControl.Controls.Add(this.tpFirms);
 			this.tbControl.Controls.Add(this.tpPrice);
 			this.tbControl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -475,9 +477,9 @@ namespace FREditor
 			this.tbControl.TabIndex = 1;
 			this.tbControl.SelectedIndexChanged += new System.EventHandler(this.tbControl_SelectedIndexChanged);
 			this.tbControl.Deselecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tbControl_Deselecting);
-			//
-			//tpFirms
-			//
+			// 
+			// tpFirms
+			// 
 			this.tpFirms.Controls.Add(this.panel2);
 			this.tpFirms.Controls.Add(this.splitter1);
 			this.tpFirms.Controls.Add(this.pnlGrid);
@@ -486,18 +488,18 @@ namespace FREditor
 			this.tpFirms.Size = new System.Drawing.Size(1317, 702);
 			this.tpFirms.TabIndex = 0;
 			this.tpFirms.Text = "Фирмы";
-			//
-			//panel2
-			//
+			// 
+			// panel2
+			// 
 			this.panel2.Controls.Add(this.indgvPrice);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel2.Location = new System.Drawing.Point(0, 424);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(1317, 278);
 			this.panel2.TabIndex = 6;
-			//
-			//indgvPrice
-			//
+			// 
+			// indgvPrice
+			// 
 			this.indgvPrice.AllowUserToAddRows = false;
 			this.indgvPrice.AllowUserToDeleteRows = false;
 			this.indgvPrice.AllowUserToResizeRows = false;
@@ -553,17 +555,17 @@ namespace FREditor
 			this.indgvPrice.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.indgvPrice_EditingControlShowing);
 			this.indgvPrice.DoubleClick += new System.EventHandler(this.indgvPrice_DoubleClick);
 			this.indgvPrice.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvPrice_KeyDown);
-			//
-			//pPriceNameDataGridViewTextBoxColumn
-			//
+			// 
+			// pPriceNameDataGridViewTextBoxColumn
+			// 
 			this.pPriceNameDataGridViewTextBoxColumn.DataPropertyName = "PPriceName";
 			this.pPriceNameDataGridViewTextBoxColumn.FillWeight = 76.57723F;
 			this.pPriceNameDataGridViewTextBoxColumn.HeaderText = "Название прайс-листа";
 			this.pPriceNameDataGridViewTextBoxColumn.Name = "pPriceNameDataGridViewTextBoxColumn";
 			this.pPriceNameDataGridViewTextBoxColumn.ReadOnly = true;
-			//
-			//pBaseCostDataGridViewCheckBoxColumn
-			//
+			// 
+			// pBaseCostDataGridViewCheckBoxColumn
+			// 
 			this.pBaseCostDataGridViewCheckBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
 			this.pBaseCostDataGridViewCheckBoxColumn.DataPropertyName = "PBaseCost";
 			this.pBaseCostDataGridViewCheckBoxColumn.FillWeight = 263.9594F;
@@ -571,61 +573,61 @@ namespace FREditor
 			this.pBaseCostDataGridViewCheckBoxColumn.Name = "pBaseCostDataGridViewCheckBoxColumn";
 			this.pBaseCostDataGridViewCheckBoxColumn.ReadOnly = true;
 			this.pBaseCostDataGridViewCheckBoxColumn.Width = 65;
-			//
-			//pDateCurPriceDataGridViewTextBoxColumn
-			//
+			// 
+			// pDateCurPriceDataGridViewTextBoxColumn
+			// 
 			this.pDateCurPriceDataGridViewTextBoxColumn.DataPropertyName = "PPriceDate";
 			this.pDateCurPriceDataGridViewTextBoxColumn.FillWeight = 76.57723F;
 			this.pDateCurPriceDataGridViewTextBoxColumn.HeaderText = "Дата загрузки прайс-листа";
 			this.pDateCurPriceDataGridViewTextBoxColumn.Name = "pDateCurPriceDataGridViewTextBoxColumn";
 			this.pDateCurPriceDataGridViewTextBoxColumn.ReadOnly = true;
-			//
-			//dataGridViewTextBoxColumn1
-			//
+			// 
+			// dataGridViewTextBoxColumn1
+			// 
 			this.dataGridViewTextBoxColumn1.DataPropertyName = "PPriceDateWithBias";
 			this.dataGridViewTextBoxColumn1.FillWeight = 76.57723F;
 			this.dataGridViewTextBoxColumn1.HeaderText = "Дата загрузки прайс-листа по местному времени";
 			this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
 			this.dataGridViewTextBoxColumn1.ReadOnly = true;
-			//
-			//pDateLastFormDataGridViewTextBoxColumn
-			//
+			// 
+			// pDateLastFormDataGridViewTextBoxColumn
+			// 
 			this.pDateLastFormDataGridViewTextBoxColumn.DataPropertyName = "PDateLastForm";
 			this.pDateLastFormDataGridViewTextBoxColumn.FillWeight = 76.57723F;
 			this.pDateLastFormDataGridViewTextBoxColumn.HeaderText = "Дата последней формализации";
 			this.pDateLastFormDataGridViewTextBoxColumn.Name = "pDateLastFormDataGridViewTextBoxColumn";
 			this.pDateLastFormDataGridViewTextBoxColumn.ReadOnly = true;
-			//
-			//pMaxOldDataGridViewTextBoxColumn
-			//
+			// 
+			// pMaxOldDataGridViewTextBoxColumn
+			// 
 			this.pMaxOldDataGridViewTextBoxColumn.DataPropertyName = "PMaxOld";
 			this.pMaxOldDataGridViewTextBoxColumn.FillWeight = 76.57723F;
 			this.pMaxOldDataGridViewTextBoxColumn.HeaderText = "Актуальность";
 			this.pMaxOldDataGridViewTextBoxColumn.Name = "pMaxOldDataGridViewTextBoxColumn";
-			//
-			//dataGridViewTextBoxColumn2
-			//
+			// 
+			// dataGridViewTextBoxColumn2
+			// 
 			this.dataGridViewTextBoxColumn2.DataPropertyName = "PWaitingDownloadInterval";
 			this.dataGridViewTextBoxColumn2.FillWeight = 76.57723F;
 			this.dataGridViewTextBoxColumn2.HeaderText = "Время ожидания (в часах)";
 			this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
-			//
-			//pPriceTypeDataGridViewComboBoxColumn
-			//
+			// 
+			// pPriceTypeDataGridViewComboBoxColumn
+			// 
 			this.pPriceTypeDataGridViewComboBoxColumn.DataPropertyName = "PPriceType";
 			this.pPriceTypeDataGridViewComboBoxColumn.FillWeight = 76.57723F;
 			this.pPriceTypeDataGridViewComboBoxColumn.HeaderText = "Тип прайс-листа";
 			this.pPriceTypeDataGridViewComboBoxColumn.Name = "pPriceTypeDataGridViewComboBoxColumn";
-			//
-			//pCostTypeDataGridViewComboBoxColumn
-			//
+			// 
+			// pCostTypeDataGridViewComboBoxColumn
+			// 
 			this.pCostTypeDataGridViewComboBoxColumn.DataPropertyName = "PCostType";
 			this.pCostTypeDataGridViewComboBoxColumn.FillWeight = 76.57723F;
 			this.pCostTypeDataGridViewComboBoxColumn.HeaderText = "Тип цены";
 			this.pCostTypeDataGridViewComboBoxColumn.Name = "pCostTypeDataGridViewComboBoxColumn";
-			//
-			//dtSet
-			//
+			// 
+			// dtSet
+			// 
 			this.dtSet.DataSetName = "NewDataSet";
 			this.dtSet.Locale = new System.Globalization.CultureInfo("ru-RU");
 			this.dtSet.Relations.AddRange(new System.Data.DataRelation[] {
@@ -648,9 +650,9 @@ namespace FREditor
             this.dtFormRules,
             this.dtPriceFMTs,
             this.dtCostsFormRules});
-			//
-			//dtClients
-			//
+			// 
+			// dtClients
+			// 
 			this.dtClients.Columns.AddRange(new System.Data.DataColumn[] {
             this.CCode,
             this.CShortName,
@@ -663,32 +665,32 @@ namespace FREditor
 			this.dtClients.PrimaryKey = new System.Data.DataColumn[] {
         this.CCode};
 			this.dtClients.TableName = "Поставщики";
-			//
-			//CCode
-			//
+			// 
+			// CCode
+			// 
 			this.CCode.AllowDBNull = false;
 			this.CCode.Caption = "CCode";
 			this.CCode.ColumnName = "CCode";
 			this.CCode.DataType = typeof(long);
-			//
-			//CShortName
-			//
+			// 
+			// CShortName
+			// 
 			this.CShortName.ColumnName = "CShortName";
-			//
-			//CRegion
-			//
+			// 
+			// CRegion
+			// 
 			this.CRegion.ColumnName = "CRegion";
-			//
-			//CFullName
-			//
+			// 
+			// CFullName
+			// 
 			this.CFullName.ColumnName = "CFullName";
-			//
-			//CSourceIndex
-			//
+			// 
+			// CSourceIndex
+			// 
 			this.CSourceIndex.ColumnName = "CSourceIndex";
-			//
-			//dtPrices
-			//
+			// 
+			// dtPrices
+			// 
 			this.dtPrices.Columns.AddRange(new System.Data.DataColumn[] {
             this.PPriceCode,
             this.PFirmCode,
@@ -715,92 +717,92 @@ namespace FREditor
 			this.dtPrices.PrimaryKey = new System.Data.DataColumn[] {
         this.PPriceItemId};
 			this.dtPrices.TableName = "Прайсы";
-			//
-			//PPriceCode
-			//
+			// 
+			// PPriceCode
+			// 
 			this.PPriceCode.AllowDBNull = false;
 			this.PPriceCode.ColumnName = "PPriceCode";
 			this.PPriceCode.DataType = typeof(long);
-			//
-			//PFirmCode
-			//
+			// 
+			// PFirmCode
+			// 
 			this.PFirmCode.ColumnName = "PFirmCode";
 			this.PFirmCode.DataType = typeof(long);
-			//
-			//PPriceName
-			//
+			// 
+			// PPriceName
+			// 
 			this.PPriceName.ColumnName = "PPriceName";
-			//
-			//PDateCurPrice
-			//
+			// 
+			// PDateCurPrice
+			// 
 			this.PDateCurPrice.ColumnName = "PDateCurPrice";
 			this.PDateCurPrice.DataType = typeof(System.DateTime);
-			//
-			//PDateLastForm
-			//
+			// 
+			// PDateLastForm
+			// 
 			this.PDateLastForm.ColumnName = "PDateLastForm";
 			this.PDateLastForm.DataType = typeof(System.DateTime);
-			//
-			//PMaxOld
-			//
+			// 
+			// PMaxOld
+			// 
 			this.PMaxOld.ColumnName = "PMaxOld";
 			this.PMaxOld.DataType = typeof(int);
-			//
-			//PPriceType
-			//
+			// 
+			// PPriceType
+			// 
 			this.PPriceType.ColumnName = "PPriceType";
 			this.PPriceType.DataType = typeof(int);
-			//
-			//PCostType
-			//
+			// 
+			// PCostType
+			// 
 			this.PCostType.ColumnName = "PCostType";
 			this.PCostType.DataType = typeof(int);
-			//
-			//PWaitingDownloadInterval
-			//
+			// 
+			// PWaitingDownloadInterval
+			// 
 			this.PWaitingDownloadInterval.ColumnName = "PWaitingDownloadInterval";
 			this.PWaitingDownloadInterval.DataType = typeof(int);
-			//
-			//PIsParent
-			//
+			// 
+			// PIsParent
+			// 
 			this.PIsParent.ColumnName = "PIsParent";
 			this.PIsParent.DataType = typeof(byte);
-			//
-			//PBaseCost
-			//
+			// 
+			// PBaseCost
+			// 
 			this.PBaseCost.ColumnName = "PBaseCost";
 			this.PBaseCost.DataType = typeof(byte);
-			//
-			//PCostCode
-			//
+			// 
+			// PCostCode
+			// 
 			this.PCostCode.ColumnName = "PCostCode";
 			this.PCostCode.DataType = typeof(int);
-			//
-			//PPriceDate
-			//
+			// 
+			// PPriceDate
+			// 
 			this.PPriceDate.ColumnName = "PPriceDate";
 			this.PPriceDate.DataType = typeof(System.DateTime);
-			//
-			//PPriceItemId
-			//
+			// 
+			// PPriceItemId
+			// 
 			this.PPriceItemId.AllowDBNull = false;
 			this.PPriceItemId.ColumnName = "PPriceItemId";
 			this.PPriceItemId.DataType = typeof(long);
-			//
-			//PDeleted
-			//
+			// 
+			// PDeleted
+			// 
 			this.PDeleted.AllowDBNull = false;
 			this.PDeleted.ColumnName = "PDeleted";
 			this.PDeleted.DataType = typeof(bool);
 			this.PDeleted.DefaultValue = false;
-			//
-			//PPriceDateWithBias
-			//
+			// 
+			// PPriceDateWithBias
+			// 
 			this.PPriceDateWithBias.ColumnName = "PPriceDateWithBias";
 			this.PPriceDateWithBias.DataType = typeof(System.DateTime);
-			//
-			//dtPricesCost
-			//
+			// 
+			// dtPricesCost
+			// 
 			this.dtPricesCost.Columns.AddRange(new System.Data.DataColumn[] {
             this.PCPriceCode,
             this.PCBaseCost,
@@ -816,33 +818,33 @@ namespace FREditor
 			this.dtPricesCost.PrimaryKey = new System.Data.DataColumn[] {
         this.PCCostCode};
 			this.dtPricesCost.TableName = "Цены";
-			//
-			//PCPriceCode
-			//
+			// 
+			// PCPriceCode
+			// 
 			this.PCPriceCode.ColumnName = "PCPriceCode";
 			this.PCPriceCode.DataType = typeof(long);
-			//
-			//PCBaseCost
-			//
+			// 
+			// PCBaseCost
+			// 
 			this.PCBaseCost.ColumnName = "PCBaseCost";
-			//
-			//PCCostCode
-			//
+			// 
+			// PCCostCode
+			// 
 			this.PCCostCode.AllowDBNull = false;
 			this.PCCostCode.ColumnName = "PCCostCode";
 			this.PCCostCode.DataType = typeof(long);
-			//
-			//PCCostName
-			//
+			// 
+			// PCCostName
+			// 
 			this.PCCostName.ColumnName = "PCCostName";
-			//
-			//PCPriceItemId
-			//
+			// 
+			// PCPriceItemId
+			// 
 			this.PCPriceItemId.ColumnName = "PCPriceItemId";
 			this.PCPriceItemId.DataType = typeof(long);
-			//
-			//dtFormRules
-			//
+			// 
+			// dtFormRules
+			// 
 			this.dtFormRules.Columns.AddRange(new System.Data.DataColumn[] {
             this.FRName,
             this.FRFormat,
@@ -933,373 +935,373 @@ namespace FREditor
                         "PPriceItemId"}, new string[] {
                         "FRPriceItemId"}, System.Data.AcceptRejectRule.None, System.Data.Rule.Cascade, System.Data.Rule.Cascade)});
 			this.dtFormRules.TableName = "Правила формализации";
-			//
-			//FRName
-			//
+			// 
+			// FRName
+			// 
 			this.FRName.ColumnName = "FRName";
-			//
-			//FRFormat
-			//
+			// 
+			// FRFormat
+			// 
 			this.FRFormat.ColumnName = "FRFormat";
-			//
-			//FRPosNum
-			//
+			// 
+			// FRPosNum
+			// 
 			this.FRPosNum.ColumnName = "FRPosNum";
 			this.FRPosNum.DataType = typeof(long);
-			//
-			//FRDelimiter
-			//
+			// 
+			// FRDelimiter
+			// 
 			this.FRDelimiter.ColumnName = "FRDelimiter";
-			//
-			//FRRules
-			//
+			// 
+			// FRRules
+			// 
 			this.FRRules.ColumnName = "FRRules";
 			this.FRRules.DataType = typeof(int);
-			//
-			//FRSynonyms
-			//
+			// 
+			// FRSynonyms
+			// 
 			this.FRSynonyms.ColumnName = "FRSynonyms";
 			this.FRSynonyms.DataType = typeof(int);
-			//
-			//FRListName
-			//
+			// 
+			// FRListName
+			// 
 			this.FRListName.ColumnName = "FRListName";
-			//
-			//FRStartLine
-			//
+			// 
+			// FRStartLine
+			// 
 			this.FRStartLine.ColumnName = "FRStartLine";
-			//
-			//FRSelfAwaitPos
-			//
+			// 
+			// FRSelfAwaitPos
+			// 
 			this.FRSelfAwaitPos.ColumnName = "FRSelfAwaitPos";
-			//
-			//FRSelfJunkPos
-			//
+			// 
+			// FRSelfJunkPos
+			// 
 			this.FRSelfJunkPos.ColumnName = "FRSelfJunkPos";
-			//
-			//FRNameMask
-			//
+			// 
+			// FRNameMask
+			// 
 			this.FRNameMask.ColumnName = "FRNameMask";
-			//
-			//FRForbWords
-			//
+			// 
+			// FRForbWords
+			// 
 			this.FRForbWords.ColumnName = "FRForbWords";
-			//
-			//FRTxtCodeBegin
-			//
+			// 
+			// FRTxtCodeBegin
+			// 
 			this.FRTxtCodeBegin.ColumnName = "FRTxtCodeBegin";
-			//
-			//FRTxtCodeEnd
-			//
+			// 
+			// FRTxtCodeEnd
+			// 
 			this.FRTxtCodeEnd.ColumnName = "FRTxtCodeEnd";
-			//
-			//FRTxtCodeCrBegin
-			//
+			// 
+			// FRTxtCodeCrBegin
+			// 
 			this.FRTxtCodeCrBegin.ColumnName = "FRTxtCodeCrBegin";
-			//
-			//FRTxtCodeCrEnd
-			//
+			// 
+			// FRTxtCodeCrEnd
+			// 
 			this.FRTxtCodeCrEnd.ColumnName = "FRTxtCodeCrEnd";
-			//
-			//FRTxtNameBegin
-			//
+			// 
+			// FRTxtNameBegin
+			// 
 			this.FRTxtNameBegin.ColumnName = "FRTxtNameBegin";
-			//
-			//FRTxtNameEnd
-			//
+			// 
+			// FRTxtNameEnd
+			// 
 			this.FRTxtNameEnd.ColumnName = "FRTxtNameEnd";
-			//
-			//FRTxtFirmCrBegin
-			//
+			// 
+			// FRTxtFirmCrBegin
+			// 
 			this.FRTxtFirmCrBegin.ColumnName = "FRTxtFirmCrBegin";
-			//
-			//FRTxtFirmCrEnd
-			//
+			// 
+			// FRTxtFirmCrEnd
+			// 
 			this.FRTxtFirmCrEnd.ColumnName = "FRTxtFirmCrEnd";
-			//
-			//FRTxtMinBoundCostBegin
-			//
+			// 
+			// FRTxtMinBoundCostBegin
+			// 
 			this.FRTxtMinBoundCostBegin.ColumnName = "FRTxtMinBoundCostBegin";
-			//
-			//FRTxtMinBoundCostEnd
-			//
+			// 
+			// FRTxtMinBoundCostEnd
+			// 
 			this.FRTxtMinBoundCostEnd.ColumnName = "FRTxtMinBoundCostEnd";
-			//
-			//FRTxtUnitBegin
-			//
+			// 
+			// FRTxtUnitBegin
+			// 
 			this.FRTxtUnitBegin.ColumnName = "FRTxtUnitBegin";
-			//
-			//FRTxtUnitEnd
-			//
+			// 
+			// FRTxtUnitEnd
+			// 
 			this.FRTxtUnitEnd.ColumnName = "FRTxtUnitEnd";
-			//
-			//FRTxtVolumeBegin
-			//
+			// 
+			// FRTxtVolumeBegin
+			// 
 			this.FRTxtVolumeBegin.ColumnName = "FRTxtVolumeBegin";
-			//
-			//FRTxtVolumeEnd
-			//
+			// 
+			// FRTxtVolumeEnd
+			// 
 			this.FRTxtVolumeEnd.ColumnName = "FRTxtVolumeEnd";
-			//
-			//FRTxtQuantityBegin
-			//
+			// 
+			// FRTxtQuantityBegin
+			// 
 			this.FRTxtQuantityBegin.ColumnName = "FRTxtQuantityBegin";
-			//
-			//FRTxtQuantityEnd
-			//
+			// 
+			// FRTxtQuantityEnd
+			// 
 			this.FRTxtQuantityEnd.ColumnName = "FRTxtQuantityEnd";
-			//
-			//FRTxtNoteBegin
-			//
+			// 
+			// FRTxtNoteBegin
+			// 
 			this.FRTxtNoteBegin.ColumnName = "FRTxtNoteBegin";
-			//
-			//FRTxtNoteEnd
-			//
+			// 
+			// FRTxtNoteEnd
+			// 
 			this.FRTxtNoteEnd.ColumnName = "FRTxtNoteEnd";
-			//
-			//FRTxtPeriodBegin
-			//
+			// 
+			// FRTxtPeriodBegin
+			// 
 			this.FRTxtPeriodBegin.ColumnName = "FRTxtPeriodBegin";
-			//
-			//FRTxtPeriodEnd
-			//
+			// 
+			// FRTxtPeriodEnd
+			// 
 			this.FRTxtPeriodEnd.ColumnName = "FRTxtPeriodEnd";
-			//
-			//FRTxtDocBegin
-			//
+			// 
+			// FRTxtDocBegin
+			// 
 			this.FRTxtDocBegin.ColumnName = "FRTxtDocBegin";
-			//
-			//FRTxtDocEnd
-			//
+			// 
+			// FRTxtDocEnd
+			// 
 			this.FRTxtDocEnd.ColumnName = "FRTxtDocEnd";
-			//
-			//FRTxtJunkBegin
-			//
+			// 
+			// FRTxtJunkBegin
+			// 
 			this.FRTxtJunkBegin.ColumnName = "FRTxtJunkBegin";
-			//
-			//FRTxtJunkEnd
-			//
+			// 
+			// FRTxtJunkEnd
+			// 
 			this.FRTxtJunkEnd.ColumnName = "FRTxtJunkEnd";
-			//
-			//FRTxtAwaitBegin
-			//
+			// 
+			// FRTxtAwaitBegin
+			// 
 			this.FRTxtAwaitBegin.ColumnName = "FRTxtAwaitBegin";
-			//
-			//FRTxtAwaitEnd
-			//
+			// 
+			// FRTxtAwaitEnd
+			// 
 			this.FRTxtAwaitEnd.ColumnName = "FRTxtAwaitEnd";
-			//
-			//FRFCode
-			//
+			// 
+			// FRFCode
+			// 
 			this.FRFCode.ColumnName = "FRFCode";
-			//
-			//FRFCodeCr
-			//
+			// 
+			// FRFCodeCr
+			// 
 			this.FRFCodeCr.ColumnName = "FRFCodeCr";
-			//
-			//FRFName1
-			//
+			// 
+			// FRFName1
+			// 
 			this.FRFName1.ColumnName = "FRFName1";
-			//
-			//FRFName2
-			//
+			// 
+			// FRFName2
+			// 
 			this.FRFName2.ColumnName = "FRFName2";
-			//
-			//FRFName3
-			//
+			// 
+			// FRFName3
+			// 
 			this.FRFName3.ColumnName = "FRFName3";
-			//
-			//FRFUnit
-			//
+			// 
+			// FRFUnit
+			// 
 			this.FRFUnit.ColumnName = "FRFUnit";
-			//
-			//FRFVolume
-			//
+			// 
+			// FRFVolume
+			// 
 			this.FRFVolume.ColumnName = "FRFVolume";
-			//
-			//FRFQuantity
-			//
+			// 
+			// FRFQuantity
+			// 
 			this.FRFQuantity.ColumnName = "FRFQuantity";
-			//
-			//FRFNote
-			//
+			// 
+			// FRFNote
+			// 
 			this.FRFNote.ColumnName = "FRFNote";
-			//
-			//FRFPeriod
-			//
+			// 
+			// FRFPeriod
+			// 
 			this.FRFPeriod.ColumnName = "FRFPeriod";
-			//
-			//FRFDoc
-			//
+			// 
+			// FRFDoc
+			// 
 			this.FRFDoc.ColumnName = "FRFDoc";
-			//
-			//FRFJunk
-			//
+			// 
+			// FRFJunk
+			// 
 			this.FRFJunk.ColumnName = "FRFJunk";
-			//
-			//FRFAwait
-			//
+			// 
+			// FRFAwait
+			// 
 			this.FRFAwait.ColumnName = "FRFAwait";
-			//
-			//FRFFirmCr
-			//
+			// 
+			// FRFFirmCr
+			// 
 			this.FRFFirmCr.ColumnName = "FRFFirmCr";
-			//
-			//FRFMinBoundCost
-			//
+			// 
+			// FRFMinBoundCost
+			// 
 			this.FRFMinBoundCost.ColumnName = "FRFMinBoundCost";
-			//
-			//FRMemo
-			//
+			// 
+			// FRMemo
+			// 
 			this.FRMemo.ColumnName = "FRMemo";
-			//
-			//FRTxtRequestRatioBegin
-			//
+			// 
+			// FRTxtRequestRatioBegin
+			// 
 			this.FRTxtRequestRatioBegin.ColumnName = "FRTxtRequestRatioBegin";
-			//
-			//FRTxtRequestRatioEnd
-			//
+			// 
+			// FRTxtRequestRatioEnd
+			// 
 			this.FRTxtRequestRatioEnd.ColumnName = "FRTxtRequestRatioEnd";
-			//
-			//FRTxtRegistryCostBegin
-			//
+			// 
+			// FRTxtRegistryCostBegin
+			// 
 			this.FRTxtRegistryCostBegin.ColumnName = "FRTxtRegistryCostBegin";
-			//
-			//FRTxtRegistryCostEnd
-			//
+			// 
+			// FRTxtRegistryCostEnd
+			// 
 			this.FRTxtRegistryCostEnd.ColumnName = "FRTxtRegistryCostEnd";
-			//
-			//FRFRequestRatio
-			//
+			// 
+			// FRFRequestRatio
+			// 
 			this.FRFRequestRatio.ColumnName = "FRFRequestRatio";
-			//
-			//FRFRegistryCost
-			//
+			// 
+			// FRFRegistryCost
+			// 
 			this.FRFRegistryCost.ColumnName = "FRFRegistryCost";
-			//
-			//FRExt
-			//
+			// 
+			// FRExt
+			// 
 			this.FRExt.ColumnName = "FRExt";
-			//
-			//FRFVitallyImportant
-			//
+			// 
+			// FRFVitallyImportant
+			// 
 			this.FRFVitallyImportant.ColumnName = "FRFVitallyImportant";
-			//
-			//FRTxtVitallyImportantBegin
-			//
+			// 
+			// FRTxtVitallyImportantBegin
+			// 
 			this.FRTxtVitallyImportantBegin.ColumnName = "FRTxtVitallyImportantBegin";
-			//
-			//FRTxtVitallyImportantEnd
-			//
+			// 
+			// FRTxtVitallyImportantEnd
+			// 
 			this.FRTxtVitallyImportantEnd.ColumnName = "FRTxtVitallyImportantEnd";
-			//
-			//FRSelfVitallyImportantMask
-			//
+			// 
+			// FRSelfVitallyImportantMask
+			// 
 			this.FRSelfVitallyImportantMask.ColumnName = "FRSelfVitallyImportantMask";
-			//
-			//FRFMaxBoundCost
-			//
+			// 
+			// FRFMaxBoundCost
+			// 
 			this.FRFMaxBoundCost.ColumnName = "FRFMaxBoundCost";
-			//
-			//FRTxtMaxBoundCostBegin
-			//
+			// 
+			// FRTxtMaxBoundCostBegin
+			// 
 			this.FRTxtMaxBoundCostBegin.ColumnName = "FRTxtMaxBoundCostBegin";
-			//
-			//FRTxtMaxBoundCostEnd
-			//
+			// 
+			// FRTxtMaxBoundCostEnd
+			// 
 			this.FRTxtMaxBoundCostEnd.ColumnName = "FRTxtMaxBoundCostEnd";
-			//
-			//FRFOrderCost
-			//
+			// 
+			// FRFOrderCost
+			// 
 			this.FRFOrderCost.ColumnName = "FRFOrderCost";
-			//
-			//FRTxtOrderCostBegin
-			//
+			// 
+			// FRTxtOrderCostBegin
+			// 
 			this.FRTxtOrderCostBegin.ColumnName = "FRTxtOrderCostBegin";
-			//
-			//FRTxtOrderCostEnd
-			//
+			// 
+			// FRTxtOrderCostEnd
+			// 
 			this.FRTxtOrderCostEnd.ColumnName = "FRTxtOrderCostEnd";
-			//
-			//FRFProducerCost
-			//
+			// 
+			// FRFProducerCost
+			// 
 			this.FRFProducerCost.ColumnName = "FRFProducerCost";
-			//
-			//FRTxtProducerCostBegin
-			//
+			// 
+			// FRTxtProducerCostBegin
+			// 
 			this.FRTxtProducerCostBegin.ColumnName = "FRTxtProducerCostBegin";
-			//
-			//FRTxtProducerCostEnd
-			//
+			// 
+			// FRTxtProducerCostEnd
+			// 
 			this.FRTxtProducerCostEnd.ColumnName = "FRTxtProducerCostEnd";
-			//
-			//FRFNds
-			//
+			// 
+			// FRFNds
+			// 
 			this.FRFNds.ColumnName = "FRFNds";
-			//
-			//FRTxtNdsBegin
-			//
+			// 
+			// FRTxtNdsBegin
+			// 
 			this.FRTxtNdsBegin.ColumnName = "FRTxtNdsBegin";
-			//
-			//FRTxtNdsEnd
-			//
+			// 
+			// FRTxtNdsEnd
+			// 
 			this.FRTxtNdsEnd.ColumnName = "FRTxtNdsEnd";
-			//
-			//FRFMinOrderCount
-			//
+			// 
+			// FRFMinOrderCount
+			// 
 			this.FRFMinOrderCount.ColumnName = "FRFMinOrderCount";
-			//
-			//FRTxtMinOrderCountBegin
-			//
+			// 
+			// FRTxtMinOrderCountBegin
+			// 
 			this.FRTxtMinOrderCountBegin.ColumnName = "FRTxtMinOrderCountBegin";
-			//
-			//FRTxtMinOrderCountEnd
-			//
+			// 
+			// FRTxtMinOrderCountEnd
+			// 
 			this.FRTxtMinOrderCountEnd.ColumnName = "FRTxtMinOrderCountEnd";
-			//
-			//FRFormID
-			//
+			// 
+			// FRFormID
+			// 
 			this.FRFormID.ColumnName = "FRFormID";
 			this.FRFormID.DataType = typeof(long);
-			//
-			//FRPriceItemId
-			//
+			// 
+			// FRPriceItemId
+			// 
 			this.FRPriceItemId.ColumnName = "FRPriceItemId";
 			this.FRPriceItemId.DataType = typeof(long);
-			//
-			//FRSelfPriceCode
-			//
+			// 
+			// FRSelfPriceCode
+			// 
 			this.FRSelfPriceCode.ColumnName = "FRSelfPriceCode";
 			this.FRSelfPriceCode.DataType = typeof(long);
-			//
-			//FRPriceFormatId
-			//
+			// 
+			// FRPriceFormatId
+			// 
 			this.FRPriceFormatId.ColumnName = "FRPriceFormatId";
 			this.FRPriceFormatId.DataType = typeof(long);
-			//
-			//dtPriceFMTs
-			//
+			// 
+			// dtPriceFMTs
+			// 
 			this.dtPriceFMTs.Columns.AddRange(new System.Data.DataColumn[] {
             this.FMTFormat,
             this.FMTExt,
             this.FMTId});
 			this.dtPriceFMTs.TableName = "Форматы прайса";
-			//
-			//FMTFormat
-			//
+			// 
+			// FMTFormat
+			// 
 			this.FMTFormat.ColumnName = "FMTFormat";
-			//
-			//FMTExt
-			//
+			// 
+			// FMTExt
+			// 
 			this.FMTExt.ColumnName = "FMTExt";
-			//
-			//FMTId
-			//
+			// 
+			// FMTId
+			// 
 			this.FMTId.ColumnName = "FMTId";
 			this.FMTId.DataType = typeof(long);
-			//
-			//dtCostsFormRules
-			//
+			// 
+			// dtCostsFormRules
+			// 
 			this.dtCostsFormRules.Columns.AddRange(new System.Data.DataColumn[] {
             this.CFRCost_Code,
             this.CFRFieldName,
@@ -1314,62 +1316,62 @@ namespace FREditor
                         "PPriceItemId"}, new string[] {
                         "CFRPriceItemId"}, System.Data.AcceptRejectRule.None, System.Data.Rule.Cascade, System.Data.Rule.Cascade)});
 			this.dtCostsFormRules.TableName = "Правила формализации цен";
-			//
-			//CFRCost_Code
-			//
+			// 
+			// CFRCost_Code
+			// 
 			this.CFRCost_Code.ColumnName = "CFRCost_Code";
 			this.CFRCost_Code.DataType = typeof(long);
-			//
-			//CFRFieldName
-			//
+			// 
+			// CFRFieldName
+			// 
 			this.CFRFieldName.AllowDBNull = false;
 			this.CFRFieldName.ColumnName = "CFRFieldName";
 			this.CFRFieldName.DefaultValue = "";
-			//
-			//CFRTextBegin
-			//
+			// 
+			// CFRTextBegin
+			// 
 			this.CFRTextBegin.ColumnName = "CFRTextBegin";
-			//
-			//CFRTextEnd
-			//
+			// 
+			// CFRTextEnd
+			// 
 			this.CFRTextEnd.ColumnName = "CFRTextEnd";
-			//
-			//CFRCostName
-			//
+			// 
+			// CFRCostName
+			// 
 			this.CFRCostName.AllowDBNull = false;
 			this.CFRCostName.ColumnName = "CFRCostName";
-			//
-			//CFRPriceItemId
-			//
+			// 
+			// CFRPriceItemId
+			// 
 			this.CFRPriceItemId.ColumnName = "CFRPriceItemId";
 			this.CFRPriceItemId.DataType = typeof(long);
-			//
-			//CFRDeleted
-			//
+			// 
+			// CFRDeleted
+			// 
 			this.CFRDeleted.AllowDBNull = false;
 			this.CFRDeleted.ColumnName = "CFRDeleted";
 			this.CFRDeleted.DataType = typeof(bool);
 			this.CFRDeleted.DefaultValue = false;
-			//
-			//CFRRegionBaseCost
-			//
+			// 
+			// CFRRegionBaseCost
+			// 
 			this.CFRRegionBaseCost.AllowDBNull = false;
 			this.CFRRegionBaseCost.Caption = "CFRRegionBaseCost";
 			this.CFRRegionBaseCost.ColumnName = "CFRRegionBaseCost";
 			this.CFRRegionBaseCost.DataType = typeof(bool);
 			this.CFRRegionBaseCost.DefaultValue = false;
-			//
-			//splitter1
-			//
+			// 
+			// splitter1
+			// 
 			this.splitter1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.splitter1.Location = new System.Drawing.Point(0, 419);
 			this.splitter1.Name = "splitter1";
 			this.splitter1.Size = new System.Drawing.Size(1317, 5);
 			this.splitter1.TabIndex = 7;
 			this.splitter1.TabStop = false;
-			//
-			//pnlGrid
-			//
+			// 
+			// pnlGrid
+			// 
 			this.pnlGrid.Controls.Add(this.indgvFirm);
 			this.pnlGrid.Controls.Add(this.panel3);
 			this.pnlGrid.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1377,9 +1379,9 @@ namespace FREditor
 			this.pnlGrid.Name = "pnlGrid";
 			this.pnlGrid.Size = new System.Drawing.Size(1317, 419);
 			this.pnlGrid.TabIndex = 5;
-			//
-			//indgvFirm
-			//
+			// 
+			// indgvFirm
+			// 
 			this.indgvFirm.AllowUserToAddRows = false;
 			this.indgvFirm.AllowUserToDeleteRows = false;
 			this.indgvFirm.AllowUserToResizeRows = false;
@@ -1410,7 +1412,7 @@ namespace FREditor
 			this.indgvFirm.DefaultCellStyle = dataGridViewCellStyle5;
 			this.indgvFirm.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.indgvFirm.HideEmptyColumns = false;
-			this.indgvFirm.Location = new System.Drawing.Point(0, 30);
+			this.indgvFirm.Location = new System.Drawing.Point(0, 60);
 			this.indgvFirm.Name = "indgvFirm";
 			this.indgvFirm.ReadOnly = true;
 			dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -1423,35 +1425,37 @@ namespace FREditor
 			this.indgvFirm.RowHeadersDefaultCellStyle = dataGridViewCellStyle6;
 			this.indgvFirm.RowHeadersVisible = false;
 			this.indgvFirm.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.indgvFirm.Size = new System.Drawing.Size(1317, 389);
+			this.indgvFirm.Size = new System.Drawing.Size(1317, 359);
 			this.indgvFirm.TabIndex = 2;
 			this.indgvFirm.DoubleClick += new System.EventHandler(this.indgvFirm_DoubleClick);
 			this.indgvFirm.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvFirm_KeyDown);
 			this.indgvFirm.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvFirm_KeyPress);
-			//
-			//cShortNameDataGridViewTextBoxColumn
-			//
+			// 
+			// cShortNameDataGridViewTextBoxColumn
+			// 
 			this.cShortNameDataGridViewTextBoxColumn.DataPropertyName = "CShortName";
 			this.cShortNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
 			this.cShortNameDataGridViewTextBoxColumn.Name = "cShortNameDataGridViewTextBoxColumn";
 			this.cShortNameDataGridViewTextBoxColumn.ReadOnly = true;
-			//
-			//cRegionDataGridViewTextBoxColumn
-			//
+			// 
+			// cRegionDataGridViewTextBoxColumn
+			// 
 			this.cRegionDataGridViewTextBoxColumn.DataPropertyName = "CRegion";
 			this.cRegionDataGridViewTextBoxColumn.HeaderText = "Регион";
 			this.cRegionDataGridViewTextBoxColumn.Name = "cRegionDataGridViewTextBoxColumn";
 			this.cRegionDataGridViewTextBoxColumn.ReadOnly = true;
-			//
-			//CSourceIndexViewTextBoxColumn
-			//
+			// 
+			// CSourceIndexViewTextBoxColumn
+			// 
 			this.CSourceIndexViewTextBoxColumn.DataPropertyName = "CSourceIndex";
 			this.CSourceIndexViewTextBoxColumn.HeaderText = "Источник";
 			this.CSourceIndexViewTextBoxColumn.Name = "CSourceIndexViewTextBoxColumn";
 			this.CSourceIndexViewTextBoxColumn.ReadOnly = true;
-			//
-			//panel3
-			//
+			// 
+			// panel3
+			// 
+			this.panel3.Controls.Add(this.cbSynonym);
+			this.panel3.Controls.Add(this.synonymLabel);
 			this.panel3.Controls.Add(this.createCostCollumnInManyFilesPrice);
 			this.panel3.Controls.Add(this.cbSource);
 			this.panel3.Controls.Add(this.label27);
@@ -1465,11 +1469,30 @@ namespace FREditor
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel3.Location = new System.Drawing.Point(0, 0);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(1317, 30);
+			this.panel3.Size = new System.Drawing.Size(1317, 60);
 			this.panel3.TabIndex = 4;
-			//
-			//createCostCollumnInManyFilesPrice
-			//
+			// 
+			// cbSynonym
+			// 
+			this.cbSynonym.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbSynonym.FormattingEnabled = true;
+			this.cbSynonym.Location = new System.Drawing.Point(302, 31);
+			this.cbSynonym.Name = "cbSynonym";
+			this.cbSynonym.Size = new System.Drawing.Size(121, 21);
+			this.cbSynonym.TabIndex = 13;
+			this.cbSynonym.SelectedValueChanged += new System.EventHandler(this.cbSynonym_SelectedValueChanged);
+			// 
+			// synonymLabel
+			// 
+			this.synonymLabel.AutoSize = true;
+			this.synonymLabel.Location = new System.Drawing.Point(218, 34);
+			this.synonymLabel.Name = "synonymLabel";
+			this.synonymLabel.Size = new System.Drawing.Size(60, 13);
+			this.synonymLabel.TabIndex = 12;
+			this.synonymLabel.Text = "Синонимы";
+			// 
+			// createCostCollumnInManyFilesPrice
+			// 
 			this.createCostCollumnInManyFilesPrice.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.createCostCollumnInManyFilesPrice.Enabled = false;
 			this.createCostCollumnInManyFilesPrice.Location = new System.Drawing.Point(834, 5);
@@ -1479,28 +1502,28 @@ namespace FREditor
 			this.createCostCollumnInManyFilesPrice.Text = "Создать ценовую колонку";
 			this.createCostCollumnInManyFilesPrice.UseVisualStyleBackColor = true;
 			this.createCostCollumnInManyFilesPrice.Click += new System.EventHandler(this.createCostCollumnInManyFilesPrice_Click);
-			//
-			//cbSource
-			//
+			// 
+			// cbSource
+			// 
 			this.cbSource.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbSource.FormattingEnabled = true;
-			this.cbSource.Location = new System.Drawing.Point(471, 4);
+			this.cbSource.Location = new System.Drawing.Point(302, 3);
 			this.cbSource.Name = "cbSource";
 			this.cbSource.Size = new System.Drawing.Size(121, 21);
 			this.cbSource.TabIndex = 10;
 			this.cbSource.SelectedValueChanged += new System.EventHandler(this.cbSource_SelectedValueChanged);
-			//
-			//label27
-			//
+			// 
+			// label27
+			// 
 			this.label27.AutoSize = true;
-			this.label27.Location = new System.Drawing.Point(407, 11);
+			this.label27.Location = new System.Drawing.Point(218, 8);
 			this.label27.Name = "label27";
 			this.label27.Size = new System.Drawing.Size(58, 13);
 			this.label27.TabIndex = 9;
 			this.label27.Text = "Источник:";
-			//
-			//buttonCreateMail
-			//
+			// 
+			// buttonCreateMail
+			// 
 			this.buttonCreateMail.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonCreateMail.Location = new System.Drawing.Point(1010, 5);
 			this.buttonCreateMail.Name = "buttonCreateMail";
@@ -1510,9 +1533,9 @@ namespace FREditor
 			this.ttMain.SetToolTip(this.buttonCreateMail, "Создать письмо ответственным за прайс-лист");
 			this.buttonCreateMail.UseVisualStyleBackColor = true;
 			this.buttonCreateMail.Click += new System.EventHandler(this.buttonCreateMail_Click);
-			//
-			//checkBoxShowDisabled
-			//
+			// 
+			// checkBoxShowDisabled
+			// 
 			this.checkBoxShowDisabled.AutoSize = true;
 			this.checkBoxShowDisabled.Location = new System.Drawing.Point(609, 7);
 			this.checkBoxShowDisabled.Name = "checkBoxShowDisabled";
@@ -1521,9 +1544,9 @@ namespace FREditor
 			this.checkBoxShowDisabled.Text = "Показывать недействующие";
 			this.checkBoxShowDisabled.UseVisualStyleBackColor = true;
 			this.checkBoxShowDisabled.CheckedChanged += new System.EventHandler(this.checkBoxShowDisabled_CheckedChanged);
-			//
-			//btnRetrancePrice
-			//
+			// 
+			// btnRetrancePrice
+			// 
 			this.btnRetrancePrice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.btnRetrancePrice.Location = new System.Drawing.Point(1151, 5);
 			this.btnRetrancePrice.Name = "btnRetrancePrice";
@@ -1532,45 +1555,45 @@ namespace FREditor
 			this.btnRetrancePrice.Text = "Переподложить прайс";
 			this.btnRetrancePrice.UseVisualStyleBackColor = true;
 			this.btnRetrancePrice.Click += new System.EventHandler(this.btnRetrancePrice_Click);
-			//
-			//cbRegions
-			//
+			// 
+			// cbRegions
+			// 
 			this.cbRegions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbRegions.FormattingEnabled = true;
-			this.cbRegions.Location = new System.Drawing.Point(275, 5);
+			this.cbRegions.Location = new System.Drawing.Point(90, 31);
 			this.cbRegions.Name = "cbRegions";
-			this.cbRegions.Size = new System.Drawing.Size(121, 21);
+			this.cbRegions.Size = new System.Drawing.Size(122, 21);
 			this.cbRegions.TabIndex = 3;
 			this.cbRegions.SelectedValueChanged += new System.EventHandler(this.cbRegions_SelectedValueChanged);
-			//
-			//label22
-			//
+			// 
+			// label22
+			// 
 			this.label22.AutoSize = true;
-			this.label22.Location = new System.Drawing.Point(223, 11);
+			this.label22.Location = new System.Drawing.Point(4, 34);
 			this.label22.Name = "label22";
 			this.label22.Size = new System.Drawing.Size(46, 13);
 			this.label22.TabIndex = 2;
 			this.label22.Text = "Регион:";
-			//
-			//label13
-			//
+			// 
+			// label13
+			// 
 			this.label13.AutoSize = true;
 			this.label13.Location = new System.Drawing.Point(4, 8);
 			this.label13.Name = "label13";
 			this.label13.Size = new System.Drawing.Size(86, 13);
 			this.label13.TabIndex = 1;
 			this.label13.Text = "Наименование:";
-			//
-			//tbFirmName
-			//
+			// 
+			// tbFirmName
+			// 
 			this.tbFirmName.Location = new System.Drawing.Point(90, 5);
 			this.tbFirmName.Name = "tbFirmName";
 			this.tbFirmName.Size = new System.Drawing.Size(122, 20);
 			this.tbFirmName.TabIndex = 0;
 			this.tbFirmName.TextChanged += new System.EventHandler(this.tbFirmName_TextChanged);
-			//
-			//tpPrice
-			//
+			// 
+			// tpPrice
+			// 
 			this.tpPrice.Controls.Add(this.pnlFloat);
 			this.tpPrice.Controls.Add(this.tcInnerTable);
 			this.tpPrice.Controls.Add(this.btnFloatPanel);
@@ -1580,18 +1603,18 @@ namespace FREditor
 			this.tpPrice.Size = new System.Drawing.Size(1317, 702);
 			this.tpPrice.TabIndex = 1;
 			this.tpPrice.Text = "Прайс";
-			//
-			//pnlFloat
-			//
+			// 
+			// pnlFloat
+			// 
 			this.pnlFloat.Controls.Add(this.grpbGeneral);
 			this.pnlFloat.Dock = System.Windows.Forms.DockStyle.Right;
 			this.pnlFloat.Location = new System.Drawing.Point(1061, 0);
 			this.pnlFloat.Name = "pnlFloat";
 			this.pnlFloat.Size = new System.Drawing.Size(232, 507);
 			this.pnlFloat.TabIndex = 4;
-			//
-			//grpbGeneral
-			//
+			// 
+			// grpbGeneral
+			// 
 			this.grpbGeneral.Controls.Add(this.MatchPriceButton);
 			this.grpbGeneral.Controls.Add(this.SavePriceButton);
 			this.grpbGeneral.Controls.Add(this.btnPutToBase);
@@ -1607,9 +1630,9 @@ namespace FREditor
 			this.grpbGeneral.TabIndex = 0;
 			this.grpbGeneral.TabStop = false;
 			this.grpbGeneral.Text = "Общая информация по прайс-листу";
-			//
-			//MatchPriceButton
-			//
+			// 
+			// MatchPriceButton
+			// 
 			this.MatchPriceButton.Location = new System.Drawing.Point(21, 134);
 			this.MatchPriceButton.Name = "MatchPriceButton";
 			this.MatchPriceButton.Size = new System.Drawing.Size(200, 24);
@@ -1617,9 +1640,9 @@ namespace FREditor
 			this.MatchPriceButton.Text = "Сопоставить синонимы";
 			this.MatchPriceButton.UseVisualStyleBackColor = true;
 			this.MatchPriceButton.Click += new System.EventHandler(this.MatchPriceButton_Click);
-			//
-			//SavePriceButton
-			//
+			// 
+			// SavePriceButton
+			// 
 			this.SavePriceButton.Location = new System.Drawing.Point(20, 104);
 			this.SavePriceButton.Name = "SavePriceButton";
 			this.SavePriceButton.Size = new System.Drawing.Size(200, 24);
@@ -1627,9 +1650,9 @@ namespace FREditor
 			this.SavePriceButton.Text = "Сохранить текущий прайс";
 			this.SavePriceButton.UseVisualStyleBackColor = true;
 			this.SavePriceButton.Click += new System.EventHandler(this.SavePriceButton_Click);
-			//
-			//btnPutToBase
-			//
+			// 
+			// btnPutToBase
+			// 
 			this.btnPutToBase.Location = new System.Drawing.Point(20, 75);
 			this.btnPutToBase.Name = "btnPutToBase";
 			this.btnPutToBase.Size = new System.Drawing.Size(200, 23);
@@ -1637,10 +1660,10 @@ namespace FREditor
 			this.btnPutToBase.Text = "Поместить прайс в Base";
 			this.btnPutToBase.UseVisualStyleBackColor = true;
 			this.btnPutToBase.Click += new System.EventHandler(this.btnPutToBase_Click);
-			//
-			//groupBox1
-			//
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.groupBox1.Controls.Add(this.rtbArticle);
 			this.groupBox1.Controls.Add(this.lblArticle);
@@ -1651,10 +1674,10 @@ namespace FREditor
 			this.groupBox1.Size = new System.Drawing.Size(200, 168);
 			this.groupBox1.TabIndex = 32;
 			this.groupBox1.TabStop = false;
-			//
-			//rtbArticle
-			//
-			this.rtbArticle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			// 
+			// rtbArticle
+			// 
+			this.rtbArticle.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.rtbArticle.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRMemo", true));
 			this.rtbArticle.Location = new System.Drawing.Point(2, 74);
@@ -1663,22 +1686,22 @@ namespace FREditor
 			this.rtbArticle.TabIndex = 29;
 			this.rtbArticle.Text = "";
 			this.rtbArticle.TextChanged += new System.EventHandler(this.rtbArticle_TextChanged);
-			//
-			//bsFormRules
-			//
+			// 
+			// bsFormRules
+			// 
 			this.bsFormRules.DataMember = "Правила формализации";
 			this.bsFormRules.DataSource = this.dtSet;
-			//
-			//lblArticle
-			//
+			// 
+			// lblArticle
+			// 
 			this.lblArticle.Location = new System.Drawing.Point(6, 55);
 			this.lblArticle.Name = "lblArticle";
 			this.lblArticle.Size = new System.Drawing.Size(64, 16);
 			this.lblArticle.TabIndex = 28;
 			this.lblArticle.Text = "Заметки :";
-			//
-			//lLblMaster
-			//
+			// 
+			// lLblMaster
+			// 
 			this.lLblMaster.Location = new System.Drawing.Point(6, 39);
 			this.lLblMaster.Name = "lLblMaster";
 			this.lLblMaster.Size = new System.Drawing.Size(168, 16);
@@ -1687,17 +1710,17 @@ namespace FREditor
 			this.lLblMaster.Text = "Создать письмо";
 			this.ttMain.SetToolTip(this.lLblMaster, "Создать письмо ответственным за прайс-лист");
 			this.lLblMaster.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lLblMaster_LinkClicked);
-			//
-			//lblMaster
-			//
+			// 
+			// lblMaster
+			// 
 			this.lblMaster.Location = new System.Drawing.Point(6, 16);
 			this.lblMaster.Name = "lblMaster";
 			this.lblMaster.Size = new System.Drawing.Size(168, 23);
 			this.lblMaster.TabIndex = 16;
 			this.lblMaster.Text = "Ответственный за прайс-лист :";
-			//
-			//grpbParent
-			//
+			// 
+			// grpbParent
+			// 
 			this.grpbParent.Controls.Add(this.cmbParentSynonyms);
 			this.grpbParent.Location = new System.Drawing.Point(20, 275);
 			this.grpbParent.Name = "grpbParent";
@@ -1705,9 +1728,9 @@ namespace FREditor
 			this.grpbParent.TabIndex = 31;
 			this.grpbParent.TabStop = false;
 			this.grpbParent.Text = "Родительские синонимы";
-			//
-			//cmbParentSynonyms
-			//
+			// 
+			// cmbParentSynonyms
+			// 
 			this.cmbParentSynonyms.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRSynonyms", true));
 			this.cmbParentSynonyms.FormattingEnabled = true;
 			this.cmbParentSynonyms.Location = new System.Drawing.Point(6, 19);
@@ -1715,9 +1738,9 @@ namespace FREditor
 			this.cmbParentSynonyms.Size = new System.Drawing.Size(188, 21);
 			this.cmbParentSynonyms.TabIndex = 5;
 			this.cmbParentSynonyms.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cmbParentSynonyms_KeyDown);
-			//
-			//groupBox2
-			//
+			// 
+			// groupBox2
+			// 
 			this.groupBox2.Controls.Add(this.lblDevider);
 			this.groupBox2.Controls.Add(this.tbDevider);
 			this.groupBox2.Controls.Add(this.lblPosition);
@@ -1729,18 +1752,18 @@ namespace FREditor
 			this.groupBox2.Size = new System.Drawing.Size(200, 114);
 			this.groupBox2.TabIndex = 30;
 			this.groupBox2.TabStop = false;
-			//
-			//lblDevider
-			//
+			// 
+			// lblDevider
+			// 
 			this.lblDevider.Location = new System.Drawing.Point(6, 80);
 			this.lblDevider.Name = "lblDevider";
 			this.lblDevider.Size = new System.Drawing.Size(80, 20);
 			this.lblDevider.TabIndex = 16;
 			this.lblDevider.Text = "Разделитель :";
 			this.lblDevider.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//tbDevider
-			//
+			// 
+			// tbDevider
+			// 
 			this.tbDevider.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRDelimiter", true));
 			this.tbDevider.Location = new System.Drawing.Point(92, 80);
 			this.tbDevider.Name = "tbDevider";
@@ -1748,36 +1771,36 @@ namespace FREditor
 			this.tbDevider.TabIndex = 15;
 			this.tbDevider.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
 			this.tbDevider.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbDevider_KeyDown);
-			//
-			//lblPosition
-			//
+			// 
+			// lblPosition
+			// 
 			this.lblPosition.Location = new System.Drawing.Point(30, 48);
 			this.lblPosition.Name = "lblPosition";
 			this.lblPosition.Size = new System.Drawing.Size(56, 20);
 			this.lblPosition.TabIndex = 14;
 			this.lblPosition.Text = "Позиций :";
 			this.lblPosition.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//tbPosition
-			//
+			// 
+			// tbPosition
+			// 
 			this.tbPosition.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRPosNum", true));
 			this.tbPosition.Location = new System.Drawing.Point(92, 48);
 			this.tbPosition.Name = "tbPosition";
 			this.tbPosition.Size = new System.Drawing.Size(92, 20);
 			this.tbPosition.TabIndex = 13;
 			this.tbPosition.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
-			//
-			//lblFormat
-			//
+			// 
+			// lblFormat
+			// 
 			this.lblFormat.Location = new System.Drawing.Point(30, 16);
 			this.lblFormat.Name = "lblFormat";
 			this.lblFormat.Size = new System.Drawing.Size(56, 21);
 			this.lblFormat.TabIndex = 9;
 			this.lblFormat.Text = "Формат :";
 			this.lblFormat.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//cmbFormat
-			//
+			// 
+			// cmbFormat
+			// 
 			this.cmbFormat.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRPriceFormatId", true));
 			this.cmbFormat.DataSource = this.dtSet;
 			this.cmbFormat.DisplayMember = "Форматы прайса.FMTFormat";
@@ -1789,26 +1812,26 @@ namespace FREditor
 			this.cmbFormat.TabIndex = 8;
 			this.cmbFormat.ValueMember = "Форматы прайса.FMTId";
 			this.cmbFormat.MouseEnter += new System.EventHandler(this.cmbFormat_MouseEnter);
-			//
-			//lblPriceName
-			//
+			// 
+			// lblPriceName
+			// 
 			this.lblPriceName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRName", true));
 			this.lblPriceName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.lblPriceName.Location = new System.Drawing.Point(23, 32);
 			this.lblPriceName.Name = "lblPriceName";
 			this.lblPriceName.Size = new System.Drawing.Size(184, 49);
 			this.lblPriceName.TabIndex = 29;
-			//
-			//lblNameFirm
-			//
+			// 
+			// lblNameFirm
+			// 
 			this.lblNameFirm.Location = new System.Drawing.Point(17, 16);
 			this.lblNameFirm.Name = "lblNameFirm";
 			this.lblNameFirm.Size = new System.Drawing.Size(64, 16);
 			this.lblNameFirm.TabIndex = 28;
 			this.lblNameFirm.Text = "Название :";
-			//
-			//tcInnerTable
-			//
+			// 
+			// tcInnerTable
+			// 
 			this.tcInnerTable.Appearance = System.Windows.Forms.TabAppearance.Buttons;
 			this.tcInnerTable.Controls.Add(this.tbpTable);
 			this.tcInnerTable.Controls.Add(this.tbpMarking);
@@ -1821,9 +1844,9 @@ namespace FREditor
 			this.tcInnerTable.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
 			this.tcInnerTable.TabIndex = 3;
 			this.tcInnerTable.SelectedIndexChanged += new System.EventHandler(this.tcInnerTable_SelectedIndexChanged);
-			//
-			//tbpTable
-			//
+			// 
+			// tbpTable
+			// 
 			this.tbpTable.Controls.Add(this.tcInnerSheets);
 			this.tbpTable.Controls.Add(this.panel4);
 			this.tbpTable.Location = new System.Drawing.Point(4, 5);
@@ -1831,9 +1854,9 @@ namespace FREditor
 			this.tbpTable.Size = new System.Drawing.Size(1285, 498);
 			this.tbpTable.TabIndex = 0;
 			this.tbpTable.Text = "Таблица";
-			//
-			//tcInnerSheets
-			//
+			// 
+			// tcInnerSheets
+			// 
 			this.tcInnerSheets.Appearance = System.Windows.Forms.TabAppearance.Buttons;
 			this.tcInnerSheets.Controls.Add(this.tbpSheet1);
 			this.tcInnerSheets.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1846,18 +1869,18 @@ namespace FREditor
 			this.tcInnerSheets.TabIndex = 1;
 			this.tcInnerSheets.SelectedIndexChanged += new System.EventHandler(this.tcInnerSheets_SelectedIndexChanged);
 			this.tcInnerSheets.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tcInnerSheets_MouseDown);
-			//
-			//tbpSheet1
-			//
+			// 
+			// tbpSheet1
+			// 
 			this.tbpSheet1.Controls.Add(this.indgvPriceData);
 			this.tbpSheet1.Location = new System.Drawing.Point(4, 5);
 			this.tbpSheet1.Name = "tbpSheet1";
 			this.tbpSheet1.Size = new System.Drawing.Size(1277, 462);
 			this.tbpSheet1.TabIndex = 0;
 			this.tbpSheet1.Text = "sheet1";
-			//
-			//indgvPriceData
-			//
+			// 
+			// indgvPriceData
+			// 
 			dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
 			dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -1895,9 +1918,9 @@ namespace FREditor
 			this.indgvPriceData.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvPriceData_KeyDown);
 			this.indgvPriceData.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.indgvPriceData_KeyPress);
 			this.indgvPriceData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.indgvPriceData_MouseDown);
-			//
-			//panel4
-			//
+			// 
+			// panel4
+			// 
 			this.panel4.Controls.Add(this.buttonSearchNext);
 			this.panel4.Controls.Add(this.tbSearchInPrice);
 			this.panel4.Controls.Add(this.label23);
@@ -1906,9 +1929,9 @@ namespace FREditor
 			this.panel4.Name = "panel4";
 			this.panel4.Size = new System.Drawing.Size(1285, 27);
 			this.panel4.TabIndex = 0;
-			//
-			//buttonSearchNext
-			//
+			// 
+			// buttonSearchNext
+			// 
 			this.buttonSearchNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.buttonSearchNext.Location = new System.Drawing.Point(272, 1);
 			this.buttonSearchNext.Name = "buttonSearchNext";
@@ -1917,9 +1940,9 @@ namespace FREditor
 			this.buttonSearchNext.Text = "Искать следующее";
 			this.buttonSearchNext.UseVisualStyleBackColor = true;
 			this.buttonSearchNext.Click += new System.EventHandler(this.buttonSearchNext_Click);
-			//
-			//tbSearchInPrice
-			//
+			// 
+			// tbSearchInPrice
+			// 
 			this.tbSearchInPrice.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tbSearchInPrice.Location = new System.Drawing.Point(51, 3);
 			this.tbSearchInPrice.Name = "tbSearchInPrice";
@@ -1927,18 +1950,18 @@ namespace FREditor
 			this.tbSearchInPrice.TabIndex = 3;
 			this.tbSearchInPrice.TextChanged += new System.EventHandler(this.tbSearchInPrice_TextChanged);
 			this.tbSearchInPrice.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearchInPrice_KeyDown);
-			//
-			//label23
-			//
+			// 
+			// label23
+			// 
 			this.label23.AutoSize = true;
 			this.label23.Location = new System.Drawing.Point(4, 5);
 			this.label23.Name = "label23";
 			this.label23.Size = new System.Drawing.Size(39, 13);
 			this.label23.TabIndex = 2;
 			this.label23.Text = "Поиск";
-			//
-			//tbpMarking
-			//
+			// 
+			// tbpMarking
+			// 
 			this.tbpMarking.Controls.Add(this.indgvMarking);
 			this.tbpMarking.Location = new System.Drawing.Point(4, 5);
 			this.tbpMarking.Name = "tbpMarking";
@@ -1946,9 +1969,9 @@ namespace FREditor
 			this.tbpMarking.TabIndex = 1;
 			this.tbpMarking.Text = "Разметка";
 			this.tbpMarking.Visible = false;
-			//
-			//indgvMarking
-			//
+			// 
+			// indgvMarking
+			// 
 			this.indgvMarking.AllowDrop = true;
 			this.indgvMarking.AllowUserToResizeRows = false;
 			this.indgvMarking.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -1988,27 +2011,27 @@ namespace FREditor
 			this.indgvMarking.Size = new System.Drawing.Size(1285, 498);
 			this.indgvMarking.TabIndex = 7;
 			this.indgvMarking.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.InDataGridViewMarking_CellValidating);
-			//
-			//MNameFieldINDataGridViewTextBoxColumn
-			//
+			// 
+			// MNameFieldINDataGridViewTextBoxColumn
+			// 
 			this.MNameFieldINDataGridViewTextBoxColumn.DataPropertyName = "MNameField";
 			this.MNameFieldINDataGridViewTextBoxColumn.HeaderText = "Наименование колонки";
 			this.MNameFieldINDataGridViewTextBoxColumn.Name = "MNameFieldINDataGridViewTextBoxColumn";
-			//
-			//MBeginFieldINDataGridViewTextBoxColumn
-			//
+			// 
+			// MBeginFieldINDataGridViewTextBoxColumn
+			// 
 			this.MBeginFieldINDataGridViewTextBoxColumn.DataPropertyName = "MBeginField";
 			this.MBeginFieldINDataGridViewTextBoxColumn.HeaderText = "Начало";
 			this.MBeginFieldINDataGridViewTextBoxColumn.Name = "MBeginFieldINDataGridViewTextBoxColumn";
-			//
-			//MEndFieldINDataGridViewTextBoxColumn
-			//
+			// 
+			// MEndFieldINDataGridViewTextBoxColumn
+			// 
 			this.MEndFieldINDataGridViewTextBoxColumn.DataPropertyName = "MEndField";
 			this.MEndFieldINDataGridViewTextBoxColumn.HeaderText = "Конец";
 			this.MEndFieldINDataGridViewTextBoxColumn.Name = "MEndFieldINDataGridViewTextBoxColumn";
-			//
-			//btnFloatPanel
-			//
+			// 
+			// btnFloatPanel
+			// 
 			this.btnFloatPanel.Dock = System.Windows.Forms.DockStyle.Right;
 			this.btnFloatPanel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.btnFloatPanel.Location = new System.Drawing.Point(1293, 0);
@@ -2018,9 +2041,9 @@ namespace FREditor
 			this.btnFloatPanel.TabIndex = 1;
 			this.btnFloatPanel.Click += new System.EventHandler(this.btnFloatPanel_Click);
 			this.btnFloatPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.btnFloatPanel_Paint);
-			//
-			//panel1
-			//
+			// 
+			// panel1
+			// 
 			this.panel1.Controls.Add(this.pCosts);
 			this.panel1.Controls.Add(this.grpbFields);
 			this.panel1.Controls.Add(this.grpbSettings);
@@ -2029,9 +2052,9 @@ namespace FREditor
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(1317, 195);
 			this.panel1.TabIndex = 0;
-			//
-			//pCosts
-			//
+			// 
+			// pCosts
+			// 
 			this.pCosts.Controls.Add(this.indgvCosts);
 			this.pCosts.Controls.Add(this.pCostFind);
 			this.pCosts.Controls.Add(this.lCostCount);
@@ -2041,9 +2064,9 @@ namespace FREditor
 			this.pCosts.Name = "pCosts";
 			this.pCosts.Size = new System.Drawing.Size(403, 195);
 			this.pCosts.TabIndex = 7;
-			//
-			//indgvCosts
-			//
+			// 
+			// indgvCosts
+			// 
 			this.indgvCosts.AllowDrop = true;
 			this.indgvCosts.AllowUserToDeleteRows = false;
 			this.indgvCosts.AutoGenerateColumns = false;
@@ -2095,56 +2118,56 @@ namespace FREditor
 			this.indgvCosts.DragEnter += new System.Windows.Forms.DragEventHandler(this.indgvCosts_DragEnter);
 			this.indgvCosts.DragOver += new System.Windows.Forms.DragEventHandler(this.indgvCosts_DragOver);
 			this.indgvCosts.KeyDown += new System.Windows.Forms.KeyEventHandler(this.indgvCosts_KeyDown);
-			//
-			//cFRCostNameDataGridViewTextBoxColumn
-			//
+			// 
+			// cFRCostNameDataGridViewTextBoxColumn
+			// 
 			this.cFRCostNameDataGridViewTextBoxColumn.DataPropertyName = "CFRCostName";
 			this.cFRCostNameDataGridViewTextBoxColumn.HeaderText = "Наименование";
 			this.cFRCostNameDataGridViewTextBoxColumn.Name = "cFRCostNameDataGridViewTextBoxColumn";
 			this.cFRCostNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			//
-			//cFRFieldNameDataGridViewTextBoxColumn
-			//
+			// 
+			// cFRFieldNameDataGridViewTextBoxColumn
+			// 
 			this.cFRFieldNameDataGridViewTextBoxColumn.DataPropertyName = "CFRFieldName";
 			this.cFRFieldNameDataGridViewTextBoxColumn.HeaderText = "Поле";
 			this.cFRFieldNameDataGridViewTextBoxColumn.Name = "cFRFieldNameDataGridViewTextBoxColumn";
 			this.cFRFieldNameDataGridViewTextBoxColumn.ReadOnly = true;
 			this.cFRFieldNameDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			//
-			//cFRTextBeginDataGridViewTextBoxColumn
-			//
+			// 
+			// cFRTextBeginDataGridViewTextBoxColumn
+			// 
 			this.cFRTextBeginDataGridViewTextBoxColumn.DataPropertyName = "CFRTextBegin";
 			this.cFRTextBeginDataGridViewTextBoxColumn.HeaderText = "Начало";
 			this.cFRTextBeginDataGridViewTextBoxColumn.Name = "cFRTextBeginDataGridViewTextBoxColumn";
 			this.cFRTextBeginDataGridViewTextBoxColumn.ReadOnly = true;
 			this.cFRTextBeginDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			//
-			//cFRTextEndDataGridViewTextBoxColumn
-			//
+			// 
+			// cFRTextEndDataGridViewTextBoxColumn
+			// 
 			this.cFRTextEndDataGridViewTextBoxColumn.DataPropertyName = "CFRTextEnd";
 			this.cFRTextEndDataGridViewTextBoxColumn.HeaderText = "Конец";
 			this.cFRTextEndDataGridViewTextBoxColumn.Name = "cFRTextEndDataGridViewTextBoxColumn";
 			this.cFRTextEndDataGridViewTextBoxColumn.ReadOnly = true;
 			this.cFRTextEndDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-			//
-			//bsCostsFormRules
-			//
+			// 
+			// bsCostsFormRules
+			// 
 			this.bsCostsFormRules.DataMember = "Правила формализации цен";
 			this.bsCostsFormRules.DataSource = this.dtSet;
 			this.bsCostsFormRules.ListChanged += new System.ComponentModel.ListChangedEventHandler(this.bsCostsFormRules_ListChanged);
-			//
-			//pCostFind
-			//
+			// 
+			// pCostFind
+			// 
 			this.pCostFind.Controls.Add(this.tbCostFind);
 			this.pCostFind.Dock = System.Windows.Forms.DockStyle.Top;
 			this.pCostFind.Location = new System.Drawing.Point(0, 0);
 			this.pCostFind.Name = "pCostFind";
 			this.pCostFind.Size = new System.Drawing.Size(310, 31);
 			this.pCostFind.TabIndex = 9;
-			//
-			//tbCostFind
-			//
-			this.tbCostFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			// 
+			// tbCostFind
+			// 
+			this.tbCostFind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbCostFind.Location = new System.Drawing.Point(4, 4);
 			this.tbCostFind.Name = "tbCostFind";
@@ -2152,9 +2175,9 @@ namespace FREditor
 			this.tbCostFind.TabIndex = 0;
 			this.tbCostFind.TextChanged += new System.EventHandler(this.tbCostFind_TextChanged);
 			this.tbCostFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbCostFind_KeyDown);
-			//
-			//lCostCount
-			//
+			// 
+			// lCostCount
+			// 
 			this.lCostCount.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.lCostCount.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.lCostCount.Location = new System.Drawing.Point(0, 178);
@@ -2164,9 +2187,9 @@ namespace FREditor
 			this.lCostCount.Text = "lCostCount";
 			this.lCostCount.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.lCostCount.TextChanged += new System.EventHandler(this.lCostCount_TextChanged);
-			//
-			//gbCostLegends
-			//
+			// 
+			// gbCostLegends
+			// 
 			this.gbCostLegends.Controls.Add(this.createNewPriceCollumn);
 			this.gbCostLegends.Controls.Add(this.btnDeletedCostColor);
 			this.gbCostLegends.Controls.Add(this.btnChangedCostColor);
@@ -2179,9 +2202,9 @@ namespace FREditor
 			this.gbCostLegends.TabIndex = 7;
 			this.gbCostLegends.TabStop = false;
 			this.gbCostLegends.Text = "Легенда";
-			//
-			//createNewPriceCollumn
-			//
+			// 
+			// createNewPriceCollumn
+			// 
 			this.createNewPriceCollumn.Location = new System.Drawing.Point(6, 133);
 			this.createNewPriceCollumn.Name = "createNewPriceCollumn";
 			this.createNewPriceCollumn.Size = new System.Drawing.Size(81, 54);
@@ -2189,9 +2212,9 @@ namespace FREditor
 			this.createNewPriceCollumn.Text = "Создать ценовую колонку";
 			this.createNewPriceCollumn.UseVisualStyleBackColor = true;
 			this.createNewPriceCollumn.Click += new System.EventHandler(this.createNewPriceCollumn_Click);
-			//
-			//btnDeletedCostColor
-			//
+			// 
+			// btnDeletedCostColor
+			// 
 			this.btnDeletedCostColor.BackColor = global::FREditor.Properties.Settings.Default.DeletedCostColor;
 			this.btnDeletedCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::FREditor.Properties.Settings.Default, "DeletedCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.btnDeletedCostColor.Location = new System.Drawing.Point(6, 106);
@@ -2201,9 +2224,9 @@ namespace FREditor
 			this.btnDeletedCostColor.Text = "Удаленная";
 			this.btnDeletedCostColor.UseVisualStyleBackColor = false;
 			this.btnDeletedCostColor.Click += new System.EventHandler(this.ColorChange);
-			//
-			//btnChangedCostColor
-			//
+			// 
+			// btnChangedCostColor
+			// 
 			this.btnChangedCostColor.BackColor = global::FREditor.Properties.Settings.Default.ChangedCostColor;
 			this.btnChangedCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::FREditor.Properties.Settings.Default, "ChangedCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.btnChangedCostColor.Location = new System.Drawing.Point(6, 77);
@@ -2213,9 +2236,9 @@ namespace FREditor
 			this.btnChangedCostColor.Text = "Измененная";
 			this.btnChangedCostColor.UseVisualStyleBackColor = false;
 			this.btnChangedCostColor.Click += new System.EventHandler(this.ColorChange);
-			//
-			//btnNewCostColor
-			//
+			// 
+			// btnNewCostColor
+			// 
 			this.btnNewCostColor.BackColor = global::FREditor.Properties.Settings.Default.NewCostColor;
 			this.btnNewCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::FREditor.Properties.Settings.Default, "NewCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.btnNewCostColor.Location = new System.Drawing.Point(6, 48);
@@ -2225,9 +2248,9 @@ namespace FREditor
 			this.btnNewCostColor.Text = "Новая";
 			this.btnNewCostColor.UseVisualStyleBackColor = false;
 			this.btnNewCostColor.Click += new System.EventHandler(this.ColorChange);
-			//
-			//btnBaseCostColor
-			//
+			// 
+			// btnBaseCostColor
+			// 
 			this.btnBaseCostColor.BackColor = global::FREditor.Properties.Settings.Default.BaseCostColor;
 			this.btnBaseCostColor.DataBindings.Add(new System.Windows.Forms.Binding("BackColor", global::FREditor.Properties.Settings.Default, "BaseCostColor", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
 			this.btnBaseCostColor.Location = new System.Drawing.Point(6, 19);
@@ -2237,9 +2260,9 @@ namespace FREditor
 			this.btnBaseCostColor.Text = "Базовая";
 			this.btnBaseCostColor.UseVisualStyleBackColor = false;
 			this.btnBaseCostColor.Click += new System.EventHandler(this.ColorChange);
-			//
-			//grpbFields
-			//
+			// 
+			// grpbFields
+			// 
 			this.grpbFields.Controls.Add(this.pnlTxtFields);
 			this.grpbFields.Controls.Add(this.pnlGeneralFields);
 			this.grpbFields.Dock = System.Windows.Forms.DockStyle.Left;
@@ -2249,9 +2272,9 @@ namespace FREditor
 			this.grpbFields.TabIndex = 4;
 			this.grpbFields.TabStop = false;
 			this.grpbFields.Text = "Поля";
-			//
-			//pnlTxtFields
-			//
+			// 
+			// pnlTxtFields
+			// 
 			this.pnlTxtFields.Controls.Add(this.textBoxNdsTxtEnd);
 			this.pnlTxtFields.Controls.Add(this.textBoxNdsTxtBegin);
 			this.pnlTxtFields.Controls.Add(this.labelTxtNds);
@@ -2320,9 +2343,9 @@ namespace FREditor
 			this.pnlTxtFields.Name = "pnlTxtFields";
 			this.pnlTxtFields.Size = new System.Drawing.Size(644, 176);
 			this.pnlTxtFields.TabIndex = 1;
-			//
-			//textBoxNdsTxtEnd
-			//
+			// 
+			// textBoxNdsTxtEnd
+			// 
 			this.textBoxNdsTxtEnd.AccessibleName = "NdsEnd";
 			this.textBoxNdsTxtEnd.AllowDrop = true;
 			this.textBoxNdsTxtEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNdsEnd", true));
@@ -2334,9 +2357,9 @@ namespace FREditor
 			this.textBoxNdsTxtEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.textBoxNdsTxtEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.textBoxNdsTxtEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//textBoxNdsTxtBegin
-			//
+			// 
+			// textBoxNdsTxtBegin
+			// 
 			this.textBoxNdsTxtBegin.AccessibleName = "NdsBegin";
 			this.textBoxNdsTxtBegin.AllowDrop = true;
 			this.textBoxNdsTxtBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNdsBegin", true));
@@ -2348,18 +2371,18 @@ namespace FREditor
 			this.textBoxNdsTxtBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.textBoxNdsTxtBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.textBoxNdsTxtBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//labelTxtNds
-			//
+			// 
+			// labelTxtNds
+			// 
 			this.labelTxtNds.Location = new System.Drawing.Point(326, 142);
 			this.labelTxtNds.Name = "labelTxtNds";
 			this.labelTxtNds.Size = new System.Drawing.Size(104, 23);
 			this.labelTxtNds.TabIndex = 128;
 			this.labelTxtNds.Text = "НДС :";
 			this.labelTxtNds.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//textBoxProducerCostTxtEnd
-			//
+			// 
+			// textBoxProducerCostTxtEnd
+			// 
 			this.textBoxProducerCostTxtEnd.AccessibleName = "ProducerCostEnd";
 			this.textBoxProducerCostTxtEnd.AllowDrop = true;
 			this.textBoxProducerCostTxtEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtProducerCostEnd", true));
@@ -2371,9 +2394,9 @@ namespace FREditor
 			this.textBoxProducerCostTxtEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.textBoxProducerCostTxtEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.textBoxProducerCostTxtEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//textBoxProducerCostTxtBegin
-			//
+			// 
+			// textBoxProducerCostTxtBegin
+			// 
 			this.textBoxProducerCostTxtBegin.AccessibleName = "ProducerCostBegin";
 			this.textBoxProducerCostTxtBegin.AllowDrop = true;
 			this.textBoxProducerCostTxtBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtProducerCostBegin", true));
@@ -2385,18 +2408,18 @@ namespace FREditor
 			this.textBoxProducerCostTxtBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.textBoxProducerCostTxtBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.textBoxProducerCostTxtBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//labelTxtProducerCost
-			//
+			// 
+			// labelTxtProducerCost
+			// 
 			this.labelTxtProducerCost.Location = new System.Drawing.Point(326, 119);
 			this.labelTxtProducerCost.Name = "labelTxtProducerCost";
 			this.labelTxtProducerCost.Size = new System.Drawing.Size(104, 23);
 			this.labelTxtProducerCost.TabIndex = 129;
 			this.labelTxtProducerCost.Text = "Цена производителя :";
 			this.labelTxtProducerCost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxMinOrderCountEnd
-			//
+			// 
+			// txtBoxMinOrderCountEnd
+			// 
 			this.txtBoxMinOrderCountEnd.AccessibleName = "MinOrderCountEnd";
 			this.txtBoxMinOrderCountEnd.AllowDrop = true;
 			this.txtBoxMinOrderCountEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMinOrderCountEnd", true));
@@ -2408,9 +2431,9 @@ namespace FREditor
 			this.txtBoxMinOrderCountEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxMinOrderCountEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxMinOrderCountEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxMinOrderCountBegin
-			//
+			// 
+			// txtBoxMinOrderCountBegin
+			// 
 			this.txtBoxMinOrderCountBegin.AccessibleName = "MinOrderCountBegin";
 			this.txtBoxMinOrderCountBegin.AllowDrop = true;
 			this.txtBoxMinOrderCountBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMinOrderCountBegin", true));
@@ -2422,18 +2445,18 @@ namespace FREditor
 			this.txtBoxMinOrderCountBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxMinOrderCountBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxMinOrderCountBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//label51
-			//
+			// 
+			// label51
+			// 
 			this.label51.Location = new System.Drawing.Point(326, 97);
 			this.label51.Name = "label51";
 			this.label51.Size = new System.Drawing.Size(104, 23);
 			this.label51.TabIndex = 116;
 			this.label51.Text = "Мин. количество :";
 			this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxOrderCostEnd
-			//
+			// 
+			// txtBoxOrderCostEnd
+			// 
 			this.txtBoxOrderCostEnd.AccessibleName = "OrderCostEnd";
 			this.txtBoxOrderCostEnd.AllowDrop = true;
 			this.txtBoxOrderCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtOrderCostEnd", true));
@@ -2445,9 +2468,9 @@ namespace FREditor
 			this.txtBoxOrderCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxOrderCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxOrderCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxOrderCostBegin
-			//
+			// 
+			// txtBoxOrderCostBegin
+			// 
 			this.txtBoxOrderCostBegin.AccessibleName = "OrderCostBegin";
 			this.txtBoxOrderCostBegin.AllowDrop = true;
 			this.txtBoxOrderCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtOrderCostBegin", true));
@@ -2459,18 +2482,18 @@ namespace FREditor
 			this.txtBoxOrderCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxOrderCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxOrderCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//label49
-			//
+			// 
+			// label49
+			// 
 			this.label49.Location = new System.Drawing.Point(326, 74);
 			this.label49.Name = "label49";
 			this.label49.Size = new System.Drawing.Size(104, 23);
 			this.label49.TabIndex = 113;
 			this.label49.Text = "Мин. сумма :";
 			this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxMaxBoundCostEnd
-			//
+			// 
+			// txtBoxMaxBoundCostEnd
+			// 
 			this.txtBoxMaxBoundCostEnd.AccessibleName = "MaxBoundCostEnd";
 			this.txtBoxMaxBoundCostEnd.AllowDrop = true;
 			this.txtBoxMaxBoundCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMaxBoundCostEnd", true));
@@ -2482,9 +2505,9 @@ namespace FREditor
 			this.txtBoxMaxBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxMaxBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxMaxBoundCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxMaxBoundCostBegin
-			//
+			// 
+			// txtBoxMaxBoundCostBegin
+			// 
 			this.txtBoxMaxBoundCostBegin.AccessibleName = "MaxBoundCostBegin";
 			this.txtBoxMaxBoundCostBegin.AllowDrop = true;
 			this.txtBoxMaxBoundCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMaxBoundCostBegin", true));
@@ -2496,18 +2519,18 @@ namespace FREditor
 			this.txtBoxMaxBoundCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxMaxBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxMaxBoundCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//label45
-			//
+			// 
+			// label45
+			// 
 			this.label45.Location = new System.Drawing.Point(326, 51);
 			this.label45.Name = "label45";
 			this.label45.Size = new System.Drawing.Size(104, 23);
 			this.label45.TabIndex = 110;
 			this.label45.Text = "Цена макс. :";
 			this.label45.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxVitalyImportantEnd
-			//
+			// 
+			// txtBoxVitalyImportantEnd
+			// 
 			this.txtBoxVitalyImportantEnd.AccessibleName = "VitalyImportantEnd";
 			this.txtBoxVitalyImportantEnd.AllowDrop = true;
 			this.txtBoxVitalyImportantEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVitallyImportantEnd", true));
@@ -2519,9 +2542,9 @@ namespace FREditor
 			this.txtBoxVitalyImportantEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxVitalyImportantEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxVitalyImportantEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxVitalyImportantBegin
-			//
+			// 
+			// txtBoxVitalyImportantBegin
+			// 
 			this.txtBoxVitalyImportantBegin.AccessibleName = "VitalyImportantBegin";
 			this.txtBoxVitalyImportantBegin.AllowDrop = true;
 			this.txtBoxVitalyImportantBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVitallyImportantBegin", true));
@@ -2533,9 +2556,9 @@ namespace FREditor
 			this.txtBoxVitalyImportantBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxVitalyImportantBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxVitalyImportantBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxRegistryCostEnd
-			//
+			// 
+			// txtBoxRegistryCostEnd
+			// 
 			this.txtBoxRegistryCostEnd.AccessibleName = "RegistryCostEnd";
 			this.txtBoxRegistryCostEnd.AllowDrop = true;
 			this.txtBoxRegistryCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRegistryCostEnd", true));
@@ -2547,9 +2570,9 @@ namespace FREditor
 			this.txtBoxRegistryCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxRegistryCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxRegistryCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxRegistryCostBegin
-			//
+			// 
+			// txtBoxRegistryCostBegin
+			// 
 			this.txtBoxRegistryCostBegin.AccessibleName = "RegistryCostBegin";
 			this.txtBoxRegistryCostBegin.AllowDrop = true;
 			this.txtBoxRegistryCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRegistryCostBegin", true));
@@ -2561,18 +2584,18 @@ namespace FREditor
 			this.txtBoxRegistryCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxRegistryCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxRegistryCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//label42
-			//
+			// 
+			// label42
+			// 
 			this.label42.Location = new System.Drawing.Point(350, 5);
 			this.label42.Name = "label42";
 			this.label42.Size = new System.Drawing.Size(80, 23);
 			this.label42.TabIndex = 101;
 			this.label42.Text = "Реестр. цена :";
 			this.label42.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxRequestRatioEnd
-			//
+			// 
+			// txtBoxRequestRatioEnd
+			// 
 			this.txtBoxRequestRatioEnd.AccessibleName = "RequestRatioEnd";
 			this.txtBoxRequestRatioEnd.AllowDrop = true;
 			this.txtBoxRequestRatioEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRequestRatioEnd", true));
@@ -2584,9 +2607,9 @@ namespace FREditor
 			this.txtBoxRequestRatioEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxRequestRatioEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxRequestRatioEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxRequestRatioBegin
-			//
+			// 
+			// txtBoxRequestRatioBegin
+			// 
 			this.txtBoxRequestRatioBegin.AccessibleName = "RequestRatioBegin";
 			this.txtBoxRequestRatioBegin.AllowDrop = true;
 			this.txtBoxRequestRatioBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtRequestRatioBegin", true));
@@ -2598,18 +2621,18 @@ namespace FREditor
 			this.txtBoxRequestRatioBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxRequestRatioBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxRequestRatioBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//label41
-			//
+			// 
+			// label41
+			// 
 			this.label41.Location = new System.Drawing.Point(158, 146);
 			this.label41.Name = "label41";
 			this.label41.Size = new System.Drawing.Size(95, 23);
 			this.label41.TabIndex = 98;
 			this.label41.Text = "Кратность :";
 			this.label41.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxAwaitEnd
-			//
+			// 
+			// txtBoxAwaitEnd
+			// 
 			this.txtBoxAwaitEnd.AccessibleName = "AwaitEnd";
 			this.txtBoxAwaitEnd.AllowDrop = true;
 			this.txtBoxAwaitEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtAwaitEnd", true));
@@ -2621,9 +2644,9 @@ namespace FREditor
 			this.txtBoxAwaitEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxAwaitEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxAwaitEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxJunkEnd
-			//
+			// 
+			// txtBoxJunkEnd
+			// 
 			this.txtBoxJunkEnd.AccessibleName = "JunkEnd";
 			this.txtBoxJunkEnd.AllowDrop = true;
 			this.txtBoxJunkEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtJunkEnd", true));
@@ -2635,9 +2658,9 @@ namespace FREditor
 			this.txtBoxJunkEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxJunkEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxJunkEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxAwaitBegin
-			//
+			// 
+			// txtBoxAwaitBegin
+			// 
 			this.txtBoxAwaitBegin.AccessibleName = "AwaitBegin";
 			this.txtBoxAwaitBegin.AllowDrop = true;
 			this.txtBoxAwaitBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtAwaitBegin", true));
@@ -2649,9 +2672,9 @@ namespace FREditor
 			this.txtBoxAwaitBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxAwaitBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxAwaitBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxJunkBegin
-			//
+			// 
+			// txtBoxJunkBegin
+			// 
 			this.txtBoxJunkBegin.AccessibleName = "JunkBegin";
 			this.txtBoxJunkBegin.AllowDrop = true;
 			this.txtBoxJunkBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtJunkBegin", true));
@@ -2663,9 +2686,9 @@ namespace FREditor
 			this.txtBoxJunkBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxJunkBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxJunkBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxMinBoundCostEnd
-			//
+			// 
+			// txtBoxMinBoundCostEnd
+			// 
 			this.txtBoxMinBoundCostEnd.AccessibleName = "MinBoundCostEnd";
 			this.txtBoxMinBoundCostEnd.AllowDrop = true;
 			this.txtBoxMinBoundCostEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMinBoundCostEnd", true));
@@ -2677,9 +2700,9 @@ namespace FREditor
 			this.txtBoxMinBoundCostEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxMinBoundCostEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxMinBoundCostEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxMinBoundCostBegin
-			//
+			// 
+			// txtBoxMinBoundCostBegin
+			// 
 			this.txtBoxMinBoundCostBegin.AccessibleName = "MinBoundCostBegin";
 			this.txtBoxMinBoundCostBegin.AllowDrop = true;
 			this.txtBoxMinBoundCostBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtMinBoundCostBegin", true));
@@ -2691,9 +2714,9 @@ namespace FREditor
 			this.txtBoxMinBoundCostBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxMinBoundCostBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxMinBoundCostBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxDocEnd
-			//
+			// 
+			// txtBoxDocEnd
+			// 
 			this.txtBoxDocEnd.AccessibleName = "DocEnd";
 			this.txtBoxDocEnd.AllowDrop = true;
 			this.txtBoxDocEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtDocEnd", true));
@@ -2705,9 +2728,9 @@ namespace FREditor
 			this.txtBoxDocEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxDocEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxDocEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxPeriodEnd
-			//
+			// 
+			// txtBoxPeriodEnd
+			// 
 			this.txtBoxPeriodEnd.AccessibleName = "PeriodEnd";
 			this.txtBoxPeriodEnd.AllowDrop = true;
 			this.txtBoxPeriodEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtPeriodEnd", true));
@@ -2719,9 +2742,9 @@ namespace FREditor
 			this.txtBoxPeriodEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxPeriodEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxPeriodEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxNoteEnd
-			//
+			// 
+			// txtBoxNoteEnd
+			// 
 			this.txtBoxNoteEnd.AccessibleName = "NoteEnd";
 			this.txtBoxNoteEnd.AllowDrop = true;
 			this.txtBoxNoteEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNoteEnd", true));
@@ -2733,9 +2756,9 @@ namespace FREditor
 			this.txtBoxNoteEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxNoteEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxNoteEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxDocBegin
-			//
+			// 
+			// txtBoxDocBegin
+			// 
 			this.txtBoxDocBegin.AccessibleName = "DocBegin";
 			this.txtBoxDocBegin.AllowDrop = true;
 			this.txtBoxDocBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtDocBegin", true));
@@ -2747,9 +2770,9 @@ namespace FREditor
 			this.txtBoxDocBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxDocBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxDocBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxPeriodBegin
-			//
+			// 
+			// txtBoxPeriodBegin
+			// 
 			this.txtBoxPeriodBegin.AccessibleName = "PeriodBegin";
 			this.txtBoxPeriodBegin.AllowDrop = true;
 			this.txtBoxPeriodBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtPeriodBegin", true));
@@ -2761,9 +2784,9 @@ namespace FREditor
 			this.txtBoxPeriodBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxPeriodBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxPeriodBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxNoteBegin
-			//
+			// 
+			// txtBoxNoteBegin
+			// 
 			this.txtBoxNoteBegin.AccessibleName = "NoteBegin";
 			this.txtBoxNoteBegin.AllowDrop = true;
 			this.txtBoxNoteBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNoteBegin", true));
@@ -2775,9 +2798,9 @@ namespace FREditor
 			this.txtBoxNoteBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxNoteBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxNoteBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxQuantityEnd
-			//
+			// 
+			// txtBoxQuantityEnd
+			// 
 			this.txtBoxQuantityEnd.AccessibleName = "QuantityEnd";
 			this.txtBoxQuantityEnd.AllowDrop = true;
 			this.txtBoxQuantityEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtQuantityEnd", true));
@@ -2789,9 +2812,9 @@ namespace FREditor
 			this.txtBoxQuantityEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxQuantityEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxQuantityEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxQuantityBegin
-			//
+			// 
+			// txtBoxQuantityBegin
+			// 
 			this.txtBoxQuantityBegin.AccessibleName = "QuantityBegin";
 			this.txtBoxQuantityBegin.AllowDrop = true;
 			this.txtBoxQuantityBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtQuantityBegin", true));
@@ -2803,9 +2826,9 @@ namespace FREditor
 			this.txtBoxQuantityBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxQuantityBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxQuantityBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxVolumeEnd
-			//
+			// 
+			// txtBoxVolumeEnd
+			// 
 			this.txtBoxVolumeEnd.AccessibleName = "VolumeEnd";
 			this.txtBoxVolumeEnd.AllowDrop = true;
 			this.txtBoxVolumeEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVolumeEnd", true));
@@ -2817,9 +2840,9 @@ namespace FREditor
 			this.txtBoxVolumeEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxVolumeEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxVolumeEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxVolumeBegin
-			//
+			// 
+			// txtBoxVolumeBegin
+			// 
 			this.txtBoxVolumeBegin.AccessibleName = "VolumeBegin";
 			this.txtBoxVolumeBegin.AllowDrop = true;
 			this.txtBoxVolumeBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtVolumeBegin", true));
@@ -2831,9 +2854,9 @@ namespace FREditor
 			this.txtBoxVolumeBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxVolumeBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxVolumeBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxUnitEnd
-			//
+			// 
+			// txtBoxUnitEnd
+			// 
 			this.txtBoxUnitEnd.AccessibleName = "UnitEnd";
 			this.txtBoxUnitEnd.AllowDrop = true;
 			this.txtBoxUnitEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtUnitEnd", true));
@@ -2845,9 +2868,9 @@ namespace FREditor
 			this.txtBoxUnitEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxUnitEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxUnitEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxUnitBegin
-			//
+			// 
+			// txtBoxUnitBegin
+			// 
 			this.txtBoxUnitBegin.AccessibleName = "UnitBegin";
 			this.txtBoxUnitBegin.AllowDrop = true;
 			this.txtBoxUnitBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtUnitBegin", true));
@@ -2859,9 +2882,9 @@ namespace FREditor
 			this.txtBoxUnitBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxUnitBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxUnitBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxFirmCrEnd
-			//
+			// 
+			// txtBoxFirmCrEnd
+			// 
 			this.txtBoxFirmCrEnd.AccessibleName = "FirmCrEnd";
 			this.txtBoxFirmCrEnd.AllowDrop = true;
 			this.txtBoxFirmCrEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtFirmCrEnd", true));
@@ -2873,9 +2896,9 @@ namespace FREditor
 			this.txtBoxFirmCrEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxFirmCrEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxFirmCrEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxFirmCrBegin
-			//
+			// 
+			// txtBoxFirmCrBegin
+			// 
 			this.txtBoxFirmCrBegin.AccessibleName = "FirmCrBegin";
 			this.txtBoxFirmCrBegin.AllowDrop = true;
 			this.txtBoxFirmCrBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtFirmCrBegin", true));
@@ -2887,9 +2910,9 @@ namespace FREditor
 			this.txtBoxFirmCrBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxFirmCrBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxFirmCrBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxName1End
-			//
+			// 
+			// txtBoxName1End
+			// 
 			this.txtBoxName1End.AccessibleName = "Name1End";
 			this.txtBoxName1End.AllowDrop = true;
 			this.txtBoxName1End.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNameEnd", true));
@@ -2901,9 +2924,9 @@ namespace FREditor
 			this.txtBoxName1End.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxName1End.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxName1End.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxName1Begin
-			//
+			// 
+			// txtBoxName1Begin
+			// 
 			this.txtBoxName1Begin.AccessibleName = "Name1Begin";
 			this.txtBoxName1Begin.AllowDrop = true;
 			this.txtBoxName1Begin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtNameBegin", true));
@@ -2915,9 +2938,9 @@ namespace FREditor
 			this.txtBoxName1Begin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxName1Begin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxName1Begin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxCodeCrEnd
-			//
+			// 
+			// txtBoxCodeCrEnd
+			// 
 			this.txtBoxCodeCrEnd.AccessibleName = "CodeCrEnd";
 			this.txtBoxCodeCrEnd.AllowDrop = true;
 			this.txtBoxCodeCrEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeCrEnd", true));
@@ -2929,9 +2952,9 @@ namespace FREditor
 			this.txtBoxCodeCrEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxCodeCrEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxCodeCrEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxCodeCrBegin
-			//
+			// 
+			// txtBoxCodeCrBegin
+			// 
 			this.txtBoxCodeCrBegin.AccessibleName = "CodeCrBegin";
 			this.txtBoxCodeCrBegin.AllowDrop = true;
 			this.txtBoxCodeCrBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeCrBegin", true));
@@ -2943,9 +2966,9 @@ namespace FREditor
 			this.txtBoxCodeCrBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxCodeCrBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxCodeCrBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//txtBoxCodeEnd
-			//
+			// 
+			// txtBoxCodeEnd
+			// 
 			this.txtBoxCodeEnd.AccessibleName = "CodeEnd";
 			this.txtBoxCodeEnd.AllowDrop = true;
 			this.txtBoxCodeEnd.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeEnd", true));
@@ -2957,90 +2980,90 @@ namespace FREditor
 			this.txtBoxCodeEnd.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxCodeEnd.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxCodeEnd.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//label24
-			//
+			// 
+			// label24
+			// 
 			this.label24.Location = new System.Drawing.Point(158, 123);
 			this.label24.Name = "label24";
 			this.label24.Size = new System.Drawing.Size(95, 23);
 			this.label24.TabIndex = 63;
 			this.label24.Text = "Ожидается :";
 			this.label24.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label25
-			//
+			// 
+			// label25
+			// 
 			this.label25.Location = new System.Drawing.Point(158, 100);
 			this.label25.Name = "label25";
 			this.label25.Size = new System.Drawing.Size(95, 23);
 			this.label25.TabIndex = 62;
 			this.label25.Text = "Срок :";
 			this.label25.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label26
-			//
+			// 
+			// label26
+			// 
 			this.label26.Location = new System.Drawing.Point(158, 77);
 			this.label26.Name = "label26";
 			this.label26.Size = new System.Drawing.Size(95, 23);
 			this.label26.TabIndex = 61;
 			this.label26.Text = "Цена мин. :";
 			this.label26.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label29
-			//
+			// 
+			// label29
+			// 
 			this.label29.Location = new System.Drawing.Point(158, 54);
 			this.label29.Name = "label29";
 			this.label29.Size = new System.Drawing.Size(95, 23);
 			this.label29.TabIndex = 52;
 			this.label29.Text = "Документ :";
 			this.label29.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label30
-			//
+			// 
+			// label30
+			// 
 			this.label30.Location = new System.Drawing.Point(158, 31);
 			this.label30.Name = "label30";
 			this.label30.Size = new System.Drawing.Size(95, 23);
 			this.label30.TabIndex = 51;
 			this.label30.Text = "Срок годности :";
 			this.label30.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label31
-			//
+			// 
+			// label31
+			// 
 			this.label31.Location = new System.Drawing.Point(158, 8);
 			this.label31.Name = "label31";
 			this.label31.Size = new System.Drawing.Size(95, 23);
 			this.label31.TabIndex = 50;
 			this.label31.Text = "Примечание :";
 			this.label31.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label32
-			//
+			// 
+			// label32
+			// 
 			this.label32.Location = new System.Drawing.Point(16, 146);
 			this.label32.Name = "label32";
 			this.label32.Size = new System.Drawing.Size(84, 23);
 			this.label32.TabIndex = 49;
 			this.label32.Text = "Количество :";
 			this.label32.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label33
-			//
+			// 
+			// label33
+			// 
 			this.label33.Location = new System.Drawing.Point(20, 123);
 			this.label33.Name = "label33";
 			this.label33.Size = new System.Drawing.Size(80, 23);
 			this.label33.TabIndex = 48;
 			this.label33.Text = "Цех. уп. :";
 			this.label33.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label34
-			//
+			// 
+			// label34
+			// 
 			this.label34.Location = new System.Drawing.Point(2, 100);
 			this.label34.Name = "label34";
 			this.label34.Size = new System.Drawing.Size(100, 23);
 			this.label34.TabIndex = 47;
 			this.label34.Text = "Ед. измерения :";
 			this.label34.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxCodeBegin
-			//
+			// 
+			// txtBoxCodeBegin
+			// 
 			this.txtBoxCodeBegin.AccessibleName = "CodeBegin";
 			this.txtBoxCodeBegin.AllowDrop = true;
 			this.txtBoxCodeBegin.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRTxtCodeBegin", true));
@@ -3052,54 +3075,54 @@ namespace FREditor
 			this.txtBoxCodeBegin.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragDrop);
 			this.txtBoxCodeBegin.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCodeBegin_DragEnter);
 			this.txtBoxCodeBegin.DoubleClick += new System.EventHandler(this.txtBoxCodeBegin_DoubleClick);
-			//
-			//label35
-			//
+			// 
+			// label35
+			// 
 			this.label35.Location = new System.Drawing.Point(1, 77);
 			this.label35.Name = "label35";
 			this.label35.Size = new System.Drawing.Size(100, 23);
 			this.label35.TabIndex = 40;
 			this.label35.Text = "Производитель :";
 			this.label35.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label38
-			//
+			// 
+			// label38
+			// 
 			this.label38.Location = new System.Drawing.Point(3, 54);
 			this.label38.Name = "label38";
 			this.label38.Size = new System.Drawing.Size(98, 23);
 			this.label38.TabIndex = 37;
 			this.label38.Text = "Наименование 1 :";
 			this.label38.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label39
-			//
+			// 
+			// label39
+			// 
 			this.label39.Location = new System.Drawing.Point(2, 31);
 			this.label39.Name = "label39";
 			this.label39.Size = new System.Drawing.Size(100, 23);
 			this.label39.TabIndex = 36;
 			this.label39.Text = "Код производ. :";
 			this.label39.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label40
-			//
+			// 
+			// label40
+			// 
 			this.label40.Location = new System.Drawing.Point(2, 6);
 			this.label40.Name = "label40";
 			this.label40.Size = new System.Drawing.Size(100, 23);
 			this.label40.TabIndex = 35;
 			this.label40.Text = "Код :";
 			this.label40.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label46
-			//
+			// 
+			// label46
+			// 
 			this.label46.Location = new System.Drawing.Point(314, 28);
 			this.label46.Name = "label46";
 			this.label46.Size = new System.Drawing.Size(116, 23);
 			this.label46.TabIndex = 107;
 			this.label46.Text = "Жизненно важный :";
 			this.label46.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//pnlGeneralFields
-			//
+			// 
+			// pnlGeneralFields
+			// 
 			this.pnlGeneralFields.Controls.Add(this.labelNds);
 			this.pnlGeneralFields.Controls.Add(this.textBoxNds);
 			this.pnlGeneralFields.Controls.Add(this.labelProducerCost);
@@ -3151,18 +3174,18 @@ namespace FREditor
 			this.pnlGeneralFields.Name = "pnlGeneralFields";
 			this.pnlGeneralFields.Size = new System.Drawing.Size(644, 176);
 			this.pnlGeneralFields.TabIndex = 0;
-			//
-			//labelNds
-			//
+			// 
+			// labelNds
+			// 
 			this.labelNds.Location = new System.Drawing.Point(326, 133);
 			this.labelNds.Name = "labelNds";
 			this.labelNds.Size = new System.Drawing.Size(104, 23);
 			this.labelNds.TabIndex = 0;
 			this.labelNds.Text = "НДС :";
 			this.labelNds.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//textBoxNds
-			//
+			// 
+			// textBoxNds
+			// 
 			this.textBoxNds.AllowDrop = true;
 			this.textBoxNds.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFNds", true));
 			this.textBoxNds.Location = new System.Drawing.Point(437, 133);
@@ -3173,18 +3196,18 @@ namespace FREditor
 			this.textBoxNds.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.textBoxNds.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.textBoxNds.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//labelProducerCost
-			//
+			// 
+			// labelProducerCost
+			// 
 			this.labelProducerCost.Location = new System.Drawing.Point(326, 111);
 			this.labelProducerCost.Name = "labelProducerCost";
 			this.labelProducerCost.Size = new System.Drawing.Size(104, 23);
 			this.labelProducerCost.TabIndex = 2;
 			this.labelProducerCost.Text = "Цена производителя :";
 			this.labelProducerCost.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//textBoxProducerCost
-			//
+			// 
+			// textBoxProducerCost
+			// 
 			this.textBoxProducerCost.AllowDrop = true;
 			this.textBoxProducerCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFProducerCost", true));
 			this.textBoxProducerCost.Location = new System.Drawing.Point(437, 111);
@@ -3195,18 +3218,18 @@ namespace FREditor
 			this.textBoxProducerCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.textBoxProducerCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.textBoxProducerCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//label50
-			//
+			// 
+			// label50
+			// 
 			this.label50.Location = new System.Drawing.Point(321, 89);
 			this.label50.Name = "label50";
 			this.label50.Size = new System.Drawing.Size(110, 20);
 			this.label50.TabIndex = 81;
 			this.label50.Text = "Мин. количество :";
 			this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxMinOrderCount
-			//
+			// 
+			// txtBoxMinOrderCount
+			// 
 			this.txtBoxMinOrderCount.AllowDrop = true;
 			this.txtBoxMinOrderCount.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMinOrderCount", true));
 			this.txtBoxMinOrderCount.Location = new System.Drawing.Point(437, 89);
@@ -3217,18 +3240,18 @@ namespace FREditor
 			this.txtBoxMinOrderCount.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxMinOrderCount.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxMinOrderCount.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//label48
-			//
+			// 
+			// label48
+			// 
 			this.label48.Location = new System.Drawing.Point(321, 68);
 			this.label48.Name = "label48";
 			this.label48.Size = new System.Drawing.Size(110, 20);
 			this.label48.TabIndex = 79;
 			this.label48.Text = "Мин. сумма :";
 			this.label48.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxOrderCost
-			//
+			// 
+			// txtBoxOrderCost
+			// 
 			this.txtBoxOrderCost.AllowDrop = true;
 			this.txtBoxOrderCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFOrderCost", true));
 			this.txtBoxOrderCost.Location = new System.Drawing.Point(437, 68);
@@ -3239,18 +3262,18 @@ namespace FREditor
 			this.txtBoxOrderCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxOrderCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxOrderCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//label44
-			//
+			// 
+			// label44
+			// 
 			this.label44.Location = new System.Drawing.Point(321, 47);
 			this.label44.Name = "label44";
 			this.label44.Size = new System.Drawing.Size(110, 20);
 			this.label44.TabIndex = 77;
 			this.label44.Text = "Цена макс. :";
 			this.label44.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxMaxBoundCost
-			//
+			// 
+			// txtBoxMaxBoundCost
+			// 
 			this.txtBoxMaxBoundCost.AllowDrop = true;
 			this.txtBoxMaxBoundCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMaxBoundCost", true));
 			this.txtBoxMaxBoundCost.Location = new System.Drawing.Point(437, 47);
@@ -3261,9 +3284,9 @@ namespace FREditor
 			this.txtBoxMaxBoundCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxMaxBoundCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxMaxBoundCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxVitalyImportant
-			//
+			// 
+			// txtBoxVitalyImportant
+			// 
 			this.txtBoxVitalyImportant.AllowDrop = true;
 			this.txtBoxVitalyImportant.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFVitallyImportant", true));
 			this.txtBoxVitalyImportant.Location = new System.Drawing.Point(437, 26);
@@ -3274,36 +3297,36 @@ namespace FREditor
 			this.txtBoxVitalyImportant.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxVitalyImportant.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxVitalyImportant.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//label43
-			//
+			// 
+			// label43
+			// 
 			this.label43.Location = new System.Drawing.Point(321, 26);
 			this.label43.Name = "label43";
 			this.label43.Size = new System.Drawing.Size(110, 20);
 			this.label43.TabIndex = 73;
 			this.label43.Text = "Жизненно важный :";
 			this.label43.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label37
-			//
+			// 
+			// label37
+			// 
 			this.label37.Location = new System.Drawing.Point(321, 5);
 			this.label37.Name = "label37";
 			this.label37.Size = new System.Drawing.Size(110, 20);
 			this.label37.TabIndex = 72;
 			this.label37.Text = "Реестр. цена :";
 			this.label37.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label36
-			//
+			// 
+			// label36
+			// 
 			this.label36.Location = new System.Drawing.Point(166, 152);
 			this.label36.Name = "label36";
 			this.label36.Size = new System.Drawing.Size(100, 20);
 			this.label36.TabIndex = 71;
 			this.label36.Text = "Кратность :";
 			this.label36.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxRegistryCost
-			//
+			// 
+			// txtBoxRegistryCost
+			// 
 			this.txtBoxRegistryCost.AllowDrop = true;
 			this.txtBoxRegistryCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFRegistryCost", true));
 			this.txtBoxRegistryCost.Location = new System.Drawing.Point(437, 5);
@@ -3314,9 +3337,9 @@ namespace FREditor
 			this.txtBoxRegistryCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxRegistryCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxRegistryCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxRequestRatio
-			//
+			// 
+			// txtBoxRequestRatio
+			// 
 			this.txtBoxRequestRatio.AllowDrop = true;
 			this.txtBoxRequestRatio.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFRequestRatio", true));
 			this.txtBoxRequestRatio.Location = new System.Drawing.Point(270, 152);
@@ -3327,9 +3350,9 @@ namespace FREditor
 			this.txtBoxRequestRatio.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxRequestRatio.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxRequestRatio.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxAwait
-			//
+			// 
+			// txtBoxAwait
+			// 
 			this.txtBoxAwait.AllowDrop = true;
 			this.txtBoxAwait.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFAwait", true));
 			this.txtBoxAwait.Location = new System.Drawing.Point(270, 130);
@@ -3340,9 +3363,9 @@ namespace FREditor
 			this.txtBoxAwait.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxAwait.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxAwait.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxJunk
-			//
+			// 
+			// txtBoxJunk
+			// 
 			this.txtBoxJunk.AllowDrop = true;
 			this.txtBoxJunk.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFJunk", true));
 			this.txtBoxJunk.Location = new System.Drawing.Point(270, 109);
@@ -3353,9 +3376,9 @@ namespace FREditor
 			this.txtBoxJunk.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxJunk.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxJunk.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxMinBoundCost
-			//
+			// 
+			// txtBoxMinBoundCost
+			// 
 			this.txtBoxMinBoundCost.AllowDrop = true;
 			this.txtBoxMinBoundCost.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFMinBoundCost", true));
 			this.txtBoxMinBoundCost.Location = new System.Drawing.Point(270, 88);
@@ -3366,36 +3389,36 @@ namespace FREditor
 			this.txtBoxMinBoundCost.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxMinBoundCost.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxMinBoundCost.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//label17
-			//
+			// 
+			// label17
+			// 
 			this.label17.Location = new System.Drawing.Point(166, 130);
 			this.label17.Name = "label17";
 			this.label17.Size = new System.Drawing.Size(100, 20);
 			this.label17.TabIndex = 63;
 			this.label17.Text = "Ожидается :";
 			this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label16
-			//
+			// 
+			// label16
+			// 
 			this.label16.Location = new System.Drawing.Point(166, 110);
 			this.label16.Name = "label16";
 			this.label16.Size = new System.Drawing.Size(100, 20);
 			this.label16.TabIndex = 62;
 			this.label16.Text = "Срок :";
 			this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label15
-			//
+			// 
+			// label15
+			// 
 			this.label15.Location = new System.Drawing.Point(166, 88);
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(100, 20);
 			this.label15.TabIndex = 61;
 			this.label15.Text = "Цена мин. :";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxDoc
-			//
+			// 
+			// txtBoxDoc
+			// 
 			this.txtBoxDoc.AllowDrop = true;
 			this.txtBoxDoc.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFDoc", true));
 			this.txtBoxDoc.Location = new System.Drawing.Point(270, 67);
@@ -3406,9 +3429,9 @@ namespace FREditor
 			this.txtBoxDoc.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxDoc.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxDoc.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxPeriod
-			//
+			// 
+			// txtBoxPeriod
+			// 
 			this.txtBoxPeriod.AllowDrop = true;
 			this.txtBoxPeriod.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFPeriod", true));
 			this.txtBoxPeriod.Location = new System.Drawing.Point(270, 46);
@@ -3419,9 +3442,9 @@ namespace FREditor
 			this.txtBoxPeriod.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxPeriod.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxPeriod.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxNote
-			//
+			// 
+			// txtBoxNote
+			// 
 			this.txtBoxNote.AllowDrop = true;
 			this.txtBoxNote.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFNote", true));
 			this.txtBoxNote.Location = new System.Drawing.Point(270, 25);
@@ -3432,9 +3455,9 @@ namespace FREditor
 			this.txtBoxNote.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxNote.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxNote.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxQuantity
-			//
+			// 
+			// txtBoxQuantity
+			// 
 			this.txtBoxQuantity.AllowDrop = true;
 			this.txtBoxQuantity.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFQuantity", true));
 			this.txtBoxQuantity.Location = new System.Drawing.Point(270, 4);
@@ -3445,9 +3468,9 @@ namespace FREditor
 			this.txtBoxQuantity.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxQuantity.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxQuantity.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxUnit
-			//
+			// 
+			// txtBoxUnit
+			// 
 			this.txtBoxUnit.AllowDrop = true;
 			this.txtBoxUnit.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFUnit", true));
 			this.txtBoxUnit.Location = new System.Drawing.Point(112, 130);
@@ -3458,9 +3481,9 @@ namespace FREditor
 			this.txtBoxUnit.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxUnit.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxUnit.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxVolume
-			//
+			// 
+			// txtBoxVolume
+			// 
 			this.txtBoxVolume.AllowDrop = true;
 			this.txtBoxVolume.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFVolume", true));
 			this.txtBoxVolume.Location = new System.Drawing.Point(112, 151);
@@ -3471,63 +3494,63 @@ namespace FREditor
 			this.txtBoxVolume.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxVolume.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxVolume.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//label12
-			//
+			// 
+			// label12
+			// 
 			this.label12.Location = new System.Drawing.Point(166, 67);
 			this.label12.Name = "label12";
 			this.label12.Size = new System.Drawing.Size(100, 20);
 			this.label12.TabIndex = 52;
 			this.label12.Text = "Документ :";
 			this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label11
-			//
+			// 
+			// label11
+			// 
 			this.label11.Location = new System.Drawing.Point(166, 46);
 			this.label11.Name = "label11";
 			this.label11.Size = new System.Drawing.Size(100, 20);
 			this.label11.TabIndex = 51;
 			this.label11.Text = "Срок годности :";
 			this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label10
-			//
+			// 
+			// label10
+			// 
 			this.label10.Location = new System.Drawing.Point(166, 25);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(100, 20);
 			this.label10.TabIndex = 50;
 			this.label10.Text = "Примечание :";
 			this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label9
-			//
+			// 
+			// label9
+			// 
 			this.label9.Location = new System.Drawing.Point(166, 4);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(100, 20);
 			this.label9.TabIndex = 49;
 			this.label9.Text = "Количество :";
 			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label8
-			//
+			// 
+			// label8
+			// 
 			this.label8.Location = new System.Drawing.Point(8, 151);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(100, 20);
 			this.label8.TabIndex = 48;
 			this.label8.Text = "Цех. уп. :";
 			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label7
-			//
+			// 
+			// label7
+			// 
 			this.label7.Location = new System.Drawing.Point(8, 130);
 			this.label7.Name = "label7";
 			this.label7.Size = new System.Drawing.Size(100, 20);
 			this.label7.TabIndex = 47;
 			this.label7.Text = "Ед. измерения :";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//txtBoxFirmCr
-			//
+			// 
+			// txtBoxFirmCr
+			// 
 			this.txtBoxFirmCr.AllowDrop = true;
 			this.txtBoxFirmCr.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFFirmCr", true));
 			this.txtBoxFirmCr.Location = new System.Drawing.Point(112, 109);
@@ -3538,9 +3561,9 @@ namespace FREditor
 			this.txtBoxFirmCr.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxFirmCr.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxFirmCr.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxName3
-			//
+			// 
+			// txtBoxName3
+			// 
 			this.txtBoxName3.AllowDrop = true;
 			this.txtBoxName3.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName3", true));
 			this.txtBoxName3.Location = new System.Drawing.Point(112, 88);
@@ -3551,9 +3574,9 @@ namespace FREditor
 			this.txtBoxName3.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxName3.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxName3.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxName2
-			//
+			// 
+			// txtBoxName2
+			// 
 			this.txtBoxName2.AllowDrop = true;
 			this.txtBoxName2.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName2", true));
 			this.txtBoxName2.Location = new System.Drawing.Point(112, 67);
@@ -3564,9 +3587,9 @@ namespace FREditor
 			this.txtBoxName2.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxName2.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxName2.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxName1
-			//
+			// 
+			// txtBoxName1
+			// 
 			this.txtBoxName1.AllowDrop = true;
 			this.txtBoxName1.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFName1", true));
 			this.txtBoxName1.Location = new System.Drawing.Point(112, 46);
@@ -3577,9 +3600,9 @@ namespace FREditor
 			this.txtBoxName1.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxName1.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxName1.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxCodeCr
-			//
+			// 
+			// txtBoxCodeCr
+			// 
 			this.txtBoxCodeCr.AllowDrop = true;
 			this.txtBoxCodeCr.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFCodeCr", true));
 			this.txtBoxCodeCr.Location = new System.Drawing.Point(112, 25);
@@ -3590,9 +3613,9 @@ namespace FREditor
 			this.txtBoxCodeCr.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxCodeCr.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxCodeCr.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxCode
-			//
+			// 
+			// txtBoxCode
+			// 
 			this.txtBoxCode.AllowDrop = true;
 			this.txtBoxCode.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRFCode", true));
 			this.txtBoxCode.Location = new System.Drawing.Point(112, 4);
@@ -3603,63 +3626,63 @@ namespace FREditor
 			this.txtBoxCode.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragDrop);
 			this.txtBoxCode.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxCode_DragEnter);
 			this.txtBoxCode.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//label6
-			//
+			// 
+			// label6
+			// 
 			this.label6.Location = new System.Drawing.Point(8, 109);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(100, 20);
 			this.label6.TabIndex = 40;
 			this.label6.Text = "Производитель :";
 			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label5
-			//
+			// 
+			// label5
+			// 
 			this.label5.Location = new System.Drawing.Point(8, 88);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(100, 20);
 			this.label5.TabIndex = 39;
 			this.label5.Text = "Наименование 3 :";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label4
-			//
+			// 
+			// label4
+			// 
 			this.label4.Location = new System.Drawing.Point(8, 67);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(100, 20);
 			this.label4.TabIndex = 38;
 			this.label4.Text = "Наименование 2 :";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label3
-			//
+			// 
+			// label3
+			// 
 			this.label3.Location = new System.Drawing.Point(8, 46);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(100, 20);
 			this.label3.TabIndex = 37;
 			this.label3.Text = "Наименование 1 :";
 			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label2
-			//
+			// 
+			// label2
+			// 
 			this.label2.Location = new System.Drawing.Point(8, 25);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(100, 20);
 			this.label2.TabIndex = 36;
 			this.label2.Text = "Код производ. :";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//label1
-			//
+			// 
+			// label1
+			// 
 			this.label1.Location = new System.Drawing.Point(8, 4);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(100, 20);
 			this.label1.TabIndex = 35;
 			this.label1.Text = "Код :";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			//
-			//grpbSettings
-			//
+			// 
+			// grpbSettings
+			// 
 			this.grpbSettings.Controls.Add(this.pnlSettings);
 			this.grpbSettings.Dock = System.Windows.Forms.DockStyle.Left;
 			this.grpbSettings.Location = new System.Drawing.Point(0, 0);
@@ -3668,9 +3691,9 @@ namespace FREditor
 			this.grpbSettings.TabIndex = 1;
 			this.grpbSettings.TabStop = false;
 			this.grpbSettings.Text = "Настройки";
-			//
-			//pnlSettings
-			//
+			// 
+			// pnlSettings
+			// 
 			this.pnlSettings.Controls.Add(this.btnVitallyImportantCheck);
 			this.pnlSettings.Controls.Add(this.txtBoxVitallyImportantMask);
 			this.pnlSettings.Controls.Add(this.btnEditMask);
@@ -3695,9 +3718,9 @@ namespace FREditor
 			this.pnlSettings.Name = "pnlSettings";
 			this.pnlSettings.Size = new System.Drawing.Size(258, 176);
 			this.pnlSettings.TabIndex = 0;
-			//
-			//btnVitallyImportantCheck
-			//
+			// 
+			// btnVitallyImportantCheck
+			// 
 			this.btnVitallyImportantCheck.Image = ((System.Drawing.Image)(resources.GetObject("btnVitallyImportantCheck.Image")));
 			this.btnVitallyImportantCheck.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
 			this.btnVitallyImportantCheck.Location = new System.Drawing.Point(216, 104);
@@ -3706,17 +3729,17 @@ namespace FREditor
 			this.btnVitallyImportantCheck.TabIndex = 26;
 			this.ttMain.SetToolTip(this.btnVitallyImportantCheck, "Проверка маски ЖВЛС");
 			this.btnVitallyImportantCheck.Click += new System.EventHandler(this.btnVitallyImportantCheck_Click);
-			//
-			//txtBoxVitallyImportantMask
-			//
+			// 
+			// txtBoxVitallyImportantMask
+			// 
 			this.txtBoxVitallyImportantMask.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRSelfVitallyImportantMask", true));
 			this.txtBoxVitallyImportantMask.Location = new System.Drawing.Point(151, 104);
 			this.txtBoxVitallyImportantMask.Name = "txtBoxVitallyImportantMask";
 			this.txtBoxVitallyImportantMask.Size = new System.Drawing.Size(64, 20);
 			this.txtBoxVitallyImportantMask.TabIndex = 24;
-			//
-			//btnEditMask
-			//
+			// 
+			// btnEditMask
+			// 
 			this.btnEditMask.Image = ((System.Drawing.Image)(resources.GetObject("btnEditMask.Image")));
 			this.btnEditMask.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
 			this.btnEditMask.Location = new System.Drawing.Point(192, 8);
@@ -3725,9 +3748,9 @@ namespace FREditor
 			this.btnEditMask.TabIndex = 23;
 			this.ttMain.SetToolTip(this.btnEditMask, "Настройка маски разбора");
 			this.btnEditMask.Click += new System.EventHandler(this.btnEditMask_Click);
-			//
-			//btnCheckAll
-			//
+			// 
+			// btnCheckAll
+			// 
 			this.btnCheckAll.Image = ((System.Drawing.Image)(resources.GetObject("btnCheckAll.Image")));
 			this.btnCheckAll.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
 			this.btnCheckAll.Location = new System.Drawing.Point(216, 8);
@@ -3736,9 +3759,9 @@ namespace FREditor
 			this.btnCheckAll.TabIndex = 22;
 			this.ttMain.SetToolTip(this.btnCheckAll, "Проверка маски разбора");
 			this.btnCheckAll.Click += new System.EventHandler(this.btnCheckAll_Click);
-			//
-			//btnJunkCheck
-			//
+			// 
+			// btnJunkCheck
+			// 
 			this.btnJunkCheck.Image = ((System.Drawing.Image)(resources.GetObject("btnJunkCheck.Image")));
 			this.btnJunkCheck.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
 			this.btnJunkCheck.Location = new System.Drawing.Point(216, 80);
@@ -3747,9 +3770,9 @@ namespace FREditor
 			this.btnJunkCheck.TabIndex = 21;
 			this.ttMain.SetToolTip(this.btnJunkCheck, "Проверка маски сроковых");
 			this.btnJunkCheck.Click += new System.EventHandler(this.btnJunkCheck_Click);
-			//
-			//btnAwaitCheck
-			//
+			// 
+			// btnAwaitCheck
+			// 
 			this.btnAwaitCheck.Image = ((System.Drawing.Image)(resources.GetObject("btnAwaitCheck.Image")));
 			this.btnAwaitCheck.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
 			this.btnAwaitCheck.Location = new System.Drawing.Point(216, 56);
@@ -3758,17 +3781,17 @@ namespace FREditor
 			this.btnAwaitCheck.TabIndex = 20;
 			this.ttMain.SetToolTip(this.btnAwaitCheck, "Проверка маски ожидаемых");
 			this.btnAwaitCheck.Click += new System.EventHandler(this.btnAwaitCheck_Click);
-			//
-			//lBoxSheetName
-			//
+			// 
+			// lBoxSheetName
+			// 
 			this.lBoxSheetName.Location = new System.Drawing.Point(49, 155);
 			this.lBoxSheetName.Name = "lBoxSheetName";
 			this.lBoxSheetName.Size = new System.Drawing.Size(96, 23);
 			this.lBoxSheetName.TabIndex = 19;
 			this.lBoxSheetName.Text = "Название листа :";
-			//
-			//txtBoxSheetName
-			//
+			// 
+			// txtBoxSheetName
+			// 
 			this.txtBoxSheetName.AllowDrop = true;
 			this.txtBoxSheetName.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRListName", true));
 			this.txtBoxSheetName.Location = new System.Drawing.Point(151, 152);
@@ -3779,9 +3802,9 @@ namespace FREditor
 			this.txtBoxSheetName.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxSheetName_DragDrop);
 			this.txtBoxSheetName.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxSheetName_DragEnter);
 			this.txtBoxSheetName.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxStartLine
-			//
+			// 
+			// txtBoxStartLine
+			// 
 			this.txtBoxStartLine.AllowDrop = true;
 			this.txtBoxStartLine.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRStartLine", true));
 			this.txtBoxStartLine.Location = new System.Drawing.Point(151, 128);
@@ -3792,101 +3815,101 @@ namespace FREditor
 			this.txtBoxStartLine.DragDrop += new System.Windows.Forms.DragEventHandler(this.txtBoxStartLine_DragDrop);
 			this.txtBoxStartLine.DragEnter += new System.Windows.Forms.DragEventHandler(this.txtBoxStartLine_DragEnter);
 			this.txtBoxStartLine.DoubleClick += new System.EventHandler(this.txtBoxCode_DoubleClick);
-			//
-			//txtBoxSelfJunkPos
-			//
+			// 
+			// txtBoxSelfJunkPos
+			// 
 			this.txtBoxSelfJunkPos.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRSelfJunkPos", true));
 			this.txtBoxSelfJunkPos.Location = new System.Drawing.Point(152, 80);
 			this.txtBoxSelfJunkPos.Name = "txtBoxSelfJunkPos";
 			this.txtBoxSelfJunkPos.Size = new System.Drawing.Size(64, 20);
 			this.txtBoxSelfJunkPos.TabIndex = 11;
 			this.txtBoxSelfJunkPos.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
-			//
-			//txtBoxSelfAwaitPos
-			//
+			// 
+			// txtBoxSelfAwaitPos
+			// 
 			this.txtBoxSelfAwaitPos.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRSelfAwaitPos", true));
 			this.txtBoxSelfAwaitPos.Location = new System.Drawing.Point(152, 56);
 			this.txtBoxSelfAwaitPos.Name = "txtBoxSelfAwaitPos";
 			this.txtBoxSelfAwaitPos.Size = new System.Drawing.Size(64, 20);
 			this.txtBoxSelfAwaitPos.TabIndex = 10;
 			this.txtBoxSelfAwaitPos.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
-			//
-			//txtBoxForbWords
-			//
+			// 
+			// txtBoxForbWords
+			// 
 			this.txtBoxForbWords.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRForbWords", true));
 			this.txtBoxForbWords.Location = new System.Drawing.Point(152, 32);
 			this.txtBoxForbWords.Name = "txtBoxForbWords";
 			this.txtBoxForbWords.Size = new System.Drawing.Size(88, 20);
 			this.txtBoxForbWords.TabIndex = 9;
 			this.txtBoxForbWords.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
-			//
-			//txtBoxNameMask
-			//
+			// 
+			// txtBoxNameMask
+			// 
 			this.txtBoxNameMask.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bsFormRules, "FRNameMask", true));
 			this.txtBoxNameMask.Location = new System.Drawing.Point(152, 8);
 			this.txtBoxNameMask.Name = "txtBoxNameMask";
 			this.txtBoxNameMask.Size = new System.Drawing.Size(40, 20);
 			this.txtBoxNameMask.TabIndex = 8;
 			this.txtBoxNameMask.TextChanged += new System.EventHandler(this.txtBoxNameMask_TextChanged);
-			//
-			//label47
-			//
+			// 
+			// label47
+			// 
 			this.label47.Location = new System.Drawing.Point(2, 104);
 			this.label47.Name = "label47";
 			this.label47.Size = new System.Drawing.Size(147, 23);
 			this.label47.TabIndex = 25;
 			this.label47.Text = "Маска жизненно важных :";
-			//
-			//lStartLine
-			//
+			// 
+			// lStartLine
+			// 
 			this.lStartLine.Location = new System.Drawing.Point(68, 130);
 			this.lStartLine.Name = "lStartLine";
 			this.lStartLine.Size = new System.Drawing.Size(80, 23);
 			this.lStartLine.TabIndex = 18;
 			this.lStartLine.Text = "Старт-срока :";
-			//
-			//label21
-			//
+			// 
+			// label21
+			// 
 			this.label21.Location = new System.Drawing.Point(45, 81);
 			this.label21.Name = "label21";
 			this.label21.Size = new System.Drawing.Size(104, 23);
 			this.label21.TabIndex = 15;
 			this.label21.Text = "Маска сроковых :";
-			//
-			//label20
-			//
+			// 
+			// label20
+			// 
 			this.label20.Location = new System.Drawing.Point(35, 57);
 			this.label20.Name = "label20";
 			this.label20.Size = new System.Drawing.Size(112, 23);
 			this.label20.TabIndex = 14;
 			this.label20.Text = "Маска ожидаемых :";
-			//
-			//label19
-			//
+			// 
+			// label19
+			// 
 			this.label19.Location = new System.Drawing.Point(25, 33);
 			this.label19.Name = "label19";
 			this.label19.Size = new System.Drawing.Size(120, 23);
 			this.label19.TabIndex = 13;
 			this.label19.Text = "Запрещённые слова :";
-			//
-			//label18
-			//
+			// 
+			// label18
+			// 
 			this.label18.Location = new System.Drawing.Point(14, 8);
 			this.label18.Name = "label18";
 			this.label18.Size = new System.Drawing.Size(136, 23);
 			this.label18.TabIndex = 12;
 			this.label18.Text = "Маска разбора товара :";
-			//
-			//erP
-			//
+			// 
+			// erP
+			// 
 			this.erP.ContainerControl = this;
-			//
-			//tscMain
-			//
+			// 
+			// tscMain
+			// 
 			this.tscMain.BottomToolStripPanelVisible = false;
-			//
-			//tscMain.ContentPanel
-			//
+			// 
+			// tscMain.ContentPanel
+			// 
 			this.tscMain.ContentPanel.Controls.Add(this.tbControl);
 			this.tscMain.ContentPanel.Size = new System.Drawing.Size(1325, 728);
 			this.tscMain.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -3897,13 +3920,13 @@ namespace FREditor
 			this.tscMain.Size = new System.Drawing.Size(1325, 753);
 			this.tscMain.TabIndex = 2;
 			this.tscMain.Text = "toolStripContainer1";
-			//
-			//tscMain.TopToolStripPanel
-			//
+			// 
+			// tscMain.TopToolStripPanel
+			// 
 			this.tscMain.TopToolStripPanel.Controls.Add(this.tsApply);
-			//
-			//tsApply
-			//
+			// 
+			// tsApply
+			// 
 			this.tsApply.Dock = System.Windows.Forms.DockStyle.None;
 			this.tsApply.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbApply,
@@ -3912,9 +3935,9 @@ namespace FREditor
 			this.tsApply.Name = "tsApply";
 			this.tsApply.Size = new System.Drawing.Size(151, 25);
 			this.tsApply.TabIndex = 0;
-			//
-			//tsbApply
-			//
+			// 
+			// tsbApply
+			// 
 			this.tsbApply.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.tsbApply.Enabled = false;
 			this.tsbApply.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -3922,9 +3945,9 @@ namespace FREditor
 			this.tsbApply.Size = new System.Drawing.Size(74, 22);
 			this.tsbApply.Text = "Применить";
 			this.tsbApply.Click += new System.EventHandler(this.tsbApply_Click);
-			//
-			//tsbCancel
-			//
+			// 
+			// tsbCancel
+			// 
 			this.tsbCancel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.tsbCancel.Enabled = false;
 			this.tsbCancel.Image = ((System.Drawing.Image)(resources.GetObject("tsbCancel.Image")));
@@ -3933,100 +3956,100 @@ namespace FREditor
 			this.tsbCancel.Size = new System.Drawing.Size(65, 22);
 			this.tsbCancel.Text = "Отменить";
 			this.tsbCancel.Click += new System.EventHandler(this.tsbCancel_Click);
-			//
-			//mcmdUpdateCostRules
-			//
+			// 
+			// mcmdUpdateCostRules
+			// 
 			this.mcmdUpdateCostRules.CacheAge = 0;
 			this.mcmdUpdateCostRules.CommandText = "UPDATE farm.costformrules c SET\r\nFieldName = ?FieldName,\r\nTxtBegin = ?TxtBegin,\r\n" +
     "TxtEnd = ?TxtEnd\r\nWHERE c.CostCode = ?CostCode";
 			this.mcmdUpdateCostRules.Connection = null;
 			this.mcmdUpdateCostRules.EnableCaching = false;
 			this.mcmdUpdateCostRules.Transaction = null;
-			//
-			//daCostRules
-			//
+			// 
+			// daCostRules
+			// 
 			this.daCostRules.DeleteCommand = this.mcmdDeleteCostRules;
 			this.daCostRules.InsertCommand = this.mcmdInsertCostRules;
 			this.daCostRules.SelectCommand = null;
 			this.daCostRules.TableMappings.AddRange(new System.Data.Common.DataTableMapping[] {
             new System.Data.Common.DataTableMapping("Table", "Table", new System.Data.Common.DataColumnMapping[0])});
 			this.daCostRules.UpdateCommand = this.mcmdUpdateCostRules;
-			//
-			//mcmdDeleteCostRules
-			//
+			// 
+			// mcmdDeleteCostRules
+			// 
 			this.mcmdDeleteCostRules.CacheAge = 0;
 			this.mcmdDeleteCostRules.CommandText = "UPDATE farm.costformrules c SET\r\nFieldName = ?FieldName,\r\nTxtBegin = ?TxtBegin,\r\n" +
     "TxtEnd = ?TxtEnd\r\nWHERE c.CostCode = ?CostCode";
 			this.mcmdDeleteCostRules.Connection = null;
 			this.mcmdDeleteCostRules.EnableCaching = false;
 			this.mcmdDeleteCostRules.Transaction = null;
-			//
-			//mcmdInsertCostRules
-			//
+			// 
+			// mcmdInsertCostRules
+			// 
 			this.mcmdInsertCostRules.CacheAge = 0;
 			this.mcmdInsertCostRules.CommandText = "UPDATE farm.costformrules c SET\r\nFieldName = ?FieldName,\r\nTxtBegin = ?TxtBegin,\r\n" +
     "TxtEnd = ?TxtEnd\r\nWHERE c.CostCode = ?CostCode";
 			this.mcmdInsertCostRules.Connection = null;
 			this.mcmdInsertCostRules.EnableCaching = false;
 			this.mcmdInsertCostRules.Transaction = null;
-			//
-			//mcmdUpdateFormRules
-			//
+			// 
+			// mcmdUpdateFormRules
+			// 
 			this.mcmdUpdateFormRules.CacheAge = 0;
 			this.mcmdUpdateFormRules.Connection = null;
 			this.mcmdUpdateFormRules.EnableCaching = false;
 			this.mcmdUpdateFormRules.Transaction = null;
-			//
-			//daFormRules
-			//
+			// 
+			// daFormRules
+			// 
 			this.daFormRules.DeleteCommand = null;
 			this.daFormRules.InsertCommand = null;
 			this.daFormRules.SelectCommand = null;
 			this.daFormRules.UpdateCommand = this.mcmdUpdateFormRules;
-			//
-			//tmrUpdateApply
-			//
+			// 
+			// tmrUpdateApply
+			// 
 			this.tmrUpdateApply.Interval = 1000;
 			this.tmrUpdateApply.Tick += new System.EventHandler(this.tmrUpdateApply_Tick);
-			//
-			//tmrSearch
-			//
+			// 
+			// tmrSearch
+			// 
 			this.tmrSearch.Interval = 1000;
 			this.tmrSearch.Tick += new System.EventHandler(this.tmrSearch_Tick);
-			//
-			//tmrCostSearch
-			//
+			// 
+			// tmrCostSearch
+			// 
 			this.tmrCostSearch.Interval = 1000;
 			this.tmrCostSearch.Tick += new System.EventHandler(this.tmrCostSearch_Tick);
-			//
-			//tmrSetNewCost
-			//
+			// 
+			// tmrSetNewCost
+			// 
 			this.tmrSetNewCost.Interval = 200;
 			this.tmrSetNewCost.Tick += new System.EventHandler(this.tmrSetNewCost_Tick);
-			//
-			//tmrSearchInPrice
-			//
+			// 
+			// tmrSearchInPrice
+			// 
 			this.tmrSearchInPrice.Interval = 500;
 			this.tmrSearchInPrice.Tick += new System.EventHandler(this.tmrSearchInPrice_Tick);
-			//
-			//tbSearch
-			//
+			// 
+			// tbSearch
+			// 
 			this.tbSearch.Location = new System.Drawing.Point(54, 3);
 			this.tbSearch.Name = "tbSearch";
 			this.tbSearch.Size = new System.Drawing.Size(190, 20);
 			this.tbSearch.TabIndex = 6;
-			//
-			//label14
-			//
+			// 
+			// label14
+			// 
 			this.label14.AutoSize = true;
 			this.label14.Location = new System.Drawing.Point(5, 6);
 			this.label14.Name = "label14";
 			this.label14.Size = new System.Drawing.Size(39, 13);
 			this.label14.TabIndex = 5;
 			this.label14.Text = "Поиск";
-			//
-			//frmFREMain
-			//
+			// 
+			// frmFREMain
+			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
 			this.ClientSize = new System.Drawing.Size(1325, 753);
 			this.Controls.Add(this.tscMain);
@@ -4469,5 +4492,7 @@ namespace FREditor
 		private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
 		private DataGridViewComboBoxColumn pPriceTypeDataGridViewComboBoxColumn;
 		private DataGridViewComboBoxColumn pCostTypeDataGridViewComboBoxColumn;
+		private ComboBox cbSynonym;
+		private Label synonymLabel;
     }
 }

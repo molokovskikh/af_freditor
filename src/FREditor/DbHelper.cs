@@ -18,12 +18,16 @@ namespace FREditor
 			command.ExecuteNonQuery();
 		}
 
-		public static void PricesFill(MySqlConnection connection, DataTable prices, string param, bool showOnlyEnabled, params MySqlParameter[] parameters)
+		public static void PricesFill(MySqlConnection connection, DataTable prices, string param, bool showOnlyEnabled, int supplierIndex, params MySqlParameter[] parameters)
 		{
 			var sqlPart = String.Empty;
 			if (showOnlyEnabled)
 				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) ";
 			// Выбираем прайс-листы с мультиколоночными ценами
+			var joinSynonymPart = string.Empty;
+
+			if (supplierIndex > 0)
+				joinSynonymPart += "join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode";
 
 			var sql =
 				@"
@@ -44,7 +48,7 @@ SELECT
   exists(select * from userSettings.pricesregionaldata prd where prd.BaseCost=pc.CostCode and prd.PriceCode=pd.PriceCode) as PBaseCost,
   pc.CostCode as PCostCode
 FROM
-  usersettings.pricesdata pd
+  usersettings.pricesdata pd " + joinSynonymPart + @"
   inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
   inner join usersettings.PriceItems pim on (pim.Id = pc.PriceItemId)
 "

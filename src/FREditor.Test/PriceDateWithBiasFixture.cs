@@ -29,8 +29,8 @@ namespace FREditor.Test
 		[Test, STAThread]
 		public void PriceDateWithBiasTest()
 		{
-			form.dtClientsFill("", false);
-			form.dtPricesFill("", false);
+			form.dtClientsFill("", false, 0);
+			form.dtPricesFill("", false, 0);
 
 			int i = 0;
 			foreach (DataRow dataRow in form.DTPrices.Rows) {
