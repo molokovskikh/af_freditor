@@ -22,7 +22,7 @@ namespace FREditor.Test
 		[SetUp]
 		public void Setup()
 		{
-			supplier = TestSupplier.Create();
+			supplier = TestSupplier.CreateNaked();
 			var price = supplier.Prices[0];
 			price.CostType = CostType.MultiFile;
 			price.Costs[0].PriceItem.Source.SourceType = PriceSourceType.Lan;
@@ -70,6 +70,36 @@ namespace FREditor.Test
 			form.InboundPriceItemsForTests = new[] { "123" };
 			Assert.That(form.IsPriceInInbound("123", true), Is.True);
 			Assert.That(form.IsPriceInInbound("1234", true), Is.False);
+		}
+
+		[Test]
+		public void Parent_synonym_test()
+		{
+			var supplier2 = TestSupplier.CreateNaked();
+			supplier2.Prices[0].ParentSynonym = supplier.Prices[0].Id;
+			supplier2.Save();
+
+			form.Form1_Load(form, null);
+
+			var cbSynonym = ((ComboBox)form.Controls.Find("cbSynonym", true)[0]);
+			foreach (var item in cbSynonym.Items) {
+				var row = (DataRowView)item;
+				if (Convert.ToUInt32(row[0]) == supplier.Id) {
+					cbSynonym.SelectedItem = row;
+				}
+			}
+
+			form.tmrSearch_Tick(null, null);
+
+			var indgvFirm = Grid("indgvFirm");
+			var index = indgvFirm.Rows.Cast<DataGridViewRow>().IndexOf(r => Convert.ToUInt32(((DataRowView)r.DataBoundItem)["CCode"]) == supplier2.Id);
+			indgvFirm.CurrentCell = indgvFirm[0, index];
+
+			var grid = Grid("indgvPrice");
+			var views = grid.Rows.Cast<DataGridViewRow>().Select(r => r.DataBoundItem).Cast<DataRowView>().ToList();
+			var dataGridViewRow = views.First();
+
+			Assert.AreEqual(dataGridViewRow.DataView[0][0], supplier.Prices[0].Id);
 		}
 
 		[Test]

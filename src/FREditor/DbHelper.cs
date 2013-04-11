@@ -25,14 +25,22 @@ namespace FREditor
 				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) ";
 			// Выбираем прайс-листы с мультиколоночными ценами
 			var joinSynonymPart = string.Empty;
-
-			if (supplierIndex > 0)
-				joinSynonymPart += "join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode";
+			var selectPart = string.Empty;
+			if (supplierIndex > 0) {
+				joinSynonymPart += @"join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode and pd2.FirmCode <> ?synonymSupplier 
+inner join usersettings.pricescosts pc on pc.pricecode = pd2.pricecode";
+				selectPart += "pd2.FirmCode as PFirmCode,";
+				param = param.Replace("pd", "pd2");
+			}
+			else {
+				joinSynonymPart += "inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode";
+				selectPart += "pd.FirmCode as PFirmCode,";
+			}
 
 			var sql =
 				@"
 SELECT
-  pd.FirmCode as PFirmCode,
+  " + selectPart + @"
   pim.Id as PPriceItemId,
   pd.PriceCode as PPriceCode,
   if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName) as PPriceName,
@@ -49,7 +57,6 @@ SELECT
   pc.CostCode as PCostCode
 FROM
   usersettings.pricesdata pd " + joinSynonymPart + @"
-  inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode
   inner join usersettings.PriceItems pim on (pim.Id = pc.PriceItemId)
 "
 					+ sqlPart +

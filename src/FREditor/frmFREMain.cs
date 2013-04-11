@@ -583,8 +583,8 @@ order by Format";
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 			dtPricesFill(FilterParams, showOnlyEnabled, synonymSupplier);
-			dtFormRulesFill(FilterParams, showOnlyEnabled);
-			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
+			dtFormRulesFill(FilterParams, showOnlyEnabled, synonymSupplier);
+			dtCostsFormRulesFill(FilterParams, showOnlyEnabled, synonymSupplier);
 		}
 
 		private void FillCosts(string shname, ulong regcode)
@@ -620,13 +620,13 @@ order by Format";
 				if (showOnlyEnabled)
 					FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 
-				dtCostsFormRulesFill(FilterParams, !_showDisabledFirm);
+				dtCostsFormRulesFill(FilterParams, !_showDisabledFirm, synonymSupplierIndex);
 			}
 		}
 
 		public void dtClientsFill(string param, bool showOnlyEnabled, int synonymSupplier)
 		{
-			if (synonymSupplier > 0)
+			if (synonymSupplier > 0) {
 				command.CommandText = @"
 SELECT s.Id AS CCode,
 s.Name AS CShortName,
@@ -636,12 +636,19 @@ st.Type AS CSourceIndex
 FROM usersettings.pricesdata PD
 join usersettings.pricesdata PD2 on PD2.ParentSynonym = PD.PriceCode
 join Customers.suppliers s on s.id = PD2.FirmCode
-join usersettings.pricescosts PC on pc.pricecode = pd.pricecode
+join usersettings.pricescosts PC on pc.pricecode = pd2.pricecode
 join usersettings.priceitems pi on pc.priceitemid = pi.id
 join Farm.Sources so on so.id = pi.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
-where s.Disabled = false and PD.FirmCode = ?synonymSupplier and s.id <> ?synonymSupplier";
+where
+datediff(curdate(), date(pi.pricedate)) < 200
+and s.Disabled = false 
+and (PD2.AgencyEnabled = 1)
+AND (PD2.Enabled = 1) 
+and PD.FirmCode = ?synonymSupplier 
+and s.id <> ?synonymSupplier" + param;
+			}
 			else if (showOnlyEnabled) {
 				command.CommandText = @"
 SELECT s.Id AS CCode,
@@ -741,7 +748,7 @@ SELECT pd.FirmCode, s.Name FROM userSettings.PricesData P
 join userSettings.PricesData pd on p.ParentSynonym = pd.PriceCode
 join customers.Suppliers s on s.id = pd.FirmCode
 where s.disabled= false
-group by p.parentsynonym
+group by pd.FirmCode
 order by s.Name;";
 			dataAdapter.Fill(dtSource);
 			cbSynonym.DataSource = dtSource;
@@ -749,9 +756,10 @@ order by s.Name;";
 			cbSynonym.ValueMember = "FirmCode";
 		}
 
-		private void dtCostsFormRulesFill(string param, bool showOnlyEnabled)
+		private void dtCostsFormRulesFill(string param, bool showOnlyEnabled, int supplierSynonym)
 		{
 			string sqlPart = String.Empty;
+
 			if (showOnlyEnabled)
 				sqlPart +=
 					@"
@@ -760,6 +768,37 @@ order by s.Name;";
 		FROM usersettings.PriceItems
 		WHERE (datediff(curdate(), date(pricedate)) < 200))
 ";
+
+			var joinText = string.Empty;
+			if (supplierSynonym > 0) {
+				joinText += @"
+ usersettings.pricesdata pd
+join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode and pd2.FirmCode <> ?synonymSupplier
+ join Customers.suppliers s on s.Id = pd2.firmcode
+  inner join usersettings.pricescosts pc on pd2.pricecode = pc.pricecode
+ join farm.costformrules cfr on  (pc.CostCode = cfr.costcode)
+"
+					+ sqlPart +
+					@"
+	inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
+	join Farm.Sources so on so.id = pim.SourceId
+	join farm.sourcetypes st on st.id = so.SourceTypeId
+	inner join farm.regions r on r.regioncode=s.HomeRegion";
+			}
+			else {
+				joinText += @"
+farm.costformrules cfr
+  inner join usersettings.pricescosts pc on (pc.CostCode = cfr.costcode)
+"
+					+ sqlPart +
+					@"
+	inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
+	join Farm.Sources so on so.id = pim.SourceId
+	join farm.sourcetypes st on st.id = so.SourceTypeId
+	inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
+	inner join Customers.suppliers s on s.Id = pd.firmcode
+	inner join farm.regions r on r.regioncode=s.HomeRegion";
+			}
 
 			command.CommandText =
 				@"
@@ -772,17 +811,7 @@ select
   cfr.TxtEnd as CFRTextEnd,
   exists (select * from usersettings.PricesRegionalData prd where prd.BaseCost = cfr.CostCode) as CFRRegionBaseCost
 FROM
-  farm.costformrules cfr
-  inner join usersettings.pricescosts pc on (pc.CostCode = cfr.costcode)
-"
-					+ sqlPart +
-					@"
-  inner join usersettings.PriceItems pim on pim.Id = pc.PriceItemId
-	join Farm.Sources so on so.id = pim.SourceId
-	join farm.sourcetypes st on st.id = so.SourceTypeId
-  inner join usersettings.pricesdata pd on pd.pricecode = pc.pricecode
-  inner join Customers.suppliers s on s.Id = pd.firmcode
-  inner join farm.regions r on r.regioncode=s.HomeRegion
+" + joinText + @"
 where
   pd.CostType is not null
 ";
@@ -794,11 +823,20 @@ order by CFRCostName";
 			dataAdapter.Fill(dtCostsFormRules);
 		}
 
-		private void dtFormRulesFill(string param, bool showOnlyEnabled)
+		private void dtFormRulesFill(string param, bool showOnlyEnabled, int supplierSynonym)
 		{
 			string sqlPart = String.Empty;
 			if (showOnlyEnabled)
 				sqlPart += @"and (datediff(curdate(), date(pim.pricedate)) < 200)";
+
+			var synonymJoinText = string.Empty;
+			if (supplierSynonym > 0) {
+				synonymJoinText += @"join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode and pd2.FirmCode <> ?synonymSupplier
+inner join usersettings.pricescosts pc on pc.pricecode = pd2.pricecode";
+			}
+			else {
+				synonymJoinText += "inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode";
+			}
 
 			var sql = Fields.Columnds().Implode(f => String.Format("PFR.{0} as FR{0}", f));
 
@@ -919,9 +957,9 @@ SELECT
 	{0}
 FROM
   UserSettings.PricesData AS PD
+ " + synonymJoinText + @"
   INNER JOIN Customers.suppliers s on s.Id = pd.FirmCode
   INNER JOIN farm.regions r on r.regioncode=s.HomeRegion
-  inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode
   inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId
 "
 				+ sqlPart +
@@ -1445,9 +1483,9 @@ order by PriceName
 			if (showOnlyEnabled)
 				FilterParams += "and pd.AgencyEnabled = ?AgencyEnabled and pd.Enabled = ?Enabled ";
 			dtPricesFill(FilterParams, showOnlyEnabled, synonymSupplierIndex);
-			dtFormRulesFill(FilterParams, showOnlyEnabled);
+			dtFormRulesFill(FilterParams, showOnlyEnabled, synonymSupplierIndex);
 			dtPriceFMTsFill();
-			dtCostsFormRulesFill(FilterParams, showOnlyEnabled);
+			dtCostsFormRulesFill(FilterParams, showOnlyEnabled, synonymSupplierIndex);
 			cbRegionsFill();
 			cbSourceFill();
 			cbSynonymFill();
