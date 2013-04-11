@@ -1537,7 +1537,7 @@ namespace FREditor
 			// checkBoxShowDisabled
 			// 
 			this.checkBoxShowDisabled.AutoSize = true;
-			this.checkBoxShowDisabled.Location = new System.Drawing.Point(609, 7);
+			this.checkBoxShowDisabled.Location = new System.Drawing.Point(429, 5);
 			this.checkBoxShowDisabled.Name = "checkBoxShowDisabled";
 			this.checkBoxShowDisabled.Size = new System.Drawing.Size(173, 17);
 			this.checkBoxShowDisabled.TabIndex = 7;
