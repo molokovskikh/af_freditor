@@ -826,6 +826,13 @@ order by CFRCostName";
 		private void dtFormRulesFill(string param, bool showOnlyEnabled, int supplierSynonym)
 		{
 			string sqlPart = String.Empty;
+			var selectPart = @"pd.PriceCode as FRSelfPriceCode,
+	pd.ParentSynonym AS FRSynonyms,
+
+	PFR.PriceFormatId as FRPriceFormatId,
+
+	FR.Memo As FRMemo,
+	if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), PD.PriceName) AS FRName,";
 			if (showOnlyEnabled)
 				sqlPart += @"and (datediff(curdate(), date(pim.pricedate)) < 200)";
 
@@ -833,6 +840,8 @@ order by CFRCostName";
 			if (supplierSynonym > 0) {
 				synonymJoinText += @"join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode and pd2.FirmCode <> ?synonymSupplier
 inner join usersettings.pricescosts pc on pc.pricecode = pd2.pricecode";
+
+				selectPart = selectPart.Replace("pd", "pd2");
 			}
 			else {
 				synonymJoinText += "inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode";
@@ -846,13 +855,7 @@ SELECT
 
 	pim.Id As FRPriceItemId,
 
-	pd.PriceCode as FRSelfPriceCode,
-	pd.ParentSynonym AS FRSynonyms,
-
-	PFR.PriceFormatId as FRPriceFormatId,
-
-	FR.Memo As FRMemo,
-	if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), PD.PriceName) AS FRName,
+	{2}
 	FR.JunkPos AS FRSelfJunkPos,
 	FR.AwaitPos AS FRSelfAwaitPos,
 	FR.VitallyImportantMask as FRSelfVitallyImportantMask,
@@ -971,7 +974,7 @@ FROM
   left join Farm.PriceFMTs as pfmt on pfmt.id = PFR.PriceFormatId
 where 1=1 {1}
 group by pim.Id",
-				sql, param);
+				sql, param, selectPart);
 			dataAdapter.Fill(dtFormRules);
 		}
 
