@@ -626,6 +626,10 @@ order by Format";
 
 		public void dtClientsFill(string param, bool showOnlyEnabled, int synonymSupplier)
 		{
+			var showEnableText = string.Empty;
+			if (showOnlyEnabled) {
+				showEnableText = "and datediff(curdate(), date(pi.pricedate)) < 200";
+			}
 			if (synonymSupplier > 0) {
 				command.CommandText = @"
 SELECT s.Id AS CCode,
@@ -642,12 +646,9 @@ join Farm.Sources so on so.id = pi.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 where
-datediff(curdate(), date(pi.pricedate)) < 200
-and s.Disabled = false 
-and (PD2.AgencyEnabled = 1)
-AND (PD2.Enabled = 1) 
-and PD.FirmCode = ?synonymSupplier 
-and s.id <> ?synonymSupplier" + param;
+PD.FirmCode = ?synonymSupplier 
+and s.id <> ?synonymSupplier" 
+					+ param + showEnableText;
 			}
 			else if (showOnlyEnabled) {
 				command.CommandText = @"
