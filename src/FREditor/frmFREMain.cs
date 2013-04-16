@@ -646,8 +646,7 @@ join Farm.Sources so on so.id = pi.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 where
-PD.FirmCode = ?synonymSupplier 
-and s.id <> ?synonymSupplier" 
+PD.FirmCode = ?synonymSupplier" 
 					+ param + showEnableText;
 			}
 			else if (showOnlyEnabled) {
@@ -745,9 +744,10 @@ FROM
 			dtSource.Clear();
 			dtSource.Rows.Add(new object[] { 0, "Все" });
 			command.CommandText = @"
-SELECT pd.FirmCode, s.Name FROM userSettings.PricesData P
+SELECT pd.FirmCode, concat(s.Name, ' (', pd.PriceName, ') - ', r.Region) as Name FROM userSettings.PricesData P
 join userSettings.PricesData pd on p.ParentSynonym = pd.PriceCode
 join customers.Suppliers s on s.id = pd.FirmCode
+join farm.Regions r on s.HomeRegion = r.RegionCode
 where s.disabled= false
 group by pd.FirmCode
 order by s.Name;";
@@ -774,7 +774,7 @@ order by s.Name;";
 			if (supplierSynonym > 0) {
 				joinText += @"
  usersettings.pricesdata pd
-join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode and pd2.FirmCode <> ?synonymSupplier
+join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode
  join Customers.suppliers s on s.Id = pd2.firmcode
   inner join usersettings.pricescosts pc on pd2.pricecode = pc.pricecode
  join farm.costformrules cfr on  (pc.CostCode = cfr.costcode)
@@ -839,7 +839,7 @@ order by CFRCostName";
 
 			var synonymJoinText = string.Empty;
 			if (supplierSynonym > 0) {
-				synonymJoinText += @"join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode and pd2.FirmCode <> ?synonymSupplier
+				synonymJoinText += @"join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode
 inner join usersettings.pricescosts pc on pc.pricecode = pd2.pricecode";
 
 				selectPart = selectPart.Replace("pd", "pd2");
@@ -2498,6 +2498,26 @@ and fr.Id = pim.FormRuleId;
 		{
 			if (e.KeyCode == Keys.Escape)
 				tbControl.SelectedTab = tpFirms;
+		}
+
+		private void CbSynonymWidthCalculatorDropDown(object sender, EventArgs e)
+		{
+			try {
+				var comboBox = (ComboBox)sender;
+				var width = comboBox.Width;
+				var graphics = comboBox.CreateGraphics();
+				foreach (DataRowView item in comboBox.Items) {
+					if (item != null) {
+						int newWidth = (int)graphics.MeasureString(item.Row[1].ToString().Trim(), comboBox.Font).Width + 5;
+						if (width < newWidth)
+							width = newWidth;
+					}
+				}
+				comboBox.DropDownWidth = width;
+			}
+			catch (Exception ex) {
+				_logger.Error("Ошибка расчете ширины ComboBox synonym", ex);
+			}
 		}
 
 		private void indgvPriceData_MouseDown(object sender, MouseEventArgs e)

@@ -27,7 +27,7 @@ namespace FREditor
 			var joinSynonymPart = string.Empty;
 			var selectPart = string.Empty;
 			if (supplierIndex > 0) {
-				joinSynonymPart += @"join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode and pd2.FirmCode <> ?synonymSupplier 
+				joinSynonymPart += @"join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode
 inner join usersettings.pricescosts pc on pc.pricecode = pd2.pricecode";
 				selectPart += "pd2.FirmCode as PFirmCode,";
 				param = param.Replace("pd", "pd2");
