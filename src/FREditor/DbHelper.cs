@@ -22,7 +22,11 @@ namespace FREditor
 		{
 			var sqlPart = String.Empty;
 			if (showOnlyEnabled)
-				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) ";
+				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) 
+  inner join Customers.suppliers s on s.Id = pd.FirmCode";
+			else {
+				sqlPart += "inner join Customers.suppliers s on s.Id = pd.FirmCode";
+			}
 			// Выбираем прайс-листы с мультиколоночными ценами
 			var joinSynonymPart = string.Empty;
 			var selectPart = string.Empty;
@@ -31,6 +35,7 @@ namespace FREditor
 inner join usersettings.pricescosts pc on pc.pricecode = pd2.pricecode";
 				selectPart += "pd2.FirmCode as PFirmCode,";
 				param = param.Replace("pd", "pd2");
+				sqlPart = sqlPart.Replace("pd", "pd2");
 			}
 			else {
 				joinSynonymPart += "inner join usersettings.pricescosts pc on pc.pricecode = pd.pricecode";
@@ -61,7 +66,6 @@ FROM
 "
 					+ sqlPart +
 					@"
-  inner join Customers.suppliers s on s.Id = pd.FirmCode
   inner join farm.formrules fr on fr.Id = pim.FormRuleId
   inner join farm.regions r on r.regioncode=s.HomeRegion
 	join Farm.Sources so on so.id = pim.SourceId

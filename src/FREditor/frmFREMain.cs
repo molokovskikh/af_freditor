@@ -785,6 +785,7 @@ join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.Paren
 	join Farm.Sources so on so.id = pim.SourceId
 	join farm.sourcetypes st on st.id = so.SourceTypeId
 	inner join farm.regions r on r.regioncode=s.HomeRegion";
+				param = param.Replace("pd", "pd2");
 			}
 			else {
 				joinText += @"
@@ -840,12 +841,15 @@ order by CFRCostName";
 			var synonymJoinText = string.Empty;
 			if (supplierSynonym > 0) {
 				synonymJoinText += @"join usersettings.pricesdata PD2 on pd.FirmCode = ?synonymSupplier and PD2.ParentSynonym = PD.PriceCode
-inner join usersettings.pricescosts pc on pc.pricecode = pd2.pricecode";
+inner join usersettings.pricescosts pc on pc.pricecode = pd2.pricecode
+  INNER JOIN Customers.suppliers s on s.Id = pd2.FirmCode";
 
 				selectPart = selectPart.Replace("pd", "pd2");
+				param = param.Replace("pd", "pd2");
 			}
 			else {
-				synonymJoinText += "inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode";
+				synonymJoinText += "inner join usersettings.pricescosts pc on pc.PriceCode = pd.PriceCode" +
+					"  INNER JOIN Customers.suppliers s on s.Id = pd.FirmCode";
 			}
 
 			var sql = Fields.Columnds().Implode(f => String.Format("PFR.{0} as FR{0}", f));
@@ -962,7 +966,6 @@ SELECT
 FROM
   UserSettings.PricesData AS PD
  " + synonymJoinText + @"
-  INNER JOIN Customers.suppliers s on s.Id = pd.FirmCode
   INNER JOIN farm.regions r on r.regioncode=s.HomeRegion
   inner join usersettings.priceitems pim on pim.Id = pc.PriceItemId
 "
