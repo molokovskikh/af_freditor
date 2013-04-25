@@ -2065,8 +2065,16 @@ and c.Type = ?ContactType;",
 
 		public void tsbApply_Click(object sender, EventArgs e)
 		{
-			Point selectedFirmCell = new Point(indgvFirm.SelectedCells[0].RowIndex, indgvFirm.SelectedCells[0].ColumnIndex);
-			Point selectedPriceCell = new Point(indgvPrice.SelectedCells[0].RowIndex, indgvPrice.SelectedCells[0].ColumnIndex);
+			Point selectedFirmCell = new Point();
+			Point selectedPriceCell = new Point();
+			if (indgvFirm.SelectedCells.Count > 0) {
+				selectedFirmCell.X = indgvFirm.SelectedCells[0].RowIndex;
+				selectedFirmCell.Y = indgvFirm.SelectedCells[0].ColumnIndex;
+			}
+			if (indgvPrice.SelectedCells.Count > 0) {
+				selectedPriceCell.X = indgvPrice.SelectedCells[0].RowIndex;
+				selectedPriceCell.Y = indgvPrice.SelectedCells[0].ColumnIndex;
+			}
 			string filePath = String.Empty;
 			filePath = EndPath + Path.GetFileNameWithoutExtension(_priceFileFormatHelper.NewShortFileName) +
 				Path.DirectorySeparatorChar + _priceFileFormatHelper.NewShortFileName;
