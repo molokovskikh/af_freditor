@@ -296,6 +296,7 @@ SET
   FMinOrderCount = ?FRFMinOrderCount,
   FProducerCost = ?FRFProducerCost,
   FNds = ?FRFNds,
+  PriceEncode = ?FRPriceEncode,
 
   Memo = ?FRMemo,
   {0}
@@ -398,6 +399,7 @@ where
 			parameters.Add("?FRFMinOrderCount", MySqlDbType.VarString);
 			parameters.Add("?FRFProducerCost", MySqlDbType.VarString);
 			parameters.Add("?FRFNds", MySqlDbType.VarString);
+			parameters.Add("?FRPriceEncode", MySqlDbType.Int32);
 			parameters.Add("?FRMemo", MySqlDbType.VarString);
 
 			foreach (var column in Fields.Columnds())
@@ -962,6 +964,7 @@ SELECT
 	PFR.FMinOrderCount as FRFMinOrderCount,
 	PFR.FProducerCost as FRFProducerCost,
 	PFR.FNds as FRFNds,
+	PFR.PriceEncode as FRPriceEncode,
 	{0}
 FROM
   UserSettings.PricesData AS PD
@@ -1077,6 +1080,19 @@ order by PriceName
 				drFR[0]["FRSynonyms"],
 				"PriceCode",
 				"PriceName");
+
+			bsFormRules.SuspendBinding();
+			try {
+				//priceEncoding.DataSource = null;
+				priceEncoding.Items.Clear();
+				var items = EnulHelper.AllElements<Encodes>(i => new EncodeSourceType(i));
+				priceEncoding.Items.AddRange(items);
+				priceEncoding.ValueMember = "PriceEncode";
+				priceEncoding.DisplayMember = "PriceEncodeName";
+			}
+			finally {
+				bsFormRules.ResumeBinding();
+			}
 
 			delimiter = _priceFileFormatHelper.NewDelimiter;
 
@@ -3519,6 +3535,14 @@ order by PriceName
 			if (!InSearch) {
 				tmrSearch.Stop();
 				tmrSearch.Start();
+			}
+		}
+
+		private void priceEncoding_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (!InSearch) {
+				tmrUpdateApply.Stop();
+				tmrUpdateApply.Start();
 			}
 		}
 	}
