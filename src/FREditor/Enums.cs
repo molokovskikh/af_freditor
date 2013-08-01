@@ -24,6 +24,16 @@ namespace FREditor
 
 		public int PriceEncode { get; set; }
 		public string PriceEncodeName { get; set; }
+
+		public static implicit operator int(EncodeSourceType sourceType)
+		{
+			return sourceType.PriceEncode;
+		}
+
+		public override string ToString()
+		{
+			return PriceEncode.ToString();
+		}
 	}
 
 	public static class EnulHelper

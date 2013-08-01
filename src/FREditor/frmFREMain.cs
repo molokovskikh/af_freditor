@@ -1012,6 +1012,8 @@ group by pim.Id",
 			Application.DoEvents();
 			// Выбираем правила для текущего priceItemId
 			var drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName]);
+			//Делаем так потому, что после SuspendBinding значение станет пустым
+			var priceEncode = drFR[0]["FRPriceEncode"].ToString();
 			var drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
 			frmCaption = String.Format("{0}; {1}", drC["CShortName"], drC["CRegion"]);
 			var shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
@@ -1081,18 +1083,19 @@ order by PriceName
 				"PriceCode",
 				"PriceName");
 
-			bsFormRules.SuspendBinding();
-			try {
-				//priceEncoding.DataSource = null;
-				priceEncoding.Items.Clear();
-				var items = EnulHelper.AllElements<Encodes>(i => new EncodeSourceType(i));
-				priceEncoding.Items.AddRange(items);
-				priceEncoding.ValueMember = "PriceEncode";
-				priceEncoding.DisplayMember = "PriceEncodeName";
-			}
-			finally {
-				bsFormRules.ResumeBinding();
-			}
+			
+			FillParentComboBox(
+				priceEncoding,
+				@"
+select
+id as PriceEncode,
+Name as PriceEncodeName
+from
+farm.PriceEncodes
+",
+				drFR[0]["FRPriceEncode"],
+				"PriceEncode",
+				"PriceEncodeName");
 
 			delimiter = _priceFileFormatHelper.NewDelimiter;
 
@@ -3542,6 +3545,7 @@ order by PriceName
 		{
 			if (!InSearch) {
 				tmrUpdateApply.Stop();
+				//dtSet.Tables["Правила формализации"].Rows[0][FRPriceEncode.ColumnName] = priceEncoding.SelectedValue;
 				tmrUpdateApply.Start();
 			}
 		}
