@@ -6,15 +6,15 @@ update `farm`.`FormRules` fr
 join farm.pricefmts p on p.Id = fr.PriceFormatId
  set `PriceEncode` = 1251
  where p.ParserClassName = 'DelimiterTextParser1251' or p.ParserClassName = 'FixedTextParser1251';
- 
+
 update `farm`.`FormRules` fr
  set PriceFormatId = 11
  where PriceFormatId = 12;
- 
+
  update `farm`.`FormRules` fr
  set PriceFormatId = 13
  where PriceFormatId = 14;
- 
+
  delete from farm.pricefmts
 where id = 12 or id = 14;
 
