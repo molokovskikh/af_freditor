@@ -1083,19 +1083,17 @@ order by PriceName
 				"PriceCode",
 				"PriceName");
 
-			
-			FillParentComboBox(
-				priceEncoding,
-				@"
-select
-id as PriceEncode,
-Name as PriceEncodeName
-from
-farm.PriceEncodes
-",
-				drFR[0]["FRPriceEncode"],
-				"PriceEncode",
-				"PriceEncodeName");
+			priceEncoding.Items.Clear();
+			var items = Encoding.GetEncodings()
+				.Where(e => Encodes.Allow.Contains(e.GetEncoding()))
+				.Select(e => new EncodeSourceType(e))
+				.ToArray();
+			priceEncoding.ValueMember = "PriceEncode";
+			priceEncoding.DisplayMember = "PriceEncodeName";
+			priceEncoding.Items.AddRange(items);
+			var encodeValue = Convert.ToInt32(drFR[0]["FRPriceEncode"]);
+			priceEncoding.SelectedItem =
+				priceEncoding.Items.OfType<EncodeSourceType>().FirstOrDefault(i => i.PriceEncode == encodeValue);
 
 			delimiter = _priceFileFormatHelper.NewDelimiter;
 
@@ -3545,7 +3543,10 @@ order by PriceName
 		{
 			if (!InSearch) {
 				tmrUpdateApply.Stop();
-				//dtSet.Tables["Правила формализации"].Rows[0][FRPriceEncode.ColumnName] = priceEncoding.SelectedValue;
+				var encodeInDataSet = dtFormRules.Select("FRPriceItemId = " + currentPriceItemId)[0][FRPriceEncode.ColumnName];
+				var selectedEncode = ((EncodeSourceType)priceEncoding.SelectedItem).PriceEncode;
+				if (encodeInDataSet.ToString() != selectedEncode.ToString())
+					dtFormRules.Select("FRPriceItemId = " + currentPriceItemId)[0][FRPriceEncode.ColumnName] = selectedEncode;
 				tmrUpdateApply.Start();
 			}
 		}

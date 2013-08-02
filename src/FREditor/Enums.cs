@@ -6,12 +6,13 @@ using System.Text;
 
 namespace FREditor
 {
-	public enum Encodes
+	public class Encodes
 	{
-		[Description("CP 866")]
-		Cp866 = 0,
-		[Description("CP 1251")]
-		Cp1251 = 1
+		public static readonly Encoding[] Allow = new[] {
+			Encoding.GetEncoding(866),
+			Encoding.GetEncoding(1251),
+			Encoding.GetEncoding("utf-8")
+		};
 	}
 
 	public class EncodeSourceType
@@ -20,6 +21,12 @@ namespace FREditor
 		{
 			PriceEncode = (int)item.Item2;
 			PriceEncodeName = item.Item1;
+		}
+
+		public EncodeSourceType(EncodingInfo info)
+		{
+			PriceEncode = info.CodePage;
+			PriceEncodeName = info.DisplayName;
 		}
 
 		public int PriceEncode { get; set; }
@@ -36,7 +43,7 @@ namespace FREditor
 		}
 	}
 
-	public static class EnulHelper
+	public static class EnumHelper
 	{
 		public static object[] AllElements<T>(Func<Tuple<string, object>, object> constructor)
 		{

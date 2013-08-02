@@ -1655,7 +1655,7 @@ namespace FREditor
 			// 
 			// priceEncoding
 			// 
-			this.priceEncoding.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRPriceEncode", true));
+			//this.priceEncoding.DataBindings.Add(new System.Windows.Forms.Binding("SelectedValue", this.bsFormRules, "FRPriceEncode", true));
 			this.priceEncoding.FormattingEnabled = true;
 			this.priceEncoding.Location = new System.Drawing.Point(9, 19);
 			this.priceEncoding.Name = "priceEncoding";
