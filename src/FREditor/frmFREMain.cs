@@ -996,7 +996,10 @@ group by pim.Id",
 			try {
 				fW.openPrice += OpenPrice;
 				fW.drP = drP;
-				fW.ShowDialog();
+				if (!Testing)
+					fW.ShowDialog();
+				else
+					OpenPrice(drP);
 			}
 			finally {
 				fW = null;

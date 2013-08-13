@@ -129,15 +129,15 @@ namespace FREditor.Test
 
 			SearchAndSelect();
 
-			var priceEncoding = Control<ComboBox>("priceEncoding");
 			var tabcontrol = Control<TabControl>("tbControl");
 			var tpPrice = Control<TabPage>("tpPrice");
 			tabcontrol.SelectedTab = tpPrice;
 			form.tbControl_SelectedIndexChanged(null, null);
 
+			var priceEncoding = Control<ComboBox>("priceEncoding");
+
 			priceEncoding.SelectedItem =
 				priceEncoding.Items.OfType<EncodeSourceType>().FirstOrDefault(i => i.PriceEncode == 866);
-
 			form.tsbApply_Click(null, null);
 
 			supplier = session.Get<TestSupplier>(supplier.Id);
