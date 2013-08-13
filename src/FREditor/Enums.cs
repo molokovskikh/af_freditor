@@ -13,6 +13,19 @@ namespace FREditor
 			Encoding.GetEncoding(1251),
 			Encoding.GetEncoding("utf-8")
 		};
+
+		public static IList<EncodeSourceType> GetSourceTypes()
+		{
+			var items = new List<EncodeSourceType> {
+				new EncodeSourceType((EncodingInfo)null)
+			};
+			var encodes = Encoding.GetEncodings()
+				.Where(e => Allow.Contains(e.GetEncoding()))
+				.Select(e => new EncodeSourceType(e))
+				.ToList();
+			items.AddRange(encodes);
+			return items;
+		}
 	}
 
 	public class EncodeSourceType
@@ -25,8 +38,13 @@ namespace FREditor
 
 		public EncodeSourceType(EncodingInfo info)
 		{
-			PriceEncode = info.CodePage;
-			PriceEncodeName = info.DisplayName;
+			if (info != null) {
+				PriceEncode = info.CodePage;
+				PriceEncodeName = info.DisplayName;
+			}
+			else {
+				PriceEncodeName = "<Не установлена>";
+			}
 		}
 
 		public int PriceEncode { get; set; }

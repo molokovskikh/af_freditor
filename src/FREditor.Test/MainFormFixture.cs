@@ -14,7 +14,7 @@ using Test.Support.Suppliers;
 namespace FREditor.Test
 {
 	[TestFixture, RequiresSTA]
-	public class MainFormFixture
+	public class MainFormFixture : IntegrationFixture
 	{
 		private frmFREMain form;
 		private TestSupplier supplier;
@@ -26,7 +26,8 @@ namespace FREditor.Test
 			var price = supplier.Prices[0];
 			price.CostType = CostType.MultiFile;
 			price.Costs[0].PriceItem.Source.SourceType = PriceSourceType.Lan;
-			supplier.Save();
+			session.Save(supplier);
+			Close();
 
 			form = new frmFREMain();
 			form.Testing = true;
@@ -77,7 +78,8 @@ namespace FREditor.Test
 		{
 			var supplier2 = TestSupplier.CreateNaked();
 			supplier2.Prices[0].ParentSynonym = supplier.Prices[0].Id;
-			supplier2.Save();
+			session.Save(supplier2);
+			Close();
 
 			form.Form1_Load(form, null);
 
@@ -107,7 +109,8 @@ namespace FREditor.Test
 		{
 			supplier.Prices[0].CostType = CostType.MultiColumn;
 			supplier.Prices[0].NewPriceCost();
-			supplier.Save();
+			session.Save(supplier);
+			Close();
 
 			SearchAndSelect();
 
@@ -117,6 +120,28 @@ namespace FREditor.Test
 			dataGridViewRow["PCostType"] = 1;
 
 			form.tsbApply_Click(null, null);
+		}
+
+		[Test]
+		public void EncodeTest()
+		{
+			Assert.AreEqual(supplier.Prices[0].Costs[0].PriceItem.Format.PriceEncode, 0);
+
+			SearchAndSelect();
+
+			var priceEncoding = Control<ComboBox>("priceEncoding");
+			var tabcontrol = Control<TabControl>("tbControl");
+			var tpPrice = Control<TabPage>("tpPrice");
+			tabcontrol.SelectedTab = tpPrice;
+			form.tbControl_SelectedIndexChanged(null, null);
+
+			priceEncoding.SelectedItem =
+				priceEncoding.Items.OfType<EncodeSourceType>().FirstOrDefault(i => i.PriceEncode == 866);
+
+			form.tsbApply_Click(null, null);
+
+			supplier = session.Get<TestSupplier>(supplier.Id);
+			Assert.AreEqual(supplier.Prices[0].Costs[0].PriceItem.Format.PriceEncode, 866);
 		}
 
 		private void SearchAndSelect()
@@ -135,9 +160,14 @@ namespace FREditor.Test
 			grid.CurrentCell = grid[0, index];
 		}
 
+		private T Control<T>(string name) where T : Control
+		{
+			return (T)form.Controls.Find(name, true).FirstOrDefault();
+		}
+
 		private INDataGridView Grid(string name)
 		{
-			return (INDataGridView)form.Controls.Find(name, true)[0];
+			return Control<INDataGridView>(name);
 		}
 	}
 }

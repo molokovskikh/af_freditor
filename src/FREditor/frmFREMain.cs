@@ -1083,17 +1083,7 @@ order by PriceName
 				"PriceCode",
 				"PriceName");
 
-			priceEncoding.Items.Clear();
-			var items = Encoding.GetEncodings()
-				.Where(e => Encodes.Allow.Contains(e.GetEncoding()))
-				.Select(e => new EncodeSourceType(e))
-				.ToArray();
-			priceEncoding.ValueMember = "PriceEncode";
-			priceEncoding.DisplayMember = "PriceEncodeName";
-			priceEncoding.Items.AddRange(items);
-			var encodeValue = Convert.ToInt32(drFR[0]["FRPriceEncode"]);
-			priceEncoding.SelectedItem =
-				priceEncoding.Items.OfType<EncodeSourceType>().FirstOrDefault(i => i.PriceEncode == encodeValue);
+			FillPriceEncoding(Convert.ToInt32(drFR[0]["FRPriceEncode"]));
 
 			delimiter = _priceFileFormatHelper.NewDelimiter;
 
@@ -1143,6 +1133,17 @@ order by PriceName
 					MessageBox.Show(priceProcessorException.Message, "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				}
 			}
+		}
+
+		public void FillPriceEncoding(int encode)
+		{
+			priceEncoding.Items.Clear();
+			var items = Encodes.GetSourceTypes();
+			priceEncoding.ValueMember = "PriceEncode";
+			priceEncoding.DisplayMember = "PriceEncodeName";
+			priceEncoding.Items.AddRange(items.ToArray());
+			priceEncoding.SelectedItem =
+				priceEncoding.Items.OfType<EncodeSourceType>().FirstOrDefault(i => i.PriceEncode == encode);
 		}
 
 		private bool LoadFileFromBase(string shortFileNameByPriceItemId, string filePath)
@@ -1536,7 +1537,7 @@ order by PriceName
 			}
 		}
 
-		private void tbControl_SelectedIndexChanged(object sender, EventArgs e)
+		public void tbControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			MatchPriceButton.Enabled = true;
 			if (tbControl.SelectedTab == tpFirms) {
