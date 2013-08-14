@@ -19,6 +19,8 @@ namespace FREditor.Helpers
 
 		private ulong _priceItemId = 0;
 
+		private int? _priceEncode;
+
 		private PriceFormat? _newPriceFormat = null;
 
 		private string _newDelimiter = String.Empty;
@@ -53,7 +55,7 @@ FROM
 			dataAdapter.Fill(_dataTableFormats);
 		}
 
-		public void LoadPriceFormat(ulong priceItemId, PriceFormat? priceFormat, string delimiter)
+		public void LoadPriceFormat(ulong priceItemId, PriceFormat? priceFormat, string delimiter, int priceEncode)
 		{
 			_errorMessage = String.Empty;
 
@@ -61,6 +63,7 @@ FROM
 			_currentDelimiter = delimiter;
 
 			_newPriceFormat = priceFormat;
+			_priceEncode = priceEncode;
 			_newDelimiter = delimiter;
 
 			_currentOpenedFileFormat = priceFormat;
@@ -73,8 +76,7 @@ FROM
 		{
 			if (_priceItemId != 0) {
 				_errorMessage = String.Empty;
-				if ((newFormat == PriceFormat.NativeDelimWIN) ||
-					(newFormat == PriceFormat.NativeDelimDOS)) {
+				if (newFormat == PriceFormat.NativeDelim) {
 					if (String.IsNullOrEmpty(newDelimiter)) {
 						_errorMessage = "Для данного формата необходимо сначала задать разделитель";
 						return false;
@@ -245,6 +247,19 @@ FROM
 			get { return _newPriceFormat; }
 		}
 
+		public PriceEncode PriceEncode
+		{
+			get
+			{
+				if (_priceEncode != null)
+					return (PriceEncode)_priceEncode;
+				else {
+					throw new Exception(
+						"Не была передана кодировка, попытка обращения к номеру кодовой страницы завершилась с ошибкой.");
+				}
+			}
+		}
+
 		public string CurrentDelimiter
 		{
 			get { return _currentDelimiter; }
@@ -270,10 +285,8 @@ FROM
 		{
 			return ((priceFormat == PriceFormat.FixedDOS) ||
 				(priceFormat == PriceFormat.FixedWIN) ||
-				(priceFormat == PriceFormat.NativeDelimDOS) ||
-				(priceFormat == PriceFormat.NativeDelimWIN) ||
-				(priceFormat == PriceFormat.NativeFixedDOS) ||
-				(priceFormat == PriceFormat.NativeFixedWIN) ||
+				(priceFormat == PriceFormat.NativeDelim) ||
+				(priceFormat == PriceFormat.NativeFixed) ||
 				(priceFormat == PriceFormat.DelimWIN) ||
 				(priceFormat == PriceFormat.DelimDOS));
 		}

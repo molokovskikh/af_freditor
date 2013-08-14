@@ -24,13 +24,14 @@ namespace FREditor.Helpers
 		private DataTableMarking _dataTableMarking;
 		private Thread _handle;
 		private frmWait _formWait;
+		private PriceEncode _priceEncode;
 		private List<DataTable> _returnValue = null;
 
 		private delegate DialogResult ShowForm();
 
 		private delegate void CloseForm();
 
-		public OpenPriceFileThread(string filePath, PriceFormat? priceFormat, string delimiter, DataTableMarking dataTableMarking)
+		public OpenPriceFileThread(string filePath, PriceFormat? priceFormat, PriceEncode encode, string delimiter, DataTableMarking dataTableMarking)
 		{
 			_filePath = filePath;
 			_priceFormat = priceFormat;
@@ -38,11 +39,12 @@ namespace FREditor.Helpers
 			_dataTableMarking = dataTableMarking;
 			_handle = new Thread(ThreadProc);
 			_formWait = new frmWait();
+			_priceEncode = encode;
 		}
 
 		private void ThreadProc()
 		{
-			_returnValue = PriceFileHelper.OpenPriceFile(_filePath, _priceFormat, _delimiter, _dataTableMarking);
+			_returnValue = PriceFileHelper.OpenPriceFile(_filePath, _priceFormat, _priceEncode, _delimiter, _dataTableMarking);
 		}
 
 		public void Start()
@@ -64,42 +66,60 @@ namespace FREditor.Helpers
 	{
 		public static ILog _logger = LogManager.GetLogger(typeof(PriceFileHelper));
 
-		public static List<DataTable> AsyncOpenPriceFile(string filePath, PriceFormat? priceFormat, string delimiter, DataTableMarking dataTableMarking)
+		public static List<DataTable> AsyncOpenPriceFile(string filePath,
+			PriceFormat? priceFormat,
+			PriceEncode encode,
+			string delimiter,
+			DataTableMarking dataTableMarking)
 		{
-			var openPriceThread = new OpenPriceFileThread(filePath, priceFormat, delimiter, dataTableMarking);
+			var openPriceThread = new OpenPriceFileThread(filePath, priceFormat, encode, delimiter, dataTableMarking);
 			openPriceThread.Start();
 			return openPriceThread.WaitStop();
 		}
 
-		public static List<DataTable> OpenPriceFile(string filePath, PriceFormat? priceFormat, string delimiter, DataTableMarking dataTableMarking)
+		public static List<DataTable> OpenPriceFile(string filePath,
+			PriceFormat? priceFormat,
+			PriceEncode encode,
+			string delimiter,
+			DataTableMarking dataTableMarking)
 		{
 			try {
 				if (!priceFormat.HasValue)
 					throw new Exception(String.Format("Неизвестный формат {0}", priceFormat));
 				var tables = new List<DataTable>();
-				if ((priceFormat.Value == PriceFormat.DBF) || (priceFormat.Value == PriceFormat.NativeDbf)) {
+				if ((priceFormat.Value == PriceFormat.DBF)
+					|| (priceFormat.Value == PriceFormat.NativeDbf)) {
 					tables.Add(OpenDbfFile(filePath));
 					return tables;
 				}
-				if ((priceFormat.Value == PriceFormat.XLS) || (priceFormat.Value == PriceFormat.NativeXls)) {
+				if ((priceFormat.Value == PriceFormat.XLS)
+					|| (priceFormat.Value == PriceFormat.NativeXls)) {
 					return OpenXlsFile(filePath);
 				}
-				if ((priceFormat.Value == PriceFormat.DelimDOS) || (priceFormat.Value == PriceFormat.DelimWIN) ||
-					(priceFormat.Value == PriceFormat.NativeDelimWIN) || (priceFormat.Value == PriceFormat.NativeDelimDOS)) {
-					tables.Add(OpenTextDelimiterFile(filePath, priceFormat, delimiter));
+				if ((priceFormat.Value == PriceFormat.DelimDOS)
+					|| (priceFormat.Value == PriceFormat.DelimWIN)
+					||
+					(priceFormat.Value == PriceFormat.NativeDelim)) {
+					tables.Add(OpenTextDelimiterFile(filePath, priceFormat, delimiter, encode));
 					return tables;
 				}
-				if ((priceFormat.Value == PriceFormat.FixedDOS) || (priceFormat.Value == PriceFormat.FixedWIN) ||
-					(priceFormat.Value == PriceFormat.NativeFixedDOS) || (priceFormat.Value == PriceFormat.NativeFixedWIN)) {
-					tables.Add(OpenTextFixedFile(filePath, priceFormat, dataTableMarking));
+				if ((priceFormat.Value == PriceFormat.FixedDOS)
+					|| (priceFormat.Value == PriceFormat.FixedWIN)
+					||
+					(priceFormat.Value == PriceFormat.NativeFixed)) {
+					tables.Add(OpenTextFixedFile(filePath, priceFormat, encode, dataTableMarking));
 					return tables;
 				}
-				if (priceFormat.Value == PriceFormat.UniversalFormalizer || priceFormat.Value == PriceFormat.FarmaimpeksOKPFormalizer)
+				if (priceFormat.Value == PriceFormat.UniversalFormalizer
+					|| priceFormat.Value == PriceFormat.FarmaimpeksOKPFormalizer)
 					return new List<DataTable>();
 				throw new Exception(String.Format("Неизвестный формат {0}", priceFormat));
 			}
 			catch (Exception ex) {
-				var error = String.Format("Ошибка при открытии файла\nЛокальный путь:{0}\nФормат:{1}\nРазделитель:{2}", filePath, priceFormat, delimiter);
+				var error = String.Format("Ошибка при открытии файла\nЛокальный путь:{0}\nФормат:{1}\nРазделитель:{2}",
+					filePath,
+					priceFormat,
+					delimiter);
 				_logger.Error(error, ex);
 				return null;
 			}
@@ -138,13 +158,13 @@ namespace FREditor.Helpers
 			return filePath;
 		}
 
-		private static DataTable OpenTextDelimiterFile(string filePath, PriceFormat? fmt, string delimiter)
+		private static DataTable OpenTextDelimiterFile(string filePath, PriceFormat? fmt, string delimiter, PriceEncode encode)
 		{
 			filePath = CreateCopyWithoutSpacesAndDots(filePath);
 			var fileName = Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini";
 			using (var w = new StreamWriter(fileName, false, Encoding.GetEncoding(1251))) {
 				w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN)))
+				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelim && encode == PriceEncode.Cp1251)))
 					? "CharacterSet=ANSI"
 					: "CharacterSet=OEM");
 				w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
@@ -180,7 +200,7 @@ namespace FREditor.Helpers
 			using (var w = new StreamWriter(Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini",
 				false, Encoding.GetEncoding(1251))) {
 				w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelimWIN)))
+				w.WriteLine(((fmt == PriceFormat.DelimWIN) || ((fmt == PriceFormat.NativeDelim && encode == PriceEncode.Cp1251)))
 					? "CharacterSet=ANSI"
 					: "CharacterSet=OEM");
 				w.WriteLine(("TAB" == delimiter.ToUpper()) ? "Format=TabDelimited" : "Format=Delimited(" + delimiter + ")");
@@ -206,12 +226,15 @@ namespace FREditor.Helpers
 			return dataTablePrice;
 		}
 
-		private static DataTable OpenTextFixedFile(string filePath, PriceFormat? priceFormat, DataTableMarking dataTableMarking)
+		private static DataTable OpenTextFixedFile(string filePath,
+			PriceFormat? priceFormat,
+			PriceEncode encode,
+			DataTableMarking dataTableMarking)
 		{
-			return OpenPriceTable(filePath, dataTableMarking, priceFormat);
+			return OpenPriceTable(filePath, dataTableMarking, priceFormat, encode);
 		}
 
-		public static DataTable OpenPriceTable(string filePath, DataTableMarking dataTableMarking, PriceFormat? priceFormat)
+		public static DataTable OpenPriceTable(string filePath, DataTableMarking dataTableMarking, PriceFormat? priceFormat, PriceEncode encode)
 		{
 			DataTable dataTablePrice = null;
 			if (dataTableMarking.Rows.Count > 1) {
@@ -228,7 +251,7 @@ namespace FREditor.Helpers
 				var schemaFile = Path.GetDirectoryName(filePath) + Path.DirectorySeparatorChar + "Schema.ini";
 				using (var w = new StreamWriter(schemaFile, false, Encoding.GetEncoding(1251))) {
 					w.WriteLine("[" + Path.GetFileName(filePath) + "]");
-					w.WriteLine(((priceFormat == PriceFormat.FixedWIN) || (priceFormat == PriceFormat.NativeFixedWIN)) ?
+					w.WriteLine(((priceFormat == PriceFormat.FixedWIN) || (priceFormat == PriceFormat.NativeFixed && encode == PriceEncode.Cp1251)) ?
 						"CharacterSet=ANSI" : "CharacterSet=OEM");
 					w.WriteLine("Format=FixedLength");
 					w.WriteLine("ColNameHeader=False");

@@ -26,14 +26,22 @@ namespace FREditor.Test
 
 			foreach (var filename in pricesFiles) {
 				var path = Settings.Default.TestDirectoryPath + pricesDirectory + Path.DirectorySeparatorChar + filename;
-				var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path), pricesFormats[index], "tab", null);
+				var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path),
+					pricesFormats[index],
+					PriceEncode.Cp1251,
+					"tab",
+					null);
 				Assert.That(tables.Count, Is.EqualTo(countsTables[index++]));
 				Assert.That(tables[0].Rows.Count, Is.GreaterThan(0));
 			}
 			index = 0;
 			foreach (var filename in indvalidPricesFiles) {
 				var path = Settings.Default.TestDirectoryPath + invalidPricesDirectory + Path.DirectorySeparatorChar + filename;
-				var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path), pricesFormats[index++], "tab", null);
+				var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path),
+					pricesFormats[index++],
+					PriceEncode.Cp1251,
+					"tab",
+					null);
 				if (tables != null) {
 					Assert.That(tables.Count, Is.EqualTo(1));
 					Assert.That(tables[0].Rows.Count, Is.EqualTo(0));
@@ -48,7 +56,11 @@ namespace FREditor.Test
 			var priceFile = "okp.xml";
 
 			var path = Settings.Default.TestDirectoryPath + pricesDirectory + Path.DirectorySeparatorChar + priceFile;
-			var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path), PriceFormat.FarmaimpeksOKPFormalizer, "tab", null);
+			var tables = PriceFileHelper.OpenPriceFile(Path.GetFullPath(path),
+				PriceFormat.FarmaimpeksOKPFormalizer,
+				PriceEncode.Cp1251,
+				"tab",
+				null);
 			Assert.That(tables, Is.Not.Null);
 		}
 

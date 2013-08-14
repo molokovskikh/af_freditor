@@ -1092,7 +1092,7 @@ order by PriceName
 
 			string takeFile = _priceFileFormatHelper.NewShortFileName;
 
-			PrepareShowTab(fmt);
+			PrepareShowTab(fmt, _priceFileFormatHelper.PriceEncode);
 
 			fileExist = false;
 			// Если формат не установлен, то больше ничего не делаем
@@ -1109,7 +1109,11 @@ order by PriceName
 					Application.DoEvents();
 					_currentFilename = filePath;
 					_dataTableMarking.Fill(drFR[0], dtCostsFormRules.Select("CFRPriceItemId = " + drP[PPriceItemId.ColumnName]));
-					var tables = PriceFileHelper.OpenPriceFile(filePath, fmt, delimiter, _dataTableMarking);
+					var tables = PriceFileHelper.OpenPriceFile(filePath,
+						fmt,
+						_priceFileFormatHelper.PriceEncode,
+						delimiter,
+						_dataTableMarking);
 					if (tables == null) {
 						MessageBox.Show("Неправильный формат или файл поврежден", "Ошибка открытия файла", MessageBoxButtons.OK,
 							MessageBoxIcon.Error);
@@ -1127,7 +1131,7 @@ order by PriceName
 					}
 					Application.DoEvents();
 					if(tryOpenTable)
-						ShowTab(fmt);
+						ShowTab(fmt, _priceFileFormatHelper.PriceEncode);
 					Application.DoEvents();
 					Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
 					Application.DoEvents();
@@ -1209,31 +1213,29 @@ order by PriceName
 			}
 		}
 
-		private void PrepareShowTab(PriceFormat? fmt)
+		private void PrepareShowTab(PriceFormat? fmt, PriceEncode encode)
 		{
 			switch (fmt) {
 				case PriceFormat.DelimDOS:
 				case PriceFormat.DelimWIN:
-				case PriceFormat.NativeDelimWIN:
-				case PriceFormat.NativeDelimDOS:
-
-					lBoxSheetName.Visible = false;
-					txtBoxSheetName.Visible = false;
-					pnlGeneralFields.Visible = true;
-					pnlTxtFields.Visible = false;
-
+				case PriceFormat.NativeDelim:
+					if (encode == PriceEncode.Cp866) {
+						lBoxSheetName.Visible = false;
+						txtBoxSheetName.Visible = false;
+						pnlGeneralFields.Visible = true;
+						pnlTxtFields.Visible = false;
+					}
 					break;
 
 				case PriceFormat.FixedDOS:
 				case PriceFormat.FixedWIN:
-				case PriceFormat.NativeFixedWIN:
-				case PriceFormat.NativeFixedDOS:
-
-					lBoxSheetName.Visible = false;
-					txtBoxSheetName.Visible = false;
-					pnlGeneralFields.Visible = false;
-					pnlTxtFields.Visible = true;
-
+				case PriceFormat.NativeFixed:
+					if (encode == PriceEncode.Cp866) {
+						lBoxSheetName.Visible = false;
+						txtBoxSheetName.Visible = false;
+						pnlGeneralFields.Visible = false;
+						pnlTxtFields.Visible = true;
+					}
 					break;
 
 				case PriceFormat.XLS:
@@ -1301,7 +1303,7 @@ order by PriceName
 			}
 		}
 
-		private void ShowTab(PriceFormat? fmt)
+		private void ShowTab(PriceFormat? fmt, PriceEncode encode)
 		{
 			tcInnerTable.Visible = true;
 
@@ -1309,35 +1311,35 @@ order by PriceName
 			switch (fmt) {
 				case PriceFormat.DelimDOS:
 				case PriceFormat.DelimWIN:
-				case PriceFormat.NativeDelimWIN:
-				case PriceFormat.NativeDelimDOS:
-					tcInnerTable.SizeMode = TabSizeMode.Fixed;
-					tcInnerTable.ItemSize = new Size(0, 1);
-					tcInnerTable.Appearance = TabAppearance.Buttons;
+				case PriceFormat.NativeDelim:
+					if (encode == PriceEncode.Cp866) {
+						tcInnerTable.SizeMode = TabSizeMode.Fixed;
+						tcInnerTable.ItemSize = new Size(0, 1);
+						tcInnerTable.Appearance = TabAppearance.Buttons;
 
-					indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
+						indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
 
-					tcInnerSheets.SizeMode = TabSizeMode.Fixed;
-					tcInnerSheets.ItemSize = new Size(0, 1);
-					tcInnerSheets.Appearance = TabAppearance.FlatButtons;
-
+						tcInnerSheets.SizeMode = TabSizeMode.Fixed;
+						tcInnerSheets.ItemSize = new Size(0, 1);
+						tcInnerSheets.Appearance = TabAppearance.FlatButtons;
+					}
 					break;
 
 				case PriceFormat.FixedDOS:
 				case PriceFormat.FixedWIN:
-				case PriceFormat.NativeFixedWIN:
-				case PriceFormat.NativeFixedDOS:
-					tcInnerTable.SizeMode = TabSizeMode.Normal;
-					tcInnerTable.ItemSize = new Size(58, 18);
-					tcInnerTable.Appearance = TabAppearance.Normal;
+				case PriceFormat.NativeFixed:
+					if (encode == PriceEncode.Cp866) {
+						tcInnerTable.SizeMode = TabSizeMode.Normal;
+						tcInnerTable.ItemSize = new Size(58, 18);
+						tcInnerTable.Appearance = TabAppearance.Normal;
 
-					indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
-					indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
+						indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
+						indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
 
-					tcInnerSheets.SizeMode = TabSizeMode.Fixed;
-					tcInnerSheets.ItemSize = new Size(0, 1);
-					tcInnerSheets.Appearance = TabAppearance.FlatButtons;
-
+						tcInnerSheets.SizeMode = TabSizeMode.Fixed;
+						tcInnerSheets.ItemSize = new Size(0, 1);
+						tcInnerSheets.Appearance = TabAppearance.FlatButtons;
+					}
 					break;
 
 				case PriceFormat.XLS:
@@ -1434,7 +1436,10 @@ order by PriceName
 			indgvPriceData.DataSource = null;
 			Application.DoEvents();
 
-			dtPrice = PriceFileHelper.OpenPriceTable(_currentFilename, _dataTableMarking, _priceFileFormatHelper.NewFormat); // OpenTable(fmt);
+			dtPrice = PriceFileHelper.OpenPriceTable(_currentFilename,
+				_dataTableMarking,
+				_priceFileFormatHelper.NewFormat,
+				_priceFileFormatHelper.PriceEncode); // OpenTable(fmt);
 			Application.DoEvents();
 
 			indgvPriceData.DataSource = dtPrice;
@@ -1573,8 +1578,9 @@ order by PriceName
 
 				var row = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
 				var priceFormat = (row[0]["FRPriceFormatId"] is DBNull) ? null : (PriceFormat?)Convert.ToInt32(row[0]["FRPriceFormatId"]);
+				var encode = Convert.ToInt32(row[0]["FRPriceEncode"]);
 				var delim = Convert.ToString(row[0]["FRDelimiter"]);
-				_priceFileFormatHelper.LoadPriceFormat((ulong)currentPriceItemId, priceFormat, delim);
+				_priceFileFormatHelper.LoadPriceFormat((ulong)currentPriceItemId, priceFormat, delim, encode);
 
 				bsCostsFormRules.Filter = "CFRPriceItemId = " + currentPriceItemId.ToString();
 				bsFormRules.Filter = "FRPriceItemId = " + currentPriceItemId.ToString();
@@ -1830,7 +1836,7 @@ and c.Type = ?ContactType;",
 					var regexMask = txtMask.Text; //.Replace("*", "+?");
 					r = new Regex(regexMask, RegexOptions.IgnoreCase);
 					if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
-						(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN)) {
+						(fmt == PriceFormat.NativeFixed)) {
 						if ((txtExistBegin.Text != String.Empty) && (txtExistEnd.Text != String.Empty)) {
 							foreach (DataRow dr in _dataTableMarking.Rows) {
 								if ((dr["MBeginField"].ToString() == txtExistBegin.Text) && (dr["MEndField"].ToString() == txtExistEnd.Text))
@@ -2475,7 +2481,7 @@ and fr.Id = pim.FormRuleId;
 		{
 			if (fileExist) {
 				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
-					(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN)) {
+					(fmt == PriceFormat.NativeFixed)) {
 					CregKey = BaseRegKey + "\\CostsDataGridFixed";
 				}
 				else {
@@ -2488,7 +2494,7 @@ and fr.Id = pim.FormRuleId;
 		private void LoadCostsSettings()
 		{
 			if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
-				(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN)) {
+				(fmt == PriceFormat.NativeFixed)) {
 				indgvCosts.Columns[cFRCostNameDataGridViewTextBoxColumn.Name].Visible = true;
 				indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
 				indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
@@ -3035,7 +3041,7 @@ order by PriceName
 				string selectFieldName;
 
 				if ((fmt == PriceFormat.FixedDOS) || (fmt == PriceFormat.FixedWIN) ||
-					(fmt == PriceFormat.NativeFixedDOS) || (fmt == PriceFormat.NativeFixedWIN))
+					(fmt == PriceFormat.NativeFixed))
 					selectFieldName = "CFRTextBegin";
 				else
 					selectFieldName = "CFRFieldName";
@@ -3121,8 +3127,11 @@ order by PriceName
 				dialog.Title += String.Format("Разделитель '{0}'", _priceFileFormatHelper.NewDelimiter);
 			if (dialog.ShowDialog() == DialogResult.OK) {
 				var fileName = dialog.FileName;
-				var tables = PriceFileHelper.AsyncOpenPriceFile(fileName, _priceFileFormatHelper.NewFormat,
-					_priceFileFormatHelper.NewDelimiter, _dataTableMarking);
+				var tables = PriceFileHelper.AsyncOpenPriceFile(fileName,
+					_priceFileFormatHelper.NewFormat,
+					_priceFileFormatHelper.PriceEncode,
+					_priceFileFormatHelper.NewDelimiter,
+					_dataTableMarking);
 				if ((tables == null) || (tables.Count == 0) || (tables[0].Rows.Count == 0)) {
 					MessageBox.Show("Неправильный формат или файл поврежден", "Ошибка открытия файла", MessageBoxButtons.OK,
 						MessageBoxIcon.Error);
