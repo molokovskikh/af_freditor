@@ -514,6 +514,7 @@ SELECT
   FileExtention  as FMTExt
 FROM
   farm.PriceFmts
+where hidden = false
 order by Format";
 
 			dataAdapter.Fill(dtPriceFMTs);
