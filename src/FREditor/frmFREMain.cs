@@ -1303,34 +1303,30 @@ order by PriceName
 				case PriceFormat.DelimDOS:
 				case PriceFormat.DelimWIN:
 				case PriceFormat.NativeDelim:
-					if (encode == PriceEncode.Cp866) {
-						tcInnerTable.SizeMode = TabSizeMode.Fixed;
-						tcInnerTable.ItemSize = new Size(0, 1);
-						tcInnerTable.Appearance = TabAppearance.Buttons;
+					tcInnerTable.SizeMode = TabSizeMode.Fixed;
+					tcInnerTable.ItemSize = new Size(0, 1);
+					tcInnerTable.Appearance = TabAppearance.Buttons;
 
-						indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
+					indgvCosts.Columns[cFRFieldNameDataGridViewTextBoxColumn.Name].Visible = true;
 
-						tcInnerSheets.SizeMode = TabSizeMode.Fixed;
-						tcInnerSheets.ItemSize = new Size(0, 1);
-						tcInnerSheets.Appearance = TabAppearance.FlatButtons;
-					}
+					tcInnerSheets.SizeMode = TabSizeMode.Fixed;
+					tcInnerSheets.ItemSize = new Size(0, 1);
+					tcInnerSheets.Appearance = TabAppearance.FlatButtons;
 					break;
 
 				case PriceFormat.FixedDOS:
 				case PriceFormat.FixedWIN:
 				case PriceFormat.NativeFixed:
-					if (encode == PriceEncode.Cp866) {
-						tcInnerTable.SizeMode = TabSizeMode.Normal;
-						tcInnerTable.ItemSize = new Size(58, 18);
-						tcInnerTable.Appearance = TabAppearance.Normal;
+					tcInnerTable.SizeMode = TabSizeMode.Normal;
+					tcInnerTable.ItemSize = new Size(58, 18);
+					tcInnerTable.Appearance = TabAppearance.Normal;
 
-						indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
-						indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
+					indgvCosts.Columns[cFRTextBeginDataGridViewTextBoxColumn.Name].Visible = true;
+					indgvCosts.Columns[cFRTextEndDataGridViewTextBoxColumn.Name].Visible = true;
 
-						tcInnerSheets.SizeMode = TabSizeMode.Fixed;
-						tcInnerSheets.ItemSize = new Size(0, 1);
-						tcInnerSheets.Appearance = TabAppearance.FlatButtons;
-					}
+					tcInnerSheets.SizeMode = TabSizeMode.Fixed;
+					tcInnerSheets.ItemSize = new Size(0, 1);
+					tcInnerSheets.Appearance = TabAppearance.FlatButtons;
 					break;
 
 				case PriceFormat.XLS:
