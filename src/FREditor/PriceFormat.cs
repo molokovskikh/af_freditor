@@ -25,7 +25,7 @@
 		NativeFixedDOS,*/
 		UniversalFormalizer = 16,
 		FarmaimpeksOKPFormalizer = 17,
-		NativeDelim = 18,
-		NativeFixed = 19
+		NativeDelim = 19,
+		NativeFixed = 21
 	}
 }
