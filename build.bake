@@ -9,4 +9,4 @@ Global(
 
 task @default, [@ClickOnceBuild]
 
-task @deploy, [@CheckScmChanges, @ClickOnceDeploy]
+task @deploy, [@ClickOnceDeploy]
