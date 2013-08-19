@@ -1220,46 +1220,36 @@ order by PriceName
 				case PriceFormat.DelimDOS:
 				case PriceFormat.DelimWIN:
 				case PriceFormat.NativeDelim:
-					if (encode == PriceEncode.Cp866) {
-						lBoxSheetName.Visible = false;
-						txtBoxSheetName.Visible = false;
-						pnlGeneralFields.Visible = true;
-						pnlTxtFields.Visible = false;
-					}
+					lBoxSheetName.Visible = false;
+					txtBoxSheetName.Visible = false;
+					pnlGeneralFields.Visible = true;
+					pnlTxtFields.Visible = false;
 					break;
 
 				case PriceFormat.FixedDOS:
 				case PriceFormat.FixedWIN:
 				case PriceFormat.NativeFixed:
-					if (encode == PriceEncode.Cp866) {
-						lBoxSheetName.Visible = false;
-						txtBoxSheetName.Visible = false;
-						pnlGeneralFields.Visible = false;
-						pnlTxtFields.Visible = true;
-					}
+					lBoxSheetName.Visible = false;
+					txtBoxSheetName.Visible = false;
+					pnlGeneralFields.Visible = false;
+					pnlTxtFields.Visible = true;
 					break;
 
 				case PriceFormat.XLS:
 				case PriceFormat.NativeXls:
-
 					lBoxSheetName.Visible = true;
 					txtBoxSheetName.Visible = true;
 					pnlGeneralFields.Visible = true;
 					pnlTxtFields.Visible = false;
-
 					break;
-
 				case PriceFormat.DBF:
 				case PriceFormat.NativeDbf:
-
 					lBoxSheetName.Visible = false;
 					txtBoxSheetName.Visible = false;
 					pnlGeneralFields.Visible = true;
 					pnlTxtFields.Visible = false;
-
 					break;
 			}
-
 			txtBoxSelfAwaitPos.ReadOnly = false;
 			txtBoxSelfJunkPos.ReadOnly = false;
 			txtBoxNameMask.ReadOnly = false;
