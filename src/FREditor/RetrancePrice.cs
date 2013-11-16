@@ -45,7 +45,7 @@ namespace FREditor
 					MessageBox.Show("Прайс-лист успешно переподложен.");
 #endif
 				}
-				catch(EndpointNotFoundException ex) {
+				catch (EndpointNotFoundException ex) {
 					SynonymMatcher.ErrorOnConnectToPriceProcessor(_log, ex);
 				}
 				catch (Exception ex) {

@@ -36,7 +36,8 @@ namespace FREditor
 			}
 
 			Text = String.Format("Результат сопоставления (сопоставлено позиций: {0})", matchCnt);
-			if (!Modal) ShowDialog();
+			if (!Modal)
+				ShowDialog();
 		}
 
 		private void matchResGV_DoubleClick(object sender, EventArgs e)
@@ -55,7 +56,8 @@ namespace FREditor
 
 		private void btnMatchAll_Click(object sender, EventArgs e)
 		{
-			if (Matcher.Firms.Count <= 0) return;
+			if (Matcher.Firms.Count <= 0)
+				return;
 			btnMatchAll.Enabled = false;
 			Close();
 			Matcher.StartAutoMatching();

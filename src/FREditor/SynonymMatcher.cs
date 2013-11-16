@@ -121,7 +121,7 @@ namespace FREditor
 					ret = true;
 				}
 			}
-			catch(EndpointNotFoundException ex) {
+			catch (EndpointNotFoundException ex) {
 				iterCount = 0;
 				timer.Stop();
 				ErrorOnConnectToPriceProcessor(_logger, ex);
@@ -162,7 +162,8 @@ namespace FREditor
 				if (matching) {
 					if (StartMatching(currentPriceItemId, currentPriceCode)) {
 						matching = false;
-						if (!frmMatchProgr.Modal) frmMatchProgr.ShowDialog();
+						if (!frmMatchProgr.Modal)
+							frmMatchProgr.ShowDialog();
 					}
 					else
 						timer.Stop();
@@ -211,7 +212,7 @@ namespace FREditor
 					CloseProgressBar();
 				}
 			}
-			catch(EndpointNotFoundException ex) {
+			catch (EndpointNotFoundException ex) {
 				timer.Stop();
 				CloseProgressBar();
 				ErrorOnConnectToPriceProcessor(_logger, ex);
@@ -231,7 +232,8 @@ namespace FREditor
 			int matchCnt = 0;
 			foreach (var res in result) {
 				string[] info = res.Split(';');
-				if (info.Length <= 1) continue;
+				if (info.Length <= 1)
+					continue;
 				int firmCnt = Convert.ToInt32(info[0]);
 				string synonym = info[info.Length - 1];
 				for (int i = 0; i < firmCnt; i++) {

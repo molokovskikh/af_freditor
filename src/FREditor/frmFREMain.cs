@@ -58,6 +58,7 @@ namespace FREditor
 			get { return gds; }
 			set { gds = value; }
 		}
+
 		/// <summary>
 		/// для тестов
 		/// </summary>
@@ -649,7 +650,7 @@ join Farm.Sources so on so.id = pi.SourceId
 join farm.sourcetypes st on st.id = so.SourceTypeId
 INNER JOIN farm.regions r ON r.RegionCode = s.HomeRegion
 where
-PD.FirmCode = ?synonymSupplier" 
+PD.FirmCode = ?synonymSupplier"
 					+ param + showEnableText;
 			}
 			else if (showOnlyEnabled) {
@@ -1121,7 +1122,7 @@ order by PriceName
 						return;
 					}
 					var tryOpenTable = tables.Count > 0;
-					if(tryOpenTable) {
+					if (tryOpenTable) {
 						dtPrice = tables[0];
 						if ((fmt == PriceFormat.XLS) || (fmt == PriceFormat.NativeXls)) {
 							tbpSheet1.Text = tables[0].TableName;
@@ -1131,7 +1132,7 @@ order by PriceName
 						}
 					}
 					Application.DoEvents();
-					if(tryOpenTable)
+					if (tryOpenTable)
 						ShowTab(fmt, _priceFileFormatHelper.PriceEncode);
 					Application.DoEvents();
 					Text = String.Format("Редактор Правил Формализации ({0})", frmCaption);
@@ -2070,7 +2071,7 @@ and c.Type = ?ContactType;",
 			var inboundPriceItems = InboundPriceItemsForTests ?? new[] { "1152" };
 #endif
 			if (inboundPriceItems.Contains(dataRowPrice)) {
-				if(!isTest)
+				if (!isTest)
 					MessageBox.Show("Данный прайс-лист находится в очереди на формализацию.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return true;
 			}
@@ -2095,7 +2096,7 @@ and c.Type = ?ContactType;",
 
 			CommitAllEdit();
 			var dataRowPrice = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row[PPriceItemId.ColumnName];
-			if(IsPriceInInbound(dataRowPrice.ToString()))
+			if (IsPriceInInbound(dataRowPrice.ToString()))
 				return;
 			DataSet chg = dtSet.GetChanges();
 			if (chg != null) {
@@ -2302,7 +2303,7 @@ and fr.Id = pim.FormRuleId;
 								MessageBoxIcon.Error);
 						}
 					}
-					catch(EndpointNotFoundException ex) {
+					catch (EndpointNotFoundException ex) {
 						SynonymMatcher.ErrorOnConnectToPriceProcessor(_logger, ex);
 					}
 					catch (Exception ex) {
@@ -2571,7 +2572,8 @@ and fr.Id = pim.FormRuleId;
 							beginText = dr["MBeginField"].ToString();
 							endText = dr["MEndField"].ToString();
 						}
-						else i++;
+						else
+							i++;
 					}
 					dgv.DoDragDrop(new DropField(beginText, endText, RowText), DragDropEffects.Copy | DragDropEffects.Move);
 				}
@@ -2703,8 +2705,10 @@ and fr.Id = pim.FormRuleId;
 				if (CostIsValid()) {
 					DataRowView item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
 					int cost_type = (int)item[PCostType.ColumnName];
-					if (cost_type == 0) return; // для удаления цен из мультиколоночных прайсов используется другой механизм
-					if ((bool)item[PDeleted.ColumnName] == true) return;
+					if (cost_type == 0)
+						return; // для удаления цен из мультиколоночных прайсов используется другой механизм
+					if ((bool)item[PDeleted.ColumnName] == true)
+						return;
 					byte isBaseCost = (byte)item[PBaseCost.ColumnName];
 					if (isBaseCost == 1) {
 						MessageBox.Show("Нельзя удалить базовую ценовую колонку", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -2981,7 +2985,8 @@ order by PriceName
 		private void indgvCosts_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
 		{
 			DataGridViewRow r = indgvCosts.Rows[e.RowIndex];
-			if (r.IsNewRow) return;
+			if (r.IsNewRow)
+				return;
 
 			//Если мы пытаемся отредактировать название ценовой колонки, помечанной на удаление, то не позволяем это сделать
 			if (indgvCosts.Columns[e.ColumnIndex] == cFRCostNameDataGridViewTextBoxColumn) {
@@ -3136,7 +3141,7 @@ order by PriceName
 						tbControl_SelectedIndexChanged(sender, e);
 					}
 				}
-				catch(EndpointNotFoundException ex) {
+				catch (EndpointNotFoundException ex) {
 					SynonymMatcher.ErrorOnConnectToPriceProcessor(_logger, ex);
 				}
 				catch (Exception ex) {
@@ -3525,7 +3530,9 @@ order by PriceName
 					createCostCollumnInManyFilesPrice.Enabled = false;
 			}
 		}
+
 		private ToolTip _toolTip1 = new ToolTip();
+
 		private void cmbFormat_MouseEnter(object sender, EventArgs e)
 		{
 			_toolTip1.SetToolTip(cmbFormat, cmbFormat.Text);

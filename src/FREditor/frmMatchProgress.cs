@@ -23,7 +23,8 @@ namespace FREditor
 
 		private void btnCancel_Click(object sender, EventArgs e)
 		{
-			if (Matcher != null) Matcher.StopMatching();
+			if (Matcher != null)
+				Matcher.StopMatching();
 		}
 	}
 }
