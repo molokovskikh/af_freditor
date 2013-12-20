@@ -19,10 +19,6 @@
 		NativeDbf,
 		Sudakov,
 		NativeXls,
-		/*NativeDelimWIN,
-		NativeDelimDOS,
-		NativeFixedWIN,
-		NativeFixedDOS,*/
 		UniversalFormalizer = 16,
 		FarmaimpeksOKPFormalizer = 17,
 		NativeDelim = 19,
