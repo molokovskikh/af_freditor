@@ -729,11 +729,8 @@ Order By Region
 			dtSource.Clear();
 			dtSource.Rows.Add(new object[] { 0, "Все" });
 			command.CommandText = @"
-SELECT
-	Id,
-	Type
-FROM
-	farm.sourcetypes";
+SELECT Id, Type
+FROM farm.sourcetypes";
 			dataAdapter.Fill(dtSource);
 			cbSource.DataSource = dtSource;
 			cbSource.DisplayMember = "Type";
