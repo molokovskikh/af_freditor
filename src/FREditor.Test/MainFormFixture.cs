@@ -27,7 +27,7 @@ namespace FREditor.Test
 			price.CostType = CostType.MultiFile;
 			price.Costs[0].PriceItem.Source.SourceType = PriceSourceType.Lan;
 			session.Save(supplier);
-			Close();
+			session.Transaction.Commit();
 
 			form = new frmFREMain();
 			form.Testing = true;
@@ -76,10 +76,11 @@ namespace FREditor.Test
 		[Test]
 		public void Parent_synonym_test()
 		{
+			session.Transaction.Begin();
 			var supplier2 = TestSupplier.CreateNaked();
 			supplier2.Prices[0].ParentSynonym = supplier.Prices[0].Id;
 			session.Save(supplier2);
-			Close();
+			session.Transaction.Commit();
 
 			form.Form1_Load(form, null);
 
@@ -107,10 +108,11 @@ namespace FREditor.Test
 		[Test]
 		public void Update_cost_type()
 		{
+			session.Transaction.Begin();
 			supplier.Prices[0].CostType = CostType.MultiColumn;
 			supplier.Prices[0].NewPriceCost();
 			session.Save(supplier);
-			Close();
+			session.Transaction.Commit();
 
 			SearchAndSelect();
 
@@ -140,7 +142,7 @@ namespace FREditor.Test
 				priceEncoding.Items.OfType<EncodeSourceType>().FirstOrDefault(i => i.PriceEncode == 866);
 			form.tsbApply_Click(null, null);
 
-			supplier = session.Get<TestSupplier>(supplier.Id);
+			session.Refresh(supplier);
 			Assert.AreEqual(supplier.Prices[0].Costs[0].PriceItem.Format.PriceEncode, 866);
 		}
 
