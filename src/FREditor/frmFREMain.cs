@@ -92,9 +92,12 @@ namespace FREditor
 		private string delimiter = String.Empty;
 		private PriceFormat? fmt;
 
-		//Текущий клиент, с которым происходит работа и текущий прайс
-		private long currentPriceItemId;
-		private long currentClientCode;
+		//текущий поставщик, с которым происходит работа и текущий прайс
+		//будь бдителен когда таблица со списком прайс-листов не отображается текущий элемент в таблице всегда будет первым
+		//а не тот в который мы вошли
+		private uint currentPriceItemId;
+		private uint currentPriceId;
+		private uint currentSupplierId;
 
 		private string nameR = String.Empty;
 		private string FilterParams = String.Empty;
@@ -1015,7 +1018,6 @@ group by pim.Id",
 			// Выбираем правила для текущего priceItemId
 			var drFR = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName]);
 			//Делаем так потому, что после SuspendBinding значение станет пустым
-			var priceEncode = drFR[0]["FRPriceEncode"].ToString();
 			var drC = drP.GetParentRow(dtClients.TableName + "-" + dtPrices.TableName);
 			frmCaption = String.Format("{0}; {1}", drC["CShortName"], drC["CRegion"]);
 			var shortFileNameByPriceItemId = drFR[0]["FRPriceItemId"].ToString();
@@ -1545,35 +1547,39 @@ order by PriceName
 				bsFormRules.SuspendBinding();
 
 				RefreshDataBind();
-				currentClientCode = 0;
+				currentSupplierId = 0;
 				currentPriceItemId = 0;
 				tsbApply.Enabled = false;
 				tsbCancel.Enabled = false;
 				tmrUpdateApply.Start();
 			}
 			else if (tbControl.SelectedTab == tpPrice) {
-				CurrencyManager currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
-				DataRowView drv = (DataRowView)currencyManager.Current;
-				DataView dv = (DataView)currencyManager.List;
+				var currencyManager = (CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember];
+				var drv = (DataRowView)currencyManager.Current;
 
-				DataRow drP = drv.Row;
+				var drP = drv.Row;
+				var dataGridViewRow = indgvPrice.CurrentRow;
+				if (dataGridViewRow == null)
+					return;
+				var dataRowView = ((DataRowView)dataGridViewRow.DataBoundItem);
 
-				currentClientCode = (long)(((DataRowView)indgvFirm.CurrentRow.DataBoundItem)[CCode.ColumnName]);
-				currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
+				currentSupplierId = Convert.ToUInt32(dataRowView[PFirmCode.ColumnName]);
+				currentPriceItemId = Convert.ToUInt32(dataRowView[PPriceItemId.ColumnName]);
+				currentPriceId = Convert.ToUInt32(dataRowView[PPriceCode.ColumnName]);
 
-				var row = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName].ToString());
+				var row = dtFormRules.Select("FRPriceItemId = " + drP[PPriceItemId.ColumnName]);
 				var priceFormat = (row[0]["FRPriceFormatId"] is DBNull) ? null : (PriceFormat?)Convert.ToInt32(row[0]["FRPriceFormatId"]);
 				var encode = Convert.ToInt32(row[0]["FRPriceEncode"]);
 				var delim = Convert.ToString(row[0]["FRDelimiter"]);
-				_priceFileFormatHelper.LoadPriceFormat((ulong)currentPriceItemId, priceFormat, delim, encode);
+				_priceFileFormatHelper.LoadPriceFormat(currentPriceItemId, priceFormat, delim, encode);
 
-				bsCostsFormRules.Filter = "CFRPriceItemId = " + currentPriceItemId.ToString();
-				bsFormRules.Filter = "FRPriceItemId = " + currentPriceItemId.ToString();
+				bsCostsFormRules.Filter = "CFRPriceItemId = " + currentPriceItemId;
+				bsFormRules.Filter = "FRPriceItemId = " + currentPriceItemId;
 				tbCostFind.Text = String.Empty;
 				bsCostsFormRules.ResumeBinding();
 				bsFormRules.ResumeBinding();
 
-				if (((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PCostType.ColumnName] is DBNull)
+				if (dataRowView[PCostType.ColumnName] is DBNull)
 					indgvCosts.AllowUserToAddRows = false;
 
 				indgvCosts.ReadOnly = !indgvCosts.AllowUserToAddRows;
@@ -1592,9 +1598,7 @@ order by PriceName
 						.DefaultValue = DBNull.Value;
 				}
 				fmt = null;
-				//_prevFmt = null;
 				delimiter = String.Empty;
-				//_prevDelimiter = String.Empty;
 				DoOpenPrice(drP);
 				tmrUpdateApply.Start();
 				if (indgvPriceData.RowCount > 0) {
@@ -1614,11 +1618,11 @@ order by PriceName
 			this.Text = "Редактор Правил Формализации";
 			if (fcs == dgFocus.Firm) {
 				indgvFirm.Focus();
-				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentClientCode);
+				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentSupplierId);
 			}
 			else if (fcs == dgFocus.Price) {
 				indgvPrice.Select();
-				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentClientCode);
+				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvFirm.DataSource, indgvFirm.DataMember], CCode.ColumnName, currentSupplierId);
 				CurrencyManagerPosition((CurrencyManager)BindingContext[indgvPrice.DataSource, indgvPrice.DataMember], PPriceItemId.ColumnName, currentPriceItemId);
 			}
 		}
@@ -1766,9 +1770,7 @@ and c.Type = ?ContactType;",
 		private void CheckOnePrice(CurrencyManager currencyManager)
 		{
 			if (currencyManager.Position > -1) {
-				DataRowView drv = (DataRowView)currencyManager.Current;
-				DataView dv = (DataView)currencyManager.List;
-
+				var drv = (DataRowView)currencyManager.Current;
 				if (drv.Row.GetChildRows(dtClients.TableName + "-" + dtPrices.TableName).Length > 1) {
 					indgvPrice.Focus();
 				}
@@ -2077,8 +2079,8 @@ and c.Type = ?ContactType;",
 
 		public void tsbApply_Click(object sender, EventArgs e)
 		{
-			Point selectedFirmCell = new Point();
-			Point selectedPriceCell = new Point();
+			var selectedFirmCell = new Point();
+			var selectedPriceCell = new Point();
 			if (indgvFirm.SelectedCells.Count > 0) {
 				selectedFirmCell.X = indgvFirm.SelectedCells[0].RowIndex;
 				selectedFirmCell.Y = indgvFirm.SelectedCells[0].ColumnIndex;
@@ -2087,21 +2089,20 @@ and c.Type = ?ContactType;",
 				selectedPriceCell.X = indgvPrice.SelectedCells[0].RowIndex;
 				selectedPriceCell.Y = indgvPrice.SelectedCells[0].ColumnIndex;
 			}
-			string filePath = String.Empty;
-			filePath = EndPath + Path.GetFileNameWithoutExtension(_priceFileFormatHelper.NewShortFileName) +
+			var filePath = EndPath + Path.GetFileNameWithoutExtension(_priceFileFormatHelper.NewShortFileName) +
 				Path.DirectorySeparatorChar + _priceFileFormatHelper.NewShortFileName;
 
 			CommitAllEdit();
 			var dataRowPrice = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row[PPriceItemId.ColumnName];
 			if (IsPriceInInbound(dataRowPrice.ToString()))
 				return;
-			DataSet chg = dtSet.GetChanges();
+			var chg = dtSet.GetChanges();
 			if (chg != null) {
 				if (tbControl.SelectedTab == tpPrice) {
 					if (connection.State == ConnectionState.Closed)
 						connection.Open();
 					try {
-						MySqlTransaction tr = connection.BeginTransaction();
+						var tr = connection.BeginTransaction();
 						try {
 							DbHelper.SetLogParameters(connection);
 
@@ -2113,7 +2114,7 @@ and c.Type = ?ContactType;",
 							daCostRules.TableMappings.Add("Table", dtCostsFormRules.TableName);
 
 							//Формируем тело письма с изменениями в колонках
-							StringBuilder body = new StringBuilder();
+							var body = new StringBuilder();
 							foreach (DataRow changeRow in chg.Tables[dtCostsFormRules.TableName].Rows) {
 								if (changeRow.RowState == DataRowState.Added)
 									body.AppendFormat("Добавлена ценовая колонка \"{0}\".\n", changeRow[CFRCostName.ColumnName]);
@@ -2137,17 +2138,17 @@ and c.Type = ?ContactType;",
 
 							if (body.Length > 0) {
 								//Получаем информацию о поставщике, регионе и прайс-листе
-								long _selfPriceCode = (long)(((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
-								DataRow drPrice = dtPrices.Select("PPriceCode = " + _selfPriceCode)[0];
-								string _priceName = drPrice[PPriceName.ColumnName].ToString();
+								var selfPriceCode = (long)(((DataRowView)bsFormRules.Current)[FRSelfPriceCode.ColumnName]);
+								var drPrice = dtPrices.Select("PPriceCode = " + selfPriceCode)[0];
+								var priceName = drPrice[PPriceName.ColumnName].ToString();
 
-								long _firmCode = (long)drPrice[PFirmCode.ColumnName];
-								DataRow drClient = dtClients.Select("CCode = " + _firmCode)[0];
-								string _firmName = drClient[CShortName.ColumnName].ToString();
-								string _regionName = drClient[CRegion.ColumnName].ToString();
+								var firmCode = (long)drPrice[PFirmCode.ColumnName];
+								var drClient = dtClients.Select("CCode = " + firmCode)[0];
+								var firmName = drClient[CShortName.ColumnName].ToString();
+								var regionName = drClient[CRegion.ColumnName].ToString();
 
 								Mailer.SendNotificationLetter(connection, body.ToString(),
-									_priceName, _firmName, _regionName);
+									priceName, firmName, regionName);
 							}
 							dtSet.AcceptChanges();
 							//Обновляе цены и правила формализации цен для того, чтобы загрузить корректные ID новых цен
@@ -2155,7 +2156,11 @@ and c.Type = ?ContactType;",
 							tr.Commit();
 
 							// Перепроводим прайс
-							RetrancePrice.Go(indgvPrice, indgvFirm, connection, _priceProcessor, PPriceItemId);
+							RetrancePrice.Go(connection, _priceProcessor, currentPriceItemId);
+							if (indgvPrice.CurrentRow != null)
+								indgvPrice.Focus();
+							else
+								indgvFirm.Focus();
 						}
 						catch (Exception ex) {
 							tr.Rollback();
@@ -2700,13 +2705,13 @@ and fr.Id = pim.FormRuleId;
 			if (e.KeyCode == Keys.Delete) {
 				// удаление ценовой колонки для многофайлового ПЛ
 				if (CostIsValid()) {
-					DataRowView item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
-					int cost_type = (int)item[PCostType.ColumnName];
-					if (cost_type == 0)
+					var item = (DataRowView)indgvPrice.CurrentRow.DataBoundItem;
+					var costType = (int)item[PCostType.ColumnName];
+					if (costType == 0)
 						return; // для удаления цен из мультиколоночных прайсов используется другой механизм
-					if ((bool)item[PDeleted.ColumnName] == true)
+					if ((bool)item[PDeleted.ColumnName])
 						return;
-					byte isBaseCost = (byte)item[PBaseCost.ColumnName];
+					var isBaseCost = (byte)item[PBaseCost.ColumnName];
 					if (isBaseCost == 1) {
 						MessageBox.Show("Нельзя удалить базовую ценовую колонку", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 						return;
@@ -2717,8 +2722,6 @@ and fr.Id = pim.FormRuleId;
 						item.EndEdit();
 						indgvPrice.Refresh();
 					}
-					else
-						return;
 				}
 			}
 		}
@@ -2810,7 +2813,11 @@ and fr.Id = pim.FormRuleId;
 
 		private void btnRetrancePrice_Click(object sender, EventArgs e)
 		{
-			RetrancePrice.Go(indgvPrice, indgvFirm, connection, _priceProcessor, PPriceItemId);
+			if (indgvPrice.CurrentRow == null)
+				return;
+
+			var priceItemId = Convert.ToUInt32(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
+			RetrancePrice.Go(connection, _priceProcessor, priceItemId);
 		}
 
 		private void indgvPrice_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
@@ -2824,7 +2831,6 @@ and fr.Id = pim.FormRuleId;
 
 				// Проверяем, если была первоначальная настройка прайс-листа,
 				// то не выделяем колонки серым цветом (неактивные)
-				INDataGridView inGridView = (sender as INDataGridView);
 				bool isCostTypeColumn = (e.ColumnIndex == pCostTypeDataGridViewComboBoxColumn.Index);
 				if (isCostTypeColumn) {
 					string priceItemId = Convert.ToString(((DataRowView)indgvPrice
@@ -2834,7 +2840,7 @@ and fr.Id = pim.FormRuleId;
 					}
 				}
 			}
-			DataRowView drv = (DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem;
+			var drv = (DataRowView)indgvPrice.Rows[e.RowIndex].DataBoundItem;
 			if ((bool)drv[PDeleted.ColumnName]) {
 				e.CellStyle.BackColor = btnDeletedCostColor.BackColor;
 			}
@@ -3127,8 +3133,7 @@ order by PriceName
 					return;
 				}
 				try {
-					currentPriceItemId = (long)(((DataRowView)indgvPrice.CurrentRow.DataBoundItem)[PPriceItemId.ColumnName]);
-					if (!_priceProcessor.PutFileToBase(Convert.ToUInt32(currentPriceItemId), File.OpenRead(fileName))) {
+					if (!_priceProcessor.PutFileToBase(currentPriceItemId, File.OpenRead(fileName))) {
 						MessageBox.Show(_priceProcessor.LastErrorMessage, "Ошибка", MessageBoxButtons.OK,
 							MessageBoxIcon.Error);
 					}
@@ -3427,22 +3432,17 @@ order by PriceName
 
 		private void SavePriceButton_Click(object sender, EventArgs e)
 		{
-			var row = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
-			var id = row[PPriceItemId.ColumnName].ToString();
 			var file = _priceFileFormatHelper.CurrentShortFileName;
 			if (!String.IsNullOrEmpty(file)) {
 				file = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), file);
-				if (LoadFileFromBase(id, file))
+				if (LoadFileFromBase(currentPriceItemId.ToString(), file))
 					MessageBox.Show(String.Format("Прайс сохранен на рабочий стол, файл {0}", Path.GetFileName(file)));
 			}
 		}
 
 		private void MatchPriceButton_Click(object sender, EventArgs e)
 		{
-			var row = (indgvPrice.CurrentRow.DataBoundItem as DataRowView).Row;
-			var priceItemId = Convert.ToUInt32(row[PPriceItemId.ColumnName]);
-			var priceCode = Convert.ToUInt32(row[PPriceCode.ColumnName]);
-			matcher.Start(priceItemId, priceCode);
+			matcher.Start(currentPriceItemId, currentPriceId);
 			MatchPriceButton.Enabled = false;
 		}
 
@@ -3469,7 +3469,7 @@ order by PriceName
 			var priceCode = Convert.ToUInt32(row[PPriceCode.ColumnName]);
 
 			var collumnCreator = new CostCollumnCreator(field => {
-				var smtp = new SmtpClient("box.analit.net");
+				var smtp = new SmtpClient();
 #if !DEBUG
 				var mailToAdress = "RegisterList@subscribe.analit.net";
 #else

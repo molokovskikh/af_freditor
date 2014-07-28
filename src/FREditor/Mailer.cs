@@ -14,8 +14,6 @@ namespace FREditor
 	/// </summary>
 	public class Mailer
 	{
-		private static string SmtpServerName = "box.analit.net";
-
 		private static string EmailService = Settings.Default.EmailService;
 
 		public static void SendNotificationLetter(MySqlConnection connection,
@@ -57,7 +55,7 @@ WHERE
 						body));
 				if (!String.IsNullOrEmpty(operatorMail))
 					m.Bcc.Add(operatorMail);
-				var sm = new SmtpClient(SmtpServerName);
+				var sm = new SmtpClient();
 				sm.Send(m);
 			}
 			catch (Exception ex) {
@@ -75,7 +73,7 @@ WHERE
 					Environment.UserName, body);
 				//Формируем сообщение
 				var m = new MailMessage(EmailService, EmailService, "Предупреждение в FREditor", messageBody);
-				var sm = new SmtpClient(SmtpServerName);
+				var sm = new SmtpClient();
 				sm.Send(m);
 			}
 			catch (Exception ex) {
