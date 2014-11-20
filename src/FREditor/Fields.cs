@@ -4,12 +4,21 @@ using System.Linq;
 
 namespace FREditor
 {
+	/// <summary>
+	/// Класс необходим для того, чтобы создавать новые поля формализации в редакторе прайсов.
+	/// Поначалу кажется, что он не нужен и лучше пользоваться дизайнером в студии.
+	/// Но в последствии выяснится, что на самом деле этот самый класс - вселенское благо, а
+	/// в дизайнере огромное количество дублирования кода и прочих неудобств.
+	///
+	/// Если надо добавить поле - делать лучше это здесь.
+	/// </summary>
 	public class Fields
 	{
 		public static IEnumerable<Tuple<string, string>> fields
 			= new List<Tuple<string, string>> {
 				new Tuple<string, string>("EAN13", "Штрих-код"),
 				new Tuple<string, string>("Series", "Серия"),
+				new Tuple<string, string>("OptimizationSkip", "Флаг оптимизации"),
 				new Tuple<string, string>("CodeOKP", "Код ОКП")
 			};
 
