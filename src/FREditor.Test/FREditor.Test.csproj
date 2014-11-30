@@ -49,7 +49,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="NHibernate">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NHibernate.3.4.0.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
