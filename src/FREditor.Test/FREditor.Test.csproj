@@ -13,7 +13,8 @@
     <AssemblyName>FREditor.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags></FileUpgradeFlags>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
@@ -50,7 +51,7 @@
     </Reference>
     <Reference Include="NHibernate">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\UEEditor\packages\NHibernate.3.1.0.4000\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\..\packages\NHibernate.3.4.0.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <SpecificVersion>False</SpecificVersion>
@@ -89,8 +90,7 @@
     <Compile Include="SearchTextInGridViewFixture.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\FREditor\app.config">
-      <Link>app.config</Link>
+    <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">

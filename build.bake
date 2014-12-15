@@ -1,6 +1,3 @@
-﻿import file from ClickOnce.bake
-import file from Test.bake
-import file from DB.bake
 
 Global(
 	Project : "FREditor",
