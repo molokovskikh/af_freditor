@@ -18,7 +18,7 @@ namespace FREditor
 			= new List<Tuple<string, string>> {
 				new Tuple<string, string>("EAN13", "Штрих-код"),
 				new Tuple<string, string>("Series", "Серия"),
-				new Tuple<string, string>("OptimizationSkip", "Флаг оптимизации"),
+				new Tuple<string, string>("OptimizationSkip", "Флаг пропуска оптимизации"),
 				new Tuple<string, string>("CodeOKP", "Код ОКП")
 			};
 
