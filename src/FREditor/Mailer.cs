@@ -47,7 +47,7 @@ WHERE
 {4}
 
 С уважением,
-  АК Инфорум.",
+  АналитФармация.",
 						Environment.UserName,
 						providerName,
 						regionName,
