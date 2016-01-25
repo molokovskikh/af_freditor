@@ -22,7 +22,7 @@ namespace FREditor
 		{
 			var sqlPart = String.Empty;
 			if (showOnlyEnabled)
-				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200) 
+				sqlPart += @" and (datediff(curdate(), date(pim.pricedate)) < 200)
   inner join Customers.suppliers s on s.Id = pd.FirmCode";
 			else {
 				sqlPart += "inner join Customers.suppliers s on s.Id = pd.FirmCode";
@@ -49,8 +49,8 @@ SELECT
   pim.Id as PPriceItemId,
   pd.PriceCode as PPriceCode,
   if(pd.CostType = 1, concat(pd.PriceName, ' [Колонка] ', pc.CostName), pd.PriceName) as PPriceName,
-  pim.LastDownload as PPriceDate,
-	DATE_ADD(pim.LastDownload, INTERVAL r.MoscowBias HOUR) as PPriceDateWithBias,
+  pim.PriceDate as PPriceDate,
+	DATE_ADD(pim.PriceDate, INTERVAL r.MoscowBias HOUR) as PPriceDateWithBias,
   pim.LastFormalization as PDateLastForm,
   fr.MaxOld as PMaxOld,
   pd.PriceType as PPriceType,
