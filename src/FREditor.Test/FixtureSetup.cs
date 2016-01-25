@@ -11,7 +11,7 @@ namespace FREditor.Test
 	[SetUpFixture]
 	public class FixtureSetup
 	{
-		[SetUp]
+		[OneTimeSetUp]
 		public void Setup()
 		{
 			TestSupport.Setup.Initialize();
