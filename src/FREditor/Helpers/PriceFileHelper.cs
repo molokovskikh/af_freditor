@@ -89,7 +89,7 @@ namespace FREditor.Helpers
 				var tables = new List<DataTable>();
 				if ((priceFormat.Value == PriceFormat.DBF)
 					|| (priceFormat.Value == PriceFormat.NativeDbf)) {
-					var encoding = encode == PriceEncode.Cp1251 ? Encoding.GetEncoding(1215) : Encoding.GetEncoding(866);
+					var encoding = encode == PriceEncode.Cp1251 ? Encoding.GetEncoding(1251) : Encoding.GetEncoding(866);
 					var beliveInCodePageByte = encode == PriceEncode.CoNo;
 					tables.Add(Dbf.Load(filePath,
 						encoding,

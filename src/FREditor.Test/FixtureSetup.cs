@@ -15,6 +15,7 @@ namespace FREditor.Test
 		public void Setup()
 		{
 			TestSupport.Setup.Initialize();
+			Environment.CurrentDirectory = TestContext.CurrentContext.TestDirectory;
 			With.DefaultConnectionStringName = ConnectionHelper.GetConnectionName();
 		}
 	}
