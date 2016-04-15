@@ -85,11 +85,15 @@ namespace FREditor.Helpers
 		{
 			try {
 				if (!priceFormat.HasValue)
-					throw new Exception(String.Format("Неизвестный формат {0}", priceFormat));
+					throw new Exception($"Неизвестный формат {priceFormat}");
 				var tables = new List<DataTable>();
 				if ((priceFormat.Value == PriceFormat.DBF)
 					|| (priceFormat.Value == PriceFormat.NativeDbf)) {
-					tables.Add(OpenDbfFile(filePath));
+					var encoding = encode == PriceEncode.Cp1251 ? Encoding.GetEncoding(1215) : Encoding.GetEncoding(866);
+					var beliveInCodePageByte = encode == PriceEncode.CoNo;
+					tables.Add(Dbf.Load(filePath,
+						encoding,
+						beliveInCodePageByte));
 					return tables;
 				}
 				if ((priceFormat.Value == PriceFormat.XLS)
@@ -113,26 +117,12 @@ namespace FREditor.Helpers
 				if (priceFormat.Value == PriceFormat.UniversalFormalizer
 					|| priceFormat.Value == PriceFormat.FarmaimpeksOKPFormalizer)
 					return new List<DataTable>();
-				throw new Exception(String.Format("Неизвестный формат {0}", priceFormat));
+				throw new Exception($"Неизвестный формат {priceFormat}");
 			}
 			catch (Exception ex) {
-				var error = String.Format("Ошибка при открытии файла\nЛокальный путь:{0}\nФормат:{1}\nРазделитель:{2}",
-					filePath,
-					priceFormat,
-					delimiter);
+				var error = $"Ошибка при открытии файла\nЛокальный путь:{filePath}\nФормат:{priceFormat}\nРазделитель:{delimiter}";
 				_logger.Error(error, ex);
 				return null;
-			}
-		}
-
-		private static DataTable OpenDbfFile(string filePath)
-		{
-			Application.DoEvents();
-			try {
-				return Dbf.Load(filePath, Encoding.GetEncoding(866), false, true);
-			}
-			finally {
-				Application.DoEvents();
 			}
 		}
 
