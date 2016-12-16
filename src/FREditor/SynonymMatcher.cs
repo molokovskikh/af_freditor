@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using log4net;
+using RemotePriceProcessor;
 
 namespace FREditor
 {
@@ -170,13 +171,13 @@ namespace FREditor
 					return;
 				}
 
-				string[] res = owner._priceProcessor.FindSynonymsResult(currentTask.ToString());
-				if (res[0] == "Running") {
-					frmMatchProgr.SetValue(Convert.ToUInt32(res[1]));
+				WcfSynonymBox res = owner._priceProcessor.FindSynonymsResult(currentTask.ToString());
+				if (res.Status == TaskState.Running) {
+					frmMatchProgr.SetValue(Convert.ToUInt32(res.Message));
 					owner.EnableMatchBtn();
 					return;
 				}
-				if (res[0] == "Success") {
+				if (res.Status == TaskState.Success) {
 					timer.Stop();
 					FillSummary(res); // заполняем информацию о совпадениях по поставщикам
 					if (iterCount == 0) {
@@ -199,14 +200,14 @@ namespace FREditor
 
 					return;
 				}
-				if (res[0] == "Error") {
+				if (res.Status == TaskState.Error) {
 					iterCount = 0;
 					timer.Stop();
 					CloseProgressBar();
-					MessageBox.Show(res[1], "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(res.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return;
 				}
-				if (res[0] == "Canceled") {
+				if (res.Status == TaskState.Canceled) {
 					iterCount = 0;
 					timer.Stop();
 					CloseProgressBar();
@@ -226,25 +227,17 @@ namespace FREditor
 			}
 		}
 
-		private void FillSummary(string[] result)
+		private void FillSummary(WcfSynonymBox result)
 		{
 			firms.Clear();
 			int matchCnt = 0;
-			foreach (var res in result) {
-				string[] info = res.Split(';');
-				if (info.Length <= 1)
-					continue;
-				int firmCnt = Convert.ToInt32(info[0]);
-				string synonym = info[info.Length - 1];
-				for (int i = 0; i < firmCnt; i++) {
-					uint firmCode = Convert.ToUInt32(info[i * 4 + 1]);
-					string firmName = info[i * 4 + 2];
-					uint productId = Convert.ToUInt32(info[i * 4 + 3]);
-					bool junk = Convert.ToBoolean(info[i * 4 + 4]);
-					if (!firms.ContainsKey(firmCode))
-						firms[firmCode] = new FirmSummary(firmName);
-					firms[firmCode].AddInfo(synonym, productId, junk);
-					matchCnt++;
+			foreach (var res in result.SynonymBox) {
+				var info = res.SynonymList;
+				foreach (var item in info) {
+					if (!firms.ContainsKey(item.FirmCode)) {
+						firms[item.FirmCode] = new FirmSummary(item.FirmName);
+						firms[item.FirmCode].AddInfo(res.OriginalName, item.ProductId, item.Junk);
+					}
 				}
 			}
 			firms = firms.OrderByDescending(f => f.Value.SynonymCount()).ToDictionary(pair => pair.Key, pair => pair.Value);
